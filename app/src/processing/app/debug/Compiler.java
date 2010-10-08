@@ -39,6 +39,7 @@ public class Compiler implements MessageConsumer {
     "http://code.google.com/p/arduino/issues/list";
   static final String SUPER_BADNESS =
     "Compiler error, please submit this code to " + BUGS_URL;
+  static final String compilerPrefix = "avr-";
 
   Sketch sketch;
   String buildPath;
@@ -93,77 +94,77 @@ public class Compiler implements MessageConsumer {
 
     List<File> objectFiles = new ArrayList<File>();
 
-   // 0. include paths for core + all libraries
+    List includePaths = new ArrayList();
+    includePaths.add(corePath);
+    
+    String runtimeLibraryName = buildPath + File.separator + "core.a";
 
-   List includePaths = new ArrayList();
-   includePaths.add(corePath);
-   for (File file : sketch.getImportedLibraries()) {
-     includePaths.add(file.getPath());
-   }
+    // 1. compile the core, outputting .o files to <buildPath> and then
+    // collecting them into the core.a library file.
+    
+    List<File> coreObjectFiles = 
+      compileFiles(avrBasePath, buildPath, includePaths,
+                   findFilesInPath(corePath, "S", true),
+                   findFilesInPath(corePath, "c", true),
+                   findFilesInPath(corePath, "cpp", true),
+                   boardPreferences);
+                   
+    List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
+      avrBasePath + compilerPrefix + "ar",
+      "rcs",
+      runtimeLibraryName
+    }));
 
-   // 1. compile the sketch (already in the buildPath)
+    for(File file : coreObjectFiles) {
+      List commandAR = new ArrayList(baseCommandAR);
+      commandAR.add(file.getAbsolutePath());
+      execAsynchronously(commandAR);
+    }
 
-   objectFiles.addAll(
-     compileFiles(avrBasePath, buildPath, includePaths,
-               findFilesInPath(buildPath, "S", false),
-               findFilesInPath(buildPath, "c", false),
-               findFilesInPath(buildPath, "cpp", false),
-               boardPreferences));
+    // 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
 
-   // 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
+    // use library directories as include paths for all libraries
+    for (File file : sketch.getImportedLibraries()) {
+      includePaths.add(file.getPath());
+    }
 
-   for (File libraryFolder : sketch.getImportedLibraries()) {
-     File outputFolder = new File(buildPath, libraryFolder.getName());
-     File utilityFolder = new File(libraryFolder, "utility");
-     createFolder(outputFolder);
-     // this library can use includes in its utility/ folder
-     includePaths.add(utilityFolder.getAbsolutePath());
-     objectFiles.addAll(
-       compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
-               findFilesInFolder(libraryFolder, "S", false),
-               findFilesInFolder(libraryFolder, "c", false),
-               findFilesInFolder(libraryFolder, "cpp", false),
-               boardPreferences));
-     outputFolder = new File(outputFolder, "utility");
-     createFolder(outputFolder);
-     objectFiles.addAll(
-       compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
-               findFilesInFolder(utilityFolder, "S", false),
-               findFilesInFolder(utilityFolder, "c", false),
-               findFilesInFolder(utilityFolder, "cpp", false),
-               boardPreferences));
-     // other libraries should not see this library's utility/ folder
-     includePaths.remove(includePaths.size() - 1);
-   }
+    for (File libraryFolder : sketch.getImportedLibraries()) {
+      File outputFolder = new File(buildPath, libraryFolder.getName());
+      File utilityFolder = new File(libraryFolder, "utility");
+      createFolder(outputFolder);
+      // this library can use includes in its utility/ folder
+      includePaths.add(utilityFolder.getAbsolutePath());
+      objectFiles.addAll(
+        compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
+                     findFilesInFolder(libraryFolder, "S", false),
+                     findFilesInFolder(libraryFolder, "c", false),
+                     findFilesInFolder(libraryFolder, "cpp", false),
+                     boardPreferences));
+      outputFolder = new File(outputFolder, "utility");
+      createFolder(outputFolder);
+      objectFiles.addAll(
+        compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
+                     findFilesInFolder(utilityFolder, "S", false),
+                     findFilesInFolder(utilityFolder, "c", false),
+                     findFilesInFolder(utilityFolder, "cpp", false),
+                     boardPreferences));
+      // other libraries should not see this library's utility/ folder
+      includePaths.remove(includePaths.size() - 1);
+    }
 
-   // 3. compile the core, outputting .o files to <buildPath> and then
-   // collecting them into the core.a library file.
+    // 3. compile the sketch (already in the buildPath)
 
-  includePaths.clear();
-  includePaths.add(corePath);  // include path for core only
-  List<File> coreObjectFiles =
-    compileFiles(avrBasePath, buildPath, includePaths,
-              findFilesInPath(corePath, "S", true),
-              findFilesInPath(corePath, "c", true),
-              findFilesInPath(corePath, "cpp", true),
-              boardPreferences);
-
-   String runtimeLibraryName = buildPath + File.separator + "core.a";
-   List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
-     avrBasePath + "avr-ar",
-     "rcs",
-     runtimeLibraryName
-   }));
-   for(File file : coreObjectFiles) {
-     List commandAR = new ArrayList(baseCommandAR);
-     commandAR.add(file.getAbsolutePath());
-     execAsynchronously(commandAR);
-   }
+    objectFiles.addAll(
+      compileFiles(avrBasePath, buildPath, includePaths,
+                   findFilesInPath(buildPath, "S", false),
+                   findFilesInPath(buildPath, "c", false),
+                   findFilesInPath(buildPath, "cpp", false),
+                   boardPreferences));
 
     // 4. link it all together into the .elf file
 
     List baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "avr-gcc",
+      avrBasePath + compilerPrefix + "gcc",
       "-Os",
       "-Wl,--gc-sections",
       "-mmcu=" + boardPreferences.get("build.mcu"),
@@ -182,7 +183,7 @@ public class Compiler implements MessageConsumer {
     execAsynchronously(baseCommandLinker);
 
     List baseCommandObjcopy = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "avr-objcopy",
+      avrBasePath + compilerPrefix + "objcopy",
       "-O",
       "-R",
     }));
@@ -382,15 +383,19 @@ public class Compiler implements MessageConsumer {
 
   static private List getCommandCompilerS(String avrBasePath, List includePaths,
     String sourceName, String objectName, Map<String, String> boardPreferences) {
-    List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "avr-gcc",
+      String mcu, board;
+      List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
+      avrBasePath + compilerPrefix + "gcc",
       "-c", // compile, don't link
       "-g", // include debugging info (so errors include line numbers)
       "-assembler-with-cpp",
-      "-mmcu=" + boardPreferences.get("build.mcu"),
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-DARDUINO=" + Base.REVISION,
     }));
+
+    mcu = boardPreferences.get("build.mcu");
+    if (null!=mcu)
+      baseCommandCompiler.add("-mmcu=" + mcu);
 
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompiler.add("-I" + (String) includePaths.get(i));
@@ -405,16 +410,15 @@ public class Compiler implements MessageConsumer {
   
   static private List getCommandCompilerC(String avrBasePath, List includePaths,
     String sourceName, String objectName, Map<String, String> boardPreferences) {
-
+    String mcu;
     List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "avr-gcc",
+      avrBasePath + compilerPrefix + "gcc",
       "-c", // compile, don't link
       "-g", // include debugging info (so errors include line numbers)
       "-Os", // optimize for size
       "-w", // surpress all warnings
       "-ffunction-sections", // place each function in its own section
       "-fdata-sections",
-      "-mmcu=" + boardPreferences.get("build.mcu"),
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-DARDUINO=" + Base.REVISION,
     }));
@@ -422,6 +426,10 @@ public class Compiler implements MessageConsumer {
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompiler.add("-I" + (String) includePaths.get(i));
     }
+
+    mcu = boardPreferences.get("build.mcu");
+    if (null!=mcu)
+      baseCommandCompiler.add("-mmcu=" + mcu);
 
     baseCommandCompiler.add(sourceName);
     baseCommandCompiler.add("-o"+ objectName);
@@ -433,9 +441,9 @@ public class Compiler implements MessageConsumer {
   static private List getCommandCompilerCPP(String avrBasePath,
     List includePaths, String sourceName, String objectName,
     Map<String, String> boardPreferences) {
-    
+    String mcu;
     List baseCommandCompilerCPP = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "avr-g++",
+      avrBasePath + compilerPrefix + "g++",
       "-c", // compile, don't link
       "-g", // include debugging info (so errors include line numbers)
       "-Os", // optimize for size
@@ -443,7 +451,6 @@ public class Compiler implements MessageConsumer {
       "-fno-exceptions",
       "-ffunction-sections", // place each function in its own section
       "-fdata-sections",
-      "-mmcu=" + boardPreferences.get("build.mcu"),
       "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
       "-DARDUINO=" + Base.REVISION,
     }));
@@ -451,6 +458,10 @@ public class Compiler implements MessageConsumer {
     for (int i = 0; i < includePaths.size(); i++) {
       baseCommandCompilerCPP.add("-I" + (String) includePaths.get(i));
     }
+
+    mcu = boardPreferences.get("build.mcu");
+    if (null!=mcu)
+      baseCommandCompilerCPP.add("-mmcu=" + mcu);
 
     baseCommandCompilerCPP.add(sourceName);
     baseCommandCompilerCPP.add("-o"+ objectName);
