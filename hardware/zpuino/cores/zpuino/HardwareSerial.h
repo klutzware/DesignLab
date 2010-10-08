@@ -21,6 +21,7 @@ public:
 	int read(void) const;
 	void flush(void) {};
 	void write(unsigned char c);
+	void write(const char *c);
 };
 
 
@@ -44,7 +45,14 @@ template<unsigned int base>
 
 template<unsigned int base>
 	void HardwareSerial<base>::write(unsigned char c) {
-		while (!(REGISTER(IO_SLOT(base),1) & 2));
-		REGISTER(IO_SLOT(base),0) = base;
+		while ((REGISTER(IO_SLOT(base),1) & 2)==2);
+		REGISTER(IO_SLOT(base),0) = c;
 	}
 
+template<unsigned int base>
+	void HardwareSerial<base>::write(const char *c) {
+		while (*c) {
+			write(*c);
+			c++;
+		}
+	}
