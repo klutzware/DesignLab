@@ -2391,26 +2391,31 @@ public class Editor extends JFrame implements RunnerListener {
 
   protected void handleBurnBootloader(final String target, final String programmer) {
     console.clear();
-    statusNotice("Burning bootloader to I/O Board (this may take a minute)...");
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        try {
-          Uploader uploader = new AvrdudeUploader();
-          if (uploader.burnBootloader(target, programmer)) {
-            statusNotice("Done burning bootloader.");
-          } else {
+    Map<String, String> boardPreferences = Base.getBoardPreferences();
+    if (boardPreferences.get("build.core").equals("arduino")) {
+      statusNotice("Burning bootloader to I/O Board (this may take a minute)...");
+      SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+          try {
+            Uploader uploader = new AvrdudeUploader();
+            if (uploader.burnBootloader(target, programmer)) {
+              statusNotice("Done burning bootloader.");
+            } else {
+              statusError("Error while burning bootloader.");
+              // error message will already be visible
+            }
+          } catch (RunnerException e) {
             statusError("Error while burning bootloader.");
-            // error message will already be visible
+            e.printStackTrace();
+            //statusError(e);
+          } catch (Exception e) {
+            statusError("Error while burning bootloader.");
+            e.printStackTrace();
           }
-        } catch (RunnerException e) {
-          statusError("Error while burning bootloader.");
-          e.printStackTrace();
-          //statusError(e);
-        } catch (Exception e) {
-          statusError("Error while burning bootloader.");
-          e.printStackTrace();
-        }
-      }});
+        }});
+    } else {
+      statusError("Core " + boardPreferences.get("build.core") + " does not support bootloader burning.");
+    }
   }
 
 
