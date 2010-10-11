@@ -39,7 +39,6 @@ public class Compiler implements MessageConsumer {
     "http://code.google.com/p/arduino/issues/list";
   static final String SUPER_BADNESS =
     "Compiler error, please submit this code to " + BUGS_URL;
-  static final String compilerPrefix = "avr-";
 
   Sketch sketch;
   String buildPath;
@@ -49,6 +48,58 @@ public class Compiler implements MessageConsumer {
   RunnerException exception;
 
   public Compiler() { }
+
+  private static final String getCompilerPrefix(Map<String, String> boardPreferences)
+  {
+      String corename = boardPreferences.get("build.core");
+      if (null==corename)
+          return "unknown-";
+      if (corename.equals("arduino"))
+          return "avr-";
+      if (corename.equals("zpuino"))
+          return "zpu-elf-";
+      return "unknown-";
+  }
+
+  private static final List getDefaultLinkerFlags(Map<String, String> boardPreferences)
+  {
+      String corename = boardPreferences.get("build.core");
+      ArrayList flags = new ArrayList();
+
+      if (null==corename)
+	return flags;
+
+      if (corename.equals("arduino"))
+	return flags;
+
+      if (corename.equals("zpuino")) {
+	String corePath = getCorePath(boardPreferences);
+
+	flags.add("-Wl,-T");
+	flags.add("-Wl,"+corePath+File.separator+"zpuino.lds");
+	flags.add("-Wl,--relax");
+	flags.add("-nostartfiles");
+      }
+      return flags;
+  }
+
+  private static final String getCorePath(Map<String, String> boardPreferences)
+  {
+    String corePath;
+    String core = boardPreferences.get("build.core");
+
+    if (core.indexOf(':') == -1) {
+      Target t = Base.getTarget();
+      File coreFolder = new File(new File(t.getFolder(), "cores"), core);
+      corePath = coreFolder.getAbsolutePath();
+    } else {
+      Target t = Base.targetsTable.get(core.substring(0, core.indexOf(':')));
+      File coresFolder = new File(t.getFolder(), "cores");
+      File coreFolder = new File(coresFolder, core.substring(core.indexOf(':') + 1));
+      corePath = coreFolder.getAbsolutePath();
+    }
+    return corePath;
+  }
 
   /**
    * Compile with avr-gcc.
@@ -79,18 +130,8 @@ public class Compiler implements MessageConsumer {
       re.hideStackTrace();
       throw re;
     }
-    String corePath;
-    
-    if (core.indexOf(':') == -1) {
-      Target t = Base.getTarget();
-      File coreFolder = new File(new File(t.getFolder(), "cores"), core);
-      corePath = coreFolder.getAbsolutePath();
-    } else {
-      Target t = Base.targetsTable.get(core.substring(0, core.indexOf(':')));
-      File coresFolder = new File(t.getFolder(), "cores");
-      File coreFolder = new File(coresFolder, core.substring(core.indexOf(':') + 1));
-      corePath = coreFolder.getAbsolutePath();
-    }
+
+    String corePath = getCorePath(boardPreferences);
 
     List<File> objectFiles = new ArrayList<File>();
 
@@ -110,7 +151,7 @@ public class Compiler implements MessageConsumer {
                    boardPreferences);
                    
     List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + compilerPrefix + "ar",
+      avrBasePath + getCompilerPrefix(boardPreferences) + "ar",
       "rcs",
       runtimeLibraryName
     }));
@@ -164,26 +205,45 @@ public class Compiler implements MessageConsumer {
     // 4. link it all together into the .elf file
 
     List baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + compilerPrefix + "gcc",
+      avrBasePath + getCompilerPrefix(boardPreferences) + "gcc",
       "-Os",
       "-Wl,--gc-sections",
-      "-mmcu=" + boardPreferences.get("build.mcu"),
       "-o",
       buildPath + File.separator + primaryClassName + ".elf"
     }));
+
+    String mcu = boardPreferences.get("build.mcu");
+    if (null!=mcu) {
+        baseCommandLinker.add( "-mmcu=" + mcu );
+    }
 
     for (File file : objectFiles) {
       baseCommandLinker.add(file.getAbsolutePath());
     }
 
+    String extraLDflags = boardPreferences.get("build.extraLDflags");
+    if (null!=extraLDflags) {
+        String [] flagList = processing.core.PApplet.split(extraLDflags," ");
+        for (String flag: flagList)
+            baseCommandLinker.add(flag);
+    }
+
+    List baseLDflags = getDefaultLinkerFlags(boardPreferences);
+
+    for (Object flag: baseLDflags.toArray()) {
+        baseCommandLinker.add(flag); // Improve this
+    }
+
+    baseCommandLinker.add("-Wl,--whole-archive");
     baseCommandLinker.add(runtimeLibraryName);
+    baseCommandLinker.add("-Wl,--no-whole-archive");
     baseCommandLinker.add("-L" + buildPath);
     baseCommandLinker.add("-lm");
 
     execAsynchronously(baseCommandLinker);
 
     List baseCommandObjcopy = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + compilerPrefix + "objcopy",
+      avrBasePath + getCompilerPrefix(boardPreferences) + "objcopy",
       "-O",
       "-R",
     }));
@@ -191,26 +251,35 @@ public class Compiler implements MessageConsumer {
     List commandObjcopy;
 
     // 5. extract EEPROM data (from EEMEM directive) to .eep file.
-    commandObjcopy = new ArrayList(baseCommandObjcopy);
-    commandObjcopy.add(2, "ihex");
-    commandObjcopy.set(3, "-j");
-    commandObjcopy.add(".eeprom");
-    commandObjcopy.add("--set-section-flags=.eeprom=alloc,load");
-    commandObjcopy.add("--no-change-warnings");
-    commandObjcopy.add("--change-section-lma");
-    commandObjcopy.add(".eeprom=0");
-    commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
-    commandObjcopy.add(buildPath + File.separator + primaryClassName + ".eep");
-    execAsynchronously(commandObjcopy);
-    
-    // 6. build the .hex file
-    commandObjcopy = new ArrayList(baseCommandObjcopy);
-    commandObjcopy.add(2, "ihex");
-    commandObjcopy.add(".eeprom"); // remove eeprom data
-    commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
-    commandObjcopy.add(buildPath + File.separator + primaryClassName + ".hex");
-    execAsynchronously(commandObjcopy);
-    
+    if ( boardPreferences.get("build.core").equals("arduino") ) {
+        commandObjcopy = new ArrayList(baseCommandObjcopy);
+        commandObjcopy.add(2, "ihex");
+        commandObjcopy.set(3, "-j");
+        commandObjcopy.add(".eeprom");
+        commandObjcopy.add("--set-section-flags=.eeprom=alloc,load");
+        commandObjcopy.add("--no-change-warnings");
+        commandObjcopy.add("--change-section-lma");
+        commandObjcopy.add(".eeprom=0");
+        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
+        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".eep");
+        execAsynchronously(commandObjcopy);
+
+        // 6. build the .hex file
+        commandObjcopy = new ArrayList(baseCommandObjcopy);
+        commandObjcopy.add(2, "ihex");
+        commandObjcopy.add(".eeprom"); // remove eeprom data
+        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
+        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".hex");
+        execAsynchronously(commandObjcopy);
+    } else if (boardPreferences.get("build.core").equals("zpuino") ) {
+        // 6. build the .bin file
+        commandObjcopy = new ArrayList(baseCommandObjcopy);
+        commandObjcopy.set(2, "binary");
+        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
+        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".bin");
+        execAsynchronously(commandObjcopy);
+    }
+
     return true;
   }
 
@@ -385,7 +454,7 @@ public class Compiler implements MessageConsumer {
     String sourceName, String objectName, Map<String, String> boardPreferences) {
       String mcu, board;
       List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + compilerPrefix + "gcc",
+      avrBasePath + getCompilerPrefix(boardPreferences) + "gcc",
       "-c", // compile, don't link
       "-g", // include debugging info (so errors include line numbers)
       "-assembler-with-cpp",
@@ -412,7 +481,7 @@ public class Compiler implements MessageConsumer {
     String sourceName, String objectName, Map<String, String> boardPreferences) {
     String mcu;
     List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + compilerPrefix + "gcc",
+      avrBasePath + getCompilerPrefix(boardPreferences) + "gcc",
       "-c", // compile, don't link
       "-g", // include debugging info (so errors include line numbers)
       "-Os", // optimize for size
@@ -431,6 +500,13 @@ public class Compiler implements MessageConsumer {
     if (null!=mcu)
       baseCommandCompiler.add("-mmcu=" + mcu);
 
+    String extracppflags = boardPreferences.get("build.extraCflags");
+    if (null!=extracppflags) {
+        String [] flagList = processing.core.PApplet.split(extracppflags," ");
+        for (String flag: flagList)
+            baseCommandCompiler.add(flag);
+    }
+
     baseCommandCompiler.add(sourceName);
     baseCommandCompiler.add("-o"+ objectName);
 
@@ -443,7 +519,7 @@ public class Compiler implements MessageConsumer {
     Map<String, String> boardPreferences) {
     String mcu;
     List baseCommandCompilerCPP = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + compilerPrefix + "g++",
+      avrBasePath + getCompilerPrefix(boardPreferences) + "g++",
       "-c", // compile, don't link
       "-g", // include debugging info (so errors include line numbers)
       "-Os", // optimize for size
@@ -463,6 +539,13 @@ public class Compiler implements MessageConsumer {
     if (null!=mcu)
       baseCommandCompilerCPP.add("-mmcu=" + mcu);
 
+    String extracppflags = boardPreferences.get("build.extraCflags");
+    if (null!=extracppflags) {
+        String [] flagList = processing.core.PApplet.split(extracppflags," ");
+        for (String flag: flagList)
+            baseCommandCompilerCPP.add(flag);
+
+    }
     baseCommandCompilerCPP.add(sourceName);
     baseCommandCompilerCPP.add("-o"+ objectName);
 
