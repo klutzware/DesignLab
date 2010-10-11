@@ -24,6 +24,7 @@
 package processing.app;
 
 import processing.app.debug.AvrdudeUploader;
+import processing.app.debug.ZPUinoUploader;
 import processing.app.debug.Compiler;
 import processing.app.debug.RunnerException;
 import processing.app.debug.Sizer;
@@ -1595,11 +1596,21 @@ public class Sketch {
   protected String upload(String buildPath, String suggestedClassName, boolean verbose)
     throws RunnerException, SerialException {
 
+    Map<String, String> boardPreferences = Base.getBoardPreferences();
     Uploader uploader;
+    String core = boardPreferences.get("build.core");
 
     // download the program
     //
-    uploader = new AvrdudeUploader();
+    if (core.equals("arduino")) {
+      uploader = new AvrdudeUploader();
+    } else if (core.equals("zpuino")) {
+      uploader = new ZPUinoUploader();
+    } else {
+      System.err.println("Don't have a programmer for core "+core);
+      return null;
+    }
+
     boolean success = uploader.uploadUsingPreferences(buildPath,
                                                       suggestedClassName,
                                                       verbose);
