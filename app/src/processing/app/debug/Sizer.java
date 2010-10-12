@@ -5,6 +5,7 @@
   Part of the Arduino project - http://www.arduino.cc/
 
   Copyright (c) 2006 David A. Mellis
+  Copyright (c) 2010 Alvaro Lopes
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -30,79 +31,41 @@ import processing.app.Base;
 import java.io.*;
 import java.util.*;
 
-public class Sizer implements MessageConsumer {
+public class Sizer {
   private String buildPath, sketchName;
-  private String firstLine;
-  private long size;
-  private RunnerException exception;
-
   public Sizer(String buildPath, String sketchName) {
     this.buildPath = buildPath;
     this.sketchName = sketchName;
   }
   
   public long computeSize() throws RunnerException {
-    String avrBasePath = Base.getAvrBasePath();
-    String commandSize[] = new String[] {
-      avrBasePath + "avr-size",
-      " "
-    };
-    
-    commandSize[1] = buildPath + File.separator + sketchName + ".hex";
 
-    int r = 0;
+    // Size file should have been created by make
+
+    String sizeFile = buildPath + File.separator + Base.getFileNameWithoutExtension(new File(sketchName)) + ".size";
+		long size = -1;
+
     try {
-      exception = null;
-      size = -1;
-      firstLine = null;
-      Process process = Runtime.getRuntime().exec(commandSize);
-      MessageSiphon in = new MessageSiphon(process.getInputStream(), this);
-      MessageSiphon err = new MessageSiphon(process.getErrorStream(), this);
+			BufferedReader fileReader = new BufferedReader(new FileReader(sizeFile));
+			String sizeString = fileReader.readLine(); // This line is to be ignored
+			sizeString = fileReader.readLine();
+			fileReader.close();
+      StringTokenizer st = new StringTokenizer(sizeString, " ");
 
-      boolean running = true;
-
-      while(running) {
-        try {
-          if (in.thread != null)
-            in.thread.join();
-          if (err.thread != null)
-            err.thread.join();
-          r = process.waitFor();
-          running = false;
-        } catch (InterruptedException intExc) { }
-      }
-    } catch (Exception e) {
-      // The default Throwable.toString() never returns null, but apparently
-      // some sub-class has overridden it to do so, thus we need to check for
-      // it.  See: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1166589459
-      exception = new RunnerException(
-        (e.toString() == null) ? e.getClass().getName() + r : e.toString() + r);
-    }
-    
-    if (exception != null)
-      throw exception;
-      
-    if (size == -1)
-      throw new RunnerException(firstLine);
-      
-    return size;
-  }
-  
-  public void message(String s) {
-    if (firstLine == null)
-      firstLine = s;
-    else {
-      StringTokenizer st = new StringTokenizer(s, " ");
-      try {
+			try {
         st.nextToken();
         st.nextToken();
         st.nextToken();
         size = (new Integer(st.nextToken().trim())).longValue();
       } catch (NoSuchElementException e) {
-        exception = new RunnerException(e.toString());
+        throw new RunnerException(e.toString());
       } catch (NumberFormatException e) {
-        exception = new RunnerException(e.toString());
+        throw new RunnerException(e.toString());
       }
-    }
-  }
+
+			return size;
+		} catch (IOException e) {
+			throw new RunnerException(e.toString());
+		}
+	}
 }

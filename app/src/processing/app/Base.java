@@ -2306,4 +2306,13 @@ public class Base {
       }
     }
   }
+
+  public final static String getFileNameWithoutExtension(File fileName) {
+    int pos = fileName.getName().lastIndexOf('.');
+    if (0 < pos && pos <= fileName.getName().length() - 2 ) {
+      return fileName.getName().substring(0, pos);
+    }
+    return fileName.getName();
+  }
+
 }

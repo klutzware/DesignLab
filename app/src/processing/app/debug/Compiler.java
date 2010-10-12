@@ -49,40 +49,6 @@ public class Compiler implements MessageConsumer {
 
   public Compiler() { }
 
-  private static final String getCompilerPrefix(Map<String, String> boardPreferences)
-  {
-      String corename = boardPreferences.get("build.core");
-      if (null==corename)
-          return "unknown-";
-      if (corename.equals("arduino"))
-          return "avr-";
-      if (corename.equals("zpuino"))
-          return "zpu-elf-";
-      return "unknown-";
-  }
-
-  private static final List getDefaultLinkerFlags(Map<String, String> boardPreferences)
-  {
-      String corename = boardPreferences.get("build.core");
-      ArrayList flags = new ArrayList();
-
-      if (null==corename)
-	return flags;
-
-      if (corename.equals("arduino"))
-	return flags;
-
-      if (corename.equals("zpuino")) {
-	String corePath = getCorePath(boardPreferences);
-
-	flags.add("-Wl,-T");
-	flags.add("-Wl,"+corePath+File.separator+"zpuino.lds");
-	flags.add("-Wl,--relax");
-	flags.add("-nostartfiles");
-      }
-      return flags;
-  }
-
   private static final String getCorePath(Map<String, String> boardPreferences)
   {
     String corePath;
@@ -101,6 +67,17 @@ public class Compiler implements MessageConsumer {
     return corePath;
   }
 
+  public static List<File> getAllSourcesInPath( String path, boolean recurse ) {
+    List<File> sources = findFilesInPath(path, "S", recurse);
+    sources.addAll( findFilesInPath(path, "c", recurse) );
+    sources.addAll( findFilesInPath(path, "cpp", recurse) );
+    return sources;
+  }
+
+  public static final String makeMakeFileVariable(String name) {
+    name = name.replace(".","___");
+    return name;
+  }
   /**
    * Compile with avr-gcc.
    *
@@ -124,205 +101,212 @@ public class Compiler implements MessageConsumer {
 
     String avrBasePath = Base.getAvrBasePath();
     Map<String, String> boardPreferences = Base.getBoardPreferences();
+
     String core = boardPreferences.get("build.core");
     if (core == null) {
-    	RunnerException re = new RunnerException("No board selected; please choose a board from the Tools > Board menu.");
+      RunnerException re = new RunnerException("No board selected; please choose a board from the Tools > Board menu.");
       re.hideStackTrace();
       throw re;
     }
 
     String corePath = getCorePath(boardPreferences);
-
     List<File> objectFiles = new ArrayList<File>();
-
     List includePaths = new ArrayList();
     includePaths.add(corePath);
+
+    String runtimeLibraryName = buildPath + File.separator + "core/libcore.a";
+
+    List<String> extracflags=new ArrayList<String>();
+    String classFileName = Base.getFileNameWithoutExtension(new File(primaryClassName));
+
+    String extracppflags = boardPreferences.get("build.extraCflags");
+    if (null!=extracppflags) {
+      String [] flagList = processing.core.PApplet.split(extracppflags," ");
+      for (String flag: flagList)
+        extracflags.add(flag);
+    }
+
+    // Create a suitable makefile
+    BufferedWriter makeFile;
+    try {
+
+      /* Write preferences */
+      BufferedWriter commonMakeFile = new BufferedWriter(new FileWriter(new File(buildPath, "Common.mak")));
+      for (String key: boardPreferences.keySet()) {
+        commonMakeFile.write( "PREFS___board___" + makeMakeFileVariable(key) +"="+ boardPreferences.get(key));
+        commonMakeFile.newLine();
+      }
+      commonMakeFile.write("COREPATH=" + corePath);
+      commonMakeFile.newLine();
+      commonMakeFile.write("AVRPATH=" + avrBasePath);
+      commonMakeFile.newLine();
+      commonMakeFile.write("BUILDPATH=" + buildPath);
+      commonMakeFile.newLine();
+      commonMakeFile.write("REVISION=" + Base.REVISION);
+      commonMakeFile.newLine();
+
+      commonMakeFile.close();
+
+      makeFile = new BufferedWriter(new FileWriter(new File(buildPath, "Makefile")));
+      makeFile.write("include Common.mak");
+      makeFile.newLine();
+
+
+      makeFile.write("TARGET=" + classFileName);
+      makeFile.newLine();
+      makeFile.newLine();
+
+      /* Place core file in core subdirectory */
+
+      File coreFolder = new File(buildPath, "core");
+      createFolder(coreFolder);
+      BufferedWriter coreMakeFile = new BufferedWriter(new FileWriter(new File(coreFolder, "Makefile")));
+
+      coreMakeFile.write("include " + ".." + File.separator + "Common.mak");
+      coreMakeFile.newLine();
+
+      /* Get all source files for core */
+      List<File> coreSources = getAllSourcesInPath(corePath,true);
+
+
+      coreMakeFile.write("libcore.a:");
+      for (File file : coreSources) {
+        coreMakeFile.write(" " + Base.getFileNameWithoutExtension(file) + ".o");
+      }
+      //			coreMakeFile.newLine();
+      coreMakeFile.newLine();
+      coreMakeFile.write("\t$(AR) $(ARFLAGS) $@ $+");
+      coreMakeFile.newLine();
+
+      // Copy files into place
+
+      for (File file : coreSources) {
+        Base.copyFile( file, new File(coreFolder,file.getName()));
+        coreMakeFile.write( Base.getFileNameWithoutExtension(file) + ".o: "+  file.getName());
+        coreMakeFile.newLine();
+      }
+      extracflags.add("-I" + buildPath);
+      coreMakeFile.write("EXTRACFLAGS=");
+      for (String f: extracflags) {
+        coreMakeFile.write(f + " ");
+      }
+      coreMakeFile.newLine();
+      coreMakeFile.write("include " + corePath + File.separator + "Rules.mak");
+      coreMakeFile.newLine();
+
+
+      coreMakeFile.close();
+
+      // Write core dependency
+
+      makeFile.write("core" + File.separator + "libcore.a:");
+      makeFile.newLine();
+      makeFile.write("\t$(MAKE) -C core libcore.a");
+      makeFile.newLine();
+
+      // use library directories as include paths for all libraries
+      for (File file : sketch.getImportedLibraries()) {
+        extracflags.add("-I"+file.getPath());
+      }
+
+
+      for (File libraryFolder : sketch.getImportedLibraries()) {
+        File outputFolder = new File(buildPath, libraryFolder.getName());
+        File utilityFolder = new File(libraryFolder, "utility");
+        String libraryName = "lib" + libraryFolder.getName();
+
+        createFolder(outputFolder);
+        System.err.println("Creating folder " + outputFolder);
+
+        /* Get all sources for this library */
+        List<File> libSources = getAllSourcesInPath(libraryFolder.getPath(),false);
+        // Specific makefile for this library
+        BufferedWriter libMakeFile = new BufferedWriter(new FileWriter(new File(outputFolder, "Makefile")));
+
+        libMakeFile.write("include " + ".." + File.separator + "Common.mak");
+        libMakeFile.newLine();
+
+        // Copy files into place
+        libMakeFile.write( libraryName +  ".a: ");
+
+        for (File file : libSources) {
+          Base.copyFile( file, new File(outputFolder,file.getName()));
+          libMakeFile.write( Base.getFileNameWithoutExtension(file) + ".o ");
+        }
+        libMakeFile.newLine();
+        libMakeFile.write("\t$(AR) $(ARFLAGS) $@ $+");
+        libMakeFile.newLine();
+
+        outputFolder = new File(outputFolder, "utility");
+        createFolder(outputFolder);
+
+        List<File> utilitySources = getAllSourcesInPath(utilityFolder.getPath(),false);
+
+        for (File file : utilitySources) {
+          Base.copyFile( file, new File(utilityFolder,file.getName()));
+        }
+
+        // this library can use includes in its utility/ folder
+
+        libMakeFile.write("EXTRACFLAGS=-I" + libraryFolder.getPath());
+        libMakeFile.newLine();
+
+        makeFile.write("EXTRACFLAGS+=-I" + libraryFolder.getPath());
+        makeFile.newLine();
+
+        libMakeFile.write("include " + corePath + File.separator + "Rules.mak");
+        libMakeFile.newLine();
+
+        libMakeFile.close();
+
+        makeFile.write("LIBS+="+libraryFolder.getName()+ File.separator + libraryName + ".a");
+        makeFile.newLine();
+
+        makeFile.write(libraryFolder.getName()+ File.separator + libraryName + ".a:");
+        makeFile.newLine();
+        makeFile.write("\t$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
+        makeFile.newLine();
+
+      }
+
+      List<File> sketchSources = getAllSourcesInPath(buildPath,false);
+
+      makeFile.write("TARGETOBJ=");
+      for (File file : sketchSources) {
+        makeFile.write( " " + Base.getFileNameWithoutExtension(file) + ".o ");
+      }
+      makeFile.newLine();
+
+      // TODO: add targetobj dependencies
+
+      makeFile.write("LIBS+=core/libcore.a");
+      makeFile.newLine();
+
+      makeFile.write("include " + corePath + File.separator + "Rules.mak");
+      makeFile.newLine();
+
+      makeFile.close();
+
+    } catch (java.io.IOException e) {
+      throw new RunnerException("Cannot write makefile!");
+    }
+
+    return runMake(avrBasePath, buildPath);
+  }
+
+
+  private boolean runMake(String avrBasePath,
+                          String buildPath)
+  throws RunnerException {
+
     
-    String runtimeLibraryName = buildPath + File.separator + "core.a";
+    List baseCommandMake = new ArrayList(Arrays.asList(new String[] {
+      avrBasePath + "make", "-C", buildPath, "all"}));
 
-    // 1. compile the core, outputting .o files to <buildPath> and then
-    // collecting them into the core.a library file.
-    
-    List<File> coreObjectFiles = 
-      compileFiles(avrBasePath, buildPath, includePaths,
-                   findFilesInPath(corePath, "S", true),
-                   findFilesInPath(corePath, "c", true),
-                   findFilesInPath(corePath, "cpp", true),
-                   boardPreferences);
-                   
-    List baseCommandAR = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + getCompilerPrefix(boardPreferences) + "ar",
-      "rcs",
-      runtimeLibraryName
-    }));
-
-    for(File file : coreObjectFiles) {
-      List commandAR = new ArrayList(baseCommandAR);
-      commandAR.add(file.getAbsolutePath());
-      execAsynchronously(commandAR);
-    }
-
-    // 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
-
-    // use library directories as include paths for all libraries
-    for (File file : sketch.getImportedLibraries()) {
-      includePaths.add(file.getPath());
-    }
-
-    for (File libraryFolder : sketch.getImportedLibraries()) {
-      File outputFolder = new File(buildPath, libraryFolder.getName());
-      File utilityFolder = new File(libraryFolder, "utility");
-      createFolder(outputFolder);
-      // this library can use includes in its utility/ folder
-      includePaths.add(utilityFolder.getAbsolutePath());
-      objectFiles.addAll(
-        compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
-                     findFilesInFolder(libraryFolder, "S", false),
-                     findFilesInFolder(libraryFolder, "c", false),
-                     findFilesInFolder(libraryFolder, "cpp", false),
-                     boardPreferences));
-      outputFolder = new File(outputFolder, "utility");
-      createFolder(outputFolder);
-      objectFiles.addAll(
-        compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
-                     findFilesInFolder(utilityFolder, "S", false),
-                     findFilesInFolder(utilityFolder, "c", false),
-                     findFilesInFolder(utilityFolder, "cpp", false),
-                     boardPreferences));
-      // other libraries should not see this library's utility/ folder
-      includePaths.remove(includePaths.size() - 1);
-    }
-
-    // 3. compile the sketch (already in the buildPath)
-
-    objectFiles.addAll(
-      compileFiles(avrBasePath, buildPath, includePaths,
-                   findFilesInPath(buildPath, "S", false),
-                   findFilesInPath(buildPath, "c", false),
-                   findFilesInPath(buildPath, "cpp", false),
-                   boardPreferences));
-
-    // 4. link it all together into the .elf file
-
-    List baseCommandLinker = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + getCompilerPrefix(boardPreferences) + "gcc",
-      "-Os",
-      "-Wl,--gc-sections",
-      "-o",
-      buildPath + File.separator + primaryClassName + ".elf"
-    }));
-
-    String mcu = boardPreferences.get("build.mcu");
-    if (null!=mcu) {
-        baseCommandLinker.add( "-mmcu=" + mcu );
-    }
-
-    for (File file : objectFiles) {
-      baseCommandLinker.add(file.getAbsolutePath());
-    }
-
-    String extraLDflags = boardPreferences.get("build.extraLDflags");
-    if (null!=extraLDflags) {
-        String [] flagList = processing.core.PApplet.split(extraLDflags," ");
-        for (String flag: flagList)
-            baseCommandLinker.add(flag);
-    }
-
-    List baseLDflags = getDefaultLinkerFlags(boardPreferences);
-
-    for (Object flag: baseLDflags.toArray()) {
-        baseCommandLinker.add(flag); // Improve this
-    }
-
-    baseCommandLinker.add("-Wl,--whole-archive");
-    baseCommandLinker.add(runtimeLibraryName);
-    baseCommandLinker.add("-Wl,--no-whole-archive");
-    baseCommandLinker.add("-L" + buildPath);
-    baseCommandLinker.add("-lm");
-
-    execAsynchronously(baseCommandLinker);
-
-    List baseCommandObjcopy = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + getCompilerPrefix(boardPreferences) + "objcopy",
-      "-O",
-      "-R",
-    }));
-    
-    List commandObjcopy;
-
-    // 5. extract EEPROM data (from EEMEM directive) to .eep file.
-    if ( boardPreferences.get("build.core").equals("arduino") ) {
-        commandObjcopy = new ArrayList(baseCommandObjcopy);
-        commandObjcopy.add(2, "ihex");
-        commandObjcopy.set(3, "-j");
-        commandObjcopy.add(".eeprom");
-        commandObjcopy.add("--set-section-flags=.eeprom=alloc,load");
-        commandObjcopy.add("--no-change-warnings");
-        commandObjcopy.add("--change-section-lma");
-        commandObjcopy.add(".eeprom=0");
-        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
-        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".eep");
-        execAsynchronously(commandObjcopy);
-
-        // 6. build the .hex file
-        commandObjcopy = new ArrayList(baseCommandObjcopy);
-        commandObjcopy.add(2, "ihex");
-        commandObjcopy.add(".eeprom"); // remove eeprom data
-        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
-        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".hex");
-        execAsynchronously(commandObjcopy);
-    } else if (boardPreferences.get("build.core").equals("zpuino") ) {
-        // 6. build the .bin file
-        commandObjcopy = new ArrayList(baseCommandObjcopy);
-        commandObjcopy.set(2, "binary");
-        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".elf");
-        commandObjcopy.add(buildPath + File.separator + primaryClassName + ".bin");
-        execAsynchronously(commandObjcopy);
-    }
-
+    execAsynchronously(baseCommandMake);
     return true;
+
   }
-
-
-  private List<File> compileFiles(String avrBasePath,
-                                  String buildPath, List<File> includePaths,
-                                  List<File> sSources, 
-                                  List<File> cSources, List<File> cppSources,
-                                  Map<String, String> boardPreferences)
-    throws RunnerException {
-
-    List<File> objectPaths = new ArrayList<File>();
-    
-    for (File file : sSources) {
-      String objectPath = buildPath + File.separator + file.getName() + ".o";
-      objectPaths.add(new File(objectPath));
-      execAsynchronously(getCommandCompilerS(avrBasePath, includePaths,
-                                             file.getAbsolutePath(),
-                                             objectPath,
-                                             boardPreferences));
-    }
- 		
-    for (File file : cSources) {
-        String objectPath = buildPath + File.separator + file.getName() + ".o";
-        objectPaths.add(new File(objectPath));
-        execAsynchronously(getCommandCompilerC(avrBasePath, includePaths,
-                                               file.getAbsolutePath(),
-                                               objectPath,
-                                               boardPreferences));
-    }
-
-    for (File file : cppSources) {
-        String objectPath = buildPath + File.separator + file.getName() + ".o";
-        objectPaths.add(new File(objectPath));
-        execAsynchronously(getCommandCompilerCPP(avrBasePath, includePaths,
-                                                 file.getAbsolutePath(),
-                                                 objectPath,
-                                                 boardPreferences));
-    }
-    
-    return objectPaths;
-  }
-
 
   boolean firstErrorFound;
   boolean secondErrorFound;
@@ -449,109 +433,6 @@ public class Compiler implements MessageConsumer {
   }
 
   /////////////////////////////////////////////////////////////////////////////
-
-  static private List getCommandCompilerS(String avrBasePath, List includePaths,
-    String sourceName, String objectName, Map<String, String> boardPreferences) {
-      String mcu, board;
-      List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + getCompilerPrefix(boardPreferences) + "gcc",
-      "-c", // compile, don't link
-      "-g", // include debugging info (so errors include line numbers)
-      "-assembler-with-cpp",
-      "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-      "-DARDUINO=" + Base.REVISION,
-    }));
-
-    mcu = boardPreferences.get("build.mcu");
-    if (null!=mcu)
-      baseCommandCompiler.add("-mmcu=" + mcu);
-
-    for (int i = 0; i < includePaths.size(); i++) {
-      baseCommandCompiler.add("-I" + (String) includePaths.get(i));
-    }
-
-    baseCommandCompiler.add(sourceName);
-    baseCommandCompiler.add("-o"+ objectName);
-
-    return baseCommandCompiler;
-  }
-
-  
-  static private List getCommandCompilerC(String avrBasePath, List includePaths,
-    String sourceName, String objectName, Map<String, String> boardPreferences) {
-    String mcu;
-    List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + getCompilerPrefix(boardPreferences) + "gcc",
-      "-c", // compile, don't link
-      "-g", // include debugging info (so errors include line numbers)
-      "-Os", // optimize for size
-      "-w", // surpress all warnings
-      "-ffunction-sections", // place each function in its own section
-      "-fdata-sections",
-      "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-      "-DARDUINO=" + Base.REVISION,
-    }));
-		
-    for (int i = 0; i < includePaths.size(); i++) {
-      baseCommandCompiler.add("-I" + (String) includePaths.get(i));
-    }
-
-    mcu = boardPreferences.get("build.mcu");
-    if (null!=mcu)
-      baseCommandCompiler.add("-mmcu=" + mcu);
-
-    String extracppflags = boardPreferences.get("build.extraCflags");
-    if (null!=extracppflags) {
-        String [] flagList = processing.core.PApplet.split(extracppflags," ");
-        for (String flag: flagList)
-            baseCommandCompiler.add(flag);
-    }
-
-    baseCommandCompiler.add(sourceName);
-    baseCommandCompiler.add("-o"+ objectName);
-
-    return baseCommandCompiler;
-  }
-	
-	
-  static private List getCommandCompilerCPP(String avrBasePath,
-    List includePaths, String sourceName, String objectName,
-    Map<String, String> boardPreferences) {
-    String mcu;
-    List baseCommandCompilerCPP = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + getCompilerPrefix(boardPreferences) + "g++",
-      "-c", // compile, don't link
-      "-g", // include debugging info (so errors include line numbers)
-      "-Os", // optimize for size
-      "-w", // surpress all warnings
-      "-fno-exceptions",
-      "-ffunction-sections", // place each function in its own section
-      "-fdata-sections",
-      "-DF_CPU=" + boardPreferences.get("build.f_cpu"),
-      "-DARDUINO=" + Base.REVISION,
-    }));
-
-    for (int i = 0; i < includePaths.size(); i++) {
-      baseCommandCompilerCPP.add("-I" + (String) includePaths.get(i));
-    }
-
-    mcu = boardPreferences.get("build.mcu");
-    if (null!=mcu)
-      baseCommandCompilerCPP.add("-mmcu=" + mcu);
-
-    String extracppflags = boardPreferences.get("build.extraCflags");
-    if (null!=extracppflags) {
-        String [] flagList = processing.core.PApplet.split(extracppflags," ");
-        for (String flag: flagList)
-            baseCommandCompilerCPP.add(flag);
-
-    }
-    baseCommandCompilerCPP.add(sourceName);
-    baseCommandCompilerCPP.add("-o"+ objectName);
-
-    return baseCommandCompilerCPP;
-  }
-
 
 
   /////////////////////////////////////////////////////////////////////////////
