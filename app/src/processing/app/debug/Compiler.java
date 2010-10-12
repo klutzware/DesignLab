@@ -216,7 +216,6 @@ public class Compiler implements MessageConsumer {
         String libraryName = "lib" + libraryFolder.getName();
 
         createFolder(outputFolder);
-        System.err.println("Creating folder " + outputFolder);
 
         /* Get all sources for this library */
         List<File> libSources = getAllSourcesInPath(libraryFolder.getPath(),false);
@@ -226,9 +225,9 @@ public class Compiler implements MessageConsumer {
         libMakeFile.write("include " + ".." + File.separator + "Common.mak");
         libMakeFile.newLine();
 
-        // Copy files into place
         libMakeFile.write( libraryName +  ".a: ");
 
+        // Copy files into place
         for (File file : libSources) {
           Base.copyFile( file, new File(outputFolder,file.getName()));
           libMakeFile.write( Base.getFileNameWithoutExtension(file) + ".o ");
@@ -245,6 +244,7 @@ public class Compiler implements MessageConsumer {
         for (File file : utilitySources) {
           Base.copyFile( file, new File(utilityFolder,file.getName()));
         }
+        // TODO: add utility makefile
 
         // this library can use includes in its utility/ folder
 
@@ -301,7 +301,7 @@ public class Compiler implements MessageConsumer {
 
     
     List baseCommandMake = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "make", "-C", buildPath, "all"}));
+      avrBasePath + "make", "--silent", "-C", buildPath, "all"}));
 
     execAsynchronously(baseCommandMake);
     return true;
