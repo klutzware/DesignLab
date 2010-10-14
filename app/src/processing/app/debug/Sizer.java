@@ -43,16 +43,16 @@ public class Sizer {
     // Size file should have been created by make
 
     String sizeFile = buildPath + File.separator + Base.getFileNameWithoutExtension(new File(sketchName)) + ".size";
-		long size = -1;
+    long size = -1;
 
     try {
-			BufferedReader fileReader = new BufferedReader(new FileReader(sizeFile));
-			String sizeString = fileReader.readLine(); // This line is to be ignored
-			sizeString = fileReader.readLine();
-			fileReader.close();
+      BufferedReader fileReader = new BufferedReader(new FileReader(sizeFile));
+      String sizeString = fileReader.readLine(); // This line is to be ignored
+      sizeString = fileReader.readLine();
+      fileReader.close();
       StringTokenizer st = new StringTokenizer(sizeString, " ");
 
-			try {
+      try {
         st.nextToken();
         st.nextToken();
         st.nextToken();
@@ -63,9 +63,9 @@ public class Sizer {
         throw new RunnerException(e.toString());
       }
 
-			return size;
-		} catch (IOException e) {
-			throw new RunnerException(e.toString());
-		}
-	}
+      return size;
+    } catch (IOException e) {
+      throw new RunnerException(e.toString());
+    }
+  }
 }

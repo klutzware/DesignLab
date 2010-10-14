@@ -49,6 +49,12 @@ public class Compiler implements MessageConsumer {
 
   public Compiler() { }
 
+  /**
+   * Get core path, ie, where all core sources reside.
+   *
+   * @param boardPreferences board preferences
+   * @return Core path, in String format
+   */
   private static final String getCorePath(Map<String, String> boardPreferences)
   {
     String corePath;
@@ -67,6 +73,13 @@ public class Compiler implements MessageConsumer {
     return corePath;
   }
 
+  /**
+   * Get all source files in a given path
+   *
+   * @param path Path where to search
+   * @param recurse Whether or not to recuse into subdirectories
+   * @return List of source files found
+   */
   public static List<File> getAllSourcesInPath( String path, boolean recurse ) {
     List<File> sources = findFilesInPath(path, "S", recurse);
     sources.addAll( findFilesInPath(path, "c", recurse) );
@@ -74,12 +87,8 @@ public class Compiler implements MessageConsumer {
     return sources;
   }
 
-  public static final String makeMakeFileVariable(String name) {
-    name = name.replace(".","___");
-    return name;
-  }
   /**
-   * Compile with avr-gcc.
+   * Compile sketch
    *
    * @param sketch Sketch object to be compiled.
    * @param buildPath Where the temporary files live and will be built from.
@@ -110,182 +119,154 @@ public class Compiler implements MessageConsumer {
     }
 
     String corePath = getCorePath(boardPreferences);
-    List<File> objectFiles = new ArrayList<File>();
-    List includePaths = new ArrayList();
-    includePaths.add(corePath);
-
-    String runtimeLibraryName = buildPath + File.separator + "core/libcore.a";
 
     List<String> extracflags=new ArrayList<String>();
     String classFileName = Base.getFileNameWithoutExtension(new File(primaryClassName));
 
-    String extracppflags = boardPreferences.get("build.extraCflags");
-    if (null!=extracppflags) {
-      String [] flagList = processing.core.PApplet.split(extracppflags," ");
-      for (String flag: flagList)
-        extracflags.add(flag);
-    }
-
     // Create a suitable makefile
-    BufferedWriter makeFile;
+
     try {
 
-      /* Write preferences */
-      BufferedWriter commonMakeFile = new BufferedWriter(new FileWriter(new File(buildPath, "Common.mak")));
+      File commonMakeFileName = new File(buildPath, "Common.mak");
+      File rulesMakeFileName = new File(corePath,"Rules.mak");
+
+      Makefile commonMakeFile = new Makefile(commonMakeFileName);
+
+      /* Add all board settings to Common.mak */
       for (String key: boardPreferences.keySet()) {
-        commonMakeFile.write( "PREFS___board___" + makeMakeFileVariable(key) +"="+ boardPreferences.get(key));
-        commonMakeFile.newLine();
+        commonMakeFile.setVariable( "PREFS___board___" + Makefile.makeVariable(key), boardPreferences.get(key));
       }
-      commonMakeFile.write("COREPATH=" + corePath);
-      commonMakeFile.newLine();
-      commonMakeFile.write("AVRPATH=" + avrBasePath);
-      commonMakeFile.newLine();
-      commonMakeFile.write("BUILDPATH=" + buildPath);
-      commonMakeFile.newLine();
-      commonMakeFile.write("REVISION=" + Base.REVISION);
-      commonMakeFile.newLine();
+      /* Add also some useful variables */
+      commonMakeFile.setVariable("COREPATH", corePath);
+      commonMakeFile.setVariable("AVRPATH", avrBasePath);
+      commonMakeFile.setVariable("BUILDPATH", buildPath);
+      commonMakeFile.setVariable("REVISION", new Integer(Base.REVISION).toString());
 
-      commonMakeFile.close();
+      Makefile mainMakeFile = new Makefile( new File(buildPath, "Makefile") );
 
-      makeFile = new BufferedWriter(new FileWriter(new File(buildPath, "Makefile")));
-      makeFile.write("include Common.mak");
-      makeFile.newLine();
+      mainMakeFile.addDependency("all","all-target");
+      mainMakeFile.include( commonMakeFile );
 
 
-      makeFile.write("TARGET=" + classFileName);
-      makeFile.newLine();
-      makeFile.newLine();
+      mainMakeFile.setVariable("TARGET",classFileName);
 
-      /* Place core file in core subdirectory */
+      /* Place core makefile in core subdirectory */
 
       File coreFolder = new File(buildPath, "core");
       createFolder(coreFolder);
-      BufferedWriter coreMakeFile = new BufferedWriter(new FileWriter(new File(coreFolder, "Makefile")));
 
-      coreMakeFile.write("include " + ".." + File.separator + "Common.mak");
-      coreMakeFile.newLine();
+      Makefile coreMakeFile = new Makefile( new File(coreFolder, "Makefile") );
+      coreMakeFile.include( commonMakeFile );
 
       /* Get all source files for core */
       List<File> coreSources = getAllSourcesInPath(corePath,true);
+      File libCoreFile = new File(coreFolder,"libcore.a");
 
-
-      coreMakeFile.write("libcore.a:");
-      for (File file : coreSources) {
-        coreMakeFile.write(" " + Base.getFileNameWithoutExtension(file) + ".o");
-      }
-      //			coreMakeFile.newLine();
-      coreMakeFile.newLine();
-      coreMakeFile.write("\t$(AR) $(ARFLAGS) $@ $+");
-      coreMakeFile.newLine();
+      coreMakeFile.addDependency( libCoreFile, Makefile.makeObjectsFromSources(coreSources) );
+      coreMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
 
       // Copy files into place
 
       for (File file : coreSources) {
         Base.copyFile( file, new File(coreFolder,file.getName()));
-        coreMakeFile.write( Base.getFileNameWithoutExtension(file) + ".o: "+  file.getName());
-        coreMakeFile.newLine();
+        coreMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
       }
-      extracflags.add("-I" + buildPath);
-      coreMakeFile.write("EXTRACFLAGS=");
-      for (String f: extracflags) {
-        coreMakeFile.write(f + " ");
-      }
-      coreMakeFile.newLine();
-      coreMakeFile.write("include " + corePath + File.separator + "Rules.mak");
-      coreMakeFile.newLine();
 
-
+      coreMakeFile.appendVariable("EXTRACFLAGS","-I" + buildPath);
+      coreMakeFile.include( rulesMakeFileName );
       coreMakeFile.close();
 
       // Write core dependency
 
-      makeFile.write("core" + File.separator + "libcore.a:");
-      makeFile.newLine();
-      makeFile.write("\t$(MAKE) -C core libcore.a");
-      makeFile.newLine();
-
-      // use library directories as include paths for all libraries
-      for (File file : sketch.getImportedLibraries()) {
-        extracflags.add("-I"+file.getPath());
-      }
-
+      mainMakeFile.addDependency("core" + File.separator + "libcore.a:","");
+      mainMakeFile.addBuildRule("$(MAKE) -C core libcore.a");
 
       for (File libraryFolder : sketch.getImportedLibraries()) {
+
         File outputFolder = new File(buildPath, libraryFolder.getName());
         File utilityFolder = new File(libraryFolder, "utility");
         String libraryName = "lib" + libraryFolder.getName();
+        File libraryFile = new File(libraryFolder, libraryName + ".a");
 
         createFolder(outputFolder);
 
         /* Get all sources for this library */
         List<File> libSources = getAllSourcesInPath(libraryFolder.getPath(),false);
         // Specific makefile for this library
-        BufferedWriter libMakeFile = new BufferedWriter(new FileWriter(new File(outputFolder, "Makefile")));
+        Makefile libMakeFile = new Makefile(new File(outputFolder, "Makefile"));
 
-        libMakeFile.write("include " + ".." + File.separator + "Common.mak");
-        libMakeFile.newLine();
+        libMakeFile.include( commonMakeFile );
 
-        libMakeFile.write( libraryName +  ".a: ");
+        libMakeFile.setVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
 
         // Copy files into place
         for (File file : libSources) {
           Base.copyFile( file, new File(outputFolder,file.getName()));
-          libMakeFile.write( Base.getFileNameWithoutExtension(file) + ".o ");
+          libMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
         }
-        libMakeFile.newLine();
-        libMakeFile.write("\t$(AR) $(ARFLAGS) $@ $+");
-        libMakeFile.newLine();
 
-        outputFolder = new File(outputFolder, "utility");
-        createFolder(outputFolder);
+        if (utilityFolder.exists()) {
 
-        List<File> utilitySources = getAllSourcesInPath(utilityFolder.getPath(),false);
+          libMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath() + File.separator + "utility");
 
-        for (File file : utilitySources) {
-          Base.copyFile( file, new File(utilityFolder,file.getName()));
+          List<File> utilitySources = getAllSourcesInPath(utilityFolder.getPath(),false);
+
+          if (utilitySources.size() > 0) {
+
+            String utilityRelativePath = libraryFolder.getName() + File.separator + "utility";
+
+            outputFolder = new File(outputFolder, "utility");
+            createFolder(outputFolder);
+
+            // Append to main makefile, so it's included also
+            mainMakeFile.appendVariable( "LIBS", utilityRelativePath + File.separator + "libutility.a" );
+            mainMakeFile.addDependency(utilityRelativePath + File.separator + "libutility.a", "");
+            mainMakeFile.addBuildRule("$(MAKE) -C " + utilityRelativePath + " " + "libutility.a");
+
+            // Now, create utility makefile
+            Makefile utilityMakeFile = new Makefile( new File(outputFolder, "Makefile") );
+            utilityMakeFile.include(commonMakeFile);
+
+            for (File file : utilitySources) {
+              Base.copyFile( file, new File(outputFolder,file.getName()));
+              utilityMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
+            }
+
+            utilityMakeFile.addDependency( new File("libutility.a"), Makefile.makeObjectsFromSources(utilitySources) );
+            utilityMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
+            utilityMakeFile.include( rulesMakeFileName );
+            utilityMakeFile.close();
+
+            // TODO: add utility makefile
+            libMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
+            libMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
+
+          }
         }
-        // TODO: add utility makefile
 
         // this library can use includes in its utility/ folder
+        libMakeFile.addDependency( libraryFile, Makefile.makeObjectsFromSources(libSources) );
+        libMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
 
-        libMakeFile.write("EXTRACFLAGS=-I" + libraryFolder.getPath());
-        libMakeFile.newLine();
-
-        makeFile.write("EXTRACFLAGS+=-I" + libraryFolder.getPath());
-        makeFile.newLine();
-
-        libMakeFile.write("include " + corePath + File.separator + "Rules.mak");
-        libMakeFile.newLine();
-
+        libMakeFile.include( rulesMakeFileName );
         libMakeFile.close();
 
-        makeFile.write("LIBS+="+libraryFolder.getName()+ File.separator + libraryName + ".a");
-        makeFile.newLine();
-
-        makeFile.write(libraryFolder.getName()+ File.separator + libraryName + ".a:");
-        makeFile.newLine();
-        makeFile.write("\t$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
-        makeFile.newLine();
+        mainMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
+        mainMakeFile.appendVariable("LIBS", libraryFolder.getName()+ File.separator + libraryName + ".a");
+        mainMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
+        mainMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
 
       }
 
       List<File> sketchSources = getAllSourcesInPath(buildPath,false);
 
-      makeFile.write("TARGETOBJ=");
-      for (File file : sketchSources) {
-        makeFile.write( " " + Base.getFileNameWithoutExtension(file) + ".o ");
-      }
-      makeFile.newLine();
+      mainMakeFile.setVariable("TARGETOBJ", Makefile.makeFileList(Makefile.makeObjectsFromSources(sketchSources)) );
+      mainMakeFile.appendVariable("LIBS","core" + File.separator + "libcore.a");
+      mainMakeFile.include( rulesMakeFileName );
 
-      // TODO: add targetobj dependencies
+      mainMakeFile.close();
 
-      makeFile.write("LIBS+=core/libcore.a");
-      makeFile.newLine();
-
-      makeFile.write("include " + corePath + File.separator + "Rules.mak");
-      makeFile.newLine();
-
-      makeFile.close();
+      commonMakeFile.close();
 
     } catch (java.io.IOException e) {
       throw new RunnerException("Cannot write makefile!");

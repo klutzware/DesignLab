@@ -14,7 +14,7 @@ LDFLAGS=-Wl,--gc-sections -mmcu=$(PREFS___board___build___mcu) -L$(COREPATH)
 $(TARGET).elf: $(TARGETOBJ) $(LIBS)
 	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -lm -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive 
 
-all: $(TARGET).elf $(TARGET).hex $(TARGET).eep $(TARGET).size
+all-target: $(TARGET).elf $(TARGET).hex $(TARGET).eep $(TARGET).size
 
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
