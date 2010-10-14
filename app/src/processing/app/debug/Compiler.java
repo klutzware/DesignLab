@@ -178,7 +178,7 @@ public class Compiler implements MessageConsumer {
 
       // Write core dependency
 
-      mainMakeFile.addDependency("core" + File.separator + "libcore.a:","");
+      mainMakeFile.addDependency("core" + File.separator + "libcore.a","");
       mainMakeFile.addBuildRule("$(MAKE) -C core libcore.a");
 
       for (File libraryFolder : sketch.getImportedLibraries()) {
@@ -206,24 +206,25 @@ public class Compiler implements MessageConsumer {
         }
 
         if (utilityFolder.exists()) {
+          String utilityRelativePath = libraryFolder.getName() + File.separator + "utility";
+          File utilityPath = new File( libraryFolder.getPath() + File.separator + "utility" );
 
-          libMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath() + File.separator + "utility");
+          libMakeFile.appendVariable("EXTRACFLAGS","-I" + utilityPath.getPath());
           // This should not be needed.
-          commonMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath() + File.separator + "utility");
+          commonMakeFile.appendVariable("EXTRACFLAGS","-I" + utilityPath.getPath());
 
           List<File> utilitySources = getAllSourcesInPath(utilityFolder.getPath(),false);
 
           if (utilitySources.size() > 0) {
-
-            String utilityRelativePath = libraryFolder.getName() + File.separator + "utility";
-
+            File utilityLibFile = new File("libutility.a");
             outputFolder = new File(outputFolder, "utility");
             createFolder(outputFolder);
 
+
             // Append to main makefile, so it's included also
-            mainMakeFile.appendVariable( "LIBS", utilityRelativePath + File.separator + "libutility.a" );
-            mainMakeFile.addDependency(utilityRelativePath + File.separator + "libutility.a", "");
-            mainMakeFile.addBuildRule("$(MAKE) -C " + utilityRelativePath + " " + "libutility.a");
+            mainMakeFile.appendVariable( "LIBS", utilityRelativePath + File.separator + utilityLibFile.getName() );
+            mainMakeFile.addDependency(utilityRelativePath + File.separator + utilityLibFile.getName(), "");
+            mainMakeFile.addBuildRule("$(MAKE) -C " + utilityRelativePath + " " + utilityLibFile.getName());
 
             // Now, create utility makefile
             Makefile utilityMakeFile = new Makefile( new File(outputFolder, "Makefile") );
@@ -234,12 +235,11 @@ public class Compiler implements MessageConsumer {
               utilityMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
             }
 
-            utilityMakeFile.addDependency( new File("libutility.a"), Makefile.makeObjectsFromSources(utilitySources) );
+            utilityMakeFile.addDependency( utilityLibFile, Makefile.makeObjectsFromSources(utilitySources) );
             utilityMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
             utilityMakeFile.include( rulesMakeFileName );
             utilityMakeFile.close();
 
-            // TODO: add utility makefile
             libMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
             libMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
 
@@ -265,7 +265,7 @@ public class Compiler implements MessageConsumer {
       List<File> sketchSources = getAllSourcesInPath(buildPath,false);
 
       mainMakeFile.setVariable("TARGETOBJ", Makefile.makeFileList(Makefile.makeObjectsFromSources(sketchSources)) );
-      mainMakeFile.appendVariable("LIBS","core" + File.separator + "libcore.a");
+      mainMakeFile.appendVariable("LIBS","core" + File.separator + libCoreFile.getName());
       mainMakeFile.include( rulesMakeFileName );
 
       mainMakeFile.close();
