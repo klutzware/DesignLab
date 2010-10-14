@@ -197,7 +197,7 @@ public class Compiler implements MessageConsumer {
 
         libMakeFile.include( commonMakeFile );
 
-        libMakeFile.setVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
+        libMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
 
         // Copy files into place
         for (File file : libSources) {
@@ -208,6 +208,8 @@ public class Compiler implements MessageConsumer {
         if (utilityFolder.exists()) {
 
           libMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath() + File.separator + "utility");
+          // This should not be needed.
+          commonMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath() + File.separator + "utility");
 
           List<File> utilitySources = getAllSourcesInPath(utilityFolder.getPath(),false);
 
@@ -251,7 +253,9 @@ public class Compiler implements MessageConsumer {
         libMakeFile.include( rulesMakeFileName );
         libMakeFile.close();
 
-        mainMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
+        // This is stupid, but some libs require other libs (ex. Ethernet needs SPI)
+        commonMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
+
         mainMakeFile.appendVariable("LIBS", libraryFolder.getName()+ File.separator + libraryName + ".a");
         mainMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
         mainMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
