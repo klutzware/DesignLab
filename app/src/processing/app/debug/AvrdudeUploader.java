@@ -66,7 +66,7 @@ public class AvrdudeUploader extends Uploader  {
       }
 
       Collection params = getProgrammerCommands(t, uploadUsing);
-      params.add("-Uflash:w:" + buildPath + File.separator + className + ".hex:i");
+      params.add("-Uflash:w:" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".hex:i");
       return avrdude(params);
     }
   }
@@ -86,7 +86,8 @@ public class AvrdudeUploader extends Uploader  {
     commandDownloader.add(
       "-b" + Integer.parseInt(boardPreferences.get("upload.speed")));
     commandDownloader.add("-D"); // don't erase
-    commandDownloader.add("-Uflash:w:" + buildPath + File.separator + className + ".hex:i");
+    commandDownloader.add("-Uflash:w:" + buildPath + File.separator +
+      Base.getFileNameWithoutExtension(new File(className)) + ".hex:i");
 
     if (boardPreferences.get("upload.disable_flushing") == null ||
         boardPreferences.get("upload.disable_flushing").toLowerCase().equals("false")) {
