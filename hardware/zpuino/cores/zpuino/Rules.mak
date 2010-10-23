@@ -6,7 +6,9 @@ AR=$(CROSS)ar
 OBJCOPY=$(CROSS)objcopy
 SIZE=$(CROSS)size
 
-CFLAGS=$(EXTRACFLAGS) -Os -g -nostartfiles -I$(COREPATH)
+EXTRACFLAGS=$(PREFS___board___build___extraCflags)
+
+CFLAGS=$(EXTRACFLAGS) -Os -g -nostartfiles -mno-callpcrel -I$(COREPATH)
 CXXFLAGS=$(CFLAGS) -fno-exceptions
 ARFLAGS=crs
 LDFLAGS=-nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sections
@@ -14,7 +16,7 @@ LDFLAGS=-nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sec
 $(TARGET).elf: $(TARGETOBJ) $(LIBS)
 	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive
 
-all: $(TARGET).elf $(TARGET).bin $(TARGET).size
+all-target: $(TARGET).elf $(TARGET).bin $(TARGET).size
 
 $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) -O binary $< $@

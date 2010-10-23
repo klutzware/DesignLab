@@ -11,7 +11,8 @@ void ___do_global_ctors()
 		ptr++;
 	}
 }
-
+void exit(){
+}
 int main(int argc, char **argv)
 {
 	_Z5setupv();

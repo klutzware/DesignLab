@@ -34,10 +34,10 @@ _memreg:
 .text
 
 _premain:
-
-        im ___do_global_ctors
-        call
-
+        ;im ___do_global_ctors
+        ;call
+        im -1
+        poppc
         ; argv
         im 0
         nop
