@@ -65,7 +65,7 @@ public class ZPUinoUploader extends Uploader  {
 
       Collection params = getProgrammerCommands(t, uploadUsing);
 
-      params.add("-b" + buildPath + File.separator + className + ".bin");
+      params.add("-b" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".bin");
       return zpuinoprogrammer(params);
     }
   }
@@ -78,7 +78,7 @@ public class ZPUinoUploader extends Uploader  {
     commandDownloader.add(
       "-d" + (Base.isWindows() ? "\\\\.\\" : "") + Preferences.get("serial.port"));
 
-    commandDownloader.add("-b" + buildPath + File.separator + className + ".bin");
+    commandDownloader.add("-b" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".bin");
 
     return zpuinoprogrammer(commandDownloader);
   }
