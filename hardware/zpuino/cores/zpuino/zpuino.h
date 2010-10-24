@@ -3,6 +3,10 @@
 
 #include "register.h"
 
+const unsigned int clockFrequency = CLK_FREQ;
+const unsigned int clocksPerMicrosecond = clockFrequency/1000000U;
+const unsigned int clocksPerMilisecond = clockFrequency/1000U;
+
 template<unsigned int pin>
 	struct digitalUpS {
 		static void apply() {
