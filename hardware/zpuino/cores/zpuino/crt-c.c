@@ -20,3 +20,10 @@ int main(int argc, char **argv)
 		_Z4loopv();
 	}
 }
+
+void __attribute__((noreturn)) _premain(void)
+{
+	___do_global_ctors();
+	main(0,0);
+	while(1);
+}

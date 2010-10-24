@@ -32,24 +32,6 @@ _memreg:
         .weak _init
         .globl ___do_global_ctors
 .text
-
-_premain:
-        ;im ___do_global_ctors
-        ;call
-        im -1
-        poppc
-        ; argv
-        im 0
-        nop
-        ; argc
-        im 0
-        nop
-        im main
-        call
-
-        ; Loop forever
-        im -1
-        poppc
         .globl _initIO
         .weak _initIO
 _initIO:
