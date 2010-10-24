@@ -10,12 +10,22 @@ template<unsigned int pin>
 		}
 	};
 
+static inline void digitalUp(const unsigned int pin)
+{
+	GPIODATA( pin / 32 ) |= (1<<(pin%32));
+}
+
 template<unsigned int pin>
 	struct digitalDownS {
 		static void apply() {
 			GPIODATA( pin / 32 ) &= ~(1<<(pin%32));
 		}
 	};
+
+static inline void digitalDown(const unsigned int pin)
+{
+	GPIODATA( pin / 32 ) &= ~(1<<(pin%32));
+}
 
 template<unsigned int pin>
 	struct pinModeInputS {
@@ -40,6 +50,14 @@ template<unsigned int pin, bool val>
 				digitalDownS<pin>::apply();
 		}
 	};
+
+static inline void digitalWrite(unsigned int pin, bool val)
+{
+	if (val)
+		digitalUp(pin);
+	else
+		digitalDown(pin);
+}
 
 template<unsigned int pin, bool val>
 	struct pinModeS {
