@@ -4,12 +4,19 @@
         .globl _premain
         .globl main
 
-.balign 8,0	
+/* ATTENTION - this requires a very strict memory map. Do not change before
+   thinking */
+.balign 4,0
+	.globl ivector
+ivector:
+	.long 0 /* Will be set by bootloader */
+   
+.balign 4,0	
 __executable_start:
 	im _premain
-	poppc
-
-.balign 8,0
+	poppc      
+        
+.balign 4,0
         .globl _zpu_interrupt
 
 ___zpu_interrupt_vector:
