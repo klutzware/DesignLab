@@ -1,4 +1,7 @@
+
 extern unsigned int ___ctors, ___ctors_end;
+extern char __end__;
+static char *start_brk = &__end__;
 
 extern void _Z4loopv();
 extern void _Z5setupv();
@@ -26,4 +29,10 @@ void __attribute__((noreturn)) _premain(void)
 	___do_global_ctors();
 	main(0,0);
 	while(1);
+}
+
+void *sbrk(int inc)
+{
+	start_brk+=inc;
+	return start_brk;
 }
