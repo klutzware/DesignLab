@@ -4,6 +4,8 @@
 #include <zpuino.h>
 
 void delayCycles(unsigned int cycles);
+unsigned int millis(void);
+unsigned int micros(void);
 
 static inline void delayMicroseconds(const unsigned int us) {
 	delayCycles( clocksPerMicrosecond * us );

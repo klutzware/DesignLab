@@ -1,7 +1,8 @@
 #ifndef __ZPUINO_H__
 #define __ZPUINO_H__
 
-#include "register.h"
+#include <register.h>
+#include <stdlib.h>
 
 const unsigned int clockFrequency = CLK_FREQ;
 const unsigned int clocksPerMicrosecond = clockFrequency/1000000U;
