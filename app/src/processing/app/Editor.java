@@ -969,10 +969,17 @@ public class Editor extends JFrame implements RunnerListener {
           empty = false;
         }
       }
-      if (!empty) {
+
+      // ZPUino special port for simulator.
+      String curr_port = "socket:ZPUINOSIMULATOR";
+      rbMenuItem = new JCheckBoxMenuItem(curr_port, curr_port.equals(Preferences.get("serial.port")));
+      rbMenuItem.addActionListener(serialMenuListener);
+      serialMenu.add(rbMenuItem);
+
+      //if (!empty) {
         //System.out.println("enabling the serialMenu");
-        serialMenu.setEnabled(true);
-      }
+      serialMenu.setEnabled(true);
+      //}
 
     }
 
