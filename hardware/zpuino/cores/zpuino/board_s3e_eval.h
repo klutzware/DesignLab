@@ -1,7 +1,7 @@
 #ifndef __BOARD_S3E_H__
 #define __BOARD_S3E_H__
 
-#define CLK_FREQ 100000000ULL
+#define CLK_FREQ 100000000U
 
 #define FPGA_PIN_R7 0
 #define FPGA_PIN_M14 1

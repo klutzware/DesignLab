@@ -5,7 +5,7 @@
 #include "board_s3e_eval.h"
 #else
 # if defined( __ZPUINO_PAPILIO_ONE__ )
-#  define CLK_FREQ  96000000ULL
+#  define CLK_FREQ  96000000U
 # else
 #  error Unknown board.
 # endif
@@ -94,7 +94,7 @@
 
 /* Baud rate computation */
 
-#define BAUDRATEGEN(x) ((CLK_FREQ/(x))/4)-1
+#define BAUDRATEGEN(x) ((CLK_FREQ/(x))>>2)-1
 
 #define INPUT 1
 #define OUTPUT 0
