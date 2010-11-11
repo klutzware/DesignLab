@@ -43,3 +43,9 @@ _memreg:
         .weak _initIO
 _initIO:
 	poppc
+        .globl _zpu_interrupt
+        .weak  _zpu_interrupt
+_zpu_interrupt:
+	poppc
+        
+        .weak _initIO
