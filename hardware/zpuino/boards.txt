@@ -6,3 +6,11 @@ zpuino_s3e_eval.upload.speed=115200
 zpuino_s3e_eval.build.f_cpu=100000000L
 zpuino_s3e_eval.build.core=zpuino
 zpuino_s3e_eval.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -nostartfiles
+##############################################################
+zpuino_papilio_one.name=ZPUino on Papilio One board
+zpuino_papilio_one.upload.protocol=zpuino-serial
+zpuino_papilio_one.upload.maximum_size=12160
+zpuino_papilio_one.upload.speed=1000000
+zpuino_papilio_one.build.f_cpu=96000000L
+zpuino_papilio_one.build.core=zpuino
+zpuino_papilio_one.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -nostartfiles
