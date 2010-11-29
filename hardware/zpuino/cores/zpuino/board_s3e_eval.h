@@ -1,7 +1,12 @@
-#ifndef __BOARD_S3E_H__
-#define __BOARD_S3E_H__
+#ifndef __BOARD_H__
+#define __BOARD_H__
 
-#define CLK_FREQ 100000000U
+#define CLK_FREQ 100000000ULL
+#define BOARD_MEMORYSIZE 0x8000
+#define SPIOFFSET 0x00000000
+
+#define IOBASE 0x8000
+#define IO_SLOT_OFFSET_BIT 11
 
 #define FPGA_PIN_R7 0
 #define FPGA_PIN_M14 1
@@ -48,7 +53,6 @@
 #define FPGA_PIN_A4 42
 #define FPGA_PIN_D5 43
 #define FPGA_PIN_C5 44
-#define FPGA_PIN_P7 44
 
 #define FPGA_LED_0 FPGA_PIN_F12
 #define FPGA_LED_1 FPGA_PIN_E12
@@ -62,7 +66,6 @@
 #define FPGA_AD_CONV FPGA_PIN_P11
 #define FPGA_DAC_CS  FPGA_PIN_N8
 #define FPGA_AMP_CS  FPGA_PIN_N7
-#define FPGA_AMP_SHDN FPGA_PIN_P7
 #define FPGA_SF_CE0  FPGA_PIN_D16
 #define FPGA_SS_B    FPGA_PIN_U3
 
@@ -70,6 +73,8 @@
 #define FPGA_FX2_IO2 FPGA_PIN_A4
 #define FPGA_FX2_IO3 FPGA_PIN_D5
 #define FPGA_FX2_IO4 FPGA_PIN_C5
+
+#define SPI_FLASH_SEL_PIN FPGA_SS_B
 
 
 #endif

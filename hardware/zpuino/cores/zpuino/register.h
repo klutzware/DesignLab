@@ -5,7 +5,7 @@
 #include "board_s3e_eval.h"
 #else
 # if defined( __ZPUINO_PAPILIO_ONE__ )
-#  define CLK_FREQ  96000000U
+#  include "board_papilio_one.h"
 # else
 #  error Unknown board.
 # endif
@@ -14,8 +14,6 @@
 #define SPIISBLOCKING 1
 
 
-#define IOBASE 0x8000
-#define IO_SLOT_OFFSET_BIT 11
 #define BIT(x) (1<<x)
 
 #define IO_SLOT(x) (IOBASE + (x<<IO_SLOT_OFFSET_BIT))
@@ -94,7 +92,7 @@
 
 /* Baud rate computation */
 
-#define BAUDRATEGEN(x) ((CLK_FREQ/(x))>>2)-1
+#define BAUDRATEGEN(x) ((CLK_FREQ/(x))/4)-1
 
 #define INPUT 1
 #define OUTPUT 0
