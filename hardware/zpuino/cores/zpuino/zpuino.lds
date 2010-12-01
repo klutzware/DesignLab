@@ -11,8 +11,7 @@ SEARCH_DIR("/local/work/zpu/zpubig/binutils/../install/zpu-elf/lib");
 
   MEMORY
   {
-    MEM (rx) : ORIGIN = 0x00000000, LENGTH = 0x6FFF
-    RAM (rx) : ORIGIN = 0x00001000, LENGTH = 0x6FFF
+    RAM (rx) : ORIGIN = 0x00001000, LENGTH = 0x8000
   }
 
 SECTIONS
@@ -58,7 +57,6 @@ SECTIONS
   {
     KEEP(*(.boots))
   } > RAM 
-  AT > MEM
 
   .text           :
   {
@@ -66,16 +64,14 @@ SECTIONS
     /* .gnu.warning sections are handled specially by elf32.em.  */
     *(.gnu.warning)
     *(.glue_7t) *(.glue_7)
-    KEEP(*(.text))
+    /* KEEP(*(.text)) */
     . = ALIGN(8);
   } > RAM
-  AT > MEM
 
   .fini           :
   {
     KEEP (*(.fini))
   } > RAM
-  AT > MEM
   
   . = ALIGN(4);
    
@@ -86,9 +82,9 @@ SECTIONS
   .rodata ALIGN(4): {
   	
       *(.rodata .rodata.* .gnu.linkonce.r.*)
+      KEEP(*(.gnu.linkonce.r.*))
       . = ALIGN(4);
   } > RAM
-  AT > MEM
 
   . = ALIGN(4); /* Enforce alignment of .data below */
 
@@ -96,10 +92,8 @@ SECTIONS
  	{ *(.rodata1)
   	. = ALIGN(4); 
   } > RAM
-  AT > MEM
 
  .eh_frame_hdr : { *(.eh_frame_hdr) }  > RAM
-  AT > MEM
   
   
   /* Adjust the address for the data segment.  We want to adjust up to
@@ -133,7 +127,6 @@ SECTIONS
     SORT(CONSTRUCTORS)
     __data_end = .;
   } > RAM
-  AT > MEM
   
   .data1          : { *(.data1) }
   .tdata	  : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
@@ -163,7 +156,6 @@ SECTIONS
     KEEP (*(.ctors))
     ___ctors_end = .;
   } > RAM
-  AT > MEM
 
   .dtors          :
   {
@@ -174,7 +166,6 @@ SECTIONS
     KEEP (*(.dtors))
     ___dtors_end = .;
   } > RAM
-  AT > MEM
   
   ___jcr_start = .;
   .jcr            : 
@@ -183,7 +174,6 @@ SECTIONS
   	KEEP (*(.jcr)) 
       ___jcr_end = .;
   } > RAM
-  AT > MEM
 
   .got            : { *(.got.plt) *(.got) }
   _edata = .;
@@ -200,7 +190,6 @@ SECTIONS
       .bss section disappears because there are no input sections.  */
    . = ALIGN(32 / 8);
   } > RAM
-  AT > MEM
 
   . = ALIGN(32 / 8);
   _end = .;
@@ -244,7 +233,6 @@ SECTIONS
     _stack = .;
     *(.stack)
   } > RAM
-  AT > MEM
 
   .note.gnu.zpu.ident 0 : { KEEP (*(.note.gnu.zpu.ident)) }
   /DISCARD/ : { *(.note.GNU-stack) }

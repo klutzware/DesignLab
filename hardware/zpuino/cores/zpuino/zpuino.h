@@ -1,49 +1,45 @@
+#ifndef __ZPUINO_H__
+#define __ZPUINO_H__
+
 #include "register.h"
 
-template<unsigned int pin>
-	struct digitalUpS {
-		static void apply() {
-			GPIODATA( pin / 32 ) |= (1<<(pin%32));
-		}
-	};
+static inline __attribute__((always_inline)) register_t outputRegisterForPin(unsigned int pin)
+{
+	return &GPIODATA(pin/32);
+}
 
-template<unsigned int pin>
-	struct digitalDownS {
-		static void apply() {
-			GPIODATA( pin / 32 ) &= ~(1<<(pin%32));
-		}
-	};
+static inline __attribute__((always_inline)) register_t inputRegisterForPin(unsigned int pin)
+{
+	return &GPIODATA(pin/32);
+}
 
-template<unsigned int pin>
-	struct pinModeInputS {
-		static void apply() {
-			GPIOTRIS( pin / 32 ) |= (1<<(pin%32));
-		}
-	};
+static inline __attribute__((always_inline)) register_t modeRegisterForPin(unsigned int pin)
+{
+	return &GPIOTRIS(pin/32);
+}
 
-template<unsigned int pin>
-	struct pinModeOutputS {
-		static void apply() {
-			GPIOTRIS( pin / 32 ) &= ~(1<<(pin%32));
-		}
-	};
+static inline __attribute__((always_inline)) unsigned int bitMaskForPin(unsigned int pin)
+{
+    return (1<<(pin%32));
+}
 
-template<unsigned int pin, bool val>
-	struct digitalWriteS {
-		static void apply() {
-			if (val)
-				digitalUpS<pin>::apply();
-			else
-				digitalDownS<pin>::apply();
-		}
-	};
+static inline __attribute__((always_inline)) void digitalWrite(unsigned int pin, int value)
+{
+	if (value) {
+		*outputRegisterForPin(pin) |= bitMaskForPin(pin);
+	} else {
+		*outputRegisterForPin(pin) &= ~bitMaskForPin(pin);
+	}
+}
 
-template<unsigned int pin, bool val>
-	struct pinModeS {
-		static void apply() {
-			if (val)
-				pinModeInputS<pin>::apply();
-			else
-				pinModeOutputS<pin>::apply();
-		}
-	};
+static inline __attribute__((always_inline)) void pinMode(unsigned int pin, int mode)
+{
+	if (mode) {
+		*modeRegisterForPin(pin) |= bitMaskForPin(pin);
+	} else {
+		*modeRegisterForPin(pin) &= ~bitMaskForPin(pin);
+	}
+}
+
+
+#endif

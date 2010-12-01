@@ -14,6 +14,12 @@ void ___do_global_ctors()
 		ptr++;
 	}
 }
+
+void __cxa_pure_virtual()
+{
+	// Abort here.
+}
+
 void exit(){
 }
 int main(int argc, char **argv)

@@ -13,12 +13,13 @@
 
 #define SPIISBLOCKING 1
 
+typedef volatile unsigned int* register_t;
 
 #define BIT(x) (1<<x)
 
 #define IO_SLOT(x) (IOBASE + (x<<IO_SLOT_OFFSET_BIT))
 
-#define REGISTER(SLOT, y) *(volatile unsigned int*)(SLOT + (y<<2))
+#define REGISTER(SLOT, y) *(register_t)(SLOT + (y<<2))
 
 #define SPIBASE  IO_SLOT(0)
 #define UARTBASE IO_SLOT(1)

@@ -8,8 +8,8 @@ SIZE=$(CROSS)size
 
 EXTRACFLAGS=$(PREFS___board___build___extraCflags)
 
-CFLAGS=$(EXTRACFLAGS) -Os -g -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -I$(COREPATH)
-CXXFLAGS=$(CFLAGS) -fno-exceptions
+CFLAGS=$(EXTRACFLAGS) -Wall -Os -g -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -I$(COREPATH)
+CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
 ARFLAGS=crs
 LDFLAGS=-nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sections
 
