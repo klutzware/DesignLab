@@ -79,7 +79,7 @@ public class ZPUinoUploader extends Uploader  {
       "-d" + (Base.isWindows() ? "\\\\.\\" : "") + Preferences.get("serial.port"));
 
     commandDownloader.add("-b" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".bin");
-
+    commandDownloader.add("-R"); // Reset
     return zpuinoprogrammer(commandDownloader);
   }
   
