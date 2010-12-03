@@ -3,7 +3,7 @@
 HardwareSerial Serial(1); /* 1st slot */
 
 void HardwareSerial::begin_slow(const unsigned int baudrate) {
-	REGISTER(IO_SLOT(base),1) = BAUDRATEGEN(baudrate);
+	REGISTER(IO_SLOT(base),1) = BAUDRATEGEN(baudrate)|BIT(UARTEN);
 }
 
 int HardwareSerial::available()  {

@@ -10,7 +10,7 @@ public:
 
 	__attribute__((always_inline)) inline void begin(const unsigned int baudrate) {
 		if (__builtin_constant_p(baudrate)) {
-			REGISTER(IO_SLOT(base),1) = BAUDRATEGEN(baudrate);
+			REGISTER(IO_SLOT(base),1) = BAUDRATEGEN(baudrate) | BIT(UARTEN);
 		} else {
 			begin_slow(baudrate);
 		}

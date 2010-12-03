@@ -107,19 +107,19 @@ void Print::println(void)
   print('\n');  
 }
 
-/*
+
  void Print::println(const String &s)
 {
   print(s);
   println();
 }
-*/
+
 void Print::println(const char c[])
 {
   print(c);
   println();
 }
-/*
+
 void Print::println(char c, int base)
 {
   print(c, base);
@@ -131,13 +131,13 @@ void Print::println(unsigned char b, int base)
   print(b, base);
   println();
 }
-*/
+
 void Print::println(int n, int base)
 {
-  //print(n, base);
-  //println();
+  print(n, base);
+  println();
 }
-/*
+
 void Print::println(unsigned int n, int base)
 {
   print(n, base);
@@ -161,7 +161,7 @@ void Print::println(double n, int digits)
   print(n, digits);
   println();
 }
-*/
+
 // Private Methods /////////////////////////////////////////////////////////////
 
 void Print::printNumber(unsigned long n, uint8_t base)
