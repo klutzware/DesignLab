@@ -87,7 +87,9 @@ typedef volatile unsigned int* register_t;
 #define SPICPOL  4 /* Clock polarity */
 #define SPISRE   5 /* Sample on Rising Edge */
 #define SPIEN    6 /* SPI Enabled (gpio acquire) */
-
+#define SPIBLOCK 7 /* SPI Blocking operation */
+#define SPITS0   8
+#define SPITS1   9
 /* Sigma-Delta bits */
 #define SDENA    0 /* Sigma-delta enable */
 
