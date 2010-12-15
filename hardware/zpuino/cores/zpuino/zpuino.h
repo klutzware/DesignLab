@@ -2,6 +2,9 @@
 #define __ZPUINO_H__
 
 #include "register.h"
+#include "interrupt.h"
+
+#define __ZPUINO__ 1
 
 static inline __attribute__((always_inline)) register_t outputRegisterForPin(unsigned int pin)
 {
@@ -32,6 +35,11 @@ static inline __attribute__((always_inline)) void digitalWrite(unsigned int pin,
 	}
 }
 
+static inline __attribute__((always_inline)) int digitalRead(unsigned int pin)
+{
+	return !!(*inputRegisterForPin(pin) & bitMaskForPin(pin));
+}
+
 static inline __attribute__((always_inline)) void pinMode(unsigned int pin, int mode)
 {
 	if (mode) {
@@ -40,6 +48,5 @@ static inline __attribute__((always_inline)) void pinMode(unsigned int pin, int 
 		*modeRegisterForPin(pin) &= ~bitMaskForPin(pin);
 	}
 }
-
 
 #endif
