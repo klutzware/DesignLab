@@ -17,6 +17,10 @@ typedef volatile unsigned int* register_t;
 
 #define BIT(x) (1<<x)
 
+#ifndef _BV
+#define _BV(x) BIT(x)
+#endif
+
 #define IO_SLOT(x) (IOBASE + (x<<IO_SLOT_OFFSET_BIT))
 
 #define REGISTER(SLOT, y) *(register_t)(SLOT + (y<<2))
@@ -116,5 +120,6 @@ typedef volatile unsigned int* register_t;
 #define IOPIN_USPI_MISO   8
 #define IOPIN_USPI_MOSI   9
 #define IOPIN_USPI_SCK    10
+
 
 #endif
