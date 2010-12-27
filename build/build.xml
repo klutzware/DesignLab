@@ -307,6 +307,7 @@
     </copy>
 
     <chmod perm="755" file="linux/work/hardware/tools/avrdude" />
+    <chmod perm="755" file="linux/work/hardware/tools/zpuinoprogrammer" />
 
     <copy todir="linux/work" file="linux/dist/arduino" />
     <chmod perm="755" file="linux/work/arduino" />
@@ -337,10 +338,13 @@
 		  prefix="arduino-${version}" 
 		  excludes="arduino, 
 			    hardware/tools/avrdude,
+          hardware/tools/zpuinoprogrammer,
 			    java/**"
 		  /> 
       <tarfileset file="linux/work/arduino" filemode="755" prefix="arduino-${version}" />
       <tarfileset file="linux/work/hardware/tools/avrdude" filemode="755" 
+		  prefix="arduino-${version}/hardware/tools" />
+      <tarfileset file="linux/work/hardware/tools/zpuinoprogrammer" filemode="755" 
 		  prefix="arduino-${version}/hardware/tools" />
     </tar>
 
