@@ -68,6 +68,8 @@ typedef volatile unsigned int* register_t;
 #define CRC16ACC  REGISTER(CRC16BASE,0)
 #define CRC16POLY REGISTER(CRC16BASE,1)
 #define CRC16APP  REGISTER(CRC16BASE,2)
+#define CRC16AM1  REGISTER(CRC16BASE,4)
+#define CRC16AM2  REGISTER(CRC16BASE,5)
 
 #define UARTEN 16 /* Uart enable */
 
@@ -95,7 +97,8 @@ typedef volatile unsigned int* register_t;
 #define SPITS0   8
 #define SPITS1   9
 /* Sigma-Delta bits */
-#define SDENA    0 /* Sigma-delta enable */
+#define SDENA0   0 /* Sigma-delta 0 enable */
+#define SDENA1   1 /* Sigma-delta 1 enable */
 
 /* Baud rate computation */
 
@@ -114,12 +117,11 @@ typedef volatile unsigned int* register_t;
 #define IOPIN_SPI_MISO    2
 #define IOPIN_SPI_MOSI    3
 #define IOPIN_SPI_SCK     4
-#define IOPIN_SIGMADELTA  5
+#define IOPIN_SIGMADELTA0 5
 #define IOPIN_TIMER0_OC   6
 #define IOPIN_TIMER1_OC   7
 #define IOPIN_USPI_MISO   8
 #define IOPIN_USPI_MOSI   9
 #define IOPIN_USPI_SCK    10
-
-
+#define IOPIN_SIGMADELTA1 15
 #endif

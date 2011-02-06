@@ -11,7 +11,7 @@ SEARCH_DIR("/local/work/zpu/zpubig/binutils/../install/zpu-elf/lib");
 
   MEMORY
   {
-    RAM (rx) : ORIGIN = 0x00001000, LENGTH = 0x8000
+    RAM (rx) : ORIGIN = 0x00001000, LENGTH = 0x800000
   }
 
 SECTIONS

@@ -22,6 +22,8 @@ void __cxa_pure_virtual()
 
 void exit(){
 }
+
+#ifndef NOMAIN
 int main(int argc, char **argv)
 {
 	_Z5setupv();
@@ -29,6 +31,7 @@ int main(int argc, char **argv)
 		_Z4loopv();
 	}
 }
+#endif
 
 void __attribute__((noreturn)) _premain(void)
 {
