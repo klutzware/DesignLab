@@ -19,6 +19,9 @@
  */
 #ifndef FatStructs_h
 #define FatStructs_h
+
+#include <endian.h>
+
 /**
  * \file
  * FAT file structures
@@ -87,10 +90,10 @@ struct partitionTable {
            */
   uint8_t  endCylinderLow;
            /** Logical block address of the first block in the partition. */
-  uint32_t firstSector;
+  __le32   firstSector;
            /** Length of the partition, in blocks. */
-  uint32_t totalSectors;
-};
+  __le32   totalSectors;
+} __attribute__((packed));
 /** Type name for partitionTable */
 typedef struct partitionTable part_t;
 //------------------------------------------------------------------------------
@@ -107,14 +110,14 @@ struct masterBootRecord {
            /** Optional WindowsNT disk signature. May contain more boot code. */
   uint32_t diskSignature;
            /** Usually zero but may be more boot code. */
-  uint16_t usuallyZero;
+  __le16   usuallyZero;
            /** Partition tables. */
   part_t   part[4];
            /** First MBR signature byte. Must be 0X55 */
   uint8_t  mbrSig0;
            /** Second MBR signature byte. Must be 0XAA */
   uint8_t  mbrSig1;
-};
+}__attribute__((packed));
 /** Type name for masterBootRecord */
 typedef struct masterBootRecord mbr_t;
 //------------------------------------------------------------------------------
@@ -130,7 +133,7 @@ struct biosParmBlock {
            * Count of bytes per sector. This value may take on only the
            * following values: 512, 1024, 2048 or 4096
            */
-  uint16_t bytesPerSector;
+  __le16   bytesPerSector;
           /**
            * Number of sectors per allocation unit. This value must be a
            * power of 2 that is greater than 0. The legal values are
@@ -141,7 +144,7 @@ struct biosParmBlock {
            * Number of sectors before the first FAT.
            * This value must not be zero.
            */
-  uint16_t reservedSectorCount;
+  __le16   reservedSectorCount;
           /** The count of FAT data structures on the volume. This field should
            *  always contain the value 2 for any FAT volume of any type.
            */
@@ -154,7 +157,7 @@ struct biosParmBlock {
           * results in a multiple of bytesPerSector.  FAT16 volumes should
           * use the value 512.
           */
-  uint16_t rootDirEntryCount;
+  __le16   rootDirEntryCount;
           /**
            * This field is the old 16-bit total count of sectors on the volume.
            * This count includes the count of all sectors in all four regions
@@ -164,7 +167,7 @@ struct biosParmBlock {
            * totalSectors32 is 0 if the total sector count fits
            * (is less than 0x10000).
            */
-  uint16_t totalSectors16;
+  __le16   totalSectors16;
           /**
            * This dates back to the old MS-DOS 1.x media determination and is
            * no longer usually used for anything.  0xF8 is the standard value
@@ -177,28 +180,28 @@ struct biosParmBlock {
            * On FAT32 volumes this field must be 0, and sectorsPerFat32
            * contains the FAT size count.
            */
-  uint16_t sectorsPerFat16;
+  __le16   sectorsPerFat16;
            /** Sectors per track for interrupt 0x13. Not used otherwise. */
-  uint16_t sectorsPerTrtack;
+  __le16   sectorsPerTrtack;
            /** Number of heads for interrupt 0x13.  Not used otherwise. */
-  uint16_t headCount;
+  __le16   headCount;
           /**
            * Count of hidden sectors preceding the partition that contains this
            * FAT volume. This field is generally only relevant for media
            *  visible on interrupt 0x13.
            */
-  uint32_t hidddenSectors;
+  __le32   hidddenSectors;
           /**
            * This field is the new 32-bit total count of sectors on the volume.
            * This count includes the count of all sectors in all four regions
            * of the volume.  This field can be 0; if it is 0, then
            * totalSectors16 must be non-zero.
            */
-  uint32_t totalSectors32;
+  __le32   totalSectors32;
           /**
            * Count of sectors occupied by one FAT on FAT32 volumes.
            */
-  uint32_t sectorsPerFat32;
+  __le32   sectorsPerFat32;
           /**
            * This field is only defined for FAT32 media and does not exist on
            * FAT12 and FAT16 media.
@@ -209,34 +212,34 @@ struct biosParmBlock {
 	         *        -- 1 means only one FAT is active; it is the one referenced in bits 0-3.
            * Bits 8-15 	-- Reserved.
            */
-  uint16_t fat32Flags;
+  __le16   fat32Flags;
           /**
            * FAT32 version. High byte is major revision number.
            * Low byte is minor revision number. Only 0.0 define.
            */
-  uint16_t fat32Version;
+  __le16   fat32Version;
           /**
            * Cluster number of the first cluster of the root directory for FAT32.
            * This usually 2 but not required to be 2.
            */
-  uint32_t fat32RootCluster;
+  __le32   fat32RootCluster;
           /**
            * Sector number of FSINFO structure in the reserved area of the
            * FAT32 volume. Usually 1.
            */
-  uint16_t fat32FSInfo;
+  __le16   fat32FSInfo;
           /**
            * If non-zero, indicates the sector number in the reserved area
            * of the volume of a copy of the boot record. Usually 6.
            * No value other than 6 is recommended.
            */
-  uint16_t fat32BackBootBlock;
+  __le16   fat32BackBootBlock;
           /**
            * Reserved for future expansion. Code that formats FAT32 volumes
            * should always set all of the bytes of this field to 0.
            */
   uint8_t  fat32Reserved[12];
-};
+}__attribute__((packed));
 /** Type name for biosParmBlock */
 typedef struct biosParmBlock bpb_t;
 //------------------------------------------------------------------------------
@@ -260,7 +263,7 @@ struct fat32BootSector {
            /** 0X29 if next three fields are valid */
   uint8_t  bootSignature;
            /** usually generated by combining date and time */
-  uint32_t volumeSerialNumber;
+  __le32   volumeSerialNumber;
            /** should match volume label in root dir */
   char     volumeLabel[11];
            /** informational only - don't depend on it */
@@ -271,7 +274,7 @@ struct fat32BootSector {
   uint8_t  bootSectorSig0;
            /** must be 0XAA */
   uint8_t  bootSectorSig1;
-};
+}__attribute__((packed));
 //------------------------------------------------------------------------------
 // End Of Chain values for FAT entries
 /** FAT16 end of chain value used by Microsoft. */
@@ -344,29 +347,29 @@ struct directoryEntry {
            */
   uint8_t  creationTimeTenths;
            /** Time file was created. */
-  uint16_t creationTime;
+  __le16   creationTime;
            /** Date file was created. */
-  uint16_t creationDate;
+  __le16   creationDate;
           /**
            * Last access date. Note that there is no last access time, only
            * a date.  This is the date of last read or write. In the case of
            * a write, this should be set to the same date as lastWriteDate.
            */
-  uint16_t lastAccessDate;
+  __le16   lastAccessDate;
           /**
            * High word of this entry's first cluster number (always 0 for a
            * FAT12 or FAT16 volume).
            */
-  uint16_t firstClusterHigh;
+  __le16   firstClusterHigh;
            /** Time of last write. File creation is considered a write. */
-  uint16_t lastWriteTime;
+  __le16   lastWriteTime;
            /** Date of last write. File creation is considered a write. */
-  uint16_t lastWriteDate;
+  __le16   lastWriteDate;
            /** Low word of this entry's first cluster number. */
-  uint16_t firstClusterLow;
+  __le16   firstClusterLow;
            /** 32-bit unsigned holding this file's size in bytes. */
-  uint32_t fileSize;
-};
+  __le32   fileSize;
+}__attribute__((packed));
 //------------------------------------------------------------------------------
 // Definitions for directory entries
 //

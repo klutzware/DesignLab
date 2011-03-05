@@ -19,7 +19,13 @@
  */
 #ifndef SdInfo_h
 #define SdInfo_h
+
+#ifdef AVR
 #include <stdint.h>
+#else
+#include <inttypes.h>
+#endif
+
 // Based on the document:
 //
 // SD Specifications

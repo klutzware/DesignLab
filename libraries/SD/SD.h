@@ -30,6 +30,7 @@ public:
   virtual void write(const char *str);
   virtual void write(const uint8_t *buf, size_t size);
   virtual int read();
+  int read(uint8_t *buf,unsigned size);
   virtual int peek();
   virtual int available();
   virtual void flush();
@@ -47,9 +48,12 @@ private:
   
 public:
   // This needs to be called to set up the connection to the SD card
-  // before other methods are used.
+	// before other methods are used.
+#ifdef AVR
   boolean begin(uint8_t csPin = SD_CHIP_SELECT_PIN);
-  
+#else
+  boolean begin(uint8_t csPin);
+#endif
   // Open the specified file/directory with the supplied mode (e.g. read or
   // write, etc). Returns a File object for interacting with the file.
   // Note that currently only one file can be open at a time.

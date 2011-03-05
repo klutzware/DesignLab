@@ -18,15 +18,23 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <SdFat.h>
+#ifdef AVR
 #include <avr/pgmspace.h>
+#else
+#define PGM_P const char *
+#define PSTR(x) x
+#endif
 #include <WProgram.h>
+
+//extern void outhex32(unsigned int u32);
+
 //------------------------------------------------------------------------------
 // callback function for date/time
-void (*SdFile::dateTime_)(uint16_t* date, uint16_t* time) = NULL;
+void (*SdFile::dateTime_)(__le16* date, __le16* time) = NULL;
 
 #if ALLOW_DEPRECATED_FUNCTIONS
 // suppress cpplint warnings with NOLINT comment
-void (*SdFile::oldDateTime_)(uint16_t& date, uint16_t& time) = NULL;  // NOLINT
+void (*SdFile::oldDateTime_)(__le16& date, __le16& time) = NULL;  // NOLINT
 #endif  // ALLOW_DEPRECATED_FUNCTIONS
 //------------------------------------------------------------------------------
 // add a cluster to a file
@@ -255,10 +263,14 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
       n = 10;  // max index for full 8.3 name
       i = 8;   // place for extension
     } else {
-      // illegal FAT characters
+		// illegal FAT characters
+#ifdef AVR
       PGM_P p = PSTR("|<>^+=?/[];,*\"\\");
       uint8_t b;
-      while ((b = pgm_read_byte(p++))) if (b == c) return false;
+	  while ((b = pgm_read_byte(p++))) if (b == c) return false;
+#else
+      if (strchr("|<>^+=?/[];,*\"\\",c)!=NULL) return false;
+#endif
       // check size and only allow ASCII printable characters
       if (i > n || c < 0X21 || c > 0X7E)return false;
       // only upper case allowed in 8.3 names - convert lower to upper
@@ -412,15 +424,16 @@ uint8_t SdFile::open(SdFile* dirFile, const char* fileName, uint8_t oflag) {
       if (p->name[0] == DIR_NAME_FREE) break;
     } else if (!memcmp(dname, p->name, 11)) {
       // don't open existing file if O_CREAT and O_EXCL
-      if ((oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL)) return false;
-
+#ifdef SD_WRITE_SUPPORT
+		if ((oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL)) return false;
+#endif
       // open found file
       return openCachedEntry(0XF & index, oflag);
-    }
+	} 
   }
   // only create file if O_CREAT and O_WRITE
+#ifdef SD_WRITE_SUPPORT
   if ((oflag & (O_CREAT | O_WRITE)) != (O_CREAT | O_WRITE)) return false;
-
   // cache found slot or add cluster if end of file
   if (emptyFound) {
     p = cacheDirEntry(SdVolume::CACHE_FOR_WRITE);
@@ -457,6 +470,9 @@ uint8_t SdFile::open(SdFile* dirFile, const char* fileName, uint8_t oflag) {
 
   // open entry in cache
   return openCachedEntry(dirIndex_, oflag);
+#else
+  return false;
+#endif
 }
 //------------------------------------------------------------------------------
 /**
@@ -533,7 +549,9 @@ uint8_t SdFile::openCachedEntry(uint8_t dirIndex, uint8_t oflag) {
   curPosition_ = 0;
 
   // truncate file to zero length if requested
+#ifdef SD_WRITE_SUPPORT
   if (oflag & O_TRUNC) return truncate(0);
+#endif
   return true;
 }
 //------------------------------------------------------------------------------
@@ -550,18 +568,18 @@ uint8_t SdFile::openCachedEntry(uint8_t dirIndex, uint8_t oflag) {
 uint8_t SdFile::openRoot(SdVolume* vol) {
   // error if file is already open
   if (isOpen()) return false;
-
+  
   if (vol->fatType() == 16) {
     type_ = FAT_FILE_TYPE_ROOT16;
     firstCluster_ = 0;
     fileSize_ = 32 * vol->rootDirEntryCount();
   } else if (vol->fatType() == 32) {
-    type_ = FAT_FILE_TYPE_ROOT32;
-    firstCluster_ = vol->rootDirStart();
+	  type_ = FAT_FILE_TYPE_ROOT32;
+	  firstCluster_ = vol->rootDirStart();
     if (!vol->chainSize(firstCluster_, &fileSize_)) return false;
   } else {
-    // volume is not initialized or FAT12
-    return false;
+	  // volume is not initialized or FAT12
+	  return false;
   }
   vol_ = vol;
   // read only
@@ -689,6 +707,14 @@ int16_t SdFile::read(void* buf, uint16_t nbyte) {
     }
     uint16_t n = toRead;
 
+	if (n==512 && offset==0) {
+		if (vol_->readBlock(block, dst)) {
+			curPosition_ += n;
+			return n;
+		}
+		else
+			return 0;
+	}
     // amount to be read from current block
     if (n > (512 - offset)) n = 512 - offset;
 
@@ -700,9 +726,12 @@ int16_t SdFile::read(void* buf, uint16_t nbyte) {
     } else {
       // read block to cache and copy data to caller
       if (!SdVolume::cacheRawBlock(block, SdVolume::CACHE_FOR_READ)) return -1;
-      uint8_t* src = SdVolume::cacheBuffer_.data + offset;
+	  uint8_t* src = SdVolume::cacheBuffer_.data + offset;
+      /*
       uint8_t* end = src + n;
-      while (src != end) *dst++ = *src++;
+	  while (src != end) *dst++ = *src++;
+	  */
+	  memcpy(dst,src,n);
     }
     curPosition_ += n;
     toRead -= n;
@@ -867,6 +896,7 @@ uint8_t SdFile::rmDir(void) {
  * the value zero, false, is returned for failure.
  */
 uint8_t SdFile::rmRfStar(void) {
+#ifdef SD_WRITE_SUPPORT
   rewind();
   while (curPosition_ < fileSize_) {
     SdFile f;
@@ -903,6 +933,7 @@ uint8_t SdFile::rmRfStar(void) {
   // don't try to delete root
   if (isRoot()) return true;
   return rmDir();
+#endif
 }
 //------------------------------------------------------------------------------
 /**
@@ -955,6 +986,7 @@ uint8_t SdFile::seekSet(uint32_t pos) {
  * opened or an I/O error.
  */
 uint8_t SdFile::sync(void) {
+#ifdef SD_WRITE_SUPPORT
   // only allow open files and directories
   if (!isOpen()) return false;
 
@@ -978,6 +1010,9 @@ uint8_t SdFile::sync(void) {
     flags_ &= ~F_FILE_DIR_DIRTY;
   }
   return SdVolume::cacheFlush();
+#else
+  return true;
+#endif
 }
 //------------------------------------------------------------------------------
 /**
@@ -1122,7 +1157,8 @@ uint8_t SdFile::truncate(uint32_t length) {
  *
  */
 int16_t SdFile::write(const void* buf, uint16_t nbyte) {
-  // convert void* to uint8_t*  -  must be before goto statements
+#ifdef SD_WRITE_SUPPORT
+	// convert void* to uint8_t*  -  must be before goto statements
   const uint8_t* src = reinterpret_cast<const uint8_t*>(buf);
 
   // number of bytes left to write  -  must be before goto statements
@@ -1212,6 +1248,9 @@ int16_t SdFile::write(const void* buf, uint16_t nbyte) {
   // return for write error
   writeError = true;
   return -1;
+#else
+  return 0;
+#endif
 }
 //------------------------------------------------------------------------------
 /**
@@ -1219,19 +1258,28 @@ int16_t SdFile::write(const void* buf, uint16_t nbyte) {
  *
  * Use SdFile::writeError to check for errors.
  */
+
 void SdFile::write(uint8_t b) {
-  write(&b, 1);
+#ifdef SD_WRITE_SUPPORT
+	write(&b, 1);
+#endif
 }
+
 //------------------------------------------------------------------------------
 /**
  * Write a string to a file. Used by the Arduino Print class.
  *
  * Use SdFile::writeError to check for errors.
  */
+
 void SdFile::write(const char* str) {
-  write(str, strlen(str));
+#ifdef SD_WRITE_SUPPORT
+	write(str, strlen(str));
+#endif
 }
+
 //------------------------------------------------------------------------------
+#ifdef AVR
 /**
  * Write a PROGMEM string to a file.
  *
@@ -1250,3 +1298,5 @@ void SdFile::writeln_P(PGM_P str) {
   write_P(str);
   println();
 }
+#endif
+

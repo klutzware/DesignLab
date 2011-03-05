@@ -338,8 +338,8 @@ boolean SDClass::begin(uint8_t csPin) {
 
    */
   return card.init(SPI_HALF_SPEED, csPin) &&
-         volume.init(card) &&
-         root.openRoot(volume);
+         volume.init(card,1) &&
+         root.openRoot(&volume);
 }
 
 

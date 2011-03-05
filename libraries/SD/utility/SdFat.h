@@ -23,7 +23,9 @@
  * \file
  * SdFile and SdVolume classes
  */
+#ifdef AVR
 #include <avr/pgmspace.h>
+#endif
 #include "Sd2Card.h"
 #include "FatStructs.h"
 #include "Print.h"
@@ -186,7 +188,7 @@ class SdFile : public Print {
    * See the timestamp() function.
    */
   static void dateTimeCallback(
-    void (*dateTime)(uint16_t* date, uint16_t* time)) {
+    void (*dateTime)(__le16* date, __le16* time)) {
     dateTime_ = dateTime;
   }
   /**
@@ -286,8 +288,10 @@ class SdFile : public Print {
   void write(uint8_t b);
   int16_t write(const void* buf, uint16_t nbyte);
   void write(const char* str);
+#ifdef AVR
   void write_P(PGM_P str);
   void writeln_P(PGM_P str);
+#endif
 //------------------------------------------------------------------------------
 #if ALLOW_DEPRECATED_FUNCTIONS
 // Deprecated functions  - suppress cpplint warnings with NOLINT comment
@@ -312,7 +316,7 @@ class SdFile : public Print {
    *   void (*dateTime)(uint16_t* date, uint16_t* time));
    */
   static void dateTimeCallback(
-    void (*dateTime)(uint16_t& date, uint16_t& time)) {  // NOLINT
+    void (*dateTime)(__le16& date, __le16& time)) {  // NOLINT
     oldDateTime_ = dateTime;
     dateTime_ = dateTime ? oldToNew : 0;
   }
@@ -355,10 +359,10 @@ class SdFile : public Print {
 //------------------------------------------------------------------------------
 // rest are private
  private:
-  static void (*oldDateTime_)(uint16_t& date, uint16_t& time);  // NOLINT
-  static void oldToNew(uint16_t* date, uint16_t* time) {
-    uint16_t d;
-    uint16_t t;
+  static void (*oldDateTime_)(__le16& date, __le16& time);  // NOLINT
+  static void oldToNew(__le16* date, __le16* time) {
+    __le16 d;
+	__le16 t;
     oldDateTime_(d, t);
     *date = d;
     *time = t;
@@ -395,7 +399,7 @@ class SdFile : public Print {
   uint8_t addCluster(void);
   uint8_t addDirCluster(void);
   dir_t* cacheDirEntry(uint8_t action);
-  static void (*dateTime_)(uint16_t* date, uint16_t* time);
+  static void (*dateTime_)(__le16* date, __le16* time);
   static uint8_t make83Name(const char* str, uint8_t* name);
   uint8_t openCachedEntry(uint8_t cacheIndex, uint8_t oflags);
   dir_t* readDirCache(void);
@@ -409,9 +413,9 @@ union cache_t {
            /** Used to access cached file data blocks. */
   uint8_t  data[512];
            /** Used to access cached FAT16 entries. */
-  uint16_t fat16[256];
+  __le16   fat16[256];
            /** Used to access cached FAT32 entries. */
-  uint32_t fat32[128];
+  __le32   fat32[128];
            /** Used to access cached directory entries. */
   dir_t    dir[16];
            /** Used to access a cached MasterBoot Record. */

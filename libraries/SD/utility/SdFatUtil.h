@@ -23,8 +23,11 @@
  * \file
  * Useful utility functions.
  */
+#ifdef AVR
+
 #include <WProgram.h>
 #include <avr/pgmspace.h>
+
 /** Store and print a string in flash memory.*/
 #define PgmPrint(x) SerialPrint_P(PSTR(x))
 /** Store and print a string in flash memory followed by a CR/LF.*/
@@ -67,4 +70,6 @@ static NOINLINE void SerialPrintln_P(PGM_P str) {
   SerialPrint_P(str);
   Serial.println();
 }
+
+#endif // #defined AVR
 #endif  // #define SdFatUtil_h

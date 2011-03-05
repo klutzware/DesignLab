@@ -41,6 +41,15 @@ int File::read() {
   return SD.file.read();
 }
 
+int File::read(uint8_t *buf,unsigned size) {
+  if (SD.c != -1) {
+    int tmp = SD.c;
+    SD.c = -1;
+    return tmp;
+  }
+  return SD.file.read(buf,size);
+}
+
 int File::available() {
   if (SD.c != -1) return 1;
   SD.c = SD.file.read();
