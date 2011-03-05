@@ -99,6 +99,8 @@ typedef volatile unsigned int* register_t;
 /* Sigma-Delta bits */
 #define SDENA0   0 /* Sigma-delta 0 enable */
 #define SDENA1   1 /* Sigma-delta 1 enable */
+#define SDLE     2 /* Sigma-delta little-endian format */
+#define SDEXTSET 3 /* Sigma-delta trigger on external event */
 
 /* Baud rate computation */
 
