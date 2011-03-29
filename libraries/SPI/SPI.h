@@ -13,7 +13,12 @@
 
 #include <stdio.h>
 #include <WProgram.h>
+
+#ifdef __AVR__
 #include <avr/pgmspace.h>
+#endif
+
+#ifdef __AVR__
 
 #define SPI_CLOCK_DIV4 0x00
 #define SPI_CLOCK_DIV16 0x01
@@ -32,6 +37,32 @@
 #define SPI_MODE_MASK 0x0C  // CPOL = bit 3, CPHA = bit 2 on SPCR
 #define SPI_CLOCK_MASK 0x03  // SPR1 = bit 1, SPR0 = bit 0 on SPCR
 #define SPI_2XCLOCK_MASK 0x01  // SPI2X = bit 0 on SPSR
+
+#endif
+
+#ifdef ZPU
+
+#define SPI_CLOCK_DIV0 0
+#define SPI_CLOCK_DIV2 SPICP0
+#define SPI_CLOCK_DIV4 SPICP1
+#define SPI_CLOCK_DIV8 (SPICP1|SPICP0)
+#define SPI_CLOCK_DIV16 SPICP2
+#define SPI_CLOCK_DIV64 (SPICP2|SPICP0)
+#define SPI_CLOCK_DIV256 (SPICP2|SPICP1)
+#define SPI_CLOCK_DIV1024 (SPICP2|SPICP1|SPICP0)
+
+/* Note - these modes are not 100% accurate yet */
+
+#define SPI_MODE0 0
+#define SPI_MODE1 SPISRE
+#define SPI_MODE2 SPICPOL
+#define SPI_MODE3 (SPICPOL|SPISRE)
+
+#define SPI_CLOCK_MASK (SPICP0|SPICP1|SPICP2)
+#define SPI_MODE_MASK (SPICPOL|SPISRE)
+
+#endif /* defined ZPU */
+
 
 class SPIClass {
 public:
@@ -52,6 +83,8 @@ public:
 
 extern SPIClass SPI;
 
+#ifdef __AVR__
+
 byte SPIClass::transfer(byte _data) {
   SPDR = _data;
   while (!(SPSR & _BV(SPIF)))
@@ -66,5 +99,25 @@ void SPIClass::attachInterrupt() {
 void SPIClass::detachInterrupt() {
   SPCR &= ~_BV(SPIE);
 }
+
+#endif /* defined __AVR__ */
+
+#ifdef ZPU
+
+byte SPIClass::transfer(byte _data) {
+  USPIDATA = _data;
+  return USPIDATA;
+}
+
+void SPIClass::attachInterrupt() {
+  /* No interrupt support */
+}
+
+void SPIClass::detachInterrupt() {
+  /* No interrupt support */
+}
+
+#endif /* defined __AVR__ */
+
 
 #endif

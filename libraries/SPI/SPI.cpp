@@ -8,10 +8,15 @@
  * published by the Free Software Foundation.
  */
 
+#ifdef __AVR__
 #include "pins_arduino.h"
+#endif
+
 #include "SPI.h"
 
 SPIClass SPI;
+
+#ifdef __AVR__
 
 void SPIClass::begin() {
   // Set direction register for SCK and MOSI pin.
@@ -59,3 +64,31 @@ void SPIClass::setClockDivider(uint8_t rate)
   SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | ((rate >> 2) & SPI_2XCLOCK_MASK);
 }
 
+#endif
+
+#ifdef ZPU
+
+void SPIClass::begin() {
+	USPICTL = _BV(SPIEN)|_BV(SPIBLOCK);
+}
+
+void SPIClass::end() {
+	USPICTL &= ~(_BV(SPIEN)|_BV(SPIBLOCK));
+}
+
+void SPIClass::setBitOrder(uint8_t bitOrder)
+{
+	/* No support */
+}
+
+void SPIClass::setDataMode(uint8_t mode)
+{
+	USPICTL = (USPICTL & ~SPI_MODE_MASK) | mode;
+}
+
+void SPIClass::setClockDivider(uint8_t rate)
+{
+	USPICTL = (USPICTL & ~SPI_CLOCK_MASK) | rate;
+}
+
+#endif
