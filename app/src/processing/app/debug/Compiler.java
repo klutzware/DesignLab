@@ -168,7 +168,11 @@ public class Compiler implements MessageConsumer {
       // Copy files into place
 
       for (File file : coreSources) {
-        Base.copyFile( file, new File(coreFolder,file.getName()));
+        // Only copy files if not modified
+        File target = new File(coreFolder,file.getName());
+        if (! target.exists() || target.lastModified()!=file.lastModified()) {
+          Base.copyFile( file, target );
+        }
         coreMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
       }
 
@@ -201,7 +205,12 @@ public class Compiler implements MessageConsumer {
 
         // Copy files into place
         for (File file : libSources) {
-          Base.copyFile( file, new File(outputFolder,file.getName()));
+          // Don't copy if not modifies
+          File target = new File(outputFolder,file.getName());
+
+          if (! target.exists() || target.lastModified()!=file.lastModified()) {
+            Base.copyFile( file, target );
+          }
           libMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
         }
 
@@ -231,7 +240,11 @@ public class Compiler implements MessageConsumer {
             utilityMakeFile.include(commonMakeFile);
 
             for (File file : utilitySources) {
-              Base.copyFile( file, new File(outputFolder,file.getName()));
+              File target = new File(outputFolder,file.getName());
+
+              if (! target.exists() || target.lastModified()!=file.lastModified()) {
+                Base.copyFile( file, target );
+              }
               utilityMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
             }
 
@@ -284,7 +297,7 @@ public class Compiler implements MessageConsumer {
                           String buildPath)
   throws RunnerException {
 
-    
+      // TODO: make sure this works in Win32
     List baseCommandMake = new ArrayList(Arrays.asList(new String[] {
       avrBasePath + "make", "--silent", "-C", buildPath, "all"}));
 

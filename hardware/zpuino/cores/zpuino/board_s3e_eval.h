@@ -1,15 +1,17 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#define CLK_FREQ 100000000U
+#define CLK_FREQ 96000000ULL
 #define BOARD_MEMORYSIZE 0x8000
 #define SPIOFFSET 0x00000000
+
+#define BOARD_SPI_DIVIDER BIT(SPICP1)
 
 #define IOBASE 0x8000
 #define IO_SLOT_OFFSET_BIT 11
 
-#define FPGA_PIN_R7 0
-#define FPGA_PIN_M14 1
+#define FPGA_PIN_G14 0
+#define FPGA_PIN_G13 1
 #define FPGA_PIN_N10 2
 #define FPGA_PIN_T4 3
 #define FPGA_PIN_U16 4

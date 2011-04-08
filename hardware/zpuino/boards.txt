@@ -3,7 +3,7 @@ zpuino_s3e_eval.name=ZPUino on S3E Eval board
 zpuino_s3e_eval.upload.protocol=zpuino-serial
 zpuino_s3e_eval.upload.maximum_size=27648
 zpuino_s3e_eval.upload.speed=115200
-zpuino_s3e_eval.build.f_cpu=100000000L
+zpuino_s3e_eval.build.f_cpu=96000000L
 zpuino_s3e_eval.build.core=zpuino
 zpuino_s3e_eval.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -nostartfiles
 ##############################################################

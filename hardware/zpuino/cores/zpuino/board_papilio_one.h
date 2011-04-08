@@ -1,9 +1,11 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#define CLK_FREQ 96000000U
+#define CLK_FREQ 96000000ULL
 #define BOARD_MEMORYSIZE 0x4000
-#define SPIOFFSET 0x00040000
+#define SPIOFFSET 0x00042000
+
+#define BOARD_SPI_DIVIDER BIT(SPICP0)
 
 #define IOBASE 0x8000
 #define IO_SLOT_OFFSET_BIT 11
@@ -80,7 +82,6 @@
 
 #define SPI_FLASH_SEL_PIN FPGA_PIN_FLASHCS
 
-
 /* WING configuration */
 
 #define WING_A_0 FPGA_PIN_P18
@@ -116,6 +117,5 @@
 #define WING_C_13 FPGA_PIN_P15
 #define WING_C_14 FPGA_PIN_P16
 #define WING_C_15 FPGA_PIN_P17
-
 
 #endif

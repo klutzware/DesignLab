@@ -17,13 +17,9 @@ typedef volatile unsigned int* register_t;
 
 #define BIT(x) (1<<x)
 
-#ifndef _BV
-#define _BV(x) BIT(x)
-#endif
-
 #define IO_SLOT(x) (IOBASE + (x<<IO_SLOT_OFFSET_BIT))
 
-#define REGISTER(SLOT, y) *(register_t)(SLOT + (y<<2))
+#define REGISTER(SLOT, y) *(volatile unsigned int*)(SLOT + (y<<2))
 
 #define SPIBASE  IO_SLOT(0)
 #define UARTBASE IO_SLOT(1)
@@ -37,12 +33,14 @@ typedef volatile unsigned int* register_t;
 
 #define UARTDATA REGISTER(UARTBASE,0)
 #define UARTCTL  REGISTER(UARTBASE,1)
+#define UARTSTATUS  REGISTER(UARTBASE,2)
 
 #define SPICTL  REGISTER(SPIBASE,0)
 #define SPIDATA REGISTER(SPIBASE,1)
 
 #define GPIODATA(x)  REGISTER(GPIOBASE,x)
 #define GPIOTRIS(x)  REGISTER(GPIOBASE,4+x)
+#define GPIOPPSMODE(x)  REGISTER(GPIOBASE,8+x)
 
 #define GPIOPPSOUT(x)  REGISTER(GPIOBASE,(128 + x))
 #define GPIOPPSIN(x)  REGISTER(GPIOBASE,(256 + x))
@@ -93,14 +91,14 @@ typedef volatile unsigned int* register_t;
 #define SPICPOL  4 /* Clock polarity */
 #define SPISRE   5 /* Sample on Rising Edge */
 #define SPIEN    6 /* SPI Enabled (gpio acquire) */
-#define SPIBLOCK 7 /* SPI Blocking operation */
+#define SPIBLOCK 7
 #define SPITS0   8
 #define SPITS1   9
+
 /* Sigma-Delta bits */
-#define SDENA0   0 /* Sigma-delta 0 enable */
-#define SDENA1   1 /* Sigma-delta 1 enable */
-#define SDLE     2 /* Sigma-delta little-endian format */
-#define SDEXTSET 3 /* Sigma-delta trigger on external event */
+#define SDENA0    0 /* Sigma-delta enable */
+#define SDENA1    1
+#define SDLE      2 /* Little-endian */
 
 /* Baud rate computation */
 
@@ -114,16 +112,15 @@ typedef volatile unsigned int* register_t;
 
 /* PPS configuration */
 
-#define IOPIN_UART_RX     0
-#define IOPIN_UART_TX     1
-#define IOPIN_SPI_MISO    2
-#define IOPIN_SPI_MOSI    3
-#define IOPIN_SPI_SCK     4
-#define IOPIN_SIGMADELTA0 5
-#define IOPIN_TIMER0_OC   6
-#define IOPIN_TIMER1_OC   7
-#define IOPIN_USPI_MISO   8
-#define IOPIN_USPI_MOSI   9
-#define IOPIN_USPI_SCK    10
-#define IOPIN_SIGMADELTA1 15
+#define IOPIN_SPI_MISO    0
+#define IOPIN_SPI_MOSI    1
+#define IOPIN_SPI_SCK     2
+#define IOPIN_SIGMADELTA0 3
+#define IOPIN_TIMER0_OC   4
+#define IOPIN_TIMER1_OC   5
+#define IOPIN_USPI_MISO   6
+#define IOPIN_USPI_MOSI   7
+#define IOPIN_USPI_SCK    8
+#define IOPIN_SIGMADELTA1 13
+
 #endif

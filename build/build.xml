@@ -405,6 +405,8 @@
     
     <!-- Unzip AVR tools -->
     <unzip dest="windows/work/hardware" src="windows/avr_tools.zip" overwrite="false"/>
+    <!-- Unzip ZPU tools -->
+    <unzip dest="windows/work/hardware" src="windows/zpu_tools.zip" overwrite="false"/>
 
     <antcall target="assemble">
       <param name="target.path" value="windows/work" />

@@ -21,6 +21,11 @@ static inline __attribute__((always_inline)) register_t modeRegisterForPin(unsig
 	return &GPIOTRIS(pin/32);
 }
 
+static inline __attribute__((always_inline)) register_t PPSmodeRegisterForPin(unsigned int pin)
+{
+	return &GPIOPPSMODE(pin/32);
+}
+
 static inline __attribute__((always_inline)) unsigned int bitMaskForPin(unsigned int pin)
 {
     return (1<<(pin%32));
@@ -47,6 +52,27 @@ static inline __attribute__((always_inline)) void pinMode(unsigned int pin, int 
 	} else {
 		*modeRegisterForPin(pin) &= ~bitMaskForPin(pin);
 	}
+}
+
+/* PPS */
+
+static inline __attribute((always_inline)) void pinModePPS(int pin, int value)
+{
+	if (value) {
+		*PPSmodeRegisterForPin(pin) |= bitMaskForPin(pin);
+	} else {
+		*PPSmodeRegisterForPin(pin) &= ~bitMaskForPin(pin);
+	}
+}
+
+static inline void __attribute__((always_inline)) outputPinForFunction(unsigned int pin,unsigned int function)
+{
+	GPIOPPSOUT(pin)=function;
+}
+
+static inline void __attribute__((always_inline)) inputPinForFunction(unsigned int pin,unsigned int function)
+{
+	GPIOPPSIN(function)=pin;
 }
 
 #endif

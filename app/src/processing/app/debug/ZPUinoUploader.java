@@ -28,6 +28,7 @@ package processing.app.debug;
 import processing.app.Base;
 import processing.app.Preferences;
 import processing.app.Serial;
+import processing.core.*;
 
 import java.io.*;
 import java.util.*;
@@ -75,11 +76,22 @@ public class ZPUinoUploader extends Uploader  {
     Map<String, String> boardPreferences = Base.getBoardPreferences();
     List commandDownloader = new ArrayList();
 
+    String extraOptions = boardPreferences.get("upload.extraoptions");
+    String speed = boardPreferences.get("upload.speed");
+    if (speed!=null) {
+        commandDownloader.add("-s");
+        commandDownloader.add(speed);
+    }
     commandDownloader.add(
       "-d" + (Base.isWindows() ? "\\\\.\\" : "") + Preferences.get("serial.port"));
 
     commandDownloader.add("-b" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".bin");
     commandDownloader.add("-R"); // Reset
+    if (extraOptions!=null) {
+        for (String i: PApplet.split(extraOptions," ")) {
+            commandDownloader.add(i);
+        }
+    }
     return zpuinoprogrammer(commandDownloader);
   }
   
