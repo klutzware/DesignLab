@@ -55,6 +55,17 @@
 #define FPGA_PIN_A4 42
 #define FPGA_PIN_D5 43
 #define FPGA_PIN_C5 44
+#define FPGA_PIN_P7 45
+#define FPGA_PIN_L18 46
+#define FPGA_PIN_L17 47
+#define FPGA_PIN_R15 48
+#define FPGA_PIN_R16 49
+#define FPGA_PIN_P17 50
+#define FPGA_PIN_M15 51
+#define FPGA_PIN_M18 52
+#define FPGA_PIN_K18 53
+#define FPGA_PIN_G18 54
+#define FPGA_PIN_V16 55
 
 #define FPGA_LED_0 FPGA_PIN_F12
 #define FPGA_LED_1 FPGA_PIN_E12
