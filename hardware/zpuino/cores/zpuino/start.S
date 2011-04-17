@@ -20,21 +20,20 @@ __executable_start:
         .globl _Z14_zpu_interruptv
 
 ___zpu_interrupt_vector:
+	im _memreg+0
+        load
 	im _Z14_zpu_interruptv
+        call
+        im _memreg+0
+        store
         poppc
+        
 
 /* Other needed stuff */
 	.globl _cpu_config
 
 _cpu_config:
 	.long 0
-	.globl _memreg
-_memreg:
-	.long 0
-        .long 0
-        .long 0
-        .long 0
-        
         .globl _init
         .weak _init
         .globl ___do_global_ctors
@@ -49,3 +48,8 @@ _Z14_zpu_interruptv:
 	poppc
         
         .weak _initIO
+.section ".vectors"
+
+	.org 0x0008
+        .globl _memreg
+_memreg:
