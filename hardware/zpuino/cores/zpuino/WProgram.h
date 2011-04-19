@@ -12,4 +12,8 @@ extern char *ltoa ( long value, char * str, int base );
 
 typedef unsigned char boolean;
 
+#ifndef _BV
+#define _BV(x) (1<<(x))
+#endif
+
 #endif
