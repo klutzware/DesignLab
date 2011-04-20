@@ -387,7 +387,6 @@ int Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
 		USPIDATA=0xff;
 		USPIDATA=0xff;
 		USPIDATA=0xff;
-		spiSend(0xff);
 		*idst++=USPIDATA;
 	}
 	chipSelectHigh();
