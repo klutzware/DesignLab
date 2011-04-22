@@ -71,6 +71,9 @@ public:
   
   boolean rmdir(char *filepath);
 
+  int errorCode() const { return card.errorCode(); }
+  int errorData() const { return card.errorData(); }
+
 private:
   SdFile file;
 
