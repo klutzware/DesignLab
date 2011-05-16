@@ -13,9 +13,8 @@
 
 #define BOARD_SPI_DIVIDER BIT(SPICP0)
 
-#define IOBASE 0x8000
-#define IO_SLOT_OFFSET_BIT 11
-
+#define IOBASE 0x8000000
+#define IO_SLOT_OFFSET_BIT 23
 
 // Wing1 Column A
 #define FPGA_PIN_P18 0
