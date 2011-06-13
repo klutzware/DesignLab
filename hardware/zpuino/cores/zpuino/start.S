@@ -9,8 +9,11 @@
    thinking */
 .balign 4,0
 	.globl ivector
+        .globl bootloaderdata
 ivector:
 	.long 0 /* Will be set by bootloader */
+bootloaderdata:
+	.long 0
 .balign 4,0	
 __executable_start:
 	im _premain
