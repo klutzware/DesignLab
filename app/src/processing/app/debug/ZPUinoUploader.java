@@ -87,6 +87,15 @@ public class ZPUinoUploader extends Uploader  {
 
     commandDownloader.add("-b" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".bin");
     commandDownloader.add("-R"); // Reset
+
+    // Append extra data file, if present
+    File smallfs = new File(buildPath,"smallfs.dat");
+    if (smallfs.exists()) {
+        System.err.println("Appending extra data file");
+        commandDownloader.add("-e");
+        commandDownloader.add(smallfs.getPath());
+    }
+
     if (extraOptions!=null) {
         for (String i: PApplet.split(extraOptions," ")) {
             commandDownloader.add(i);

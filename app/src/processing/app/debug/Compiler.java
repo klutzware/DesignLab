@@ -87,6 +87,25 @@ public class Compiler implements MessageConsumer {
     return sources;
   }
 
+  public boolean generateSmallFS(File smallfsdir, String builddir)
+  {
+      String toolPath = new String(Base.getHardwarePath() + "/tools/");
+
+      List cmd = new ArrayList();
+      cmd.add(toolPath + File.separator + "mksmallfs");
+      cmd.add(builddir + File.separator + "smallfs.dat" );
+
+      cmd.add(smallfsdir.getPath());
+      try {
+          execAsynchronously(cmd);
+      } catch (RunnerException e) {
+          System.err.print(e.getMessage());
+          return false;
+      }
+
+      return true;
+  }
+
   /**
    * Compile sketch
    *
@@ -280,6 +299,15 @@ public class Compiler implements MessageConsumer {
       mainMakeFile.setVariable("TARGETOBJ", Makefile.makeFileList(Makefile.makeObjectsFromSources(sketchSources)) );
       mainMakeFile.appendVariable("LIBS","core" + File.separator + libCoreFile.getName());
       mainMakeFile.include( rulesMakeFileName );
+
+      // Check for smallfs
+
+      File smallfsdir = new File(sketch.getFolder(),"smallfs");
+      if (smallfsdir.isDirectory()) {
+          //System.err.println("Found smallfs directory");
+          generateSmallFS( smallfsdir, buildPath );
+      }
+
 
       mainMakeFile.close();
 
