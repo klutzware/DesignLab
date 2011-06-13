@@ -12,6 +12,7 @@ CFLAGS=$(EXTRACFLAGS) -DZPU -Wall -O2 -ffunction-sections -fdata-sections -nosta
 CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
 ARFLAGS=crs
 LDFLAGS=-nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sections
+ASFLAGS=$(PREFS___board___build___extraSflags)
 
 $(TARGET).elf: $(TARGETOBJ) $(LIBS)
 	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive

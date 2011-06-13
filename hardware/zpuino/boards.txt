@@ -5,7 +5,8 @@ zpuino_s3e_eval.upload.maximum_size=27648
 zpuino_s3e_eval.upload.speed=115200
 zpuino_s3e_eval.build.f_cpu=96000000L
 zpuino_s3e_eval.build.core=zpuino
-zpuino_s3e_eval.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -nostartfiles
+zpuino_s3e_eval.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -DBOARD_ID=0x83010F00 -nostartfiles 
+zpuino_s3e_eval.build.extraSflags=-DBOARD_ID=0x83010F00
 ##############################################################
 zpuino_papilio_one250.name=ZPUino on Papilio One (250) board
 zpuino_papilio_one250.upload.protocol=zpuino-serial
@@ -13,7 +14,8 @@ zpuino_papilio_one250.upload.maximum_size=12160
 zpuino_papilio_one250.upload.speed=1000000
 zpuino_papilio_one250.build.f_cpu=96000000L
 zpuino_papilio_one250.build.core=zpuino
-zpuino_papilio_one250.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -D__S3E_250__ -nostartfiles
+zpuino_papilio_one250.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020E00 -D__S3E_250__ -nostartfiles
+zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA4020E00
 ##############################################################
 zpuino_papilio_one500.name=ZPUino on Papilio One (500) board
 zpuino_papilio_one500.upload.protocol=zpuino-serial
@@ -21,4 +23,5 @@ zpuino_papilio_one500.upload.maximum_size=27648
 zpuino_papilio_one500.upload.speed=1000000
 zpuino_papilio_one500.build.f_cpu=96000000L
 zpuino_papilio_one500.build.core=zpuino
-zpuino_papilio_one500.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -D__S3E_500__ -nostartfiles
+zpuino_papilio_one500.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020F00 -D__S3E_500__ -nostartfiles
+zpuino_papilio_one500.build.extraSflags=-DBOARD_ID=0xA4020F00

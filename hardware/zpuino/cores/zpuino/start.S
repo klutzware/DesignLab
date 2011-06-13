@@ -11,9 +11,9 @@
 	.globl ivector
         .globl bootloaderdata
 ivector:
-	.long 0 /* Will be set by bootloader */
+	.long 0x310AFADE /* Will be set by bootloader later. This is a sig. */
 bootloaderdata:
-	.long 0
+	.long BOARD_ID
 .balign 4,0	
 __executable_start:
 	im _premain
