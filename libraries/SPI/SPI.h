@@ -12,9 +12,8 @@
 #define _SPI_H_INCLUDED
 
 #include <stdio.h>
-#include <WProgram.h>
-
 #ifdef __AVR__
+#include <Arduino.h>
 #include <avr/pgmspace.h>
 #endif
 

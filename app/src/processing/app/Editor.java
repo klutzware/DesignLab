@@ -2470,15 +2470,14 @@ public class Editor extends JFrame implements RunnerListener {
           Uploader uploader = new AvrdudeUploader();
           if (uploader.burnBootloader()) {
             statusNotice("Done burning bootloader.");
-          } else {
-            statusError("Error while burning bootloader.");
-            e.printStackTrace();
           }
-        }});
-    } else {
-      statusError("Core " + boardPreferences.get("build.core") + " does not support bootloader burning.");
-    }
+        } catch (Exception e) {
+           statusError("Error while burning bootloader.");
+           e.printStackTrace();
+        }
+      }});
   }
+
 
 
   /**
