@@ -15,6 +15,7 @@ uno.build.mcu=atmega328p
 uno.build.f_cpu=16000000L
 uno.build.core=arduino
 uno.build.pins=standard
+uno.build.toolchain=avr
 
 ##############################################################
 
@@ -36,6 +37,7 @@ atmega328.build.mcu=atmega328p
 atmega328.build.f_cpu=16000000L
 atmega328.build.core=arduino
 atmega328.build.pins=standard
+atmega328.build.toolchain=avr
 
 ##############################################################
 
@@ -57,6 +59,7 @@ diecimila.build.mcu=atmega168
 diecimila.build.f_cpu=16000000L
 diecimila.build.core=arduino
 diecimila.build.pins=standard
+diecimila.build.toolchain=avr
 
 ##############################################################
 
@@ -78,6 +81,7 @@ mega2560.build.mcu=atmega2560
 mega2560.build.f_cpu=16000000L
 mega2560.build.core=arduino
 mega2560.build.pins=mega
+mega2560.build.toolchain=avr
 
 ##############################################################
 
@@ -99,6 +103,7 @@ mega.build.mcu=atmega1280
 mega.build.f_cpu=16000000L
 mega.build.core=arduino
 mega.build.pins=mega
+mega.build.toolchain=avr
 
 ##############################################################
 
@@ -120,6 +125,7 @@ mini.build.mcu=atmega168
 mini.build.f_cpu=16000000L
 mini.build.core=arduino
 mini.build.pins=standard
+mini.build.toolchain=avr
 
 ##############################################################
 
@@ -141,6 +147,8 @@ fio.build.mcu=atmega328p
 fio.build.f_cpu=8000000L
 fio.build.core=arduino
 fio.build.pins=standard
+fio.build.core=arduino:arduino
+fio.build.toolchain=avr
 
 ##############################################################
 
@@ -163,6 +171,7 @@ bt328.build.mcu=atmega328p
 bt328.build.f_cpu=16000000L
 bt328.build.core=arduino
 bt328.build.pins=standard
+bt328.build.toolchain=avr
 
 ##############################################################
 
@@ -185,6 +194,7 @@ bt.build.mcu=atmega168
 bt.build.f_cpu=16000000L
 bt.build.core=arduino
 bt.build.pins=standard
+bt.build.toolchain=avr
 
 ##############################################################
 
@@ -206,6 +216,7 @@ lilypad328.build.mcu=atmega328p
 lilypad328.build.f_cpu=8000000L
 lilypad328.build.core=arduino
 lilypad328.build.pins=standard
+lilypad328.build.toolchain=avr
 
 ##############################################################
 
@@ -227,6 +238,7 @@ lilypad.build.mcu=atmega168
 lilypad.build.f_cpu=8000000L
 lilypad.build.core=arduino
 lilypad.build.pins=standard
+lilypad.build.toolchain=avr
 
 ##############################################################
 
@@ -248,6 +260,7 @@ pro5v328.build.mcu=atmega328p
 pro5v328.build.f_cpu=16000000L
 pro5v328.build.core=arduino
 pro5v328.build.pins=standard
+pro5v328.build.toolchain=avr
 
 ##############################################################
 
@@ -269,6 +282,7 @@ pro5v.build.mcu=atmega168
 pro5v.build.f_cpu=16000000L
 pro5v.build.core=arduino
 pro5v.build.pins=standard
+pro5v.build.toolchain=avr
 
 ##############################################################
 
@@ -290,6 +304,7 @@ pro328.build.mcu=atmega328p
 pro328.build.f_cpu=8000000L
 pro328.build.core=arduino
 pro328.build.pins=standard
+pro328.build.toolchain=avr
 
 ##############################################################
 
@@ -311,6 +326,7 @@ pro.build.mcu=atmega168
 pro.build.f_cpu=8000000L
 pro.build.core=arduino
 pro.build.pins=standard
+pro.build.toolchain=avr
 
 ##############################################################
 
@@ -331,6 +347,7 @@ atmega168.bootloader.lock_bits=0x0F
 atmega168.build.mcu=atmega168
 atmega168.build.f_cpu=16000000L
 atmega168.build.core=arduino
+atmega168.build.toolchain=avr
 atmega168.build.pins=standard
 
 ##############################################################
@@ -351,4 +368,5 @@ atmega8.bootloader.lock_bits=0x0F
 atmega8.build.mcu=atmega8
 atmega8.build.f_cpu=16000000L
 atmega8.build.core=arduino
+atmega8.build.toolchain=avr
 atmega8.build.pins=standard

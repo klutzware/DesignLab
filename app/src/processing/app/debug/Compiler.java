@@ -92,12 +92,16 @@ public class Compiler implements MessageConsumer {
       String toolPath = new String(Base.getHardwarePath() + "/tools/");
 
       List cmd = new ArrayList();
-      cmd.add(toolPath + File.separator + "mksmallfs");
+      String extension="";
+      if (!Base.isLinux()) {
+          extension=".exe";
+      }
+      cmd.add(toolPath + File.separator + "mksmallfs" + extension);
       cmd.add(builddir + File.separator + "smallfs.dat" );
 
       cmd.add(smallfsdir.getPath());
       try {
-          execAsynchronously(cmd);
+          execAsynchronously(cmd, toolPath);
       } catch (RunnerException e) {
           System.err.print(e.getMessage());
           return false;
@@ -127,15 +131,17 @@ public class Compiler implements MessageConsumer {
     // the pms object isn't used for anything but storage
     MessageStream pms = new MessageStream(this);
 
-    String avrBasePath = Base.getAvrBasePath();
     Map<String, String> boardPreferences = Base.getBoardPreferences();
-
     String core = boardPreferences.get("build.core");
+    String toolchain = boardPreferences.get("build.toolchain");
+
     if (core == null) {
       RunnerException re = new RunnerException("No board selected; please choose a board from the Tools > Board menu.");
       re.hideStackTrace();
       throw re;
     }
+
+    String avrBasePath = Base.getAvrBasePath(toolchain);
 
     String corePath = getCorePath(boardPreferences);
 
@@ -344,9 +350,9 @@ public class Compiler implements MessageConsumer {
 
       // TODO: make sure this works in Win32
     List baseCommandMake = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "make", "--silent", "-C", buildPath, "all"}));
+      avrBasePath + "make", "-C", buildPath, "all"}));
 
-    execAsynchronously(baseCommandMake);
+    execAsynchronously(baseCommandMake, avrBasePath);
     return true;
 
   }
@@ -357,7 +363,7 @@ public class Compiler implements MessageConsumer {
   /**
    * Either succeeds or throws a RunnerException fit for public consumption.
    */
-  private void execAsynchronously(List commandList) throws RunnerException {
+  private void execAsynchronously(List commandList, String path) throws RunnerException {
     String[] command = new String[commandList.size()];
     commandList.toArray(command);
     int result = 0;
@@ -373,9 +379,17 @@ public class Compiler implements MessageConsumer {
     secondErrorFound = false;
 
     Process process;
+    String [] envp = new String[] {
+        "PATH="  + System.getenv("PATH") + ";" + path,
+        "TEMP=" + System.getenv("TEMP")
+    };
     
     try {
-      process = Runtime.getRuntime().exec(command);
+        if(Base.isLinux()) {
+            process = Runtime.getRuntime().exec(command);
+        } else {
+            process = Runtime.getRuntime().exec(command, envp);
+        }
     } catch (IOException e) {
       RunnerException re = new RunnerException(e.getMessage());
       re.hideStackTrace();

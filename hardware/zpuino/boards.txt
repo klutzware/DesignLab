@@ -5,6 +5,8 @@ zpuino_s3e_eval.upload.maximum_size=27648
 zpuino_s3e_eval.upload.speed=115200
 zpuino_s3e_eval.build.f_cpu=96000000L
 zpuino_s3e_eval.build.core=zpuino
+zpuino_s3e_eval.build.pins=standard
+zpuino_s3e_eval.build.toolchain=zpu
 zpuino_s3e_eval.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -DBOARD_ID=0x83010F00 -nostartfiles 
 zpuino_s3e_eval.build.extraSflags=-DBOARD_ID=0x83010F00
 ##############################################################
@@ -14,6 +16,8 @@ zpuino_s3e_eval_v.upload.maximum_size=12160
 zpuino_s3e_eval_v.upload.speed=115200
 zpuino_s3e_eval_v.build.f_cpu=96000000L
 zpuino_s3e_eval_v.build.core=zpuino
+zpuino_s3e_eval_v.build.pins=standard
+zpuino_s3e_eval_v.build.toolchain=zpu
 zpuino_s3e_eval_v.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -DBOARD_ID=0x83010E01 -nostartfiles 
 zpuino_s3e_eval_v.build.extraSflags=-DBOARD_ID=0x83010E01
 ##############################################################
@@ -23,6 +27,8 @@ zpuino_papilio_one250.upload.maximum_size=12160
 zpuino_papilio_one250.upload.speed=1000000
 zpuino_papilio_one250.build.f_cpu=96000000L
 zpuino_papilio_one250.build.core=zpuino
+zpuino_papilio_one250.build.pins=standard
+zpuino_papilio_one250.build.toolchain=zpu
 zpuino_papilio_one250.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020E00 -D__S3E_250__ -nostartfiles
 zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA4020E00
 ##############################################################
@@ -32,6 +38,8 @@ zpuino_papilio_one500.upload.maximum_size=27648
 zpuino_papilio_one500.upload.speed=1000000
 zpuino_papilio_one500.build.f_cpu=96000000L
 zpuino_papilio_one500.build.core=zpuino
+zpuino_papilio_one500.build.pins=standard
+zpuino_papilio_one500.build.toolchain=zpu
 zpuino_papilio_one500.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020F00 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500.build.extraSflags=-DBOARD_ID=0xA4020F00
 ##############################################################
@@ -41,5 +49,7 @@ zpuino_papilio_one500v.upload.maximum_size=12160
 zpuino_papilio_one500v.upload.speed=1000000
 zpuino_papilio_one500v.build.f_cpu=96000000L
 zpuino_papilio_one500v.build.core=zpuino
+zpuino_papilio_one500v.build.pins=standard
+zpuino_papilio_one500v.build.toolchain=zpu
 zpuino_papilio_one500v.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020E01 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500v.build.extraSflags=-DBOARD_ID=0xA4020E01

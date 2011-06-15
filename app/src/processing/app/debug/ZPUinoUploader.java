@@ -151,8 +151,11 @@ public class ZPUinoUploader extends Uploader  {
   
   public boolean zpuinoprogrammer(Collection params) throws RunnerException {
     List commandDownloader = new ArrayList();
-    commandDownloader.add("zpuinoprogrammer");
-
+    if (Base.isLinux()) {
+        commandDownloader.add("zpuinoprogrammer");
+    } else {
+        commandDownloader.add("zpuinoprogrammer.exe");
+    }
     commandDownloader.addAll(params);
 
     return executeUploadCommand(commandDownloader);

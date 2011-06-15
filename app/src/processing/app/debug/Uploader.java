@@ -120,7 +120,12 @@ public abstract class Uploader implements MessageConsumer  {
         avrBasePath = new String(Base.getHardwarePath() + "/tools/"); 
       }
       else {
-        avrBasePath = new String(Base.getHardwarePath() + "/tools/avr/bin/"); 
+          Map<String, String> boardPreferences = Base.getBoardPreferences();
+          String toolchain = boardPreferences.get("build.toolchain");
+
+          avrBasePath = new String(Base.getHardwarePath() + File.separator + "tools" +
+                                   File.separator + toolchain + File.separator + "bin" +
+                                   File.separator);
       }
       
       commandArray[0] = avrBasePath + commandArray[0];
