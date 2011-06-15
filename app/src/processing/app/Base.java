@@ -1510,12 +1510,12 @@ public class Base {
   }
   
   
-  static public String getAvrBasePath() {
+  static public String getAvrBasePath(String toolchainName) {
     if(Base.isLinux()) {
       return ""; // avr tools are installed system-wide and in the path
     } else {
       return getHardwarePath() + File.separator + "tools" +
-             File.separator + "avr" + File.separator + "bin" + File.separator;
+             File.separator + toolchainName + File.separator + "bin" + File.separator;
     }  
   }
   
