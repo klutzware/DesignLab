@@ -333,7 +333,7 @@ public class Compiler implements MessageConsumer {
 
       // TODO: make sure this works in Win32
     List baseCommandMake = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "make", "-C", buildPath, "all"}));
+      avrBasePath + "make", "--silent", "-C", buildPath, "all"}));
 
     execAsynchronously(baseCommandMake, avrBasePath);
     return true;
