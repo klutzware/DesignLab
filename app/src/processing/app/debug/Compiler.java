@@ -87,16 +87,21 @@ public class Compiler implements MessageConsumer {
     return sources;
   }
 
-  public boolean generateSmallFS(File smallfsdir, String builddir)
+  public boolean generateSmallFS(File smallfsdir, String builddir, String toolchain)
   {
-      String toolPath = new String(Base.getHardwarePath() + File.separator +
-                                   "tools");
-
       List cmd = new ArrayList();
       String extension="";
-      if (!Base.isLinux()) {
+      String toolPath;
+
+      if (Base.isLinux()) {
+          toolPath = new String(Base.getHardwarePath() + File.separator +
+                                "tools");
+
+      } else {
           extension=".exe";
+          toolPath = Base.getAvrBasePath(toolchain);
       }
+
       cmd.add(toolPath + File.separator + "mksmallfs" + extension);
       cmd.add(builddir + File.separator + "smallfs.dat" );
 
@@ -312,7 +317,7 @@ public class Compiler implements MessageConsumer {
       File smallfsdir = new File(sketch.getFolder(),"smallfs");
       if (smallfsdir.isDirectory()) {
           //System.err.println("Found smallfs directory");
-          generateSmallFS( smallfsdir, buildPath );
+          generateSmallFS( smallfsdir, buildPath, toolchain);
       }
 
 

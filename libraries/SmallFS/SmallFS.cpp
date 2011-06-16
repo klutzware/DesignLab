@@ -172,6 +172,7 @@ int SmallFSFile::read(void *buf, int s)
 int SmallFSFile::readCallback(int s, void (*callback)(unsigned char, void*), void *data)
 {
 	unsigned char c;
+	int save_s;
 
 	if (!valid())
 		return -1;
@@ -194,6 +195,8 @@ int SmallFSFile::readCallback(int s, void (*callback)(unsigned char, void*), voi
 	SmallFS.spi_enable();
 
 	SmallFS.startread( seekpos + flashoffset );
+	save_s = s;
+	seekpos += s;
 
 	while (s--) {
 		SmallFS.read(&c,1);
@@ -201,8 +204,8 @@ int SmallFSFile::readCallback(int s, void (*callback)(unsigned char, void*), voi
 	}
 
 	SmallFS.spi_disable();
-	seekpos+=s;
-	return s;
+	
+	return save_s;
 }
 
 void SmallFSFile::seek(int pos, int whence)
