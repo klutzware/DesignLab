@@ -89,7 +89,8 @@ public class Compiler implements MessageConsumer {
 
   public boolean generateSmallFS(File smallfsdir, String builddir)
   {
-      String toolPath = new String(Base.getHardwarePath() + "/tools/");
+      String toolPath = new String(Base.getHardwarePath() + File.separator +
+                                   "tools");
 
       List cmd = new ArrayList();
       String extension="";
