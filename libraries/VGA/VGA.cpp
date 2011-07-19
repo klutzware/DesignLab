@@ -15,14 +15,12 @@ void VGA_class::printchar(unsigned int x, unsigned int y, unsigned char c, bool 
 		for (j=0; j<8;j++) {
 
 			int rx,ry;
-			rx = x + j;
-			ry = (y + i);
+			rx = j;
+			ry = i;
 
 			/* Check bounds */
 			if (rx>=0 && rx<(int)getHSize() && ry>=0 &&  ry<(int)getVSize()) {
-				rx = rx + ry * (int)getHSize();
-
-
+				rx = rx + (ry * (int)getHSize());
 				if (v&0x80) {
 					vmem[rx] = fg;
 				} else {
@@ -145,6 +143,5 @@ void VGA_class::blitStreamAppend(unsigned char c)
 		blitpos+=VGA.getHSize()-blitw;
 	}
 }
-
 
 VGA_class VGA;
