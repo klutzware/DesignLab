@@ -54,7 +54,7 @@ public:
 	inline vgaptr_t getBasePointer() const {
 		return getVgaMem();
 	}
-    inline vgaptr_t getBasePointer(unsigned x, unsigned y) const {
+    vgaptr_t getBasePointer(unsigned x, unsigned y) const {
 		vgaptr_t p = getBasePointer();
 		p += x;
 		p += (y * getHSize());
