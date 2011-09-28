@@ -43,7 +43,7 @@ public:
 	 * @brief Check if file was successfuly opened.
 	 * @return true on success, false otherwise
      */
-	bool valid() { return flashoffset!=-1; }
+	bool valid() { return flashoffset>=0;}//!=-1; }
 
 	/**
 	 * @brief Read a chunk of data from file.
