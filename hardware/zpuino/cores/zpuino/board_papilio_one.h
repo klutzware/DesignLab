@@ -127,7 +127,7 @@
 #define WING_B_13 FPGA_PIN_P32
 #define WING_B_14 FPGA_PIN_P25
 #define WING_B_15 FPGA_PIN_P22
-
+        
 #define WING_C_0 FPGA_PIN_P91
 #define WING_C_1 FPGA_PIN_P92
 #define WING_C_2 FPGA_PIN_P94
