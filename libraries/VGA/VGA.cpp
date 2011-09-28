@@ -1,4 +1,7 @@
 #include "VGA.h"
+#include "HardwareSerial.h"
+
+#define ABS(x) ((x)>0?(x):-1*(x))
 
 void VGA_class::printchar(unsigned int x, unsigned int y, unsigned char c, bool trans)
 {
@@ -141,6 +144,32 @@ void VGA_class::blitStreamAppend(unsigned char c)
 	if (cblit==blitw) {
 		cblit=0;
 		blitpos+=VGA.getHSize()-blitw;
+	}
+}
+
+void VGA_class::drawLine(int x0, int y0, int x1, int y1)
+{
+	int dx = ABS(x1-x0);
+	int dy = ABS(y1-y0);
+	int sx = (x0 < x1) ? 1:-1;
+	int sy = (y0 < y1) ? 1:-1;
+	int err = dx-dy;
+	vgaptr_t px = getBasePointer(x0,y0);
+    vgaptr_t epx = getBasePointer(x1,y1);
+	while (1)
+	{
+		*px = fg;
+		if (px==epx)
+			break;
+		int e2 = 2*err;
+		if (e2 > -dy) {
+			err-=dy;
+			px += sx;
+		}
+		if (e2 < dx) {
+			err += dx;
+			px += sy * getHSize();
+		}
 	}
 }
 

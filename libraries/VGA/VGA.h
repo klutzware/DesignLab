@@ -115,6 +115,7 @@ public:
 		VGA_class*me=static_cast<VGA_class*>(data);
 		me->blitStreamAppend(c);
 	}
+    void drawLine(int x0,int y0,int x1,int y1);
 
 protected:
 	vgaptr_t blitpos;
