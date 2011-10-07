@@ -4,7 +4,42 @@
 #if defined(ZPU)
 
 #include "zpuino.h"
+
+#if ( (BOARD_ID == 0xA4010E01) || \
+     (BOARD_ID == 0x83010E01) )
+
 #define VGABASE IO_SLOT(9)
+
+const unsigned int VGA_HSIZE = 160;
+const unsigned int VGA_VSIZE = 120;
+
+#define BYTES_PER_PIXEL 1
+#define COLOR_WEIGHT_R 3
+#define COLOR_WEIGHT_G 3
+#define COLOR_WEIGHT_B 2
+
+
+#elif BOARD_ID == 0xA4030E00
+
+const unsigned int VGA_HSIZE = 600;
+const unsigned int VGA_VSIZE = 420;
+
+#define VGABASE IO_SLOT(8)
+
+#define BYTES_PER_PIXEL 2
+#define COLOR_WEIGHT_R 4
+#define COLOR_WEIGHT_G 4
+#define COLOR_WEIGHT_B 4
+
+#else
+#error No support for your board
+#endif
+
+#define COLOR_SHIFT_R (COLOR_WEIGHT_B+COLOR_WEIGHT_G)
+#define COLOR_SHIFT_G (COLOR_WEIGHT_B)
+#define COLOR_SHIFT_B 0
+
+
 #define CHARRAMBASE IO_SLOT(10)
 #define VGAPTR REGISTER(VGABASE,0);
 #define CHARRAMPTR REGISTER(CHARRAMBASE,0);
@@ -39,14 +74,17 @@ inline vgaptr_t getCharRam() {
 #error No support
 #endif
 
-const unsigned int VGA_HSIZE = 160;
-const unsigned int VGA_VSIZE = 120;
 
 class VGA_class {
 public:
 	VGA_class(): blitpos(getBasePointer()) {};
 
+#if BYTES_PER_PIXEL == 1
 	typedef unsigned char pixel_t;
+#elif BYTES_PER_PIXEL == 2
+	typedef unsigned short pixel_t;
+#endif
+
 
 	inline unsigned int getHSize() const { return VGA_HSIZE; }
 	inline unsigned int getVSize() const { return VGA_VSIZE; }
@@ -95,7 +133,7 @@ public:
 
 	inline void setColor(unsigned r, unsigned g, unsigned b)
 	{
-		setColor(r<<5 | g<<3 | b);
+		setColor(r<<COLOR_SHIFT_R | g<<COLOR_SHIFT_G | b);
 	}
 
 	void drawRect(unsigned x, unsigned y, unsigned width, unsigned height);
@@ -123,14 +161,15 @@ protected:
 	pixel_t fg,bg;
 };
 
-const VGA_class::pixel_t RED = 0xE0;
-const VGA_class::pixel_t GREEN = 0x1C;
-const VGA_class::pixel_t BLUE = 0x03;
+const VGA_class::pixel_t RED = (((1<<COLOR_WEIGHT_R)-1) << COLOR_SHIFT_R);
+const VGA_class::pixel_t GREEN = (((1<<COLOR_WEIGHT_G)-1) << COLOR_SHIFT_G);
+const VGA_class::pixel_t BLUE = (((1<<COLOR_WEIGHT_B)-1) << COLOR_SHIFT_B);
 const VGA_class::pixel_t YELLOW = (RED|GREEN);
 const VGA_class::pixel_t PURPLE = (RED|BLUE);
 const VGA_class::pixel_t CYAN = (GREEN|BLUE);
-const VGA_class::pixel_t WHITE = 0xff;
-const VGA_class::pixel_t BLACK = 0x00;
+const VGA_class::pixel_t WHITE = (RED|GREEN|BLUE);
+const VGA_class::pixel_t BLACK = 0;
+
 extern VGA_class VGA;
 
 #endif

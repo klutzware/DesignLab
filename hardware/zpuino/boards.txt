@@ -48,3 +48,13 @@ zpuino_papilio_one500v.build.core=zpuino
 zpuino_papilio_one500v.build.toolchain=zpu
 zpuino_papilio_one500v.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500v.build.extraSflags=-DBOARD_ID=0xA4010E01
+##############################################################
+zpuino_papilio_pluslx4v.name=ZPUino on Papilio Plus (LX4)
+zpuino_papilio_pluslx4v.upload.protocol=zpuino-serial
+zpuino_papilio_pluslx4v.upload.maximum_size=12160
+zpuino_papilio_pluslx4v.upload.speed=115200
+zpuino_papilio_pluslx4v.build.f_cpu=96000000L
+zpuino_papilio_pluslx4v.build.core=zpuino
+zpuino_papilio_pluslx4v.build.toolchain=zpu
+zpuino_papilio_pluslx4v.build.extraCflags=-D__ZPUINO_PAPILIO_PLUS__ -DBOARD_ID=0xA4030E00 -DBOARD_MEMORYSIZE=0x4000 -nostartfiles
+zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
