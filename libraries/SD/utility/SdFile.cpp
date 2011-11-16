@@ -608,7 +608,7 @@ void SdFile::printDirName(const dir_t& dir, uint8_t width) {
       Serial.print('.');
       w++;
     }
-    Serial.print(dir.name[i]);
+    Serial.write(dir.name[i]);
     w++;
   }
   if (DIR_IS_SUBDIR(&dir)) {
@@ -1156,9 +1156,11 @@ uint8_t SdFile::truncate(uint32_t length) {
  * for a read-only file, device is full, a corrupt file system or an I/O error.
  *
  */
-int16_t SdFile::write(const void* buf, uint16_t nbyte) {
+size_t SdFile::write(const void* buf, uint16_t nbyte) {
 #ifdef SD_WRITE_SUPPORT
 	// convert void* to uint8_t*  -  must be before goto statements
+size_t SdFile::write(const void* buf, uint16_t nbyte) {
+  // convert void* to uint8_t*  -  must be before goto statements
   const uint8_t* src = reinterpret_cast<const uint8_t*>(buf);
 
   // number of bytes left to write  -  must be before goto statements
@@ -1246,11 +1248,10 @@ int16_t SdFile::write(const void* buf, uint16_t nbyte) {
 
  writeErrorReturn:
   // return for write error
-  writeError = true;
-  return -1;
-#else
-  return 0;
+  //writeError = true;
+  setWriteError();
 #endif
+  return 0;
 }
 //------------------------------------------------------------------------------
 /**
@@ -1259,7 +1260,7 @@ int16_t SdFile::write(const void* buf, uint16_t nbyte) {
  * Use SdFile::writeError to check for errors.
  */
 
-void SdFile::write(uint8_t b) {
+size_t SdFile::write(uint8_t b) {
 #ifdef SD_WRITE_SUPPORT
 	write(&b, 1);
 #endif
@@ -1272,10 +1273,12 @@ void SdFile::write(uint8_t b) {
  * Use SdFile::writeError to check for errors.
  */
 
-void SdFile::write(const char* str) {
+size_t SdFile::write(const char* str) {
 #ifdef SD_WRITE_SUPPORT
 	write(str, strlen(str));
 #endif
+size_t SdFile::write(const char* str) {
+  return write(str, strlen(str));
 }
 
 //------------------------------------------------------------------------------

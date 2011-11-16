@@ -121,6 +121,7 @@ public class Preferences {
   JTextField memoryField;
   JCheckBox checkUpdatesBox;
   JTextField fontSizeField;
+  JCheckBox updateExtensionBox;
   JCheckBox autoAssociateBox;
 
 
@@ -325,13 +326,21 @@ public class Preferences {
     checkUpdatesBox.setBounds(left, top, d.width + 10, d.height);
     right = Math.max(right, left + d.width);
     top += d.height + GUI_BETWEEN;
-
+    
+    // [ ] Update sketch files to new extension on save (.pde -> .ino)
+    
+    updateExtensionBox = new JCheckBox("Update sketch files to new extension on save (.pde -> .ino)");
+    pain.add(updateExtensionBox);
+    d = updateExtensionBox.getPreferredSize();
+    updateExtensionBox.setBounds(left, top, d.width + 10, d.height);
+    right = Math.max(right, left + d.width);
+    top += d.height + GUI_BETWEEN;    
 
     // [ ] Automatically associate .pde files with Processing
 
     if (Base.isWindows()) {
       autoAssociateBox =
-        new JCheckBox("Automatically associate .pde files with Arduino");
+        new JCheckBox("Automatically associate .ino files with Arduino");
       pain.add(autoAssociateBox);
       d = autoAssociateBox.getPreferredSize();
       autoAssociateBox.setBounds(left, top, d.width + 10, d.height);
@@ -526,6 +535,8 @@ public class Preferences {
       setBoolean("platform.auto_file_type_associations",
                  autoAssociateBox.isSelected());
     }
+    
+    setBoolean("editor.update_extension", updateExtensionBox.isSelected());
 
     editor.applyPreferences();
   }
@@ -558,6 +569,9 @@ public class Preferences {
       autoAssociateBox.
         setSelected(getBoolean("platform.auto_file_type_associations"));
     }
+    
+    updateExtensionBox.setSelected(get("editor.update_extension") == null ||
+                                   getBoolean("editor.update_extension"));
 
     dialog.setVisible(true);
   }
@@ -772,8 +786,9 @@ public class Preferences {
     s = st.nextToken();
     boolean bold = (s.indexOf("bold") != -1);
     boolean italic = (s.indexOf("italic") != -1);
+    boolean underlined = (s.indexOf("underlined") != -1);
     //System.out.println(what + " = " + str + " " + bold + " " + italic);
 
-    return new SyntaxStyle(color, italic, bold);
+    return new SyntaxStyle(color, italic, bold, underlined);
   }
 }
