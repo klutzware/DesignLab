@@ -100,12 +100,9 @@ int File::read(void *buf, uint16_t nbyte) {
 }
 
 int File::read(uint8_t *buf,unsigned size) {
-  if (SD.c != -1) {
-    int tmp = SD.c;
-    SD.c = -1;
-    return tmp;
-  }
-  return SD.file.read(buf,size);
+  if (_file)
+    return _file->read(buf,size);
+  return 0;
 }
 
 int File::available() {

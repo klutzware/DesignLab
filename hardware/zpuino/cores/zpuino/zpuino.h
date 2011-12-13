@@ -6,6 +6,21 @@
 
 #define __ZPUINO__ 1
 
+extern void itoa(int value, char *dest, int base);
+extern void utoa(unsigned int value, char *dest, int base);
+extern char *ultoa ( unsigned long value, char * str, int base );
+extern char *ltoa (long value, char * str, int base );
+
+class GPIO
+{
+public:
+	static void pinMode(unsigned int pin, int mode);
+
+	static const register_t gpiodata;
+	static const register_t gpiotris;
+	static const register_t gpioppsmode;
+};
+
 static inline __attribute__((always_inline)) register_t outputRegisterForPin(unsigned int pin)
 {
 	return &GPIODATA(pin/32);
@@ -47,11 +62,13 @@ static inline __attribute__((always_inline)) int digitalRead(unsigned int pin)
 
 static inline __attribute__((always_inline)) void pinMode(unsigned int pin, int mode)
 {
-	if (mode) {
+   /* if (mode) {
 		*modeRegisterForPin(pin) |= bitMaskForPin(pin);
 	} else {
 		*modeRegisterForPin(pin) &= ~bitMaskForPin(pin);
-	}
+		}
+		*/
+	GPIO::pinMode(pin,mode);
 }
 
 /* PPS */

@@ -1,6 +1,8 @@
 #ifndef WProgram_h
 #define WProgram_h
 
+#if 0
+
 #include <zpuino.h>
 #include <delay.h>
 #include <HardwareSerial.h>
@@ -14,6 +16,8 @@ typedef unsigned char boolean;
 
 #ifndef _BV
 #define _BV(x) (1<<(x))
+#endif
+
 #endif
 
 #endif

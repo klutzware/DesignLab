@@ -5,6 +5,7 @@ CXX=$(CROSS)g++
 AR=$(CROSS)ar
 OBJCOPY=$(CROSS)objcopy
 SIZE=$(CROSS)size
+DEPDIR=.deps
 
 EXTRACFLAGS+=$(PREFS___board___build___extraCflags)
 
@@ -27,3 +28,6 @@ $(TARGET).hex: $(TARGET).elf
 
 $(TARGET).size: $(TARGET).hex
 	$(SIZE) $< > $@
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(CXXCOMPILE) -MT $@ -MD -MP -MF ./$(DEPDIR)/$*.Tpo -c -o $@ "$<"

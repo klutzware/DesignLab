@@ -578,7 +578,7 @@ public class Base {
       return;  // sketch was modified, and user canceled
     }
     // Close the running window, avoid window boogers with multiple sketches
-    activeEditor.internalCloseRunner();
+    activeEditor.internalCloseRunner(true);
 
     // Actually replace things
     handleNewReplaceImpl();
@@ -610,7 +610,7 @@ public class Base {
       return;  // sketch was modified, and user canceled
     }
     // Close the running window, avoid window boogers with multiple sketches
-    activeEditor.internalCloseRunner();
+    activeEditor.internalCloseRunner(true);
 
     boolean loaded = activeEditor.handleOpenInternal(path);
     if (!loaded) {
@@ -755,7 +755,7 @@ public class Base {
     }
 
     // Close the running window, avoid window boogers with multiple sketches
-    editor.internalCloseRunner();
+    editor.internalCloseRunner(true);
 
     if (editors.size() == 1) {
       // For 0158, when closing the last window /and/ it was already an
@@ -832,7 +832,7 @@ public class Base {
     if (handleQuitEach()) {
       // make sure running sketches close before quitting
       for (Editor editor : editors) {
-        editor.internalCloseRunner();
+        editor.internalCloseRunner(true);
       }
       // Save out the current prefs state
       Preferences.save();

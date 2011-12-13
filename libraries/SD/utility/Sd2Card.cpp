@@ -17,7 +17,7 @@
  * along with the Arduino Sd2Card Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#include <WProgram.h>
+#include <Arduino.h>
 #include "Sd2Card.h"
 //------------------------------------------------------------------------------
 #ifndef SOFTWARE_SPI
@@ -25,6 +25,7 @@
 /** Send a byte to the card */
 
 #ifdef ZPU
+#include <zpuino.h>
 
 static void spiSend(uint8_t b) {
 	USPIDATA=b;

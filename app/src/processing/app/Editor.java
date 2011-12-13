@@ -1826,7 +1826,7 @@ public class Editor extends JFrame implements RunnerListener {
    * @param verbose Set true to run with verbose output.
    */
   public void handleRun(final boolean verbose) {
-    internalCloseRunner();
+    internalCloseRunner(false);
     running = true;
     toolbar.activate(EditorToolbar.RUN);
     status.progress("Compiling sketch...");
@@ -1912,7 +1912,7 @@ public class Editor extends JFrame implements RunnerListener {
   public void handleStop() {  // called by menu or buttons
 //    toolbar.activate(EditorToolbar.STOP);
 
-    internalCloseRunner();
+    internalCloseRunner(false);
 
     toolbar.deactivate(EditorToolbar.RUN);
 //    toolbar.deactivate(EditorToolbar.STOP);
@@ -1937,15 +1937,15 @@ public class Editor extends JFrame implements RunnerListener {
   /**
    * Handle internal shutdown of the runner.
    */
-  public void internalCloseRunner() {
+  public void internalCloseRunner(boolean docleanup) {
     running = false;
 
     if (stopHandler != null)
     try {
       stopHandler.run();
     } catch (Exception e) { }
-
-    sketch.cleanup();
+    if (docleanup)
+        sketch.cleanup();
   }
 
 
@@ -2038,7 +2038,7 @@ public class Editor extends JFrame implements RunnerListener {
    */
   protected void handleOpenUnchecked(String path, int codeIndex,
                                      int selStart, int selStop, int scrollPos) {
-    internalCloseRunner();
+    internalCloseRunner(true);
     handleOpenInternal(path);
     // Replacing a document that may be untitled. If this is an actual
     // untitled document, then editor.untitled will be set by Base.
@@ -2587,6 +2587,7 @@ public class Editor extends JFrame implements RunnerListener {
     lineStatus.setBoardName(boardPreferences.get("name"));
     lineStatus.setSerialPort(Preferences.get("serial.port"));
     lineStatus.repaint();
+    sketch.cleanup(); /* We might have changed board */
   }
 
   

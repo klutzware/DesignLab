@@ -166,6 +166,7 @@ public class Compiler implements MessageConsumer {
     List<String> extracflags=new ArrayList<String>();
     String classFileName = Base.getFileNameWithoutExtension(new File(primaryClassName));
 
+    createFolder( new File(buildPath, ".deps") );
     // Create a suitable makefile
 
     try {
@@ -193,10 +194,16 @@ public class Compiler implements MessageConsumer {
 
       mainMakeFile.setVariable("TARGET",classFileName);
 
+      if (variantPath != null) {
+          commonMakeFile.appendVariable("EXTRACFLAGS","-I" + variantPath);
+      }
+
       /* Place core makefile in core subdirectory */
 
       File coreFolder = new File(buildPath, "core");
+      File coreDepsFolder   = new File(buildPath, "core" + File.separator + ".deps" );
       createFolder(coreFolder);
+      createFolder(coreDepsFolder);
 
       Makefile coreMakeFile = new Makefile( new File(coreFolder, "Makefile") );
       coreMakeFile.include( commonMakeFile );
@@ -217,6 +224,9 @@ public class Compiler implements MessageConsumer {
           Base.copyFile( file, target );
         }
         coreMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
+        coreMakeFile.includeIfExists("." + File.separator + ".deps" + File.separator +
+                                     Base.getFileNameWithoutExtension(file) + ".Tpo" );
+
       }
 
       coreMakeFile.appendVariable("EXTRACFLAGS","-I" + buildPath);
@@ -225,17 +235,20 @@ public class Compiler implements MessageConsumer {
 
       // Write core dependency
 
+      mainMakeFile.addDependency(".PHONY", "core" + File.separator + "libcore.a");
       mainMakeFile.addDependency("core" + File.separator + "libcore.a","");
       mainMakeFile.addBuildRule("$(MAKE) -C core libcore.a");
 
       for (File libraryFolder : sketch.getImportedLibraries()) {
 
         File outputFolder = new File(buildPath, libraryFolder.getName());
+        File depsFolder   = new File(buildPath, libraryFolder.getName() + File.separator + ".deps" );
         File utilityFolder = new File(libraryFolder, "utility");
         String libraryName = "lib" + libraryFolder.getName();
         File libraryFile = new File(libraryFolder, libraryName + ".a");
 
         createFolder(outputFolder);
+        createFolder(depsFolder);
 
         /* Get all sources for this library */
         List<File> libSources = getAllSourcesInPath(libraryFolder.getPath(),false);
@@ -255,6 +268,8 @@ public class Compiler implements MessageConsumer {
             Base.copyFile( file, target );
           }
           libMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
+          libMakeFile.includeIfExists("." + File.separator + ".deps" + File.separator +
+                                     Base.getFileNameWithoutExtension(file) + ".Tpo" );
         }
 
         if (utilityFolder.exists()) {
@@ -271,10 +286,11 @@ public class Compiler implements MessageConsumer {
             File utilityLibFile = new File("libutility.a");
             outputFolder = new File(outputFolder, "utility");
             createFolder(outputFolder);
-
+            createFolder(new File(outputFolder,".deps"));
 
             // Append to main makefile, so it's included also
             mainMakeFile.appendVariable( "LIBS", utilityRelativePath + File.separator + utilityLibFile.getName() );
+            mainMakeFile.addDependency(".PHONY", utilityRelativePath + File.separator + utilityLibFile.getName());
             mainMakeFile.addDependency(utilityRelativePath + File.separator + utilityLibFile.getName(), "");
             mainMakeFile.addBuildRule("$(MAKE) -C " + utilityRelativePath + " " + utilityLibFile.getName());
 
@@ -289,6 +305,9 @@ public class Compiler implements MessageConsumer {
                 Base.copyFile( file, target );
               }
               utilityMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
+              utilityMakeFile.includeIfExists("." + File.separator + ".deps" + File.separator +
+                                     Base.getFileNameWithoutExtension(file) + ".Tpo" );
+
             }
 
             utilityMakeFile.addDependency( utilityLibFile, Makefile.makeObjectsFromSources(utilitySources) );
@@ -313,6 +332,9 @@ public class Compiler implements MessageConsumer {
         commonMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
 
         mainMakeFile.appendVariable("LIBS", libraryFolder.getName()+ File.separator + libraryName + ".a");
+        // Enforce recheck for library files
+        mainMakeFile.addDependency(".PHONY", libraryFolder.getName()+ File.separator + libraryName + ".a");
+
         mainMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
         mainMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
 

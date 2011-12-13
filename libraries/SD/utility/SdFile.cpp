@@ -26,6 +26,10 @@
 #endif
 #include <WProgram.h>
 
+#ifdef ZPU
+#define SDLITE /* Lite version of SD. */
+#endif
+
 //extern void outhex32(unsigned int u32);
 
 //------------------------------------------------------------------------------
@@ -207,6 +211,7 @@ void SdFile::dirName(const dir_t& dir, char* name) {
  * list to indicate subdirectory level.
  */
 void SdFile::ls(uint8_t flags, uint8_t indent) {
+#ifndef SDLITE
   dir_t* p;
 
   rewind();
@@ -247,6 +252,7 @@ void SdFile::ls(uint8_t flags, uint8_t indent) {
       seekSet(32 * (index + 1));
     }
   }
+#endif
 }
 //------------------------------------------------------------------------------
 // format directory name field from a 8.3 name string
@@ -601,7 +607,8 @@ uint8_t SdFile::openRoot(SdVolume* vol) {
  * \param[in] width Blank fill name if length is less than \a width.
  */
 void SdFile::printDirName(const dir_t& dir, uint8_t width) {
-  uint8_t w = 0;
+#ifndef SDLITE
+	uint8_t w = 0;
   for (uint8_t i = 0; i < 11; i++) {
     if (dir.name[i] == ' ')continue;
     if (i == 8) {
@@ -619,6 +626,7 @@ void SdFile::printDirName(const dir_t& dir, uint8_t width) {
     Serial.print(' ');
     w++;
   }
+#endif
 }
 //------------------------------------------------------------------------------
 /** %Print a directory date field to Serial.
@@ -628,11 +636,13 @@ void SdFile::printDirName(const dir_t& dir, uint8_t width) {
  * \param[in] fatDate The date field from a directory entry.
  */
 void SdFile::printFatDate(uint16_t fatDate) {
+#ifndef SDLITE
   Serial.print(FAT_YEAR(fatDate));
   Serial.print('-');
   printTwoDigits(FAT_MONTH(fatDate));
   Serial.print('-');
   printTwoDigits(FAT_DAY(fatDate));
+#endif
 }
 //------------------------------------------------------------------------------
 /** %Print a directory time field to Serial.
@@ -642,11 +652,13 @@ void SdFile::printFatDate(uint16_t fatDate) {
  * \param[in] fatTime The time field from a directory entry.
  */
 void SdFile::printFatTime(uint16_t fatTime) {
+#ifndef SDLITE
   printTwoDigits(FAT_HOUR(fatTime));
   Serial.print(':');
   printTwoDigits(FAT_MINUTE(fatTime));
   Serial.print(':');
   printTwoDigits(FAT_SECOND(fatTime));
+#endif
 }
 //------------------------------------------------------------------------------
 /** %Print a value as two digits to Serial.
@@ -654,11 +666,13 @@ void SdFile::printFatTime(uint16_t fatTime) {
  * \param[in] v Value to be printed, 0 <= \a v <= 99
  */
 void SdFile::printTwoDigits(uint8_t v) {
+#ifndef SDLITE
   char str[3];
   str[0] = '0' + v/10;
   str[1] = '0' + v % 10;
   str[2] = 0;
   Serial.print(str);
+#endif
 }
 //------------------------------------------------------------------------------
 /**
@@ -933,6 +947,8 @@ uint8_t SdFile::rmRfStar(void) {
   // don't try to delete root
   if (isRoot()) return true;
   return rmDir();
+#else
+  return 0;
 #endif
 }
 //------------------------------------------------------------------------------
@@ -1262,7 +1278,9 @@ size_t SdFile::write(const void* buf, uint16_t nbyte) {
 
 size_t SdFile::write(uint8_t b) {
 #ifdef SD_WRITE_SUPPORT
-	write(&b, 1);
+  return write(&b, 1);
+#else
+  return 0;
 #endif
 }
 
@@ -1275,10 +1293,10 @@ size_t SdFile::write(uint8_t b) {
 
 size_t SdFile::write(const char* str) {
 #ifdef SD_WRITE_SUPPORT
-	write(str, strlen(str));
-#endif
-size_t SdFile::write(const char* str) {
   return write(str, strlen(str));
+#else
+  return 0;
+#endif
 }
 
 //------------------------------------------------------------------------------

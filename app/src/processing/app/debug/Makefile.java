@@ -74,6 +74,26 @@ public class Makefile extends BufferedWriter {
   }
 
   /**
+   * Append an "include" file, which might not exist. The include will always use an absolute path
+   *
+   * @param target File to include
+   * @throws IOException If anything goes wrong
+   */
+  public void includeIfExists(File target) throws IOException {
+    writeline("-include " + target.getAbsolutePath() );
+  }
+
+  /**
+   * Append an "include" file, which might not exist. The include will always use an absolute path
+   *
+   * @param target File to include
+   * @throws IOException If anything goes wrong
+   */
+  public void includeIfExists(String path) throws IOException {
+    writeline("-include " + path );
+  }
+
+  /**
    * Return the location of this Makefile
    *
    * @return  File representing this Makefile location

@@ -1257,7 +1257,10 @@ public class Sketch {
     // do this here instead of after exiting, since the exit
     // can happen so many different ways.. and this will be
     // better connected to the dataFolder stuff below.
-    cleanup();
+
+    // TODO: only clean up if we changed board settings
+
+    //cleanup();
 
 //    // handle preprocessing the main file's code
 //    return build(tempBuildFolder.getAbsolutePath());

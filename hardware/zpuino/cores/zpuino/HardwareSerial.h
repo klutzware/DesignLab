@@ -1,6 +1,10 @@
+#ifndef __HardwareSerial_h__
+#define __HardwareSerial_h__
+
 #include <zpuino.h>
 #include <zpuino-types.h>
 #include "Stream.h"
+#include "Print.h"
 
 class HardwareSerial: public Stream
 {
@@ -21,19 +25,23 @@ public:
 		return (REGISTER(ioslot,1) & 1);
 	}
 
-	int read(void) {
+	virtual int read(void) {
 		return REGISTER(ioslot,0);
 	}
 
 	virtual void flush(void) {};
 
-	void write(uint8_t c);
+	size_t write(uint8_t c);
+
+	virtual int peek() { return -1; }
 
 	using Print::write; // pull in write(str) and write(buf, size) from Print
 private:
 	unsigned int ioslot;
 };
 
+extern void serialEventRun(void) __attribute__((weak));
 
 extern HardwareSerial Serial; /* 1st slot */
 
+#endif

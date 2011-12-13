@@ -16,8 +16,9 @@ int HardwareSerial::read()  {
     
 }   */
 
-void HardwareSerial::write(unsigned char c) {
+size_t HardwareSerial::write(unsigned char c) {
 	while ((REGISTER(ioslot,1) & 2)==2);
 	REGISTER(ioslot,0) = c;
+	return 1;
 }
 
