@@ -983,7 +983,7 @@ public class Editor extends JFrame implements RunnerListener {
       }
 
       // ZPUino special port for simulator.
-      String curr_port = "socket:ZPUINOSIMULATOR";
+      String curr_port = "socket:tcp/7263";
       rbMenuItem = new JCheckBoxMenuItem(curr_port, curr_port.equals(Preferences.get("serial.port")));
       rbMenuItem.addActionListener(serialMenuListener);
       serialMenu.add(rbMenuItem);
