@@ -6,20 +6,16 @@
 
 #define __ZPUINO__ 1
 
+typedef volatile unsigned int* register_t;
+
 extern void itoa(int value, char *dest, int base);
 extern void utoa(unsigned int value, char *dest, int base);
 extern char *ultoa ( unsigned long value, char * str, int base );
 extern char *ltoa (long value, char * str, int base );
 
-class GPIO
-{
-public:
-	static void pinMode(unsigned int pin, int mode);
-
-	static const register_t gpiodata;
-	static const register_t gpiotris;
-	static const register_t gpioppsmode;
-};
+extern "C" void pinMode(unsigned int pin, int mode);
+extern "C" void digitalWrite(unsigned int pin, int value);
+extern "C" void pinModePPS(unsigned int pin, int value);
 
 static inline __attribute__((always_inline)) register_t outputRegisterForPin(unsigned int pin)
 {
@@ -46,40 +42,9 @@ static inline __attribute__((always_inline)) unsigned int bitMaskForPin(unsigned
     return (1<<(pin%32));
 }
 
-static inline __attribute__((always_inline)) void digitalWrite(unsigned int pin, int value)
-{
-	if (value) {
-		*outputRegisterForPin(pin) |= bitMaskForPin(pin);
-	} else {
-		*outputRegisterForPin(pin) &= ~bitMaskForPin(pin);
-	}
-}
-
 static inline __attribute__((always_inline)) int digitalRead(unsigned int pin)
 {
 	return !!(*inputRegisterForPin(pin) & bitMaskForPin(pin));
-}
-
-static inline __attribute__((always_inline)) void pinMode(unsigned int pin, int mode)
-{
-   /* if (mode) {
-		*modeRegisterForPin(pin) |= bitMaskForPin(pin);
-	} else {
-		*modeRegisterForPin(pin) &= ~bitMaskForPin(pin);
-		}
-		*/
-	GPIO::pinMode(pin,mode);
-}
-
-/* PPS */
-
-static inline __attribute((always_inline)) void pinModePPS(int pin, int value)
-{
-	if (value) {
-		*PPSmodeRegisterForPin(pin) |= bitMaskForPin(pin);
-	} else {
-		*PPSmodeRegisterForPin(pin) &= ~bitMaskForPin(pin);
-	}
 }
 
 static inline void __attribute__((always_inline)) outputPinForFunction(unsigned int pin,unsigned int function)
