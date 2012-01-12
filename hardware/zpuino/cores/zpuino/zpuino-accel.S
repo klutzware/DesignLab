@@ -42,7 +42,7 @@ digitalWrite:
         loadsp 8
 	add
         /* Keep address, we'll need it */
-        loadsp 8
+        loadsp 0
         load
 	/* And pin offset, and shift it */
         im 1
