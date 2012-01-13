@@ -1,4 +1,5 @@
 #include "register.h"
+#ifdef ZPUINO_ACCEL
 
 .globl pinMode
 .globl pinModePPS
@@ -133,3 +134,4 @@ strcpy:
         im .strcpy_load
         poppc
         .size strcpy,.-strcpy
+#endif

@@ -11,7 +11,7 @@
 #  error Unknown board.
 # endif
 
-
+#define ZPUINO_ACCEL 1
 
 #define SPIISBLOCKING 1
 
