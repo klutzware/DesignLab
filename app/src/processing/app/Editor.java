@@ -51,6 +51,11 @@ public class Editor extends JFrame implements RunnerListener {
 
   Base base;
 
+  // This should be imported from Uploader...
+  static final int uploadNormal = 0;
+  static final int uploadUsingProgrammer = 1;
+  static final int uploadToMemory = 2;
+  
   // otherwise, if the window is resized with the message label
   // set to blank, it's preferredSize() will be fukered
   static protected final String EMPTY =
@@ -145,8 +150,6 @@ public class Editor extends JFrame implements RunnerListener {
   Runnable presentHandler;
   Runnable stopHandler;
   Runnable exportHandler;
-  Runnable exportAppHandler;
-
 
   public Editor(Base ibase, String path, int[] location) {
     super("Arduino");
@@ -544,7 +547,7 @@ public class Editor extends JFrame implements RunnerListener {
     item = newJMenuItem("Upload", 'U');
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          handleExport(false);
+          handleExport(uploadNormal);
         }
       });
     fileMenu.add(item);
@@ -552,7 +555,7 @@ public class Editor extends JFrame implements RunnerListener {
     item = newJMenuItemShift("Upload Using Programmer", 'U');
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          handleExport(true);
+          handleExport(uploadUsingProgrammer);
         }
       });
     fileMenu.add(item);
@@ -1382,12 +1385,11 @@ public class Editor extends JFrame implements RunnerListener {
 
   public void setHandlers(Runnable runHandler, Runnable presentHandler,
                           Runnable stopHandler,
-                          Runnable exportHandler, Runnable exportAppHandler) {
+                          Runnable exportHandler) {
     this.runHandler = runHandler;
     this.presentHandler = presentHandler;
     this.stopHandler = stopHandler;
     this.exportHandler = exportHandler;
-    this.exportAppHandler = exportAppHandler;
   }
 
 
@@ -1396,7 +1398,6 @@ public class Editor extends JFrame implements RunnerListener {
     presentHandler = new DefaultPresentHandler();
     stopHandler = new DefaultStopHandler();
     exportHandler = new DefaultExportHandler();
-    exportAppHandler = new DefaultExportAppHandler();
   }
 
 
@@ -2283,7 +2284,6 @@ public class Editor extends JFrame implements RunnerListener {
     return true;
   }
 
-
   /**
    * Called by Sketch &rarr; Export.
    * Handles calling the export() function on sketch, and
@@ -2299,53 +2299,23 @@ public class Editor extends JFrame implements RunnerListener {
    * Made synchronized to (hopefully) avoid problems of people
    * hitting export twice, quickly, and horking things up.
    */
-  synchronized public void handleExport(final boolean usingProgrammer) {
+  synchronized public void handleExport(final int uploadType) {
     //if (!handleExportCheckModified()) return;
     toolbar.activate(EditorToolbar.EXPORT);
     console.clear();
     status.progress("Uploading to I/O Board...");
 
-    new Thread(usingProgrammer ? exportAppHandler : exportHandler).start();
+    ((DefaultExportHandler)exportHandler).setExportOptions(uploadType);
+    new Thread(exportHandler).start();
+    //new Thread(usingProgrammer ? exportAppHandler : exportHandler).start();
   }
 
   // DAM: in Arduino, this is upload
   class DefaultExportHandler implements Runnable {
-    public void run() {
-
-      try {
-        serialMonitor.closeSerialPort();
-        serialMonitor.setVisible(false);
-            
-        uploading = true;
-          
-        boolean success = sketch.exportApplet(false);
-        if (success) {
-          statusNotice("Done uploading.");
-        } else {
-          // error message will already be visible
-        }
-      } catch (SerialNotFoundException e) {
-        populateSerialMenu();
-        if (serialMenu.getItemCount() == 0) statusError(e);
-        else if (serialPrompt()) run();
-        else statusNotice("Upload canceled.");
-      } catch (RunnerException e) {
-        //statusError("Error during upload.");
-        //e.printStackTrace();
-        status.unprogress();
-        statusError(e);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      status.unprogress();
-      uploading = false;
-      //toolbar.clear();
-      toolbar.deactivate(EditorToolbar.EXPORT);
+    int exportOptions;
+    public void setExportOptions(int op) {
+      exportOptions=op;
     }
-  }
-
-  // DAM: in Arduino, this is upload (with verbose output)
-  class DefaultExportAppHandler implements Runnable {
     public void run() {
 
       try {
@@ -2354,7 +2324,7 @@ public class Editor extends JFrame implements RunnerListener {
             
         uploading = true;
           
-        boolean success = sketch.exportApplet(true);
+        boolean success = sketch.exportApplet(exportOptions);
         if (success) {
           statusNotice("Done uploading.");
         } else {
@@ -2402,7 +2372,6 @@ public class Editor extends JFrame implements RunnerListener {
 
     if (result == JOptionPane.OK_OPTION) {
       handleSave(true);
-
     } else {
       // why it's not CANCEL_OPTION is beyond me (at least on the mac)
       // but f-- it.. let's get this shite done..

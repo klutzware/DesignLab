@@ -42,14 +42,16 @@ public class AvrdudeUploader extends Uploader  {
   public AvrdudeUploader() {
   }
 
-  public boolean uploadUsingPreferences(String buildPath, String className, boolean usingProgrammer)
+  public boolean uploadUsingPreferences(String buildPath, String className, int uploadOptions)
   throws RunnerException, SerialException {
     this.verbose = verbose;
     Map<String, String> boardPreferences = Base.getBoardPreferences();
-
+    if (uploadOptions == uploadToMemory) {
+        throw new RunnerException("Arduino targets do not support upload to memory");
+    }
     // if no protocol is specified for this board, assume it lacks a 
     // bootloader and upload using the selected programmer.
-    if (usingProgrammer || boardPreferences.get("upload.protocol") == null) {
+    if (uploadOptions==uploadUsingProgrammer || boardPreferences.get("upload.protocol") == null) {
       String programmer = Preferences.get("programmer");
       Target target = Base.getTarget();
 

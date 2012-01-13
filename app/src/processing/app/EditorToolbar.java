@@ -45,6 +45,11 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     "Verify", "Upload Using Programmer", "New Editor Window", "Open in Another Window", "Save", "Serial Monitor"
   };
 
+    /** Titles for each button when the control key is pressed. */
+  static final String titleControl[] = {
+    "Verify", "Upload To Memory", "New", "Open", "Save", "Serial Monitor"
+  };
+
   static final int BUTTON_COUNT  = title.length;
   /** Width of each toolbar button. */
   static final int BUTTON_WIDTH  = 27;
@@ -93,7 +98,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   Font statusFont;
   Color statusColor;
 
-  boolean shiftPressed;
+  boolean shiftPressed, controlPressed;
 
   public EditorToolbar(Editor editor, JMenu menu) {
     this.editor = editor;
@@ -199,7 +204,8 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     */
     if (currentRollover != -1) {
       int statusY = (BUTTON_HEIGHT + g.getFontMetrics().getAscent()) / 2;
-      String status = shiftPressed ? titleShift[currentRollover] : title[currentRollover];
+      String status = controlPressed ? titleControl[currentRollover] :
+           shiftPressed ? titleShift[currentRollover] : title[currentRollover];
       if (currentRollover != SERIAL)
         g.drawString(status, (buttonCount-1) * BUTTON_WIDTH + 3 * BUTTON_GAP, statusY);
       else {
@@ -345,7 +351,12 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       break;
 
     case EXPORT:
-      editor.handleExport(e.isShiftDown());
+      if (e.isShiftDown())
+          editor.handleExport(Editor.uploadUsingProgrammer);
+      else if (e.isControlDown())
+          editor.handleExport(Editor.uploadToMemory);
+      else
+          editor.handleExport(Editor.uploadNormal);
       break;
 
     case SERIAL:
@@ -400,13 +411,21 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
       shiftPressed = true;
       repaint();
-}
+    }
+    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+      controlPressed = true;
+      repaint();
+    }
   }
 
 
   public void keyReleased(KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
       shiftPressed = false;
+      repaint();
+    }
+    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
+      controlPressed = false;
       repaint();
     }
   }

@@ -42,7 +42,7 @@ public class ZPUinoUploader extends Uploader  {
   }
 
   // XXX: add support for uploading sketches using a programmer
-  public boolean uploadUsingPreferences(String buildPath, String className, boolean verbose)
+  public boolean uploadUsingPreferences(String buildPath, String className, int uploadOptions)
   throws RunnerException {
     this.verbose = verbose;
     Map<String, String> boardPreferences = Base.getBoardPreferences();
@@ -51,8 +51,13 @@ public class ZPUinoUploader extends Uploader  {
       // fall back on global preference
       uploadUsing = Preferences.get("upload.using");
     }
+
+    if (uploadOptions == uploadUsingProgrammer ) {
+        throw new RunnerException("ZPUino targets do not support upload using programmer");
+    }
+
     if (uploadUsing.equals("bootloader")) {
-      return uploadViaBootloader(buildPath, className);
+      return uploadViaBootloader(buildPath, className, uploadOptions==uploadToMemory);
     } else {
       Target t;
 
@@ -71,7 +76,7 @@ public class ZPUinoUploader extends Uploader  {
     }
   }
   
-  private boolean uploadViaBootloader(String buildPath, String className)
+  private boolean uploadViaBootloader(String buildPath, String className, boolean toMemory)
   throws RunnerException {
     Map<String, String> boardPreferences = Base.getBoardPreferences();
     List commandDownloader = new ArrayList();
@@ -87,11 +92,16 @@ public class ZPUinoUploader extends Uploader  {
 
     commandDownloader.add("-b" + buildPath + File.separator + Base.getFileNameWithoutExtension(new File(className)) + ".bin");
     commandDownloader.add("-R"); // Reset
+    if (toMemory)
+        commandDownloader.add("-u");
 
     // Append extra data file, if present
     File smallfs = new File(buildPath,"smallfs.dat");
     if (smallfs.exists()) {
         System.err.println("Appending extra data file");
+        if (toMemory) {
+            throw new RunnerException("smallfs can not be written to memory. Please use standard programming");
+        }
         commandDownloader.add("-e");
         commandDownloader.add(smallfs.getPath());
     }

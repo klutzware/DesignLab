@@ -1578,15 +1578,15 @@ public class Sketch {
   }
   
   
-  protected boolean exportApplet(boolean usingProgrammer) throws Exception {
-    return exportApplet(tempBuildFolder.getAbsolutePath(), usingProgrammer);
+  protected boolean exportApplet(int exportOptions) throws Exception {
+    return exportApplet(tempBuildFolder.getAbsolutePath(), exportOptions);
   }
 
 
   /**
    * Handle export to applet.
    */
-  public boolean exportApplet(String appletPath, boolean usingProgrammer)
+  public boolean exportApplet(String appletPath, int exportOptions)
     throws RunnerException, IOException, SerialException {
     
     // Make sure the user didn't hide the sketch folder
@@ -1625,7 +1625,7 @@ public class Sketch {
 //    }
 
     editor.status.progressNotice("Uploading...");
-    upload(appletFolder.getPath(), foundName, usingProgrammer);
+    upload(appletFolder.getPath(), foundName, exportOptions);
     editor.status.progressUpdate(100);
     return true;
   }
@@ -1657,7 +1657,7 @@ public class Sketch {
   }
 
 
-  protected String upload(String buildPath, String suggestedClassName, boolean usingProgrammer)
+  protected String upload(String buildPath, String suggestedClassName, int uploadOptions )
     throws RunnerException, SerialException {
 
     Map<String, String> boardPreferences = Base.getBoardPreferences();
@@ -1677,7 +1677,7 @@ public class Sketch {
 
     boolean success = uploader.uploadUsingPreferences(buildPath,
                                                       suggestedClassName,
-                                                      usingProgrammer);
+                                                      uploadOptions);
 
     return success ? suggestedClassName : null;
   }
