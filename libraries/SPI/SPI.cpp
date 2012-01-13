@@ -68,8 +68,23 @@ void SPIClass::setClockDivider(uint8_t rate)
 
 #ifdef ZPU
 
-void SPIClass::begin() {
-	USPICTL = _BV(SPIEN)|_BV(SPIBLOCK);
+
+void SPIClass::begin(int mosi, int miso, int sck)
+{
+	USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+
+
+	pinMode(mosi, OUTPUT);
+	pinModePPS(mosi,HIGH);
+	pinMode(miso, INPUT);
+	pinMode(sck, OUTPUT);
+	pinModePPS(sck,HIGH);
+
+
+	outputPinForFunction( mosi, IOPIN_USPI_MOSI );
+	outputPinForFunction( sck, IOPIN_USPI_SCK);
+	inputPinForFunction( miso, IOPIN_USPI_MISO );
+
 }
 
 void SPIClass::end() {

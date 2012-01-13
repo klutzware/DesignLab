@@ -41,6 +41,8 @@
 
 #ifdef ZPU
 
+#include <zpuino-types.h>
+#include <zpuino.h>
 #define SPI_CLOCK_DIV0 0
 #define SPI_CLOCK_DIV2 SPICP0
 #define SPI_CLOCK_DIV4 SPICP1
@@ -71,8 +73,11 @@ public:
 
   inline static void attachInterrupt();
   inline static void detachInterrupt(); // Default
-
+#ifndef ZPU
   static void begin(); // Default
+#else
+  static void begin(int mosi, int miso, int sck);
+#endif
   static void end();
 
   static void setBitOrder(uint8_t);
