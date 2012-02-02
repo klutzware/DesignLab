@@ -41,7 +41,7 @@ public:
   virtual void flush();
   int read(void *buf, uint16_t nbyte);
   boolean seek(uint32_t pos);
-  uint32_t position();
+  int32_t position();
   uint32_t size();
   void close();
   operator bool();
@@ -92,6 +92,7 @@ public:
   int errorCode() const { return card.errorCode(); }
   int errorData() const { return card.errorData(); }
 
+  void ls() { root.ls(); }
 private:
 
   // This is used to determine the mode used to open a file

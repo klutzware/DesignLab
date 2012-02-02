@@ -124,7 +124,7 @@ boolean File::seek(uint32_t pos) {
   return _file->seekSet(pos);
 }
 
-uint32_t File::position() {
+int32_t File::position() {
   if (! _file) return -1;
   return _file->curPosition();
 }

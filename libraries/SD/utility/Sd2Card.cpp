@@ -30,6 +30,7 @@
 static void spiSend(uint8_t b) {
 	USPIDATA=b;
 }
+/*
 static void spiSetMode32()
 {
 	USPICTL|=SPITS0|SPITS1;
@@ -43,9 +44,12 @@ static uint32_t spiRec32(void)
 {
 	USPIDATA=0xffffffff;
 	return USPIDATA;
-}
+	}
+*/
 static uint32_t spiRec(void) {
 	spiSend(0XFF);
+//Serial.print(USPIDATA&0xff);
+//Serial.print(" ");
 	return USPIDATA&0xff;
 }
 
@@ -128,7 +132,9 @@ unsigned int Sd2Card::cardCommand(unsigned int cmd, uint32_t arg) {
   // wait up to 300 ms if busy
   //waitNotBusy(300);
 
-  // send command
+	  // send command
+  //Serial.print("CMD ");
+  //Serial.println(cmd);
   spiSend(cmd | 0x40);
 
   // send argument
@@ -268,7 +274,7 @@ int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
 #endif
 #ifdef ZPU
 
-  USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+  //USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 
 #endif
 #endif  // SOFTWARE_SPI
@@ -364,7 +370,7 @@ int Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
 	//return readData(block, 0, 512, dst);
 	unsigned int *idst;
 	int i;
-    unsigned a;
+
 
 	if (!inBlock_ || block != block_) {
 		block_ = block;
@@ -411,7 +417,7 @@ fail:
  */
 int Sd2Card::readData(uint32_t block,
 					  unsigned offset, unsigned count, uint8_t* dst) {
-	unsigned n;
+//	unsigned n;
 	if (count == 0) return true;
 	if ((count + offset) > 512) {
 		goto fail;

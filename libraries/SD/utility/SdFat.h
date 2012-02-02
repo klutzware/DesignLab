@@ -251,7 +251,7 @@ class SdFile : public Print {
   uint8_t rmDir(void);
   uint8_t rmRfStar(void);
   /** Set the files position to current position + \a pos. See seekSet(). */
-  uint8_t seekCur(uint32_t pos) {
+  uint8_t seekCur(int32_t pos) {
     return seekSet(curPosition_ + pos);
   }
   /**
