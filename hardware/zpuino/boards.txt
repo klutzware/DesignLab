@@ -63,3 +63,14 @@ zpuino_papilio_pluslx4v.build.core=zpuino
 zpuino_papilio_pluslx4v.build.toolchain=zpu
 zpuino_papilio_pluslx4v.build.extraCflags=-D__ZPUINO_PAPILIO_PLUS__ -DBOARD_ID=0xA4030E00 -DBOARD_MEMORYSIZE=0x4000 -nostartfiles
 zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
+##############################################################
+zpuino_nexys2.name=ZPUino on Nexys2 board
+zpuino_nexys2.upload.protocol=zpuino-serial
+zpuino_nexys2.upload.maximum_size=27648
+zpuino_nexys2.upload.speed=115200
+zpuino_nexys2.build.f_cpu=85000000L
+zpuino_nexys2.build.core=zpuino
+zpuino_nexys2.build.pins=standard
+zpuino_nexys2.build.toolchain=zpu
+zpuino_nexys2.build.extraCflags=-D__ZPUINO_NEXYS2__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0x84010F00 -nostartfiles 
+zpuino_nexys2.build.extraSflags=-DBOARD_ID=0x84010F00
