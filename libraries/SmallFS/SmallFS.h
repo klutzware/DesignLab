@@ -74,6 +74,11 @@ public:
 	
 	int readCallback(int size, void (*callback)(unsigned char, void*), void *data);
 
+	/**
+	 * @brief Read a single byte
+	 */
+	unsigned readByte();
+
 private:
 	int flashoffset;
 	int filesize;
@@ -123,23 +128,10 @@ protected:
 #endif
 	}
 
-	void startread(unsigned address)
-	{
-/*		if (__builtin_constant_p(address)) {
-			spiwrite(0x0B);
-			spiwrite(address >> 16);
-			spiwrite(address >> 8);
-			spiwrite(address);
-			spiwrite(0);
-		} else {*/
-		startread_i(address);
-        /*
-		 } */
-	}
 protected:
-	void read(void *target, unsigned size);
-	void startread_i(unsigned address);
-
+	void read(unsigned address, void *target, unsigned size);
+	void seek(unsigned address) { seek_if_needed(address); }
+	unsigned readByte(unsigned address);
 public:
 	/**
 	 * @brief Open a file on the filesystem.
@@ -150,8 +142,11 @@ public:
 	SmallFSFile open(const char *name);
 
 private:
+	void seek_if_needed(unsigned address);
+
 	struct smallfs_header hdr;
 	unsigned fsstart;
+	unsigned offset;
 #ifdef __linux__
 	int fd;
 #endif

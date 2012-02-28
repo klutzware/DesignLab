@@ -34,14 +34,9 @@ int SmallFS_class::begin()
 	fsstart = b->spiend;
 
 #endif
+	offset = 0xffffffff;
 
-	spi_enable();
-
-	startread(fsstart);
-
-	read(&hdr,sizeof(hdr));
-
-	spi_disable();
+	read(fsstart, &hdr,sizeof(hdr));
 
 #ifdef SMALLFSDEBUG
 
@@ -56,9 +51,7 @@ int SmallFS_class::begin()
 	Serial.println((unsigned)b);
 	// Test read
 
-	spi_enable();
-	startread(fsstart - 8);
-	read(&debug,sizeof(debug));
+	read(fsstart - 8, &debug,sizeof(debug));
 	Serial.print("DD1 ");
 	Serial.println(debug);
 	read(&debug,sizeof(debug));
@@ -68,8 +61,6 @@ int SmallFS_class::begin()
 	Serial.print("DD3 ");
 	Serial.println(debug);
 
-
-	spi_disable();
 #endif
 
 	if(BE32(hdr.magic) == SMALLFS_MAGIC)
@@ -77,45 +68,54 @@ int SmallFS_class::begin()
 	return -1;
 }
 
+void SmallFS_class::seek_if_needed(unsigned address)
+{
+	if (address!=offset)
+	{
+		spi_disable();
+		spi_enable();
+		spiwrite(0x0B);
+#ifdef SMALLFSDEBUG
+		Serial.print("Seeking to ");
+		Serial.println(address);
+#endif
+		spiwrite(address>>16);
+		spiwrite(address>>8);
+		spiwrite(address);
+		spiwrite(0);
+		spiwrite(0); // Read ahead
+        offset = address;
+	}
+}
 
-void SmallFS_class::read(void *target, unsigned size)
+unsigned SmallFS_class::readByte(unsigned address)
+{
+	seek_if_needed(address);
+	unsigned v = spiread(); // Already cached
+	spiwrite(0);
+	offset++;
+	return v;
+}
+
+
+void SmallFS_class::read(unsigned address, void *target, unsigned size)
 {
 #ifdef __linux__
 	if (fd>=0) {
 		::read(fd,target,size);
 	}
 #else
+	seek_if_needed(address);
+
 	unsigned char *p=(unsigned char*)target;
 	while (size--) {
+		unsigned v = spiread(); // Already cached
 		spiwrite(0);
-		*p++=spiread();
+		*p++=v;
+		offset++;
 	}
 #endif
 }
-
-void SmallFS_class::startread_i(unsigned address)
-{
-#ifdef __linux__
-	if (fd>=0)
-		::lseek(fd,address,SEEK_SET);
-#else
-	spiwrite(0x0B);
-    /*
-	spiwrite( ((unsigned char*)address)[2] );
-	spiwrite( ((unsigned char*)address)[1] );
-	spiwrite( ((unsigned char*)address)[0] );
-	*/
-#ifdef SMALLFSDEBUG
-	Serial.print("Seeking to ");
-	Serial.println(address);
-#endif
-	spiwrite(address>>16);
-	spiwrite(address>>8);
-	spiwrite(address);
-	spiwrite(0);
-#endif
-}
-
 
 SmallFSFile SmallFS_class::open(const char *name)
 {
@@ -126,23 +126,26 @@ SmallFSFile SmallFS_class::open(const char *name)
 
 	int c;
 
-	spi_enable();
-	startread(o);
-
 	for (c=BE32(hdr.numfiles); c; c--) {
 
-		read(&e,sizeof(struct smallfs_entry));
+		read(o, &e,sizeof(struct smallfs_entry));
+		o+=sizeof(struct smallfs_entry);
 
-		read(buf,e.namesize);
+		read(o, buf,e.namesize);
+		o+=e.namesize;
+
 		buf[e.namesize] = '\0';
 		/* Compare */
 		if (strcmp((const char*)buf,name)==0) {
-			spi_disable();
+			
+			// Seek and readahead
+			seek_if_needed(BE32(e.offset) + fsstart);
 
 			return SmallFSFile(BE32(e.offset) + fsstart, BE32(e.size));
 		}
 	}
-	spi_disable();
+	// Reset offset.
+	offset=(unsigned)-1;
 
 	return SmallFSFile();
 }
@@ -158,13 +161,8 @@ int SmallFSFile::read(void *buf, int s)
 	if (s + seekpos > filesize) {
 		s = filesize-seekpos;
 	}
-	SmallFS.spi_enable();
+	SmallFS.read(seekpos + flashoffset, buf,s);
 
-	SmallFS.startread( seekpos + flashoffset );
-
-	SmallFS.read(buf,s);
-
-	SmallFS.spi_disable();
 	seekpos+=s;
 	return s;
 }
@@ -192,19 +190,19 @@ int SmallFSFile::readCallback(int s, void (*callback)(unsigned char, void*), voi
 
 	Serial.println(seekpos);
 #endif
-	SmallFS.spi_enable();
 
-	SmallFS.startread( seekpos + flashoffset );
+	//SmallFS.spi_enable();
+
+	//SmallFS.startread( seekpos + flashoffset );
 	save_s = s;
+	unsigned tpos = seekpos + flashoffset;
 	seekpos += s;
 
 	while (s--) {
-		SmallFS.read(&c,1);
+		c=SmallFS.readByte(tpos++);
 		callback(c,data);
 	}
 
-	SmallFS.spi_disable();
-	
 	return save_s;
 }
 
@@ -226,6 +224,7 @@ void SmallFSFile::seek(int pos, int whence)
 		newpos=0;
 
 	seekpos=newpos;
+	SmallFS.seek(seekpos + flashoffset);
 }
 
 SmallFS_class SmallFS;
