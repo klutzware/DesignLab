@@ -98,12 +98,15 @@ public class ZPUinoUploader extends Uploader  {
     // Append extra data file, if present
     File smallfs = new File(buildPath,"smallfs.dat");
     if (smallfs.exists()) {
-        System.err.println("Appending extra data file");
+        
         if (toMemory) {
-            throw new RunnerException("smallfs can not be written to memory. Please use standard programming");
+            // Just warn user
+            System.err.println("SmallFS filesystem found, *NOT* programming FLASH because you're doing a memory upload");
+        } else {
+            System.out.println("SmallFS filesystem found, appending extra data file to FLASH");
+            commandDownloader.add("-e");
+            commandDownloader.add(smallfs.getPath());
         }
-        commandDownloader.add("-e");
-        commandDownloader.add(smallfs.getPath());
     }
 
     if (extraOptions!=null) {
