@@ -134,4 +134,13 @@ strcpy:
         im .strcpy_load
         poppc
         .size strcpy,.-strcpy
+
+	.section	.text.udivmodsi4,"ax",@progbits
+        .globl udivmodsi4
+	.type	udivmodsi4, @function
+udivmodsi4:
+	im 0x28
+        load
+        poppc
+
 #endif
