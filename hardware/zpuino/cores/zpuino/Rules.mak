@@ -9,7 +9,7 @@ DEPDIR=.deps
 
 EXTRACFLAGS+=$(PREFS___board___build___extraCflags)
 
-CFLAGS=$(EXTRACFLAGS) -DZPU -Wall -O2 -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel -I$(COREPATH)
+CFLAGS=$(EXTRACFLAGS) -DZPU -Wall -O2 -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel -I$(COREPATH)
 CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
 ARFLAGS=crs
 LDFLAGS=-O2 -nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sections
