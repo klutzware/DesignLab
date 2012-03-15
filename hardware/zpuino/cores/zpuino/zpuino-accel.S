@@ -142,5 +142,34 @@ udivmodsi4:
 	im 0x28
         load
         poppc
+        .size udivmodsi4,.-udivmodsi4
+
+	.section	.text.memcpy,"ax",@progbits
+        .globl memcpy
+	.type	memcpy, @function
+memcpy:
+	im 0x2C
+        load
+        poppc
+        .size memcpy,.-memcpy
+
+	.section	.text.memset,"ax",@progbits
+        .globl memset
+	.type	memset, @function
+memset:
+	im 0x30
+        load
+        poppc
+        .size memset,.-memset
+
+	.section	.text.strcmp,"ax",@progbits
+        .globl strcmp
+	.type	strcmp, @function
+
+strcmp:
+	im 0x34
+        load
+        poppc
+        .size strcmp,.-strcmp
 
 #endif
