@@ -85,7 +85,11 @@ public class ZPUinoUploader extends Uploader  {
     String speed = boardPreferences.get("upload.speed");
     if (speed!=null) {
         commandDownloader.add("-s");
-        commandDownloader.add(speed);
+        if (toMemory) {
+            commandDownloader.add("115200");
+        } else {
+            commandDownloader.add(speed);
+        }
     }
     commandDownloader.add(
       "-d" + (Base.isWindows() ? "\\\\.\\" : "") + Preferences.get("serial.port"));
