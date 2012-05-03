@@ -35,6 +35,18 @@ zpuino_papilio_one250.build.toolchain=zpu
 zpuino_papilio_one250.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020E00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
 zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA4020E00
 ##############################################################
+zpuino_papilio_one250_e.name=ZPUino on Papilio One (250) board (extra RAM)
+zpuino_papilio_one250_e.upload.protocol=zpuino-serial
+zpuino_papilio_one250_e.upload.maximum_size=16256
+zpuino_papilio_one250_e.upload.size_sections=all
+zpuino_papilio_one250_e.upload.speed=1000000
+zpuino_papilio_one250_e.build.f_cpu=96000000L
+zpuino_papilio_one250_e.build.core=zpuino
+zpuino_papilio_one250_e.build.pins=standard
+zpuino_papilio_one250_e.build.toolchain=zpu
+zpuino_papilio_one250_e.build.extraCflags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020F00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
+zpuino_papilio_one250_e.build.extraSflags=-DBOARD_ID=0xA4020F00
+##############################################################
 zpuino_papilio_one500.name=ZPUino on Papilio One (500) board
 zpuino_papilio_one500.upload.protocol=zpuino-serial
 zpuino_papilio_one500.upload.maximum_size=27648
