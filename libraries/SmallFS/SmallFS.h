@@ -6,6 +6,7 @@
 #else
 #include "zpuino.h"
 #endif
+
 /** SmallFS filesystem magic */
 #define SMALLFS_MAGIC 0x50411F50
 
@@ -82,7 +83,7 @@ public:
 private:
 	int flashoffset;
 	int filesize;
-    int seekpos;
+	int seekpos;
 };
 
 /**
@@ -123,6 +124,22 @@ protected:
 	{
 #ifndef __linux__
 		return SPIDATA;
+#else
+		return 0;
+#endif
+	}
+
+	static inline void spiwrite(register_t datareg, unsigned int i)
+	{
+#ifndef __linux__
+		*datareg=i;
+#endif
+	}
+
+	static inline unsigned int spiread(register_t datareg)
+	{
+#ifndef __linux__
+		return *datareg;
 #else
 		return 0;
 #endif
