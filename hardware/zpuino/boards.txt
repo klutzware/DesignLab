@@ -2,6 +2,7 @@
 zpuino_s3e_eval.name=ZPUino on S3E Eval board
 zpuino_s3e_eval.upload.protocol=zpuino-serial
 zpuino_s3e_eval.upload.maximum_size=27648
+zpuino_s3e_eval.upload.size_sections=all
 zpuino_s3e_eval.upload.speed=115200
 zpuino_s3e_eval.build.f_cpu=96000000L
 zpuino_s3e_eval.build.core=zpuino
@@ -13,6 +14,7 @@ zpuino_s3e_eval.build.extraSflags=-DBOARD_ID=0x83010F00
 zpuino_s3e_eval_v.name=ZPUino on S3E Eval board with 8-bit HQVGA
 zpuino_s3e_eval_v.upload.protocol=zpuino-serial
 zpuino_s3e_eval_v.upload.maximum_size=12160
+zpuino_s3e_eval_v.upload.size_sections=all
 zpuino_s3e_eval_v.upload.speed=115200
 zpuino_s3e_eval_v.build.f_cpu=96000000L
 zpuino_s3e_eval_v.build.core=zpuino
@@ -24,6 +26,7 @@ zpuino_s3e_eval_v.build.extraSflags=-DBOARD_ID=0x83010E01
 zpuino_papilio_one250.name=ZPUino on Papilio One (250) board
 zpuino_papilio_one250.upload.protocol=zpuino-serial
 zpuino_papilio_one250.upload.maximum_size=12160
+zpuino_papilio_one250.upload.size_sections=all
 zpuino_papilio_one250.upload.speed=1000000
 zpuino_papilio_one250.build.f_cpu=96000000L
 zpuino_papilio_one250.build.core=zpuino
@@ -35,6 +38,7 @@ zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA4020E00
 zpuino_papilio_one500.name=ZPUino on Papilio One (500) board
 zpuino_papilio_one500.upload.protocol=zpuino-serial
 zpuino_papilio_one500.upload.maximum_size=27648
+zpuino_papilio_one500.upload.size_sections=all
 zpuino_papilio_one500.upload.speed=1000000
 zpuino_papilio_one500.build.f_cpu=96000000L
 zpuino_papilio_one500.build.core=zpuino
@@ -46,6 +50,7 @@ zpuino_papilio_one500.build.extraSflags=-DBOARD_ID=0xA4010F00
 zpuino_papilio_one500v.name=ZPUino on Papilio One (500) board, with 8-bit HQVGA
 zpuino_papilio_one500v.upload.protocol=zpuino-serial
 zpuino_papilio_one500v.upload.maximum_size=12160
+zpuino_papilio_one500v.upload.size_sections=all
 zpuino_papilio_one500v.upload.speed=1000000
 zpuino_papilio_one500v.build.f_cpu=96000000L
 zpuino_papilio_one500v.build.core=zpuino
@@ -57,6 +62,7 @@ zpuino_papilio_one500v.build.extraSflags=-DBOARD_ID=0xA4010E01
 zpuino_papilio_pluslx4v.name=ZPUino on Papilio Plus (LX4)
 zpuino_papilio_pluslx4v.upload.protocol=zpuino-serial
 zpuino_papilio_pluslx4v.upload.maximum_size=12160
+zpuino_papilio_pluslx4v.upload.size_sections=all
 zpuino_papilio_pluslx4v.upload.speed=115200
 zpuino_papilio_pluslx4v.build.f_cpu=96000000L
 zpuino_papilio_pluslx4v.build.core=zpuino
@@ -67,6 +73,7 @@ zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
 zpuino_nexys2.name=ZPUino on Nexys2 board
 zpuino_nexys2.upload.protocol=zpuino-serial
 zpuino_nexys2.upload.maximum_size=27648
+zpuino_nexys2.upload.size_sections=all
 zpuino_nexys2.upload.speed=115200
 zpuino_nexys2.build.f_cpu=85000000L
 zpuino_nexys2.build.core=zpuino

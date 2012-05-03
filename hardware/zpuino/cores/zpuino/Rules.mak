@@ -26,7 +26,7 @@ $(TARGET).bin: $(TARGET).elf
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex $< $@
 
-$(TARGET).size: $(TARGET).hex
+$(TARGET).size: $(TARGET).elf
 	$(SIZE) $< > $@
 
 .cpp.o:

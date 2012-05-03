@@ -22,7 +22,7 @@ $(TARGET).hex: $(TARGET).elf
 $(TARGET).eep: $(TARGET).elf
 	$(OBJCOPY) -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 $< $@
 
-$(TARGET).size: $(TARGET).hex
+$(TARGET).size: $(TARGET).elf
 	$(SIZE) $< > $@
 
 .o:.S

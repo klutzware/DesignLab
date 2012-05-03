@@ -38,12 +38,15 @@ public class Sizer {
     this.sketchName = sketchName;
   }
   
-  public long computeSize() throws RunnerException {
+  public List<Long> computeSize() throws RunnerException {
 
     // Size file should have been created by make
 
     String sizeFile = buildPath + File.separator + Base.getFileNameWithoutExtension(new File(sketchName)) + ".size";
     long size = -1;
+    long data_size = -1;
+    long bss_size = -1;
+    long text_size = -1;
 
     try {
       BufferedReader fileReader = new BufferedReader(new FileReader(sizeFile));
@@ -53,17 +56,25 @@ public class Sizer {
       StringTokenizer st = new StringTokenizer(sizeString, " ");
 
       try {
-        st.nextToken();
-        st.nextToken();
-        st.nextToken();
-        size = (new Integer(st.nextToken().trim())).longValue();
+        //    text    data     bss     dec     hex filename
+	// 20364    1052    1512   22928    5990 /tmp/bu
+	text_size = (new Integer(st.nextToken().trim())).longValue();
+	data_size = (new Integer(st.nextToken().trim())).longValue(); // DEC
+        bss_size = (new Integer(st.nextToken().trim())).longValue(); // DEC
+        size = (new Integer(st.nextToken().trim())).longValue(); // DEC
       } catch (NoSuchElementException e) {
         throw new RunnerException(e.toString());
       } catch (NumberFormatException e) {
         throw new RunnerException(e.toString());
       }
+      ArrayList<Long> ret = new ArrayList<Long>();
 
-      return size;
+      ret.add( new Long(text_size) ); 
+      ret.add( new Long(data_size) );
+      ret.add( new Long(bss_size) );
+
+      return ret;
+
     } catch (IOException e) {
       throw new RunnerException(e.toString());
     }
