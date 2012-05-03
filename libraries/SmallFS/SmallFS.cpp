@@ -70,21 +70,29 @@ int SmallFS_class::begin()
 
 void SmallFS_class::seek_if_needed(unsigned address)
 {
+	register_t spibasedata=&SPIDATA;
+
 	if (address!=offset)
 	{
+		offset = address;
 		spi_disable();
 		spi_enable();
-		spiwrite(0x0B);
 #ifdef SMALLFSDEBUG
 		Serial.print("Seeking to ");
 		Serial.println(address);
 #endif
-		spiwrite(address>>16);
-		spiwrite(address>>8);
-		spiwrite(address);
-		spiwrite(0);
-		spiwrite(0); // Read ahead
-        offset = address;
+		/*
+		spiwrite(spibasedata,0x0B);
+		spiwrite(spibasedata,address>>16);
+		spiwrite(spibasedata,address>>8);
+		spiwrite(spibasedata,address);
+		spiwrite(spibasedata,0);
+		spiwrite(spibasedata,0); // Read ahead
+		*/
+		address+=0x0B000000;
+		spiwrite(spibasedata+2,address>>16); /* 16-bit write */
+		address<<=16;
+		spiwrite(spibasedata+6,address); /* 32-bit Includes read-ahead */
 	}
 }
 
