@@ -1399,7 +1399,7 @@ public class Sketch {
     // 3. then loop over the code[] and save each .java file
 
     for (SketchCode sc : code) {
-      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h")) {
+      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h") || sc.isExtension("s")) {
         // no pre-processing services necessary for java files
         // just write the the contents of 'program' to a .java file
         // into the build directory. uses byte stream and reader/writer
@@ -1638,20 +1638,33 @@ public class Sketch {
   
   protected void size(String buildPath, String suggestedClassName)
     throws RunnerException {
-    long size = 0;
-    String maxsizeString = Base.getBoardPreferences().get("upload.maximum_size");
+		List<Long> size;
+		long msize=-1;
+    long text=-1,data=-1,bss=-1;
+		String maxsizeString = Base.getBoardPreferences().get("upload.maximum_size");
+    String sizeSections = Base.getBoardPreferences().get("upload.size_sections");
     if (maxsizeString == null) return;
     long maxsize = Integer.parseInt(maxsizeString);
     Sizer sizer = new Sizer(buildPath, suggestedClassName);
       try {
-      size = sizer.computeSize();
-      System.out.println("Binary sketch size: " + size + " bytes (of a " +
-        maxsize + " byte maximum)");      
+				size = sizer.computeSize();
+				// First value is text, second data
+				text=size.get(0);
+				data=size.get(1);
+				bss=size.get(2);
+				if (sizeSections!=null && sizeSections.equals("all")) {
+          msize = text + data + bss;
+				} else {
+          msize = text + data;
+				}
+				System.out.println("Binary sketch size: " + msize+ " bytes (of a " +
+													 maxsize + " byte maximum) - " + (text+data) + " bytes ROM, "+(data+bss)+" bytes memory");
+
     } catch (RunnerException e) {
       System.err.println("Couldn't determine program size: " + e.getMessage());
     }
 
-    if (size > maxsize)
+    if (msize > maxsize)
       throw new RunnerException(
         "Sketch too big; see http://www.arduino.cc/en/Guide/Troubleshooting#size for tips on reducing it.");
   }
@@ -1879,7 +1892,7 @@ public class Sketch {
    * Returns a String[] array of proper extensions.
    */
   public String[] getExtensions() {
-    return new String[] { "ino", "pde", "c", "cpp", "h" };
+    return new String[] { "ino", "pde", "c", "cpp", "h", "s" };
   }
 
 
