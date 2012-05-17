@@ -9,11 +9,11 @@ DEPDIR=.deps
 
 EXTRACFLAGS+=$(PREFS___board___build___extraCflags)
 
-CFLAGS=$(EXTRACFLAGS) -DZPU -Wall -O2 -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel -I$(COREPATH)
+CFLAGS=$(EXTRACFLAGS) -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel -I$(COREPATH)
 CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
 ARFLAGS=crs
 LDFLAGS=-O2 -nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sections
-ASFLAGS=$(CFLAGS) $(PREFS___board___build___extraSflags)
+ASFLAGS=$(CFLAGS) $(PREFS___board___build___extraSflags) -DASSEMBLY
 
 $(TARGET).elf: $(TARGETOBJ) $(LIBS)
 	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive

@@ -17,7 +17,9 @@
 
 #define SPIISBLOCKING 1
 
+#ifndef ASSEMBLY
 typedef volatile unsigned int* register_t;
+#endif
 
 #define BIT(x) (1<<x)
 
