@@ -2,10 +2,7 @@
 #define __BOARD_H__
 
 #define CLK_FREQ 96000000UL
-
-/* LX4 bitfile is 0x5327C in size */    
-
-#define SPIOFFSET 0x54000
+#define SPIOFFSET 0x00050000
 
 #ifndef BOARD_MEMORYSIZE
 #error Undefined board memory size
@@ -73,11 +70,10 @@
 
 // Other pins
 #define FPGA_PIN_P24 48
-#define FPGA_LED_PIN 49
 
 #define FPGA_PIN_FLASHCS     FPGA_PIN_P24
 
-#define SPI_FLASH_SEL_PIN FPGA_PIN_FLASHCS
+#define SPI_FLASH_SEL_PIN    FPGA_PIN_FLASHCS
 
 /* WING configuration */
 

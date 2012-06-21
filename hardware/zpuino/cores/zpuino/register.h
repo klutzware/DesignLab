@@ -9,17 +9,17 @@
 # include "board_papilio_plus.h"
 #elif defined( __ZPUINO_NEXYS2__ )
 # include "board_nexys2.h"
+#elif defined( __ZPUINO_OHO_GODIL__ )
+# include "board_oho_godil.h"
 #else
 #  error Unknown board.
 # endif
 
-
-
-#define SPIISBLOCKING 1
-
 #ifndef ASSEMBLY
 typedef volatile unsigned int* register_t;
 #endif
+
+#define SPIISBLOCKING 1
 
 #define BIT(x) (1<<x)
 

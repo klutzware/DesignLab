@@ -82,7 +82,7 @@ zpuino_papilio_pluslx4v.build.toolchain=zpu
 zpuino_papilio_pluslx4v.build.extraCflags=-D__ZPUINO_PAPILIO_PLUS__ -DBOARD_ID=0xA4030E00 -DBOARD_MEMORYSIZE=0x4000 -nostartfiles
 zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
 ##############################################################
-zpuino_nexys2.name=ZPUino on Nexys2 board
+zpuino_nexys2.name=ZPUino on Nexys2 board (s3e1200)
 zpuino_nexys2.upload.protocol=zpuino-serial
 zpuino_nexys2.upload.maximum_size=27648
 zpuino_nexys2.upload.size_sections=all
@@ -93,3 +93,15 @@ zpuino_nexys2.build.pins=standard
 zpuino_nexys2.build.toolchain=zpu
 zpuino_nexys2.build.extraCflags=-D__ZPUINO_NEXYS2__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0x84010F00 -nostartfiles 
 zpuino_nexys2.build.extraSflags=-DBOARD_ID=0x84010F00
+##############################################################
+oho_godil.name=ZPUino on OHO GODIL Board (s3e500)
+oho_godil.upload.protocol=zpuino-serial
+oho_godil.upload.maximum_size=27648
+oho_godil.upload.size_sections=all
+oho_godil.upload.speed=115200
+oho_godil.build.f_cpu=96000000L
+oho_godil.build.core=zpuino
+oho_godil.build.pins=standard
+oho_godil.build.toolchain=zpu
+oho_godil.build.extraCflags=-D__ZPUINO_OHO_GODIL__ -D__S3E_500__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0xa5010F00 -nostartfiles
+oho_godil.build.extraSflags=-DBOARD_ID=0xa5010F00
