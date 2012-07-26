@@ -23,7 +23,7 @@ void __cxa_pure_virtual(void) {};
 void operator delete(void * ptr)
 {
 }
-
+/*
 extern "C" {
 void * malloc(int)
 {
@@ -33,4 +33,5 @@ void free(void*)
 {
 }
 };
+*/
 #endif
