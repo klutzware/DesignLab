@@ -130,7 +130,7 @@ unsigned int Sd2Card::cardCommand(unsigned int cmd, uint32_t arg) {
   chipSelectLow();
 
   // wait up to 300 ms if busy
-  //waitNotBusy(300);
+  waitNotBusy(300);
 
 	  // send command
   //Serial.print("CMD ");
@@ -566,7 +566,7 @@ int Sd2Card::waitNotBusy(unsigned timeoutMillis) {
 /** Wait for start block token */
 int Sd2Card::waitStartBlock(void) {
 	//unsigned t0 = millis();
-	unsigned count = 3000;
+	unsigned count = 30000;
 	while ((status_ = spiRec()) == 0XFF) {
 		if (count-- == 0) {
 			error(SD_CARD_ERROR_READ_TIMEOUT);
