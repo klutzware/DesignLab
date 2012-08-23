@@ -5,6 +5,7 @@
 
 #else
 #include "zpuino.h"
+#include "Arduino.h"
 #endif
 
 /** SmallFS filesystem magic */
@@ -31,6 +32,8 @@ struct smallfs_entry {
 extern "C" void *bootloaderdata;
 struct boot_t {
 	unsigned int spiend;
+	unsigned int signature;
+	unsigned char * vstring;
 };
 /**
  * @brief SmallFS File Class
@@ -80,6 +83,9 @@ public:
 	 */
 	unsigned readByte();
 
+	inline int getOffset() const { return flashoffset; }
+	inline int getSize() const { return filesize; }
+
 private:
 	int flashoffset;
 	int filesize;
@@ -96,10 +102,10 @@ public:
 	 * @brief Initialize the SmallFS filesystem
 	 * @return 0 on success, -1 otherwise
 	 */
-	int begin();
+	static int begin();
 
 protected:
-	void spi_disable()
+	static void spi_disable()
 	{
 #ifndef __linux__
 		digitalWrite(SPI_FLASH_SEL_PIN,HIGH);
@@ -146,9 +152,9 @@ protected:
 	}
 
 protected:
-	void read(unsigned address, void *target, unsigned size);
-	void seek(unsigned address) { seek_if_needed(address); }
-	unsigned readByte(unsigned address);
+	static void read(unsigned address, void *target, unsigned size);
+	static void seek(unsigned address) { seek_if_needed(address); }
+	static unsigned readByte(unsigned address);
 public:
 	/**
 	 * @brief Open a file on the filesystem.
@@ -156,16 +162,17 @@ public:
 	 * @return A new SmallFSFile object. You should call valid() to check
 	 * if file was successfully open.
 	 */
-	SmallFSFile open(const char *name);
-
+	static SmallFSFile open(const char *name);
+	static void loadSketch(const char *name);
 private:
-	void seek_if_needed(unsigned address);
+	static void seek_if_needed(unsigned address);
 
-	struct smallfs_header hdr;
-	unsigned fsstart;
-	unsigned offset;
+	static struct smallfs_header hdr;
+	static unsigned fsstart;
+	static unsigned offset;
+	static bool can_load_sketches;
 #ifdef __linux__
-	int fd;
+	static int fd;
 #endif
 };
 

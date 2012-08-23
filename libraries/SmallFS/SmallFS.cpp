@@ -32,6 +32,10 @@ int SmallFS_class::begin()
 #else
 	struct boot_t *b = (struct boot_t*)bootloaderdata;
 	fsstart = b->spiend;
+	/* Check for >1.9 bootloader */
+	if (b->signature==0xb00110ad ) {
+        can_load_sketches=1;
+	} 
 
 #endif
 	offset = 0xffffffff;
@@ -235,4 +239,29 @@ void SmallFSFile::seek(int pos, int whence)
 	SmallFS.seek(seekpos + flashoffset);
 }
 
+void SmallFS_class::loadSketch(const char *name)
+{
+	unsigned *lc = (unsigned*)0x38;
+	void (*load_sketch)(unsigned offset, unsigned size);
+	if (!can_load_sketches)
+		return;
+
+	SmallFSFile f = open(name);
+	if (f.valid()) {
+		load_sketch = ( void(*)(unsigned,unsigned) )*lc;
+#ifdef SMALLFSDEBUG
+		Serial.print("Loading sketch at ");
+		Serial.print(f.getOffset());
+		Serial.print(" size ");
+		Serial.println(f.getSize());
+#endif
+		load_sketch(f.getOffset(), f.getSize());
+	}
+}
+
 SmallFS_class SmallFS;
+
+bool SmallFS_class::can_load_sketches = false;
+struct smallfs_header SmallFS_class::hdr;
+unsigned SmallFS_class::fsstart=0;
+unsigned SmallFS_class::offset=0;

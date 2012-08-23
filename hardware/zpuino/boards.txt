@@ -11,6 +11,18 @@ zpuino_s3e_eval.build.toolchain=zpu
 zpuino_s3e_eval.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0x83010F00 -nostartfiles 
 zpuino_s3e_eval.build.extraSflags=-DBOARD_ID=0x83010F00
 ##############################################################
+zpuino_s3e_eval_ddr.name=ZPUino on S3E Eval board w/64MB DDR
+zpuino_s3e_eval_ddr.upload.protocol=zpuino-serial
+zpuino_s3e_eval_ddr.upload.maximum_size=67104640
+zpuino_s3e_eval_ddr.upload.size_sections=all
+zpuino_s3e_eval_ddr.upload.speed=115200
+zpuino_s3e_eval_ddr.build.f_cpu=90000000L 
+zpuino_s3e_eval_ddr.build.core=zpuino
+zpuino_s3e_eval_ddr_ddr.build.pins=standard 
+zpuino_s3e_eval.build.toolchain=zpu
+zpuino_s3e_eval_ddr.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -DBOARD_MEMORYSIZE=0x04000000 -DBOARD_ID=0x83011900 -nostartfiles
+zpuino_s3e_eval_ddr.build.extraSflags=-DBOARD_ID=0x83011900
+##############################################################
 zpuino_s3e_eval_v.name=ZPUino on S3E Eval board with 8-bit HQVGA
 zpuino_s3e_eval_v.upload.protocol=zpuino-serial
 zpuino_s3e_eval_v.upload.maximum_size=12160
