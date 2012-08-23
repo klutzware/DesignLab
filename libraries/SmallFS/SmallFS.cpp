@@ -34,7 +34,7 @@ int SmallFS_class::begin()
 	fsstart = b->spiend;
 	/* Check for >1.9 bootloader */
 	if (b->signature==0xb00110ad ) {
-        can_load_sketches=1;
+		can_load_sketches=1;
 	} 
 
 #endif
@@ -66,10 +66,13 @@ int SmallFS_class::begin()
 	Serial.println(debug);
 
 #endif
-
-	if(BE32(hdr.magic) == SMALLFS_MAGIC)
+    /*
+	if(SMALLFS_MAGIC==BE32(hdr.magic))
 		return 0;
-	return -1;
+
+		return -1;
+		*/
+    return hdr.magic  - SMALLFS_MAGIC;
 }
 
 void SmallFS_class::seek_if_needed(unsigned address)
@@ -261,7 +264,7 @@ void SmallFS_class::loadSketch(const char *name)
 
 SmallFS_class SmallFS;
 
-bool SmallFS_class::can_load_sketches = false;
+bool SmallFS_class::can_load_sketches = 0;
 struct smallfs_header SmallFS_class::hdr;
 unsigned SmallFS_class::fsstart=0;
 unsigned SmallFS_class::offset=0;
