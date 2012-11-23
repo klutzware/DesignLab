@@ -7,10 +7,14 @@
 # include "board_papilio_one.h"
 #elif defined( __ZPUINO_PAPILIO_PLUS__ )
 # include "board_papilio_plus.h"
+#elif defined( __ZPUINO_PAPILIO_PRO__ )
+# include "board_papilio_pro.h"
 #elif defined( __ZPUINO_NEXYS2__ )
 # include "board_nexys2.h"
 #elif defined( __ZPUINO_OHO_GODIL__ )
 # include "board_oho_godil.h"
+#elif defined( __ZPUINO_NEXYS3__ )
+# include "board_nexys3.h"
 #else
 #  error Unknown board.
 # endif

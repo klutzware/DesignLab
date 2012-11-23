@@ -94,6 +94,17 @@ zpuino_papilio_pluslx4v.build.toolchain=zpu
 zpuino_papilio_pluslx4v.build.extraCflags=-D__ZPUINO_PAPILIO_PLUS__ -DBOARD_ID=0xA4030E00 -DBOARD_MEMORYSIZE=0x4000 -nostartfiles
 zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
 ##############################################################
+zpuino_papilio_prolx9v.name=ZPUino on Papilio Pro (LX9)
+zpuino_papilio_prolx9v.upload.protocol=zpuino-serial
+zpuino_papilio_prolx9v.upload.maximum_size=8388608
+zpuino_papilio_prolx9v.upload.size_sections=all
+zpuino_papilio_prolx9v.upload.speed=115200
+zpuino_papilio_prolx9v.build.f_cpu=96000000L
+zpuino_papilio_prolx9v.build.core=zpuino
+zpuino_papilio_prolx9v.build.toolchain=zpu
+zpuino_papilio_prolx9v.build.extraCflags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xA4041700
+##############################################################
 zpuino_nexys2.name=ZPUino on Nexys2 board (s3e1200)
 zpuino_nexys2.upload.protocol=zpuino-serial
 zpuino_nexys2.upload.maximum_size=27648
