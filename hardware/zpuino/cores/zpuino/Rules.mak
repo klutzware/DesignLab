@@ -19,7 +19,10 @@ ASFLAGS=$(CFLAGS) $(PREFS___board___build___extraSflags) -DASSEMBLY
 $(TARGET).elf: $(TARGETOBJ) $(LIBS)
 	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive
 
-all-target: $(TARGET).elf $(TARGET).bin $(TARGET).size
+$(TARGET)-r.elf: $(TARGETOBJ) $(LIBS)
+	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -x -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive
+
+all-target: $(TARGET).elf $(TARGET).bin $(TARGET).size $(TARGET)-r.elf
 
 $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
