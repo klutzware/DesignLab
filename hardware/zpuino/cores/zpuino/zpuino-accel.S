@@ -72,7 +72,7 @@ digitalWrite:
         storesp 4
         poppc 
 
-
+#if 0
         .section        .text.strlen,"ax",@progbits
         .globl strlen
         .type        strlen, @function
@@ -134,6 +134,7 @@ strcpy:
         im .strcpy_load
         poppc
         .size strcpy,.-strcpy
+#endif
 
         .section        .text.udivmodsi4,"ax",@progbits
         .globl udivmodsi4
