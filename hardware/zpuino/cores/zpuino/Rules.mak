@@ -14,15 +14,17 @@ CFLAGS=$(EXTRACFLAGS) -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-reorder-blocks  -fno-r
 CXXFLAGS=$(CFLAGS) -fno-exceptions -fno-rtti
 ARFLAGS=crs
 LDFLAGS=-O2 -nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino.lds -Wl,--relax -Wl,--gc-sections
+LDFLAGSR=-O2 -nostartfiles -Wl,-T -Wl,$(COREPATH)/zpuino-r.lds
+
 ASFLAGS=$(CFLAGS) $(PREFS___board___build___extraSflags) -DASSEMBLY
 
 $(TARGET).elf: $(TARGETOBJ) $(LIBS)
 	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive
 
 $(TARGET)-r.elf: $(TARGETOBJ) $(LIBS)
-	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGS) -x -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive
+	$(CC) -o $@ $(TARGETOBJ) $(LDFLAGSR) -r -Wl,--whole-archive $(LIBS) -Wl,--no-whole-archive
 
-all-target: $(TARGET).elf $(TARGET).bin $(TARGET).size $(TARGET)-r.elf
+all-target: $(TARGET).elf $(TARGET).bin $(TARGET).size $(TARGET)-r.elf 
 
 $(TARGET).bin: $(TARGET).elf
 	$(OBJCOPY) -O binary $< $@
