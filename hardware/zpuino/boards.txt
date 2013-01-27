@@ -18,7 +18,7 @@ zpuino_s3e_eval_ddr.upload.size_sections=all
 zpuino_s3e_eval_ddr.upload.speed=115200
 zpuino_s3e_eval_ddr.build.f_cpu=90000000L 
 zpuino_s3e_eval_ddr.build.core=zpuino
-zpuino_s3e_eval_ddr_ddr.build.pins=standard 
+zpuino_s3e_eval_ddr.build.pins=standard 
 zpuino_s3e_eval_ddr.build.toolchain=zpu
 zpuino_s3e_eval_ddr.build.extraCflags=-D__ZPUINO_S3E_EVAL__ -DBOARD_MEMORYSIZE=0x04000000 -DBOARD_ID=0x83011900 -nostartfiles
 zpuino_s3e_eval_ddr.build.extraSflags=-DBOARD_ID=0x83011900
