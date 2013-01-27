@@ -1,7 +1,9 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
+#ifndef CLK_FREQ
 #define CLK_FREQ 96000000UL
+#endif
 
 /* LX9 bitfile is 0x5327C in size */
 

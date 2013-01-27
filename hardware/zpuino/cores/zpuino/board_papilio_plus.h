@@ -1,7 +1,9 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
+#ifndef CLK_FREQ
 #define CLK_FREQ 96000000UL
+#endif
 
 /* LX4 bitfile is 0x5327C in size */    
 
@@ -15,7 +17,7 @@
 
 #define IOBASE 0x08000000
 #define IO_SLOT_OFFSET_BIT 23
-
+#define HAVE_MALLOC 1
 
 // Wing1 Column A
 #define FPGA_PIN_P18 0
