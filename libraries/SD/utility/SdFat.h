@@ -23,7 +23,7 @@
  * \file
  * SdFile and SdVolume classes
  */
-#ifdef AVR
+#ifdef __AVR__
 #include <avr/pgmspace.h>
 #endif
 #include "Sd2Card.h"
@@ -288,7 +288,7 @@ class SdFile : public Print {
   size_t write(uint8_t b);
   size_t write(const void* buf, uint16_t nbyte);
   size_t write(const char* str);
-#ifdef AVR
+#ifdef __AVR__
   void write_P(PGM_P str);
   void writeln_P(PGM_P str);
 #endif

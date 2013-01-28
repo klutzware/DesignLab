@@ -18,19 +18,14 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <SdFat.h>
-#ifdef AVR
+#ifdef __AVR__
 #include <avr/pgmspace.h>
-#else
-#define PGM_P const char *
-#define PSTR(x) x
 #endif
-#include <WProgram.h>
+#include <Arduino.h>
 
 #ifdef ZPU
 #define SDLITE /* Lite version of SD. */
 #endif
-
-//extern void outhex32(unsigned int u32);
 
 //------------------------------------------------------------------------------
 // callback function for date/time
@@ -269,13 +264,15 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
       n = 10;  // max index for full 8.3 name
       i = 8;   // place for extension
     } else {
-		// illegal FAT characters
-#ifdef AVR
-      PGM_P p = PSTR("|<>^+=?/[];,*\"\\");
+      // illegal FAT characters
       uint8_t b;
-	  while ((b = pgm_read_byte(p++))) if (b == c) return false;
-#else
-      if (strchr("|<>^+=?/[];,*\"\\",c)!=NULL) return false;
+#if defined(__AVR__)
+      PGM_P p = PSTR("|<>^+=?/[];,*\"\\");
+      while ((b = pgm_read_byte(p++))) if (b == c) return false;
+#elif defined(__arm__) || defined(ZPU)
+      const uint8_t valid[] = "|<>^+=?/[];,*\"\\";
+      const uint8_t *p = valid;
+      while ((b = *p++)) if (b == c) return false;
 #endif
       // check size and only allow ASCII printable characters
       if (i > n || c < 0X21 || c > 0X7E)return false;
@@ -1298,9 +1295,8 @@ size_t SdFile::write(const char* str) {
   return 0;
 #endif
 }
-
+#ifdef __AVR__
 //------------------------------------------------------------------------------
-#ifdef AVR
 /**
  * Write a PROGMEM string to a file.
  *
@@ -1320,4 +1316,3 @@ void SdFile::writeln_P(PGM_P str) {
   println();
 }
 #endif
-

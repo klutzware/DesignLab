@@ -117,7 +117,7 @@ struct masterBootRecord {
   uint8_t  mbrSig0;
            /** Second MBR signature byte. Must be 0XAA */
   uint8_t  mbrSig1;
-}__attribute__((packed));
+} __attribute__((packed));
 /** Type name for masterBootRecord */
 typedef struct masterBootRecord mbr_t;
 //------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ struct biosParmBlock {
            * should always set all of the bytes of this field to 0.
            */
   uint8_t  fat32Reserved[12];
-}__attribute__((packed));
+} __attribute__((packed));
 /** Type name for biosParmBlock */
 typedef struct biosParmBlock bpb_t;
 //------------------------------------------------------------------------------
@@ -274,7 +274,7 @@ struct fat32BootSector {
   uint8_t  bootSectorSig0;
            /** must be 0XAA */
   uint8_t  bootSectorSig1;
-}__attribute__((packed));
+} __attribute__((packed));
 //------------------------------------------------------------------------------
 // End Of Chain values for FAT entries
 /** FAT16 end of chain value used by Microsoft. */
@@ -369,7 +369,7 @@ struct directoryEntry {
   __le16   firstClusterLow;
            /** 32-bit unsigned holding this file's size in bytes. */
   __le32   fileSize;
-}__attribute__((packed));
+} __attribute__((packed));
 //------------------------------------------------------------------------------
 // Definitions for directory entries
 //

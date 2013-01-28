@@ -6,6 +6,7 @@
 
   Copyright (c) 2006 David A. Mellis
   Copyright (c) 2010 Alvaro Lopes
+  Copyright (c) 2011 Cristian Maglie <c.maglie@bug.st>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -26,10 +27,13 @@
 
 package processing.app.debug;
 
-import processing.app.Base;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.io.*;
-import java.util.*;
+import processing.app.helpers.PreferencesMap;
+import processing.app.helpers.StringReplacer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sizer {
   private String buildPath, sketchName;
