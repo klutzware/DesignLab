@@ -472,8 +472,14 @@ public class Compiler implements MessageConsumer {
     secondErrorFound = false;
 
     Process process;
+    String delim=";";
+    if (Base.isMacOS() || Base.isLinux()) {
+        delim=":";
+    }
+
     String [] envp = new String[] {
-        "PATH="  + System.getenv("PATH") + ";" + path,
+
+        "PATH="  + System.getenv("PATH") + delim + path,
         "TEMP=" + System.getenv("TEMP")
     };
     

@@ -205,6 +205,14 @@
       <arg value="macosx/dist/tools-universal.zip" />
     </exec>
 
+    <exec executable="unzip">
+      <arg value="-q" />
+      <arg value="-n" />
+      <arg value="-d" />
+      <arg value="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools" />
+      <arg value="macosx/dist/zpu_tools.zip" />
+    </exec>
+
     <copy todir="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/avr/include/avr">    
       <fileset file="macosx/dist/eeprom.h" />
     </copy>
@@ -228,6 +236,8 @@
       <fileset dir="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/avr-4/bin" includes="**/*" />
       <fileset dir="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/libexec/gcc/avr/3.4.6/" includes="**/cc1*" />
       <fileset dir="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools/avr/libexec/gcc/avr/4.3.2/" includes="**/cc1*" />
+      <fileset dir="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools/zpu/bin" includes="**/*" />
+      <fileset dir="macosx/work/Arduino.app/Contents/Resources/Java/hardware/tools/zpu/libexec/gcc/zpu-elf/3.4.2/" includes="**/cc1*" />
     </chmod>
 
     <replace file="macosx/work/Arduino.app/Contents/Info.plist"
