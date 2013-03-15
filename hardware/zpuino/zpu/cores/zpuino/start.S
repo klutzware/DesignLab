@@ -23,12 +23,10 @@ __executable_start:
         .globl _Z14_zpu_interruptv
 
 ___zpu_interrupt_vector:
-	im _memreg+0
-        load
+	loadsp 4
 	im _Z14_zpu_interruptv
         call
-        im _memreg+0
-        store
+        storesp 0
         poppc
         
 
