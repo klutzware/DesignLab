@@ -142,7 +142,7 @@ public class Editor extends JFrame implements RunnerListener {
   JMenuItem undoItem, redoItem;
   protected UndoAction undoAction;
   protected RedoAction redoAction;
-  UndoManager undo;
+  LastUndoableEditAwareUndoManager undo;
   // used internally, and only briefly
   CompoundEdit compoundEdit;
 
@@ -481,7 +481,6 @@ public class Editor extends JFrame implements RunnerListener {
 
   protected void buildMenuBar() {
     JMenuBar menubar = new JMenuBar();
-    menubar = new JMenuBar();
     menubar.add(buildFileMenu());
     menubar.add(buildEditMenu());
     menubar.add(buildSketchMenu());
@@ -513,12 +512,14 @@ public class Editor extends JFrame implements RunnerListener {
 
     if (sketchbookMenu == null) {
       sketchbookMenu = new JMenu(_("Sketchbook"));
+      MenuScroller.setScrollerFor(sketchbookMenu);
       base.rebuildSketchbookMenu(sketchbookMenu);
     }
     fileMenu.add(sketchbookMenu);
 
     if (examplesMenu == null) {
       examplesMenu = new JMenu(_("Examples"));
+      MenuScroller.setScrollerFor(examplesMenu);
       base.rebuildExamplesMenu(examplesMenu);
     }
     fileMenu.add(examplesMenu);
@@ -732,7 +733,10 @@ public class Editor extends JFrame implements RunnerListener {
 
 
   protected void addTools(JMenu menu, File sourceFolder) {
-    HashMap<String, JMenuItem> toolItems = new HashMap<String, JMenuItem>();
+    if (sourceFolder == null)
+      return;
+    
+    Map<String, JMenuItem> toolItems = new HashMap<String, JMenuItem>();
 
     File[] folders = sourceFolder.listFiles(new FileFilter() {
       public boolean accept(File folder) {
@@ -961,6 +965,9 @@ public class Editor extends JFrame implements RunnerListener {
     serialMonitor.closeSerialPort();
     serialMonitor.setVisible(false);
     serialMonitor = new SerialMonitor(Preferences.get("serial.port"));
+
+    onBoardOrPortChange();
+
     //System.out.println("set to " + get("serial.port"));
   }
 
@@ -1348,6 +1355,10 @@ public class Editor extends JFrame implements RunnerListener {
         //System.out.println("Unable to undo: " + ex);
         //ex.printStackTrace();
       }
+      if (undo.getLastUndoableEdit() != null && undo.getLastUndoableEdit() instanceof CaretAwareUndoableEdit) {
+        CaretAwareUndoableEdit undoableEdit = (CaretAwareUndoableEdit) undo.getLastUndoableEdit();
+        textarea.setCaretPosition(undoableEdit.getCaretPosition() - 1);
+      }
       updateUndoState();
       redoAction.updateRedoState();
     }
@@ -1386,6 +1397,10 @@ public class Editor extends JFrame implements RunnerListener {
       } catch (CannotRedoException ex) {
         //System.out.println("Unable to redo: " + ex);
         //ex.printStackTrace();
+      }
+      if (undo.getLastUndoableEdit() != null && undo.getLastUndoableEdit() instanceof CaretAwareUndoableEdit) {
+        CaretAwareUndoableEdit undoableEdit = (CaretAwareUndoableEdit) undo.getLastUndoableEdit();
+        textarea.setCaretPosition(undoableEdit.getCaretPosition());
       }
       updateRedoState();
       undoAction.updateUndoState();
@@ -1668,7 +1683,7 @@ public class Editor extends JFrame implements RunnerListener {
               compoundEdit.addEdit(e.getEdit());
 
             } else if (undo != null) {
-              undo.addEdit(e.getEdit());
+              undo.addEdit(new CaretAwareUndoableEdit(e.getEdit(), textarea));
               undoAction.updateUndoState();
               redoAction.updateRedoState();
             }
