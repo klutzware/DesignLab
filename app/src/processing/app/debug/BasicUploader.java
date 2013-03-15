@@ -126,13 +126,24 @@ public class BasicUploader extends Uploader  {
         } else {
             t = prefs.get("upload.params.smallfs");
             if (t!=null) {
+                System.out.println("Upload param is "+t);
                 prefs.put("upload.smallfs", t);
             } else {
                 throw new RunnerException("SmallFS found, but no uploader is available");
             }
             System.out.println(_("SmallFS filesystem found, appending extra data file to FLASH"));
         }
-    } 
+    }
+
+    prefs.put("upload.memory","");
+    if (uploadOptions==uploadToMemory) {
+        t = prefs.get("upload.params.memory");
+        if (t==null) {
+            System.err.println(_("Memory upload requested, but I don't know how to handle it for this platform"));
+            throw new RunnerException(_("Memory upload not possible"));
+        }
+        prefs.put("upload.memory",t);
+    }
 
     boolean uploadResult;
     try {
