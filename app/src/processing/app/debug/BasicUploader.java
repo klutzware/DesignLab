@@ -30,6 +30,7 @@ package processing.app.debug;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 import processing.app.Base;
 import processing.app.Preferences;
@@ -42,8 +43,12 @@ import static processing.app.I18n._;
 
 public class BasicUploader extends Uploader  {
 
+  static final int uploadNormal = 0;
+  static final int uploadUsingProgrammer = 1;
+  static final int uploadToMemory = 2;
+
   public boolean uploadUsingPreferences(String buildPath, String className,
-                                        boolean usingProgrammer)
+                                        int uploadOptions)
       throws RunnerException, SerialException {
     // FIXME: Preferences should be reorganized
     TargetPlatform targetPlatform = Base.getTargetPlatform();
@@ -53,7 +58,7 @@ public class BasicUploader extends Uploader  {
 
     // if no protocol is specified for this board, assume it lacks a 
     // bootloader and upload using the selected programmer.
-    if (usingProgrammer || prefs.get("upload.protocol") == null) {
+    if ((uploadOptions == uploadUsingProgrammer) || prefs.get("upload.protocol") == null) {
       return uploadUsingProgrammer(buildPath, className);
     }
     
@@ -111,6 +116,23 @@ public class BasicUploader extends Uploader  {
       prefs.put("upload.verbose", prefs.get("upload.params.verbose"));
     else
       prefs.put("upload.verbose", prefs.get("upload.params.quiet"));
+
+    prefs.put("upload.smallfs","");
+    File smallfsfile = new File(buildPath,"smallfs.dat");
+    if (smallfsfile.exists()) {
+        if (uploadOptions==uploadToMemory) {
+            /* Warn user only */
+            System.err.println(_("SmallFS filesystem found, *NOT* programming FLASH because you're doing a memory upload"));
+        } else {
+            t = prefs.get("upload.params.smallfs");
+            if (t!=null) {
+                prefs.put("upload.smallfs", t);
+            } else {
+                throw new RunnerException("SmallFS found, but no uploader is available");
+            }
+            System.out.println(_("SmallFS filesystem found, appending extra data file to FLASH"));
+        }
+    } 
 
     boolean uploadResult;
     try {

@@ -57,76 +57,31 @@ public class Compiler implements MessageConsumer {
   private boolean sketchIsCompiled;
 	
   private RunnerException exception;
-  
-  /**
-   * Get core path, ie, where all core sources reside.
-   *
-   * @param boardPreferences board preferences
-   * @return Core path, in String format
-   */
-  private static final String getCorePath(Map<String, String> boardPreferences)
+
+  public void generateSmallFS()
+    throws RunnerException
   {
-    String corePath;
-    String core = boardPreferences.get("build.core");
-
-    if (core.indexOf(':') == -1) {
-      Target t = Base.getTarget();
-      File coreFolder = new File(new File(t.getFolder(), "cores"), core);
-      corePath = coreFolder.getAbsolutePath();
-    } else {
-      Target t = Base.targetsTable.get(core.substring(0, core.indexOf(':')));
-      File coresFolder = new File(t.getFolder(), "cores");
-      File coreFolder = new File(coresFolder, core.substring(core.indexOf(':') + 1));
-      corePath = coreFolder.getAbsolutePath();
-    }
-    return corePath;
-  }
-
-  /**
-   * Get all source files in a given path
-   *
-   * @param path Path where to search
-   * @param recurse Whether or not to recuse into subdirectories
-   * @return List of source files found
-   */
-  public static List<File> getAllSourcesInPath( String path, boolean recurse ) {
-    List<File> sources = findFilesInPath(path, "S", recurse);
-    sources.addAll( findFilesInPath(path, "c", recurse) );
-    sources.addAll( findFilesInPath(path, "cpp", recurse) );
-    return sources;
-  }
-
-  public boolean generateSmallFS(File smallfsdir, String builddir, String toolchain)
-  {
-      List cmd = new ArrayList();
-      String extension="";
-      String toolPath;
-
-      if (Base.isLinux()) {
-          toolPath = new String(Base.getHardwarePath() + File.separator +
-                                "tools");
-
+      PreferencesMap dict = new PreferencesMap(prefs);
+      String cmd = prefs.get("recipe.smallfs.pattern");
+      if (cmd != null) {
+          try {
+              String [] exec = StringReplacer.formatAndSplit(cmd, dict, true);
+              for (String e: exec) {
+                  System.err.print(e+" ");
+              }
+              System.err.println("");
+              execAsynchronously(exec);
+          } catch (Exception e) {
+              throw new RunnerException(e);
+          }
       } else {
-          extension=".exe";
-          toolPath = Base.getAvrBasePath(toolchain);
+          System.err.print(_("SmallFS required but no tool found."));
       }
-
-      cmd.add(toolPath + File.separator + "mksmallfs" + extension);
-      cmd.add(builddir + File.separator + "smallfs.dat" );
-
-      cmd.add(smallfsdir.getPath());
-      try {
-          execAsynchronously(cmd, toolPath);
-      } catch (RunnerException e) {
-          System.err.print(e.getMessage());
-          return false;
-      }
-
-      return true;
   }
 
+
   /**
-   * Compile sketch
+   * Compile sketch.
    *
    * @param _sketch Sketch object to be compiled.
    * @param _buildPath Where the temporary files live and will be built from.
@@ -134,34 +89,107 @@ public class Compiler implements MessageConsumer {
    * @return true if successful.
    * @throws RunnerException Only if there's a problem. Only then.
    */
-  public boolean compile(Sketch sketch,
-                         String buildPath,
-                         String primaryClassName,
-                         boolean verbose) throws RunnerException {
-    this.sketch = sketch;
-    this.buildPath = buildPath;
-    this.primaryClassName = primaryClassName;
-    this.verbose = verbose;
+  public boolean compile(Sketch _sketch, String _buildPath,
+                         String _primaryClassName, boolean _verbose)
+      throws RunnerException {
+    sketch = _sketch;
+    verbose = _verbose;
+    sketchIsCompiled = false;
+    objectFiles = new ArrayList<File>();
 
-    // the pms object isn't used for anything but storage
-    MessageStream pms = new MessageStream(this);
+    prefs = createBuildPreferences(_buildPath, _primaryClassName);
 
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
-    String core = boardPreferences.get("build.core");
-    String toolchain = boardPreferences.get("build.toolchain");
+    File smallfsdir = new File(sketch.getFolder(),"smallfs");
+    if (smallfsdir.isDirectory()) {
+        System.err.println("Found smallfs directory");
+        prefs.put("sketch.path", sketch.getFolder().getPath());
+        generateSmallFS();
 
-    if (core == null) {
-    	RunnerException re = new RunnerException(_("No board selected; please choose a board from the Tools > Board menu."));
+    } else {
+    }
+
+    // 0. include paths for core + all libraries
+    sketch.setCompilingProgress(20);
+    List<String> includePaths = new ArrayList<String>();
+    includePaths.add(prefs.get("build.core.path"));
+    if (prefs.get("build.variant.path").length() != 0)
+      includePaths.add(prefs.get("build.variant.path"));
+    for (File file : sketch.getImportedLibraries())
+      includePaths.add(file.getPath());
+
+    // 1. compile the sketch (already in the buildPath)
+    sketch.setCompilingProgress(30);
+    compileSketch(includePaths);
+    sketchIsCompiled = true;
+
+    // 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
+    // Doesn't really use configPreferences
+    sketch.setCompilingProgress(40);
+    compileLibraries(includePaths);
+
+    // 3. compile the core, outputting .o files to <buildPath> and then
+    // collecting them into the core.a library file.
+    sketch.setCompilingProgress(50);
+    compileCore();
+
+    // 4. link it all together into the .elf file
+    sketch.setCompilingProgress(60);
+    compileLink(includePaths);
+
+    // 5. extract EEPROM data (from EEMEM directive) to .eep file.
+    sketch.setCompilingProgress(70);
+    compileEep(includePaths);
+
+    // 6. build the .hex file
+    sketch.setCompilingProgress(80);
+    compileHex(includePaths);
+
+    sketch.setCompilingProgress(90);
+    return true;
+  }
+
+  private PreferencesMap createBuildPreferences(String _buildPath,
+                                                String _primaryClassName)
+      throws RunnerException {
+    
+    if (Base.getBoardPreferences() == null) {
+      RunnerException re = new RunnerException(
+          _("No board selected; please choose a board from the Tools > Board menu."));
       re.hideStackTrace();
       throw re;
     }
 
-    String avrBasePath = Base.getAvrBasePath(toolchain);
+    TargetPlatform targetPlatform = Base.getTargetPlatform();
 
-    String corePath = getCorePath(boardPreferences);
+    // Merge all the global preference configuration in order of priority
+    PreferencesMap p = new PreferencesMap();
+    p.putAll(Preferences.getMap());
+    p.putAll(targetPlatform.getPreferences());
+    p.putAll(Base.getBoardPreferences());
+    for (String k : p.keySet()) {
+      if (p.get(k) == null)
+        p.put(k, "");
+    }
 
-    String variant = boardPreferences.get("build.variant");
-    String variantPath = null;
+    p.put("build.path", _buildPath);
+    p.put("build.project_name", _primaryClassName);
+    
+    if (!p.containsKey("compiler.path"))
+      p.put("compiler.path", Base.getAvrBasePath());
+
+    // Core folder
+    String core = p.get("build.core");
+    TargetPlatform tp;
+    if (!core.contains(":")) {
+      tp = targetPlatform;
+    } else {
+      String[] split = core.split(":", 2);
+      tp = Base.getTargetPlatform(split[0], Preferences.get("target_platform"));
+      core = split[1];
+    }
+    File coreFolder = new File(tp.getFolder(), "cores");
+    coreFolder = new File(coreFolder, core);
+    p.put("build.core.path", coreFolder.getAbsolutePath());
     
     // System Folder
     File systemFolder = targetPlatform.getFolder();
@@ -186,210 +214,53 @@ public class Compiler implements MessageConsumer {
     } else {
       p.put("build.variant.path", "");
     }
-   sketch.setCompilingProgress(20);
+    
+    return p;
+  }
 
+  private List<File> compileFiles(String outputPath, File sourcePath,
+                                  boolean recurse, List<String> includePaths)
+      throws RunnerException {
+    List<File> sSources = findFilesInFolder(sourcePath, "S", recurse);
+    List<File> cSources = findFilesInFolder(sourcePath, "c", recurse);
+    List<File> cppSources = findFilesInFolder(sourcePath, "cpp", recurse);
+    List<File> objectPaths = new ArrayList<File>();
 
-    List<String> extracflags=new ArrayList<String>();
-    String classFileName = Base.getFileNameWithoutExtension(new File(primaryClassName));
-
-    createFolder( new File(buildPath, ".deps") );
-    // Create a suitable makefile
-
-    try {
-
-      File commonMakeFileName = new File(buildPath, "Common.mak");
-      File rulesMakeFileName = new File(corePath,"Rules.mak");
-
-      Makefile commonMakeFile = new Makefile(commonMakeFileName);
-
-      /* Add all board settings to Common.mak */
-      for (String key: boardPreferences.keySet()) {
-        commonMakeFile.setVariable( "PREFS___board___" + Makefile.makeVariable(key), boardPreferences.get(key));
-      }
-      /* Add also some useful variables */
-      commonMakeFile.setVariable("COREPATH", corePath);
-      commonMakeFile.setVariable("AVRPATH", avrBasePath);
-      commonMakeFile.setVariable("BUILDPATH", buildPath);
-      commonMakeFile.setVariable("REVISION", new Integer(Base.REVISION).toString());
-
-      Makefile mainMakeFile = new Makefile( new File(buildPath, "Makefile") );
-
-      mainMakeFile.addDependency("all","all-target");
-      mainMakeFile.include( commonMakeFile );
-
-
-      mainMakeFile.setVariable("TARGET",classFileName);
-
-      if (variantPath != null) {
-          commonMakeFile.appendVariable("EXTRACFLAGS","-I" + variantPath);
-      }
-
-      /* Place core makefile in core subdirectory */
-
-      File coreFolder = new File(buildPath, "core");
-      File coreDepsFolder   = new File(buildPath, "core" + File.separator + ".deps" );
-      createFolder(coreFolder);
-      createFolder(coreDepsFolder);
-
-      Makefile coreMakeFile = new Makefile( new File(coreFolder, "Makefile") );
-      coreMakeFile.include( commonMakeFile );
-
-      /* Get all source files for core */
-      List<File> coreSources = getAllSourcesInPath(corePath,true);
-      File libCoreFile = new File(coreFolder,"libcore.a");
-
-      coreMakeFile.addDependency( libCoreFile, Makefile.makeObjectsFromSources(coreSources) );
-      coreMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
-
-      // Copy files into place
-
-      for (File file : coreSources) {
-        // Only copy files if not modified
-        File target = new File(coreFolder,file.getName());
-        if (! target.exists() || target.lastModified()!=file.lastModified()) {
-          Base.copyFile( file, target );
-        }
-        coreMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
-        coreMakeFile.includeIfExists("." + File.separator + ".deps" + File.separator +
-                                     Base.getFileNameWithoutExtension(file) + ".Tpo" );
-
-      }
-
-      coreMakeFile.appendVariable("EXTRACFLAGS","-I" + buildPath);
-      coreMakeFile.include( rulesMakeFileName );
-      coreMakeFile.close();
-
-      // Write core dependency
-
-      mainMakeFile.addDependency(".PHONY", "core" + File.separator + "libcore.a");
-      mainMakeFile.addDependency("core" + File.separator + "libcore.a","");
-      mainMakeFile.addBuildRule("$(MAKE) -C core libcore.a");
-
-      for (File libraryFolder : sketch.getImportedLibraries()) {
-
-        File outputFolder = new File(buildPath, libraryFolder.getName());
-        File depsFolder   = new File(buildPath, libraryFolder.getName() + File.separator + ".deps" );
-        File utilityFolder = new File(libraryFolder, "utility");
-        String libraryName = "lib" + libraryFolder.getName();
-        File libraryFile = new File(libraryFolder, libraryName + ".a");
-
-        createFolder(outputFolder);
-        createFolder(depsFolder);
-
-        /* Get all sources for this library */
-        List<File> libSources = getAllSourcesInPath(libraryFolder.getPath(),false);
-        // Specific makefile for this library
-        Makefile libMakeFile = new Makefile(new File(outputFolder, "Makefile"));
-
-        libMakeFile.include( commonMakeFile );
-
-        libMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
-
-        // Copy files into place
-        for (File file : libSources) {
-          // Don't copy if not modifies
-          File target = new File(outputFolder,file.getName());
-
-          if (! target.exists() || target.lastModified()!=file.lastModified()) {
-            Base.copyFile( file, target );
-          }
-          libMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
-          libMakeFile.includeIfExists("." + File.separator + ".deps" + File.separator +
-                                     Base.getFileNameWithoutExtension(file) + ".Tpo" );
-        }
-
-        if (utilityFolder.exists()) {
-          String utilityRelativePath = libraryFolder.getName() + File.separator + "utility";
-          File utilityPath = new File( libraryFolder.getPath() + File.separator + "utility" );
-
-          libMakeFile.appendVariable("EXTRACFLAGS","-I" + utilityPath.getPath());
-          // This should not be needed.
-          commonMakeFile.appendVariable("EXTRACFLAGS","-I" + utilityPath.getPath());
-
-          List<File> utilitySources = getAllSourcesInPath(utilityFolder.getPath(),false);
-
-          if (utilitySources.size() > 0) {
-            File utilityLibFile = new File("libutility.a");
-            outputFolder = new File(outputFolder, "utility");
-            createFolder(outputFolder);
-            createFolder(new File(outputFolder,".deps"));
-
-            // Append to main makefile, so it's included also
-            mainMakeFile.appendVariable( "LIBS", utilityRelativePath + File.separator + utilityLibFile.getName() );
-            mainMakeFile.addDependency(".PHONY", utilityRelativePath + File.separator + utilityLibFile.getName());
-            mainMakeFile.addDependency(utilityRelativePath + File.separator + utilityLibFile.getName(), "");
-            mainMakeFile.addBuildRule("$(MAKE) -C " + utilityRelativePath + " " + utilityLibFile.getName());
-
-            // Now, create utility makefile
-            Makefile utilityMakeFile = new Makefile( new File(outputFolder, "Makefile") );
-            utilityMakeFile.include(commonMakeFile);
-
-            for (File file : utilitySources) {
-              File target = new File(outputFolder,file.getName());
-
-              if (! target.exists() || target.lastModified()!=file.lastModified()) {
-                Base.copyFile( file, target );
-              }
-              utilityMakeFile.addDependency( Makefile.makeObjectFromSource(file), file );
-              utilityMakeFile.includeIfExists("." + File.separator + ".deps" + File.separator +
-                                     Base.getFileNameWithoutExtension(file) + ".Tpo" );
-
-            }
-
-            utilityMakeFile.addDependency( utilityLibFile, Makefile.makeObjectsFromSources(utilitySources) );
-            utilityMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
-            utilityMakeFile.include( rulesMakeFileName );
-            utilityMakeFile.close();
-
-            libMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
-            libMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
-
-          }
-        }
-
-        // this library can use includes in its utility/ folder
-        libMakeFile.addDependency( libraryFile, Makefile.makeObjectsFromSources(libSources) );
-        libMakeFile.addBuildRule("$(AR) $(ARFLAGS) $@ $+");
-
-        libMakeFile.include( rulesMakeFileName );
-        libMakeFile.close();
-
-        // This is stupid, but some libs require other libs (ex. Ethernet needs SPI)
-        commonMakeFile.appendVariable("EXTRACFLAGS","-I" + libraryFolder.getPath());
-
-        mainMakeFile.appendVariable("LIBS", libraryFolder.getName()+ File.separator + libraryName + ".a");
-        // Enforce recheck for library files
-        mainMakeFile.addDependency(".PHONY", libraryFolder.getName()+ File.separator + libraryName + ".a");
-
-        mainMakeFile.addDependency(libraryFolder.getName()+ File.separator + libraryName + ".a", "");
-        mainMakeFile.addBuildRule("$(MAKE) -C " + libraryFolder.getName() + " " + libraryName + ".a");
-
-      }
-
-      List<File> sketchSources = getAllSourcesInPath(buildPath,false);
-
-      mainMakeFile.setVariable("TARGETOBJ", Makefile.makeFileList(Makefile.makeObjectsFromSources(sketchSources)) );
-      mainMakeFile.appendVariable("LIBS","core" + File.separator + libCoreFile.getName());
-      mainMakeFile.include( rulesMakeFileName );
-
-      // Check for smallfs
-
-      File smallfsdir = new File(sketch.getFolder(),"smallfs");
-      if (smallfsdir.isDirectory()) {
-          //System.err.println("Found smallfs directory");
-          generateSmallFS( smallfsdir, buildPath, toolchain);
-      }
-
-
-      mainMakeFile.close();
-
-      commonMakeFile.close();
-
-    } catch (java.io.IOException e) {
-      throw new RunnerException("Cannot write makefile!");
+    for (File file : sSources) {
+      String objectPath = outputPath + File.separator + file.getName() + ".o";
+      objectPaths.add(new File(objectPath));
+      String[] cmd = getCommandCompilerS(includePaths, file.getAbsolutePath(),
+                                         objectPath);
+      execAsynchronously(cmd);
     }
-    sketch.setCompilingProgress(50);
-    return runMake(avrBasePath, buildPath);
+ 		
+    for (File file : cSources) {
+      String objectPath = outputPath + File.separator + file.getName() + ".o";
+      String dependPath = outputPath + File.separator + file.getName() + ".d";
+      File objectFile = new File(objectPath);
+      File dependFile = new File(dependPath);
+      objectPaths.add(objectFile);
+      if (is_already_compiled(file, objectFile, dependFile, prefs))
+        continue;
+      String[] cmd = getCommandCompilerC(includePaths, file.getAbsolutePath(),
+                                         objectPath);
+      execAsynchronously(cmd);
+    }
+
+    for (File file : cppSources) {
+      String objectPath = outputPath + File.separator + file.getName() + ".o";
+      String dependPath = outputPath + File.separator + file.getName() + ".d";
+      File objectFile = new File(objectPath);
+      File dependFile = new File(dependPath);
+      objectPaths.add(objectFile);
+      if (is_already_compiled(file, objectFile, dependFile, prefs))
+        continue;
+      String[] cmd = getCommandCompilerCPP(includePaths,
+                                           file.getAbsolutePath(), objectPath);
+      execAsynchronously(cmd);
+    }
+    
+    return objectPaths;
   }
 
   private boolean is_already_compiled(File src, File obj, File dep, Map<String, String> prefs) {
@@ -455,19 +326,6 @@ public class Compiler implements MessageConsumer {
     return ret;
   }
 
-  private boolean runMake(String avrBasePath,
-                          String buildPath)
-  throws RunnerException {
-
-      // TODO: make sure this works in Win32
-    List baseCommandMake = new ArrayList(Arrays.asList(new String[] {
-      avrBasePath + "make", "--silent", "-C", buildPath, "all"}));
-
-    execAsynchronously(baseCommandMake, avrBasePath);
-    return true;
-
-  }
-
   boolean firstErrorFound;
   boolean secondErrorFound;
 
@@ -498,17 +356,9 @@ public class Compiler implements MessageConsumer {
     secondErrorFound = false;
 
     Process process;
-    String [] envp = new String[] {
-        "PATH="  + System.getenv("PATH") + ";" + path,
-        "TEMP=" + System.getenv("TEMP")
-    };
     
     try {
-        if(Base.isLinux()) {
-            process = Runtime.getRuntime().exec(command);
-        } else {
-            process = Runtime.getRuntime().exec(command, envp);
-        }
+      process = Runtime.getRuntime().exec(command);
     } catch (IOException e) {
       RunnerException re = new RunnerException(e.getMessage());
       re.hideStackTrace();
@@ -752,6 +602,8 @@ public class Compiler implements MessageConsumer {
   // 1. compile the sketch (already in the buildPath)
   void compileSketch(List<String> includePaths) throws RunnerException {
     String buildPath = prefs.get("build.path");
+
+
     objectFiles.addAll(compileFiles(buildPath, new File(buildPath), false,
                                     includePaths));
   }

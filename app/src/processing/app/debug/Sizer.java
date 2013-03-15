@@ -35,52 +35,72 @@ import processing.app.helpers.StringReplacer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sizer {
-  private String buildPath, sketchName;
-  public Sizer(String buildPath, String sketchName) {
-    this.buildPath = buildPath;
-    this.sketchName = sketchName;
+public class Sizer implements MessageConsumer {
+  private ArrayList<Long> sizes;
+  private RunnerException exception;
+  private PreferencesMap prefs;
+  private String firstLine;
+  private Pattern pattern;
+
+public Sizer(PreferencesMap _prefs) {
+    prefs = _prefs;
+    pattern = Pattern.compile(prefs.get("recipe.size.regex"));
+    sizes = new ArrayList<Long>();
   }
-  
+
   public List<Long> computeSize() throws RunnerException {
 
-    // Size file should have been created by make
-
-    String sizeFile = buildPath + File.separator + Base.getFileNameWithoutExtension(new File(sketchName)) + ".size";
-    long size = -1;
-    long data_size = -1;
-    long bss_size = -1;
-    long text_size = -1;
-
+    int r = 0;
     try {
-      BufferedReader fileReader = new BufferedReader(new FileReader(sizeFile));
-      String sizeString = fileReader.readLine(); // This line is to be ignored
-      sizeString = fileReader.readLine();
-      fileReader.close();
-      StringTokenizer st = new StringTokenizer(sizeString, " ");
+      String pattern = prefs.get("recipe.size.pattern");
+      String cmd[] = StringReplacer.formatAndSplit(pattern, prefs, true);
 
-      try {
-        //    text    data     bss     dec     hex filename
-	// 20364    1052    1512   22928    5990 /tmp/bu
-	text_size = (new Integer(st.nextToken().trim())).longValue();
-	data_size = (new Integer(st.nextToken().trim())).longValue(); // DEC
-        bss_size = (new Integer(st.nextToken().trim())).longValue(); // DEC
-        size = (new Integer(st.nextToken().trim())).longValue(); // DEC
-      } catch (NoSuchElementException e) {
-        throw new RunnerException(e.toString());
-      } catch (NumberFormatException e) {
-        throw new RunnerException(e.toString());
+      exception = null;
+      sizes.clear();
+      System.out.print("Executing ");
+      for (String i: cmd) {
+          System.out.print(" "+i);
       }
-      ArrayList<Long> ret = new ArrayList<Long>();
+      System.out.println("");
+      Process process = Runtime.getRuntime().exec(cmd);
+      MessageSiphon in = new MessageSiphon(process.getInputStream(), this);
+      MessageSiphon err = new MessageSiphon(process.getErrorStream(), this);
 
-      ret.add( new Long(text_size) ); 
-      ret.add( new Long(data_size) );
-      ret.add( new Long(bss_size) );
+      boolean running = true;
+      while(running) {
+        try {
+          in.join();
+          err.join();
+          r = process.waitFor();
+          running = false;
+        } catch (InterruptedException intExc) { }
+      }
+    } catch (Exception e) {
+      // The default Throwable.toString() never returns null, but apparently
+      // some sub-class has overridden it to do so, thus we need to check for
+      // it.  See: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1166589459
+      exception = new RunnerException(
+        (e.toString() == null) ? e.getClass().getName() + r : e.toString() + r);
+    }
 
-      return ret;
+    if (exception != null)
+      throw exception;
+      
+    if (sizes.size() == 0)
+      throw new RunnerException(firstLine);
+      
+    return sizes;
+  }
 
-    } catch (IOException e) {
-      throw new RunnerException(e.toString());
+  public void message(String s) {
+    if (firstLine == null)
+      firstLine = s;
+    Matcher matcher = pattern.matcher(s.trim());
+    if (matcher.matches()) {
+       int i;
+       for (i=0;i<matcher.groupCount();i++) {
+        sizes.add(Long.parseLong(matcher.group(i+1)));
+       }
     }
   }
 }

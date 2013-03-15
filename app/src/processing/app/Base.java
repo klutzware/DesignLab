@@ -585,7 +585,7 @@ public class Base {
       return;  // sketch was modified, and user canceled
     }
     // Close the running window, avoid window boogers with multiple sketches
-    activeEditor.internalCloseRunner(true);
+    activeEditor.internalCloseRunner();
 
     // Actually replace things
     handleNewReplaceImpl();
@@ -617,7 +617,7 @@ public class Base {
       return;  // sketch was modified, and user canceled
     }
     // Close the running window, avoid window boogers with multiple sketches
-    activeEditor.internalCloseRunner(true);
+    activeEditor.internalCloseRunner();
 
     boolean loaded = activeEditor.handleOpenInternal(path);
     if (!loaded) {
@@ -760,7 +760,7 @@ public class Base {
     }
 
     // Close the running window, avoid window boogers with multiple sketches
-    editor.internalCloseRunner(true);
+    editor.internalCloseRunner();
 
     if (editors.size() == 1) {
       // For 0158, when closing the last window /and/ it was already an
@@ -837,7 +837,7 @@ public class Base {
     if (handleQuitEach()) {
       // make sure running sketches close before quitting
       for (Editor editor : editors) {
-        editor.internalCloseRunner(true);
+        editor.internalCloseRunner();
       }
       // Save out the current prefs state
       Preferences.save();
@@ -1781,13 +1781,13 @@ public class Base {
   }
   
   
-  static public String getAvrBasePath(String toolchainName) {
-    if(Base.isLinux()) {
-      return ""; // avr tools are installed system-wide and in the path
-    } else {
-      return getHardwarePath() + File.separator + "tools" +
-             File.separator + toolchainName + File.separator + "bin" + File.separator;
-    }  
+  static public String getAvrBasePath() {
+    String path = getHardwarePath() + File.separator + "tools" +
+                  File.separator + "avr" + File.separator + "bin" + File.separator;
+    if (Base.isLinux() && !(new File(path)).exists()) {
+      return "";  // use distribution provided avr tools if bundled tools missing
+    }
+    return path;
   }
   
   

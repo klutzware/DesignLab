@@ -419,6 +419,10 @@
       <arg value="-xjf"/>
       <arg value="../../avr_tools_linux32.tar.bz2"/>
     </exec>
+    <exec executable="tar" dir="linux/work/hardware">
+      <arg value="-xjf"/>
+      <arg value="../../zpu_tools_linux32.tar.bz2"/>
+    </exec>
   </target>
 
   <target name="linux64-build" depends="linux-build" description="Build linux (64-bit) version">
@@ -431,6 +435,10 @@
     <exec executable="tar" dir="linux/work/hardware">
       <arg value="-xjf"/>
       <arg value="../../avr_tools_linux64.tar.bz2"/>
+    </exec>
+    <exec executable="tar" dir="linux/work/hardware">
+      <arg value="-xjf"/>
+      <arg value="../../zpu_tools_linux64.tar.bz2"/>
     </exec>
   </target>
   

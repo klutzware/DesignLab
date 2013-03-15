@@ -152,6 +152,8 @@ public class Editor extends JFrame implements RunnerListener {
   Runnable presentHandler;
   Runnable stopHandler;
   Runnable exportHandler;
+  Runnable exportAppHandler;
+
 
   public Editor(Base ibase, String path, int[] location) {
     super("Arduino");
@@ -1415,11 +1417,12 @@ public class Editor extends JFrame implements RunnerListener {
 
   public void setHandlers(Runnable runHandler, Runnable presentHandler,
                           Runnable stopHandler,
-                          Runnable exportHandler) {
+                          Runnable exportHandler, Runnable exportAppHandler) {
     this.runHandler = runHandler;
     this.presentHandler = presentHandler;
     this.stopHandler = stopHandler;
     this.exportHandler = exportHandler;
+    this.exportAppHandler = exportAppHandler;
   }
 
 
@@ -1428,6 +1431,7 @@ public class Editor extends JFrame implements RunnerListener {
     presentHandler = new DefaultPresentHandler();
     stopHandler = new DefaultStopHandler();
     exportHandler = new DefaultExportHandler();
+    exportAppHandler = new DefaultExportAppHandler();
   }
 
 
@@ -1892,7 +1896,7 @@ public class Editor extends JFrame implements RunnerListener {
    * @param verbose Set true to run with verbose output.
    */
   public void handleRun(final boolean verbose) {
-    internalCloseRunner(false);
+    internalCloseRunner();
     running = true;
     toolbar.activate(EditorToolbar.RUN);
     status.progress(_("Compiling sketch..."));
@@ -1978,7 +1982,7 @@ public class Editor extends JFrame implements RunnerListener {
   public void handleStop() {  // called by menu or buttons
 //    toolbar.activate(EditorToolbar.STOP);
 
-    internalCloseRunner(false);
+    internalCloseRunner();
 
     toolbar.deactivate(EditorToolbar.RUN);
 //    toolbar.deactivate(EditorToolbar.STOP);
@@ -2003,15 +2007,15 @@ public class Editor extends JFrame implements RunnerListener {
   /**
    * Handle internal shutdown of the runner.
    */
-  public void internalCloseRunner(boolean docleanup) {
+  public void internalCloseRunner() {
     running = false;
 
     if (stopHandler != null)
     try {
       stopHandler.run();
     } catch (Exception e) { }
-    if (docleanup)
-        sketch.cleanup();
+
+    sketch.cleanup();
   }
 
 
@@ -2104,7 +2108,7 @@ public class Editor extends JFrame implements RunnerListener {
    */
   protected void handleOpenUnchecked(String path, int codeIndex,
                                      int selStart, int selStop, int scrollPos) {
-    internalCloseRunner(true);
+    internalCloseRunner();
     handleOpenInternal(path);
     // Replacing a document that may be untitled. If this is an actual
     // untitled document, then editor.untitled will be set by Base.
@@ -2429,6 +2433,42 @@ public class Editor extends JFrame implements RunnerListener {
     }
   }
 
+  // DAM: in Arduino, this is upload (with verbose output)
+  class DefaultExportAppHandler implements Runnable {
+    public void run() {
+
+      try {
+        serialMonitor.closeSerialPort();
+        serialMonitor.setVisible(false);
+            
+        uploading = true;
+          
+        boolean success = sketch.exportApplet(uploadUsingProgrammer);
+        if (success) {
+          statusNotice(_("Done uploading."));
+        } else {
+          // error message will already be visible
+        }
+      } catch (SerialNotFoundException e) {
+        populateSerialMenu();
+        if (serialMenu.getItemCount() == 0) statusError(e);
+        else if (serialPrompt()) run();
+        else statusNotice(_("Upload canceled."));
+      } catch (RunnerException e) {
+        //statusError("Error during upload.");
+        //e.printStackTrace();
+        status.unprogress();
+        statusError(e);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      status.unprogress();
+      uploading = false;
+      //toolbar.clear();
+      toolbar.deactivate(EditorToolbar.EXPORT);
+    }
+  }
+
   /**
    * Checks to see if the sketch has been modified, and if so,
    * asks the user to save the sketch or cancel the export.
@@ -2642,7 +2682,6 @@ public class Editor extends JFrame implements RunnerListener {
     lineStatus.setBoardName(boardPreferences.get("name"));
     lineStatus.setSerialPort(Preferences.get("serial.port"));
     lineStatus.repaint();
-    sketch.cleanup(); /* We might have changed board */
   }
 
   

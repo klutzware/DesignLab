@@ -51,10 +51,6 @@ public abstract class Uploader implements MessageConsumer  {
   
   boolean verbose;
 
-  static final int uploadNormal = 0;
-  static final int uploadUsingProgrammer = 1;
-  static final int uploadToMemory = 2;
-
   public abstract boolean uploadUsingPreferences(String buildPath, String className, int uploadOptions)
     throws RunnerException, SerialException;
   
@@ -104,27 +100,8 @@ public abstract class Uploader implements MessageConsumer  {
     secondErrorFound = false;
     notFoundError = false;
     int result=0; // pre-initialized to quiet a bogus warning from jikes
-    
-    try {
-      String[] commandArray = new String[commandDownloader.size()];
-      commandDownloader.toArray(commandArray);
-      
-      String avrBasePath;
-      
-      if(Base.isLinux()) {
-        avrBasePath = new String(Base.getHardwarePath() + "/tools/"); 
-      }
-      else {
-          Map<String, String> boardPreferences = Base.getBoardPreferences();
-          String toolchain = boardPreferences.get("build.toolchain");
 
-          avrBasePath = new String(Base.getHardwarePath() + File.separator + "tools" +
-                                   File.separator + toolchain + File.separator + "bin" +
-                                   File.separator);
-      }
-      
-      commandArray[0] = avrBasePath + commandArray[0];
-      
+    try {
       if (verbose || Preferences.getBoolean("upload.verbose")) {
         for(int i = 0; i < commandArray.length; i++) {
           System.out.print(commandArray[i] + " ");

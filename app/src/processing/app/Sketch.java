@@ -23,8 +23,6 @@
 
 package processing.app;
 
-/* ALVIE: note, we might be able to use the basic uploader here. */
-import processing.app.debug.ZPUinoUploader;
 import processing.app.debug.BasicUploader;
 import processing.app.debug.Compiler;
 import processing.app.debug.RunnerException;
@@ -1311,10 +1309,7 @@ public class Sketch {
     // do this here instead of after exiting, since the exit
     // can happen so many different ways.. and this will be
     // better connected to the dataFolder stuff below.
-
-    // TODO: only clean up if we changed board settings
-
-    //cleanup();
+    cleanup();
 
 //    // handle preprocessing the main file's code
 //    return build(tempBuildFolder.getAbsolutePath());
@@ -1459,7 +1454,7 @@ public class Sketch {
     // 3. then loop over the code[] and save each .java file
 
     for (SketchCode sc : code) {
-      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h") || sc.isExtension("s")) {
+      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h")) {
         // no pre-processing services necessary for java files
         // just write the the contents of 'program' to a .java file
         // into the build directory. uses byte stream and reader/writer
@@ -1596,15 +1591,15 @@ public class Sketch {
     return null;
   }  
   
-  protected boolean exportApplet(int exportOptions) throws Exception {
-    return exportApplet(tempBuildFolder.getAbsolutePath(), exportOptions);
+  protected boolean exportApplet(int programmingType) throws Exception {
+    return exportApplet(tempBuildFolder.getAbsolutePath(), programmingType);
   }
 
 
   /**
    * Handle export to applet.
    */
-  public boolean exportApplet(String appletPath, int exportOptions)
+  public boolean exportApplet(String appletPath, int programmingType)
     throws RunnerException, IOException, SerialException {
 
     prepare();
@@ -1625,7 +1620,7 @@ public class Sketch {
 //    }
 
     editor.status.progressNotice(_("Uploading..."));
-    upload(appletPath, foundName, exportOptions);
+    upload(appletPath, foundName, programmingType);
     editor.status.progressUpdate(100);
     return true;
   }
@@ -1637,59 +1632,55 @@ public class Sketch {
 
   
   protected void size(PreferencesMap prefs) throws RunnerException {
-    List<Long> size;
-    long msize=-1;
-    long text=-1,data=-1,bss=-1;
-    String maxsizeString = Base.getBoardPreferences().get("upload.maximum_size");
-    String sizeSections = Base.getBoardPreferences().get("upload.size_sections");
+    List<Long> sizes;
+    long size=-1,text,data,bss;
+    String maxsizeString = prefs.get("upload.maximum_size");
+    String sizeSections = prefs.get("upload.size_sections");
     if (maxsizeString == null)
       return;
     long maxsize = Integer.parseInt(maxsizeString);
     Sizer sizer = new Sizer(prefs);
-      try {
-	  size = sizer.computeSize();
-// First value is text, second data
-	  text=size.get(0);
-	  data=size.get(1);
-	  bss=size.get(2);
+    try {
+      sizes = sizer.computeSize();
+      if (sizes.size()==1) {
+        size = sizes.get(0);
+        System.out.println(I18n
+            .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum)"),
+                    size, maxsize));
+      } else {
+          text=sizes.get(0);
+	  data=sizes.get(1);
+	  bss=sizes.get(2);
 	  if (sizeSections!=null && sizeSections.equals("all")) {
-	      msize = text + data + bss;
+	      size = text + data + bss;
 	  } else {
-	      msize = text + data;
+	      size = text + data;
 	  }
-	  System.out.println(
-                             I18n.format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2} bytes ROM, {3} bytes memory"),
-		      msize, maxsize,(text+data),(data+bss)));
+          System.out.println(I18n
+              .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2} bytes ROM, {3} bytes memory"),
+		      size, maxsize,(text+data),(data+bss)));
+      }
     } catch (RunnerException e) {
       System.err.println(I18n.format(_("Couldn't determine program size: {0}"),
                                      e.getMessage()));
     }
 
-    if (msize > maxsize)
+    if (size > maxsize)
       throw new RunnerException(
           _("Sketch too big; see http://www.arduino.cc/en/Guide/Troubleshooting#size for tips on reducing it."));
   }
 
-  protected String upload(String buildPath, String suggestedClassName, int uploadOptions )
+  protected String upload(String buildPath, String suggestedClassName, int programmingType)
     throws RunnerException, SerialException {
 
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
     Uploader uploader;
-    String core = boardPreferences.get("build.core");
 
     // download the program
     //
-    if (core.equals("arduino")) {
-      uploader = new BasicUploader();
-    } else if (core.equals("zpuino")) {
-      uploader = new ZPUinoUploader();
-    } else {
-      System.err.println("Don't have a programmer for core "+core);
-      return null;
-    }
+    uploader = new BasicUploader();
     boolean success = uploader.uploadUsingPreferences(buildPath,
                                                       suggestedClassName,
-                                                      uploadOptions);
+                                                      programmingType);
 
     return success ? suggestedClassName : null;
   }
@@ -1891,7 +1882,7 @@ public class Sketch {
    * Returns a String[] array of proper extensions.
    */
   public String[] getExtensions() {
-    return new String[] { "ino", "pde", "c", "cpp", "h", "s" };
+    return new String[] { "ino", "pde", "c", "cpp", "h" };
   }
 
 
