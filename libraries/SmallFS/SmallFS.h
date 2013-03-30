@@ -85,7 +85,9 @@ public:
 	 * @brief Read a single byte
 	 */
 	unsigned readByte();
-
+	/**
+	 * @brief Get flass offset for this file
+     */
 	inline int getOffset() const { return flashoffset; }
 	inline int getSize() const { return filesize; }
 
@@ -99,12 +101,24 @@ private:
 
 class SmallFS_class;
 
+/**
+ * @brief SmallFSEntry represents a file entry on the SmallFS
+ *
+ * SmallFSEntry represents a file entry on the SmallFS and allows you to
+ * iterate through the present files.
+ *
+ *
+ */
 class SmallFSEntry
 {
 	friend class SmallFS_class;
 public:
 	SmallFSEntry(): m_offset(0) {}
+	/**
+	 * @brief Check if this entry is valid.
+	 */
 	bool valid() const { return m_offset>0; }
+
 	bool hasNext() const;
 	bool equals(const char *name);
 	bool endsWith(const char *end);
