@@ -70,4 +70,4 @@ tools.zpuinoprogrammer.upload.pattern="{path}/{cmd}" -R {upload.verbose} {upload
 
 # ZPU smallfs 
 # ------------------
-tools.zpuinoprogrammer.upload.params.smallfs=-e smallfs.dat
+tools.zpuinoprogrammer.upload.params.smallfs=-e "{build.path}/smallfs.dat"

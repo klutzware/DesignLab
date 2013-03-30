@@ -29,12 +29,15 @@ struct smallfs_entry {
 	char name[0];
 } __attribute__((packed));
 
+#ifndef ZPU15
 extern "C" void *bootloaderdata;
 struct boot_t {
 	unsigned int spiend;
 	unsigned int signature;
 	unsigned char * vstring;
 };
+#endif
+
 /**
  * @brief SmallFS File Class
  */
@@ -92,11 +95,37 @@ private:
 	int seekpos;
 };
 
+/* @brief SmallFS entry */
+
+class SmallFS_class;
+
+class SmallFSEntry
+{
+	friend class SmallFS_class;
+public:
+	SmallFSEntry(): m_offset(0) {}
+	bool valid() const { return m_offset>0; }
+	bool hasNext() const;
+	bool equals(const char *name);
+	bool endsWith(const char *end);
+	bool startsWith(const char *end);
+
+	void getName(char *dest);
+	SmallFSFile open();
+	SmallFSEntry&operator++(int);
+	SmallFSEntry&operator--();
+
+protected:
+	SmallFSEntry(unsigned offset, unsigned idx): m_offset(offset),m_index(idx) {}
+private:
+	unsigned m_offset;
+	unsigned m_index;
+};
+
 /**
  * @brief Main filesystem class
  */
 class SmallFS_class {
-    friend class SmallFSFile;
 public:
 	/**
 	 * @brief Initialize the SmallFS filesystem
@@ -150,8 +179,13 @@ protected:
 		return 0;
 #endif
 	}
+public:
+	static unsigned int getCount() { return hdr.numfiles; }
+	static unsigned int getFSStart() { return fsstart; }
 
-protected:
+public:
+//protected:
+//	friend class SmallFSFile;
 	static void read(unsigned address, void *target, unsigned size);
 	static void seek(unsigned address) { seek_if_needed(address); }
 	static unsigned readByte(unsigned address);
@@ -163,6 +197,8 @@ public:
 	 * if file was successfully open.
 	 */
 	static SmallFSFile open(const char *name);
+	static SmallFSFile openByOffset(unsigned offset);
+	static SmallFSEntry getFirstEntry();
 	static void loadSketch(const char *name);
 private:
 	static void seek_if_needed(unsigned address);

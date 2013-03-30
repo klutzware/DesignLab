@@ -4,6 +4,7 @@
 #include <zpuino.h>
 #include <delay.h>
 #include <HardwareSerial.h>
+#include <binary.h>
 
 #ifndef  boolean
 #define boolean bool

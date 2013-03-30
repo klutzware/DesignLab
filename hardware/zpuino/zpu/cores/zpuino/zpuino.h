@@ -10,6 +10,9 @@
 #define _BV(x) (1<<(x))
 #endif
 
+extern void attachInterrupt(unsigned int, void (*)(void), int mode=0);
+extern void detachInterrupt(unsigned int);
+
 typedef volatile unsigned int* register_t;
 
 extern void itoa(int value, char *dest, int base);
