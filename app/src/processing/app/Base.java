@@ -1261,7 +1261,7 @@ public class Base {
 
     ButtonGroup boardsButtonGroup = new ButtonGroup();
     Map<String, ButtonGroup> buttonGroupsMap = new HashMap<String, ButtonGroup>();
-
+    JMenu currentMenu = null;
     // Cycle through all packages
     for (TargetPackage targetPackage : packages.values()) {
       String packageName = targetPackage.getName();
@@ -1273,16 +1273,17 @@ public class Base {
         if (targetPlatform.getPreferences().get("name") == null || targetPlatform.getBoards().isEmpty()) {
           continue;
         }
-
+        /*
         // Add a title for each group of boards
         if (!first) {
           boardsMenu.add(new JSeparator());
         }
         first = false;
-
-        JMenuItem separator = new JMenuItem(_(targetPlatform.getPreferences().get("name")));
-        separator.setEnabled(false);
-        boardsMenu.add(separator);
+        */
+        //JMenuItem separator = new JMenuItem(_(targetPlatform.getPreferences().get("name")));
+        currentMenu =  new JMenu(_(targetPlatform.getPreferences().get("name")));
+        //separator.setEnabled(false);
+        boardsMenu.add(currentMenu);
 
         // For every platform cycle through all boards
         for (final String boardID : targetPlatform.getBoards().keySet()) {
@@ -1297,7 +1298,7 @@ public class Base {
           action.putValue("b", packageName + ":" + platformName + ":" + boardID);
 
           JRadioButtonMenuItem item = new JRadioButtonMenuItem(action);
-          boardsMenu.add(item);
+          currentMenu.add(item);
           boardsButtonGroup.add(item);
 
           if (selBoard.equals(boardID) && selPackage.equals(packageName)
