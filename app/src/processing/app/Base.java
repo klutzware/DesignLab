@@ -1222,6 +1222,7 @@ public class Base {
     File platformFolder = targetPlatform.getFolder();
     librariesFolders = new ArrayList<File>();
     librariesFolders.add(getContentFile("libraries"));
+    librariesFolders.add(new File(platformFolder.getParentFile(), "libraries"));
     librariesFolders.add(new File(platformFolder, "libraries"));
     librariesFolders.add(getSketchbookLibrariesFolder());
 
