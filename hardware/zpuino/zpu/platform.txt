@@ -2,7 +2,7 @@
 # ZPU compile variables
 # --------------------- 
 
-name=ZPUino (32-bits) Boards
+name=ZPUino 1.0 (32-bits) Boards
 compiler.path={runtime.ide.path}/hardware/tools/zpu/bin/
 compiler.c.cmd=zpu-elf-gcc
 compiler.c.flags=-c -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
