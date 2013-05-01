@@ -31,14 +31,9 @@ typedef volatile unsigned int* register_t;
 
 #define REGISTER(SLOT, y) *(volatile unsigned int*)(SLOT + (y<<2))
 
-#ifndef ZPU15
-#define SPIBASE  IO_SLOT(0)
-#define INTRBASE IO_SLOT(4)
-#else
 #define SPIBASE  IO_SLOT(4)
 #define INTRBASE IO_SLOT(0)
 #define SYSCTLBASE INTRBASE
-#endif
 
 #define UARTBASE IO_SLOT(1)
 #define GPIOBASE IO_SLOT(2)
