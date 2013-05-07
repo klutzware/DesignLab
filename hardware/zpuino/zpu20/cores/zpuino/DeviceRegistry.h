@@ -23,7 +23,7 @@ namespace ZPUino {
 		 * @param slot The slot to register
 		 * @return 0 on success, -1 on failure (already registered)
 		 */
-		static int registerDevice(uint8_t slot);
+		static int registerDevice(int slot);
 		/**
 		 * @brief Scan for a specified device on the Wishbone slots
 		 * @param vendor Vendor id for the device, or VENDOR_ANY for all vendors
@@ -32,21 +32,27 @@ namespace ZPUino {
 		 * number is always 1, not 0.
 		 * @return The slot for the device, or NO_DEVICE if not found.
 		 */
-		static uint8_t scanDevice(uint8_t vendor, uint8_t product, int instance);
+		static uint8_t scanDevice(unsigned vendor, unsigned product, int instance);
 		/**
 		 * @brief Check if any device is registered for a specific slot
 		 * @param slot The slot to check
 		 * @return true if a device is already registered there, false otherwise
 		 */
-		static bool isRegistered(uint8_t slot) { return m_sDeviceRegistry&(1<<slot); }
+		static bool isRegistered(int slot) { return m_sDeviceRegistry&(1<<(slot&31)); }
 		/**
 		 * @brief Release a device. This should be called from within end() if you have sucessufully
 		 * acquired the device.
 		 * @param slot The slot where the device is
 		 * @return true if successfuly unregistered, false otherwise
 		 */
-		static int releaseDevice(uint8_t slot);
-	private:
+                static int releaseDevice(int slot);
+            public:
+                static int getPPSInputPin(int masterslot, int offset);
+                static int getPPSOutputPin(int masterslot, int offset);
+            protected:
+                static int getPPSPin(int masterslot, int offset, int shift);
+
+            private:
 		static uint32_t m_sDeviceRegistry;
 	};
 };

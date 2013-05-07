@@ -13,7 +13,9 @@ namespace ZPUino {
 		{
 			return*_r;
 		}
-		void operator=(uint32_t value) { *_r=value; }
+                void operator=(uint32_t value) { *_r=value; }
+                inline void setBit(int bit) { *_r = *_r | BIT(bit); }
+                inline void clearBit(int bit) { *_r = *_r & ~(BIT(bit)); }
 	private:
 		register_t _r;
 	};
@@ -25,7 +27,8 @@ namespace ZPUino {
 			return REGW(m_baseaddress+offset);
 		}
 		int deviceBegin(uint8_t vendor, uint8_t product);
-		int isError() { return m_slot==0xff; }
+                int isError() { return m_slot==0xff; }
+                inline uint8_t getSlot() const { return m_slot; }
 	protected:
 	private:
 		uint8_t m_slot;

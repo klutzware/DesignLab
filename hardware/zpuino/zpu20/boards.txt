@@ -14,3 +14,17 @@ zpuino15_papilio_one500.build.pins=standard
 zpuino15_papilio_one500.build.toolchain=zpu
 zpuino15_papilio_one500.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DZPU20 -DBOARD_ID=0xA5010F00 -DBOARD_MEMORYSIZE=0x8000 -D__S3E_500__ -nostartfiles
 zpuino15_papilio_one500.build.extraSflags=-DBOARD_ID=0xA5010F00 -DZPU20
+##############################################################
+zpuino20_papilio_prolx9v.name=ZPUino on Papilio Pro (LX9)
+zpuino20_papilio_prolx9v.boardid=0xA5041700
+zpuino20_papilio_prolx9v.upload.protocol=zpuino-serial
+zpuino20_papilio_prolx9v.upload.maximum_size=8388608
+zpuino20_papilio_prolx9v.upload.size_sections=all
+zpuino20_papilio_prolx9v.upload.speed=115200
+zpuino20_papilio_prolx9v.upload.tool=zpuinoprogrammer
+zpuino20_papilio_prolx9v.build.f_cpu=96000000L
+zpuino20_papilio_prolx9v.build.core=zpuino
+zpuino20_papilio_prolx9v.build.mcu=zpu
+zpuino20_papilio_prolx9v.build.toolchain=zpu
+zpuino20_papilio_prolx9v.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA5041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino20_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xA5041700
