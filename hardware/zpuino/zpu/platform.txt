@@ -71,3 +71,18 @@ tools.zpuinoprogrammer.upload.pattern="{path}/{cmd}" -R {upload.verbose} {upload
 # ZPU smallfs 
 # ------------------
 tools.zpuinoprogrammer.upload.params.smallfs=-e "{build.path}/smallfs.dat"
+
+# Papilio Programmer
+# ------------------
+tools.papilioprog.cmd=papilioprog
+tools.papilioprog.cmd.windows=Papilio_Programmer.bat
+tools.papilioprog.path={runtime.ide.path}/hardware/tools/papilio/papilio_loader
+
+tools.papilioprog.bootloader.params.verbose=-v
+tools.papilioprog.bootloader.params.quiet=
+tools.papilioprog.bootloader.pattern="{path}/{cmd}" "{runtime.ide.path}/hardware/zpuino/zpu/bootloaders/{bootloader.file}"
+
+# This is not necessary but not sure how to disable the erase.
+tools.papilioprog.erase.params.verbose=
+tools.papilioprog.erase.params.quiet=
+tools.papilioprog.erase.pattern="{path}/bin/papilio-prog.exe" -c 

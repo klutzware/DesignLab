@@ -59,6 +59,8 @@ zpuino_papilio_one250.build.pins=standard
 zpuino_papilio_one250.build.toolchain=zpu
 zpuino_papilio_one250.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020E00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
 zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA4020E00
+zpuino_papilio_one250.bootloader.tool=papilioprog
+zpuino_papilio_one250.bootloader.file=p1_250k/zpuino-1.0-PapilioOne-S3E250.bit
 ##############################################################
 zpuino_papilio_one250_e.name=ZPUino on Papilio One (250) board (extra RAM)
 zpuino_papilio_one250_e.boardid=0xA4020F00
@@ -74,6 +76,8 @@ zpuino_papilio_one250_e.build.pins=standard
 zpuino_papilio_one250_e.build.toolchain=zpu
 zpuino_papilio_one250_e.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020F00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
 zpuino_papilio_one250_e.build.extraSflags=-DBOARD_ID=0xA4020F00
+zpuino_papilio_one250_e.bootloader.tool=papilioprog
+zpuino_papilio_one250_e.bootloader.file=p1_250k/zpuino-1.0-PapilioOne-S3E250.bit
 ##############################################################
 zpuino_papilio_one500.name=ZPUino on Papilio One (500) board
 zpuino_papilio_one500.boardid=0xA4010F00
@@ -90,6 +94,8 @@ zpuino_papilio_one500.build.pins=standard
 zpuino_papilio_one500.build.toolchain=zpu
 zpuino_papilio_one500.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4010F00 -DBOARD_MEMORYSIZE=0x8000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500.build.extraSflags=-DBOARD_ID=0xA4010F00
+zpuino_papilio_one500.bootloader.tool=papilioprog
+zpuino_papilio_one500.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500.bit
 ##############################################################
 zpuino_papilio_one500v.name=ZPUino on Papilio One (500) board, with 8-bit HQVGA
 zpuino_papilio_one500v.boardid=0xA4010E01
@@ -105,6 +111,8 @@ zpuino_papilio_one500v.build.pins=standard
 zpuino_papilio_one500v.build.toolchain=zpu
 zpuino_papilio_one500v.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500v.build.extraSflags=-DBOARD_ID=0xA4010E01
+zpuino_papilio_one500v.bootloader.tool=papilioprog
+zpuino_papilio_one500v.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500-VGA160x120x8.bit
 ##############################################################
 zpuino_papilio_pluslx4v.name=ZPUino on Papilio Plus (LX4)
 zpuino_papilio_pluslx4v.boardid=0xA4030E00
@@ -119,6 +127,8 @@ zpuino_papilio_pluslx4v.build.mcu=zpu
 zpuino_papilio_pluslx4v.build.toolchain=zpu
 zpuino_papilio_pluslx4v.build.extra_flags=-D__ZPUINO_PAPILIO_PLUS__ -DBOARD_ID=0xA4030E00 -DBOARD_MEMORYSIZE=0x4000 -nostartfiles
 zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
+zpuino_papilio_pluslx4v.bootloader.tool=papilioprog
+zpuino_papilio_pluslx4v.bootloader.file=lx4/zpuino-1.0-PapilioPro-S6LX4.bit
 ##############################################################
 zpuino_papilio_prolx9v.name=ZPUino on Papilio Pro (LX9)
 zpuino_papilio_prolx9v.boardid=0xA4041700
@@ -133,6 +143,8 @@ zpuino_papilio_prolx9v.build.mcu=zpu
 zpuino_papilio_prolx9v.build.toolchain=zpu
 zpuino_papilio_prolx9v.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
 zpuino_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xA4041700
+zpuino_papilio_prolx9v.bootloader.tool=papilioprog
+zpuino_papilio_prolx9v.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-RetroCade-1.0.bit
 ##############################################################
 zpuino_nexys2.name=ZPUino on Nexys2 board (s3e1200)
 zpuino_nexys2.boardid=0x84010F00
