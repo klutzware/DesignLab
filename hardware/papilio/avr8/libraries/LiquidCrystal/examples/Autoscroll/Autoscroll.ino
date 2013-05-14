@@ -40,12 +40,14 @@
 #include <LiquidCrystal.h>
 
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(AH6, AH5, AH4, AH3, AH2, AH1, AH0);		//Connect LCD Wing to AH. Change all instances of AH to your desired Wing Slot.
+//LiquidCrystal lcd(AH6, AH5, AH4, AH3, AH2, AH1, AH0);		//Connect LCD Wing to AH. Change all instances of AH to your desired Wing Slot.
+LiquidCrystal lcd(26, 25, 24, 23, 22, 21, 20);		//Uncomment this for the RetroCade MegaWing
 
 void setup() {
-  // set up the LCD's number of columns and rows: 
-  pinMode(AH7, OUTPUT);     //Set contrast to GND
-  digitalWrite(AH7, LOW);   //Set contrast to GND  
+//  pinMode(AH7, OUTPUT);     //Set contrast to GND for AH WingSlot
+//  digitalWrite(AH7, LOW);   //Set contrast to GND for AH WingSlot
+  pinMode(46, OUTPUT);     //Set contrast to GND for RetroCade MegaWing
+  digitalWrite(46, LOW);   //Set contrast to GND for RetroCade MegaWing
   lcd.begin(16,2);
 }
 

@@ -1,14 +1,13 @@
 /*
-  LiquidCrystal Library - display() and noDisplay()
+  LiquidCrystal Library - Serial Input
  
  Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
  library works with all LCD displays that are compatible with the 
  Hitachi HD44780 driver. There are many of them out there, and you
  can usually tell them by the 16-pin interface.
  
- This sketch prints "Hello World!" to the LCD and uses the 
- display() and noDisplay() functions to turn on and off
- the display.
+ This sketch displays text sent over the serial port 
+ (e.g. from the Serial Monitor) on an attached LCD.
  
  The circuit:
  * LCD RS pin to digital pin 12
@@ -33,7 +32,7 @@
  by Jack Gassett (http://www.GadgetFactory.net)
  
  This example code is in the public domain.
-
+ 
  http://www.arduino.cc/en/Tutorial/LiquidCrystal
  */
 
@@ -41,23 +40,32 @@
 #include <LiquidCrystal.h>
 
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(AH6, AH5, AH4, AH3, AH2, AH1, AH0);		//Connect LCD Wing to AH. Change all instances of AH to your desired Wing Slot.
+//LiquidCrystal lcd(AH6, AH5, AH4, AH3, AH2, AH1, AH0);		//Connect LCD Wing to AH. Change all instances of AH to your desired Wing Slot.
+LiquidCrystal lcd(26, 25, 24, 23, 22, 21, 20);		//Uncomment this for the RetroCade MegaWing
 
 void setup() {
-  pinMode(AH7, OUTPUT);     //Set contrast to GND
-  digitalWrite(AH7, LOW);   //Set contrast to GND
+//  pinMode(AH7, OUTPUT);     //Set contrast to GND for AH WingSlot
+//  digitalWrite(AH7, LOW);   //Set contrast to GND for AH WingSlot
+  pinMode(46, OUTPUT);     //Set contrast to GND for RetroCade MegaWing
+  digitalWrite(46, LOW);   //Set contrast to GND for RetroCade MegaWing
   // set up the LCD's number of columns and rows: 
   lcd.begin(16, 2);
-  // Print a message to the LCD.
-  lcd.print("hello, world!");
+  // initialize the serial communications:
+  Serial.begin(9600);
 }
 
-void loop() {
-  // Turn off the display:
-  lcd.noDisplay();
-  delay(500);
-   // Turn on the display:
-  lcd.display();
-  delay(500);
+void loop()
+{
+  // when characters arrive over the serial port...
+  if (Serial.available()) {
+    // wait a bit for the entire message to arrive
+    delay(100);
+    // clear the screen
+    lcd.clear();
+    // read all the available characters
+    while (Serial.available() > 0) {
+      // display each character to the LCD
+      lcd.write(Serial.read());
+    }
+  }
 }
-
