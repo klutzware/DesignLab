@@ -63,10 +63,10 @@ tools.zpuinoprogrammer.cmd=zpuinoprogrammer
 tools.zpuinoprogrammer.cmd.windows=zpuinoprogrammer.exe
 tools.zpuinoprogrammer.path={runtime.ide.path}/hardware/tools/zpu/bin
 
-tools.zpuinoprogrammer.upload.params.verbose=-v -v
+tools.zpuinoprogrammer.upload.params.verbose=-v -v -v -v
 tools.zpuinoprogrammer.upload.params.quiet=
 tools.zpuinoprogrammer.upload.params.memory="-U"
-tools.zpuinoprogrammer.upload.pattern="{path}/{cmd}" -R {upload.verbose} {upload.memory} -d {serial.port} -b "{build.path}/{build.project_name}.bin" {upload.smallfs}
+tools.zpuinoprogrammer.upload.pattern="{path}/{cmd}" -s {upload.speed} -R {upload.verbose} {upload.memory} -d {serial.port} -b "{build.path}/{build.project_name}.bin" {upload.smallfs}
 
 # ZPU smallfs 
 # ------------------
