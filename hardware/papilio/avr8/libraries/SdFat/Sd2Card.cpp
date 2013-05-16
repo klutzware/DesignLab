@@ -230,7 +230,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   // Enable SPI, Master, clock rate f_osc/128
   SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR1) | (1 << SPR0);
   // clear double speed
-  SPSR &= ~(1 << SPI2X);
+  //SPSR &= ~(1 << SPI2X);
 #endif  // SOFTWARE_SPI
 
   // must supply min of 74 clock cycles with CS high.
@@ -457,9 +457,9 @@ uint8_t Sd2Card::setSckRate(uint8_t sckRateID) {
   }
   // see avr processor datasheet for SPI register bit definitions
   if ((sckRateID & 1) || sckRateID == 6) {
-    SPSR &= ~(1 << SPI2X);
+    //SPSR &= ~(1 << SPI2X);
   } else {
-    SPSR |= (1 << SPI2X);
+    //SPSR |= (1 << SPI2X);
   }
   SPCR &= ~((1 <<SPR1) | (1 << SPR0));
   SPCR |= (sckRateID & 4 ? (1 << SPR1) : 0)
