@@ -97,25 +97,8 @@ zpuino_papilio_one500.build.extraSflags=-DBOARD_ID=0xA4010F00
 zpuino_papilio_one500.bootloader.tool=papilioprog
 zpuino_papilio_one500.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500.bit
 ##############################################################
-zpuino_papilio_one500v.name=ZPUino on Papilio One (500) board, with 8-bit HQVGA on WingSlot CH
-zpuino_papilio_one500v.boardid=0xA4010E01
-zpuino_papilio_one500v.upload.protocol=zpuino-serial
-zpuino_papilio_one500v.upload.maximum_size=12160
-zpuino_papilio_one500v.upload.size_sections=all
-zpuino_papilio_one500v.upload.speed=115200
-zpuino_papilio_one500v.upload.tool=zpuinoprogrammer
-zpuino_papilio_one500v.build.f_cpu=92000000L
-zpuino_papilio_one500v.build.core=zpuino
-zpuino_papilio_one500v.build.mcu=zpu
-zpuino_papilio_one500v.build.pins=standard
-zpuino_papilio_one500v.build.toolchain=zpu
-zpuino_papilio_one500v.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
-zpuino_papilio_one500v.build.extraSflags=-DBOARD_ID=0xA4010E01
-zpuino_papilio_one500v.bootloader.tool=papilioprog
-zpuino_papilio_one500v.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500-VGA160x120x8_CH_WingSlot.bit
-##############################################################
 zpuino_papilio_one500vam.name=ZPUino on Papilio One (500) board, Hyperion with 8-bit HQVGA on Arcade MegaWing
-zpuino_papilio_one500v.boardid=0xA4010E01
+zpuino_papilio_one500vam.boardid=0xA4010E01
 zpuino_papilio_one500vam.upload.protocol=zpuino-serial
 zpuino_papilio_one500vam.upload.maximum_size=12160
 zpuino_papilio_one500vam.upload.size_sections=all
@@ -131,37 +114,87 @@ zpuino_papilio_one500vam.build.extraSflags=-DBOARD_ID=0xA4010E01
 zpuino_papilio_one500vam.bootloader.tool=papilioprog
 zpuino_papilio_one500vam.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500-Hyperion-HQVGA-Arcade-MegaWing.bit
 ##############################################################
-zpuino_papilio_pluslx4v.name=ZPUino on Papilio Plus (LX4)
-zpuino_papilio_pluslx4v.boardid=0xA4030E00
-zpuino_papilio_pluslx4v.upload.protocol=zpuino-serial
-zpuino_papilio_pluslx4v.upload.maximum_size=12160
-zpuino_papilio_pluslx4v.upload.size_sections=all
-zpuino_papilio_pluslx4v.upload.speed=115200
-zpuino_papilio_pluslx4v.upload.tool=zpuinoprogrammer
-zpuino_papilio_pluslx4v.build.f_cpu=96000000L
-zpuino_papilio_pluslx4v.build.core=zpuino
-zpuino_papilio_pluslx4v.build.mcu=zpu
-zpuino_papilio_pluslx4v.build.toolchain=zpu
-zpuino_papilio_pluslx4v.build.extra_flags=-D__ZPUINO_PAPILIO_PLUS__ -DBOARD_ID=0xA4030E00 -DBOARD_MEMORYSIZE=0x4000 -nostartfiles
-zpuino_papilio_pluslx4v.build.extraSflags=-DBOARD_ID=0xA4030E00
-zpuino_papilio_pluslx4v.bootloader.tool=papilioprog
-zpuino_papilio_pluslx4v.bootloader.file=lx4/zpuino-1.0-PapilioPro-S6LX4.bit
+zpuino_papilio_one500vlm.name=ZPUino on Papilio One (500) board, Hyperion with 8-bit HQVGA on LogicStart MegaWing
+zpuino_papilio_one500vlm.boardid=0xA4010E01
+zpuino_papilio_one500vlm.upload.protocol=zpuino-serial
+zpuino_papilio_one500vlm.upload.maximum_size=12160
+zpuino_papilio_one500vlm.upload.size_sections=all
+zpuino_papilio_one500vlm.upload.speed=115200
+zpuino_papilio_one500vlm.upload.tool=zpuinoprogrammer
+zpuino_papilio_one500vlm.build.f_cpu=92000000L
+zpuino_papilio_one500vlm.build.core=zpuino
+zpuino_papilio_one500vlm.build.mcu=zpu
+zpuino_papilio_one500vlm.build.pins=standard
+zpuino_papilio_one500vlm.build.toolchain=zpu
+zpuino_papilio_one500vlm.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
+zpuino_papilio_one500vlm.build.extraSflags=-DBOARD_ID=0xA4010E01
+zpuino_papilio_one500vlm.bootloader.tool=papilioprog
+zpuino_papilio_one500vlm.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500-Hyperion-HQVGA-LogicStart-MegaWing.bit
 ##############################################################
-zpuino_papilio_prolx9v.name=ZPUino on Papilio Pro (LX9)
-zpuino_papilio_prolx9v.boardid=0xA4041700
-zpuino_papilio_prolx9v.upload.protocol=zpuino-serial
-zpuino_papilio_prolx9v.upload.maximum_size=8388608
-zpuino_papilio_prolx9v.upload.size_sections=all
-zpuino_papilio_prolx9v.upload.speed=115200
-zpuino_papilio_prolx9v.upload.tool=zpuinoprogrammer
-zpuino_papilio_prolx9v.build.f_cpu=96000000L
-zpuino_papilio_prolx9v.build.core=zpuino
-zpuino_papilio_prolx9v.build.mcu=zpu
-zpuino_papilio_prolx9v.build.toolchain=zpu
-zpuino_papilio_prolx9v.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
-zpuino_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xA4041700
-zpuino_papilio_prolx9v.bootloader.tool=papilioprog
-zpuino_papilio_prolx9v.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-RetroCade-1.0.bit
+zpuino_papilio_one500vps.name=ZPUino on Papilio One (500) board, Hyperion with 8-bit HQVGA, Pin Select
+zpuino_papilio_one500vps.boardid=0xA4010E01
+zpuino_papilio_one500vps.upload.protocol=zpuino-serial
+zpuino_papilio_one500vps.upload.maximum_size=12160
+zpuino_papilio_one500vps.upload.size_sections=all
+zpuino_papilio_one500vps.upload.speed=115200
+zpuino_papilio_one500vps.upload.tool=zpuinoprogrammer
+zpuino_papilio_one500vps.build.f_cpu=92000000L
+zpuino_papilio_one500vps.build.core=zpuino
+zpuino_papilio_one500vps.build.mcu=zpu
+zpuino_papilio_one500vps.build.pins=standard
+zpuino_papilio_one500vps.build.toolchain=zpu
+zpuino_papilio_one500vps.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
+zpuino_papilio_one500vps.build.extraSflags=-DBOARD_ID=0xA4010E01
+zpuino_papilio_one500vps.bootloader.tool=papilioprog
+zpuino_papilio_one500vps.bootloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500-Hyperion-HQVGA-PinSelect.bit
+##############################################################
+zpuino_papilio_prolx9vam.name=ZPUino on Papilio Pro (LX9), Hyperion with 8-bit HQVGA on Arcade MegaWing
+zpuino_papilio_prolx9vam.boardid=0xA4041700
+zpuino_papilio_prolx9vam.upload.protocol=zpuino-serial
+zpuino_papilio_prolx9vam.upload.maximum_size=8388608
+zpuino_papilio_prolx9vam.upload.size_sections=all
+zpuino_papilio_prolx9vam.upload.speed=1000000
+zpuino_papilio_prolx9vam.upload.tool=zpuinoprogrammer
+zpuino_papilio_prolx9vam.build.f_cpu=96000000L
+zpuino_papilio_prolx9vam.build.core=zpuino
+zpuino_papilio_prolx9vam.build.mcu=zpu
+zpuino_papilio_prolx9vam.build.toolchain=zpu
+zpuino_papilio_prolx9vam.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino_papilio_prolx9vam.build.extraSflags=-DBOARD_ID=0xA4041700
+zpuino_papilio_prolx9vam.bootloader.tool=papilioprog
+zpuino_papilio_prolx9vam.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Hyperion-HQVGA-Arcade-MegaWing.bit
+##############################################################
+zpuino_papilio_prolx9vlm.name=ZPUino on Papilio Pro (LX9), Hyperion with 8-bit HQVGA on LogicStart MegaWing
+zpuino_papilio_prolx9vlm.boardid=0xA4041700
+zpuino_papilio_prolx9vlm.upload.protocol=zpuino-serial
+zpuino_papilio_prolx9vlm.upload.maximum_size=8388608
+zpuino_papilio_prolx9vlm.upload.size_sections=all
+zpuino_papilio_prolx9vlm.upload.speed=1000000
+zpuino_papilio_prolx9vlm.upload.tool=zpuinoprogrammer
+zpuino_papilio_prolx9vlm.build.f_cpu=96000000L
+zpuino_papilio_prolx9vlm.build.core=zpuino
+zpuino_papilio_prolx9vlm.build.mcu=zpu
+zpuino_papilio_prolx9vlm.build.toolchain=zpu
+zpuino_papilio_prolx9vlm.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino_papilio_prolx9vlm.build.extraSflags=-DBOARD_ID=0xA4041700
+zpuino_papilio_prolx9vlm.bootloader.tool=papilioprog
+zpuino_papilio_prolx9vlm.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Hyperion-HQVGA-LogicStart-MegaWing.bit
+##############################################################
+zpuino_papilio_prolx9rrm.name=ZPUino on Papilio Pro (LX9), RetroCade on RetroCade MegaWing
+zpuino_papilio_prolx9rrm.boardid=0xA4041700
+zpuino_papilio_prolx9rrm.upload.protocol=zpuino-serial
+zpuino_papilio_prolx9rrm.upload.maximum_size=8388608
+zpuino_papilio_prolx9rrm.upload.size_sections=all
+zpuino_papilio_prolx9rrm.upload.speed=1000000
+zpuino_papilio_prolx9rrm.upload.tool=zpuinoprogrammer
+zpuino_papilio_prolx9rrm.build.f_cpu=96000000L
+zpuino_papilio_prolx9rrm.build.core=zpuino
+zpuino_papilio_prolx9rrm.build.mcu=zpu
+zpuino_papilio_prolx9rrm.build.toolchain=zpu
+zpuino_papilio_prolx9rrm.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino_papilio_prolx9rrm.build.extraSflags=-DBOARD_ID=0xA4041700
+zpuino_papilio_prolx9rrm.bootloader.tool=papilioprog
+zpuino_papilio_prolx9rrm.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-RetroCade-1.0.bit
 ##############################################################
 zpuino_nexys2.name=ZPUino on Nexys2 board (s3e1200)
 zpuino_nexys2.boardid=0x84010F00
