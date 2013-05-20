@@ -420,7 +420,7 @@ byte charSP12b[8] = {
 void setup() {
   
   //Uncomment this if you are using the pinselect variant
-  //setup_pin_select();
+  setup_pin_select();
   VGA.clear();
 /*  pinMode(AH7, OUTPUT);     //Set contrast to GND
  digitalWrite(AH7, LOW);   //Set contrast to GND
