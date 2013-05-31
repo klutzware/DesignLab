@@ -109,7 +109,14 @@ namespace ZPUino {
 
         m_intrTimerPtr = tmr;
 
-        return attachInterrupt(tmr->getInterruptLine(), &timerInterruptHandlerSS, (void*)this);
+        if (attachInterrupt(tmr->getInterruptLine(), &timerInterruptHandlerSS, (void*)this))
+            return -1;
+        if (tmr->setPeriodMilliseconds(msec)<0) {
+            detachInterrupt(tmr->getInterruptLine());
+            return -1;
+        }
+        return 0;
+
     }
 
     int Timers_class::singleShot( int msec, void (*function)(void))
@@ -126,7 +133,13 @@ namespace ZPUino {
 
         m_intrTimerPtr = tmr;
 
-        return attachInterrupt(tmr->getInterruptLine(), &timerInterruptHandler, (void*)this);
+        if (attachInterrupt(tmr->getInterruptLine(), &timerInterruptHandler, (void*)this)<0)
+            return -1;
+        if (tmr->setPeriodMilliseconds(msec)<0) {
+            detachInterrupt(tmr->getInterruptLine());
+            return -1;
+        }
+        return 0;
     }
 
     int Timers_class::periodic( int msec, bool (*function)(void) )
