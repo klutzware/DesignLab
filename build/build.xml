@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Arduino" default="build">
+<project name="ZAP" default="build">
   <!--echo message="os.name = ${os.name}" /-->
   <!--echo message="os.arch = ${os.arch}" /-->
   <!--echo message="os.version = ${os.version}" /-->
@@ -124,8 +124,8 @@
         <tokenfilter>
           <linetokenizer includeDelims="false" />
           <!-- grab the thing from the first line that's 4 digits -->
-          <containsregex pattern="ARDUINO (.*) " />
-          <replaceregex pattern="ARDUINO ([^ ]*).*" replace="\1" />
+          <containsregex pattern="ZAP (.*) " />
+          <replaceregex pattern="ZAP ([^ ]*).*" replace="\1" />
         </tokenfilter>
         <tokenfilter>
           <stringtokenizer suppressdelims="true" />
@@ -717,7 +717,7 @@
 
   <target name="windows-run" depends="windows-build"
 	  description="Run windows version">
-    <exec executable="windows/work/arduino.exe"
+    <exec executable="windows/work/zap.exe"
 	  dir="windows/work" spawn="true"/>
   </target>
 
@@ -776,14 +776,14 @@
 	 excludes="java/**" />
     -->
 
-    <zip destfile="windows/arduino-${version}-${platform}.zip" level="9">
+    <zip destfile="windows/zap-${version}-${platform}.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="arduino-${version}" />
+		  prefix="zap-${version}" />
     </zip>
 
-    <zip destfile="windows/arduino-${version}-${platform}-expert.zip" level="9">
+    <zip destfile="windows/zap-${version}-${platform}-expert.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="arduino-${version}" 
+		  prefix="zap-${version}" 
 		  excludes="java/**" />
     </zip>
 
@@ -791,8 +791,8 @@
       =======================================================
       Arduino for Windows was built. Grab the archive from
       
-      windows/arduino-${version}-${platform}.zip
-      windows/arduino-${version}-${platform}-expert.zip
+      windows/zap-${version}-${platform}.zip
+      windows/zap-${version}-${platform}-expert.zip
       =======================================================
     </echo>
   </target>
@@ -808,9 +808,9 @@
 	   addproperty="version"
 	   defaultvalue="${revision}" />
 
-    <tar compression="gzip" destfile="arduino-${version}-src.tar.gz">
+    <tar compression="gzip" destfile="zap-${version}-src.tar.gz">
       <tarfileset dir="../"
-		  prefix="arduino-${version}"
+		  prefix="zap-${version}"
 		  excludes="**/*.tgz,
 			     **/*.bz2,
 			     **/build/macosx/,

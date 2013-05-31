@@ -1,5 +1,5 @@
 
-ZAP IDE 1.5.2 BETA - 2013.05.31
+ZAP 1.5.2 BETA - 2013.05.31
 
 [zpuino]
 * Added Hyperion variants for LogicStart and Arcade MegaWing board types
