@@ -75,7 +75,7 @@ void setup_pin_select() {
 void setup() {
   
   //Uncomment this if you are using the pinselect variant
-  //setup_pin_select();
+  setup_pin_select();
 
   VGA.clear();
   
