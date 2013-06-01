@@ -35,7 +35,9 @@ uint8_t const SPI_QUARTER_SPEED = 2;
  * USE_SPI_LIB: if set, use the SPI library bundled with Arduino IDE, otherwise
  * run with a standalone driver for AVR.
  */
+#ifndef ZPU
 #define USE_SPI_LIB
+#endif // ZPU
 /**
  * Define MEGA_SOFT_SPI non-zero to use software SPI on Mega Arduinos.
  * Pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
@@ -52,7 +54,7 @@ uint8_t const SPI_QUARTER_SPEED = 2;
 
 #if defined(ZPU)
 #undef SOFTWARE_SPI
-#endif
+#endif // ZPU
 
 //------------------------------------------------------------------------------
 // SPI pin definitions
@@ -93,6 +95,7 @@ uint8_t const SPI_MISO_PIN = 12;
 /** SPI Clock pin */
 uint8_t const SPI_SCK_PIN = 13;
 #endif  // SOFTWARE_SPI
+#endif // AVR
 //------------------------------------------------------------------------------
 /** Protect block zero from write if nonzero */
 #define SD_PROTECT_BLOCK_ZERO 1
