@@ -17,7 +17,7 @@
  * along with the Arduino Sd2Card Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#define USE_SPI_LIB
+
 #include <Arduino.h>
 #include "Sd2Card.h"
 //------------------------------------------------------------------------------
@@ -267,12 +267,7 @@ int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   // set pin modes
   pinMode(chipSelectPin_, OUTPUT);
   chipSelectHigh();
-<<<<<<< HEAD
-
-#ifdef AVR
-=======
 #ifndef USE_SPI_LIB
->>>>>>> 1.5.1
   pinMode(SPI_MISO_PIN, INPUT);
   pinMode(SPI_MOSI_PIN, OUTPUT);
   pinMode(SPI_SCK_PIN, OUTPUT);
@@ -280,6 +275,7 @@ int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
 
 #ifndef SOFTWARE_SPI
 #ifndef USE_SPI_LIB
+#ifndef ZPU
   // SS must be in output mode even it is not chip select
   pinMode(SS_PIN, OUTPUT);
   digitalWrite(SS_PIN, HIGH); // disable any SPI device using hardware SS pin
@@ -287,6 +283,7 @@ int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR1) | (1 << SPR0);
   // clear double speed
   SPSR &= ~(1 << SPI2X);
+#endif // defined ZPU
 #else // USE_SPI_LIB
   SPI.begin();
 #ifdef SPI_CLOCK_DIV128
@@ -553,7 +550,7 @@ int Sd2Card::readRegister(unsigned cmd, void* buf) {
  * false, is returned for an invalid value of \a sckRateID.
  */
 uint8_t Sd2Card::setSckRate(uint8_t sckRateID) {
-#ifdef AVR
+#ifndef ZPU
   if (sckRateID > 6) {
     error(SD_CARD_ERROR_SCK_RATE);
     return false;
@@ -585,6 +582,7 @@ uint8_t Sd2Card::setSckRate(uint8_t sckRateID) {
 #endif // SPI_CLOCK_DIV128
   SPI.setClockDivider(v);
 #endif // USE_SPI_LIB
+#endif // defined ZPU
   return true;
 }
 //------------------------------------------------------------------------------

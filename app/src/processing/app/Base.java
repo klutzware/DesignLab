@@ -1259,6 +1259,7 @@ public class Base {
     boolean first = true;
 
     List<JMenuItem> menuItemsToClickAfterStartup = new LinkedList<JMenuItem>();
+    JMenuItem lastResortItem = null;
 
     ButtonGroup boardsButtonGroup = new ButtonGroup();
     Map<String, ButtonGroup> buttonGroupsMap = new HashMap<String, ButtonGroup>();
@@ -1305,6 +1306,9 @@ public class Base {
           if (selBoard.equals(boardID) && selPackage.equals(packageName)
               && selPlatform.equals(platformName)) {
             menuItemsToClickAfterStartup.add(item);
+          } else {
+              if (boardID.equals("uno"))
+                  lastResortItem=item;
           }
 
           if (targetPlatform.getCustomMenus() != null) {
@@ -1360,7 +1364,7 @@ public class Base {
     }
 
     if (menuItemsToClickAfterStartup.isEmpty()) {
-      menuItemsToClickAfterStartup.add(selectFirstEnabledMenuItem(boardsMenu));
+      menuItemsToClickAfterStartup.add(lastResortItem);//selectFirstEnabledMenuItem(boardsMenu));
     }
 
     for (JMenuItem menuItemToClick : menuItemsToClickAfterStartup) {

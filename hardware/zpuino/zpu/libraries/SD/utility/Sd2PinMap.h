@@ -371,6 +371,6 @@ static inline __attribute__((always_inline))
 
 #endif  // Sd2PinMap_h
 
-#else
-#error Architecture or board not supported.
+//#else
+//#error Architecture or board not supported.
 #endif
