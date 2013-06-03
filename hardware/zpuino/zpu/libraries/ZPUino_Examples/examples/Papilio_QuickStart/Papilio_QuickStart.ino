@@ -65,9 +65,9 @@ void loop(){
   // prints value unaltered, i.e. the raw binary version of the 
   // byte. The serial monitor interprets all bytes as 
   // ASCII, so 33, the first number,  will show up as '!' 
-  Serial.print(thisByte, BYTE);    
+  //Serial.print(thisByte, BYTE);    
 
-  Serial.print(", dec: "); 
+  Serial.print("dec: "); 
   // prints value as string as an ASCII-encoded decimal (base 10).
   // Decimal is the  default format for Serial.print() and Serial.println(),
   // so no modifier is needed:

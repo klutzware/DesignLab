@@ -1,4 +1,16 @@
 
+ZAP 1.5.2 BETA - 2013.05.31
+
+[zpuino]
+* Added Hyperion variants for LogicStart and Arcade MegaWing board types
+* Added bootloader functionality that associates bit files with each board type
+* Libraries moved to ZPUino hardware type
+* Experimental ZPUino 2.0 plugin added
+
+[avr8]
+* Libraries moved to AVR8 hardware type
+* Added AVR8 hardware type from previous AVR8 only plugin
+
 ARDUINO 1.5.2 BETA - 2013.02.06
 
 [ide]
