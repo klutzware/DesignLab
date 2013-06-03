@@ -156,7 +156,7 @@ public class Editor extends JFrame implements RunnerListener {
 
 
   public Editor(Base ibase, String path, int[] location) {
-    super("Arduino");
+    super("ZAP");
     this.base = ibase;
 
     Base.setIcon(this);
@@ -2237,7 +2237,7 @@ public class Editor extends JFrame implements RunnerListener {
     // Set the title of the window to "sketch_070752a - Processing 0126"
     setTitle(
       I18n.format(
-	_("{0} | Arduino {1}"),
+	_("{0} | ZAP {1}"),
 	sketch.getName(),
 	Base.VERSION_NAME
       )
