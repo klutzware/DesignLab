@@ -3,22 +3,40 @@
  
  This example shows how to create and destroy an SD card file 	
  The circuit:
- * SD card attached to SPI bus as follows:
- ** MOSI - pin 11
- ** MISO - pin 12
- ** CLK - pin 13
- ** CS - pin 4
+ A microSD Wing connected to AL ( http://www.papilio.cc/index.php?n=Papilio.MicroSDWing )
+ or
+ A RetroCade MegaWing ( http://retrocade.gadgetfactory.net/index.php?n=Main.RetroCadeMegaWing )
+ 
+ Soft Processor:
+ This example is for the ZPUino Soft Processor, it will work with any variant that has SPI connected to Wishbone slot 6 such as the Hyperion variant.
+  ( http://papilio.gadgetfactory.net/index.php?n=Papilio.Hyperion )
  
  created   Nov 2010
  by David A. Mellis
  modified 9 Apr 2012
  by Tom Igoe
+ modified 6/3/2013
+ by Jack Gassett for the Papilio
  
  This example code is in the public domain.
  	 
  */
-#include <SPI.h>
+//#include <SPI.h>
 #include <SD.h>
+
+//SD Card on RetroCade MegaWing
+//#define CSPIN  WING_C_13
+//#define SDIPIN WING_C_12
+//#define SCKPIN WING_C_11
+//#define SDOPIN WING_C_10
+//Uncomment for RetroCade MegaWing
+
+//SD Card on microSD Wing connected to AL
+#define CSPIN  WING_A_4
+#define SDIPIN WING_A_3
+#define SCKPIN WING_A_2
+#define SDOPIN WING_A_1
+//Uncomment for microSD Wing
 
 File root;
 
@@ -26,34 +44,41 @@ void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-   while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
-  }
+  int i;
+  USPICTL=BIT(SPICP1)|BIT(SPICPOL)|BIT(SPISRE)|BIT(SPIEN)|BIT(SPIBLOCK);
+  outputPinForFunction( SDIPIN, IOPIN_USPI_MOSI );
+  pinModePPS(SDIPIN,HIGH);
+  pinMode(SDIPIN,OUTPUT);
 
+  outputPinForFunction( SCKPIN, IOPIN_USPI_SCK);
+  pinModePPS(SCKPIN,HIGH);
+  pinMode(SCKPIN,OUTPUT);
+
+  pinModePPS(CSPIN,LOW);
+  pinMode(CSPIN,OUTPUT);
+
+  inputPinForFunction( SDOPIN, IOPIN_USPI_MISO );
+  pinMode(SDOPIN,INPUT);   
 
   Serial.print("Initializing SD card...");
-  // On the Ethernet Shield, CS is pin 4. It's set as an output by default.
-  // Note that even if it's not used as the CS pin, the hardware SS pin 
-  // (10 on most Arduino boards, 53 on the Mega) must be left as an output 
-  // or the SD library functions will not work. 
-  pinMode(10, OUTPUT);
 
-  if (!SD.begin(10)) {
+  if (!SD.begin(CSPIN)) {
     Serial.println("initialization failed!");
     return;
   }
   Serial.println("initialization done.");
 
-  root = SD.open("/");
-  
-  printDirectory(root, 0);
-  
-  Serial.println("done!");
 }
 
 void loop()
 {
-  // nothing happens after setup finishes.
+  Serial.println("\n\nStarting List Files:"); 
+  root = SD.open("/");
+  
+  printDirectory(root, 0);
+  
+  Serial.println("List Files complete, waiting 5 seconds.");
+  delay(5000);
 }
 
 void printDirectory(File dir, int numTabs) {
@@ -80,6 +105,5 @@ void printDirectory(File dir, int numTabs) {
      entry.close();
    }
 }
-
 
 
