@@ -26,26 +26,17 @@
 
 package processing.app.debug;
 
-import processing.app.Base;
+import static processing.app.I18n._;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collection;
+
+import processing.app.I18n;
 import processing.app.Preferences;
 import processing.app.Serial;
 import processing.app.SerialException;
 import processing.app.SerialNotFoundException;
-import processing.app.I18n;
-import static processing.app.I18n._;
-
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import javax.swing.*;
-//#ifndef RXTX
-//import javax.comm.*;
-//#else
-// rxtx uses package gnu.io, but all the class names
-// are the same as those used by javax.comm
-import gnu.io.*;
-//#endif
-
 
 public abstract class Uploader implements MessageConsumer  {
   static final String BUGS_URL =
@@ -54,21 +45,11 @@ public abstract class Uploader implements MessageConsumer  {
     I18n.format(_("Compiler error, please submit this code to {0}"), BUGS_URL);
 
   RunnerException exception;
-  //PdePreferences preferences;
 
-  //Serial serialPort;
   static InputStream serialInput;
   static OutputStream serialOutput;
-  //int serial; // last byte of data received
   
   boolean verbose;
-
-  static final int uploadNormal = 0;
-  static final int uploadUsingProgrammer = 1;
-  static final int uploadToMemory = 2;
-
-  public Uploader() {
-  }
 
   public abstract boolean uploadUsingPreferences(String buildPath, String className, int uploadOptions)
     throws RunnerException, SerialException;
@@ -79,9 +60,8 @@ public abstract class Uploader implements MessageConsumer  {
     // Cleanup the serial buffer
     try {
       Serial serialPort = new Serial();
-      byte[] readBuffer;
       while(serialPort.available() > 0) {
-        readBuffer = serialPort.readBytes();
+        serialPort.readBytes();
         try {
           Thread.sleep(100);
         } catch (InterruptedException e) {}
@@ -106,36 +86,22 @@ public abstract class Uploader implements MessageConsumer  {
     }
   }
 
-  protected boolean executeUploadCommand(Collection commandDownloader) 
+  protected boolean executeUploadCommand(Collection<String> commandDownloader)
+      throws RunnerException {
+    String[] commandArray = new String[commandDownloader.size()];
+    commandDownloader.toArray(commandArray);
+    return executeUploadCommand(commandArray);
+  }
+
+  protected boolean executeUploadCommand(String commandArray[]) 
     throws RunnerException
   {
     firstErrorFound = false;  // haven't found any errors yet
     secondErrorFound = false;
     notFoundError = false;
     int result=0; // pre-initialized to quiet a bogus warning from jikes
-    
-    String userdir = System.getProperty("user.dir") + File.separator;
 
     try {
-      String[] commandArray = new String[commandDownloader.size()];
-      commandDownloader.toArray(commandArray);
-      
-      String avrBasePath;
-      
-      if(Base.isLinux()) {
-        avrBasePath = new String(Base.getHardwarePath() + "/tools/"); 
-      }
-      else {
-          Map<String, String> boardPreferences = Base.getBoardPreferences();
-          String toolchain = boardPreferences.get("build.toolchain");
-
-          avrBasePath = new String(Base.getHardwarePath() + File.separator + "tools" +
-                                   File.separator + toolchain + File.separator + "bin" +
-                                   File.separator);
-      }
-      
-      commandArray[0] = avrBasePath + commandArray[0];
-      
       if (verbose || Preferences.getBoolean("upload.verbose")) {
         for(int i = 0; i < commandArray.length; i++) {
           System.out.print(commandArray[i] + " ");

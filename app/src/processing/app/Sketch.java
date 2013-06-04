@@ -23,27 +23,22 @@
 
 package processing.app;
 
-import processing.app.debug.AvrdudeUploader;
-import processing.app.debug.ZPUinoUploader;
+import processing.app.debug.BasicUploader;
 import processing.app.debug.Compiler;
 import processing.app.debug.RunnerException;
 import processing.app.debug.Sizer;
 import processing.app.debug.Uploader;
+import processing.app.helpers.PreferencesMap;
 import processing.app.preproc.*;
 import processing.core.*;
 import static processing.app.I18n._;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.beans.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;
-import java.util.zip.*;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
 
 /**
@@ -617,7 +612,7 @@ public class Sketch {
 
       } else {
         // delete the file
-        if (!current.deleteFile()) {
+        if (!current.deleteFile(tempBuildFolder)) {
           Base.showMessage(_("Couldn't do it"),
                            I18n.format(_("Could not delete \"{0}\"."), current.getFileName()));
           return;
@@ -831,7 +826,7 @@ public class Sketch {
                                    FileDialog.SAVE);
     if (isReadOnly() || isUntitled()) {
       // default to the sketchbook folder
-      fd.setDirectory(Preferences.get("sketchbook.path"));
+      fd.setDirectory(Base.getSketchbookFolder().getAbsolutePath());
     } else {
       // default to the parent folder of where this was
       fd.setDirectory(folder.getParent());
@@ -1129,11 +1124,11 @@ public class Sketch {
    * Add import statements to the current tab for all of packages inside
    * the specified jar file.
    */
-  public void importLibrary(String jarPath) {
+  public void importLibrary(String jarPath) throws IOException {
     // make sure the user didn't hide the sketch folder
     ensureExistence();
 
-    String list[] = Compiler.headerListFromIncludePath(jarPath);
+    String list[] = Base.headerListFromIncludePath(new File(jarPath));
 
     // import statements into the main sketch file (code[0])
     // if the current code is a .java file, insert into current
@@ -1314,10 +1309,7 @@ public class Sketch {
     // do this here instead of after exiting, since the exit
     // can happen so many different ways.. and this will be
     // better connected to the dataFolder stuff below.
-
-    // TODO: only clean up if we changed board settings
-
-    //cleanup();
+    cleanup();
 
 //    // handle preprocessing the main file's code
 //    return build(tempBuildFolder.getAbsolutePath());
@@ -1347,7 +1339,6 @@ public class Sketch {
     // make sure the user didn't hide the sketch folder
     ensureExistence();
 
-    String[] codeFolderPackages = null;
     classPath = buildPath;
 
 //    // figure out the contents of the code folder to see if there
@@ -1377,6 +1368,9 @@ public class Sketch {
     for (SketchCode sc : code) {
       if (sc.isExtension("ino") || sc.isExtension("pde")) {
         sc.setPreprocOffset(bigCount);
+        // These #line directives help the compiler report errors with
+        // correct the filename and line number (issue 281 & 907)
+        bigCode.append("#line 1 \"" + sc.getFileName() + "\"\n");
         bigCode.append(sc.getProgram());
         bigCode.append('\n');
         bigCount += sc.getLineCount();
@@ -1386,12 +1380,8 @@ public class Sketch {
     // Note that the headerOffset isn't applied until compile and run, because
     // it only applies to the code after it's been written to the .java file.
     int headerOffset = 0;
-    //PdePreprocessor preprocessor = new PdePreprocessor();
     try {
-      headerOffset = preprocessor.writePrefix(bigCode.toString(),
-                                              buildPath,
-                                              name,
-                                              codeFolderPackages);
+      headerOffset = preprocessor.writePrefix(bigCode.toString());
     } catch (FileNotFoundException fnfe) {
       fnfe.printStackTrace();
       String msg = _("Build folder disappeared or could not be written");
@@ -1404,24 +1394,14 @@ public class Sketch {
     String primaryClassName = null;
 
     try {
-      // if (i != 0) preproc will fail if a pde file is not
-      // java mode, since that's required
-      String className = preprocessor.write();
-
-      if (className == null) {
-        throw new RunnerException(_("Could not find main class"));
-        // this situation might be perfectly fine,
-        // (i.e. if the file is empty)
-        //System.out.println("No class found in " + code[i].name);
-        //System.out.println("(any code in that file will be ignored)");
-        //System.out.println();
-
-//      } else {
-//        code[0].setPreprocName(className + ".java");
-      }
-
+      // Output file
+      File streamFile = new File(buildPath, name + ".cpp");
+      FileOutputStream outputStream = new FileOutputStream(streamFile);
+      preprocessor.write(outputStream);
+      outputStream.close();
+      
       // store this for the compiler and the runtime
-      primaryClassName = className + ".cpp";
+      primaryClassName = name + ".cpp";
 
     } catch (FileNotFoundException fnfe) {
       fnfe.printStackTrace();
@@ -1442,9 +1422,12 @@ public class Sketch {
     // grab the imports from the code just preproc'd
 
     importedLibraries = new ArrayList<File>();
-
+    //Remember to clear library path before building it.
+    libraryPath = "";
     for (String item : preprocessor.getExtraImports()) {
-      File libFolder = (File) Base.importToLibraryTable.get(item);
+
+        File libFolder = (File) Base.importToLibraryTable.get(item);
+        //If needed can Debug libraryPath here
 
       if (libFolder != null && !importedLibraries.contains(libFolder)) {
         importedLibraries.add(libFolder);
@@ -1456,7 +1439,7 @@ public class Sketch {
     // 3. then loop over the code[] and save each .java file
 
     for (SketchCode sc : code) {
-      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h") || sc.isExtension("s")) {
+      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h")) {
         // no pre-processing services necessary for java files
         // just write the the contents of 'program' to a .java file
         // into the build directory. uses byte stream and reader/writer
@@ -1546,54 +1529,16 @@ public class Sketch {
   public RunnerException placeException(String message, 
                                         String dotJavaFilename, 
                                         int dotJavaLine) {
-    int codeIndex = 0; //-1;
-    int codeLine = -1;
-
-//    System.out.println("placing " + dotJavaFilename + " " + dotJavaLine);
-//    System.out.println("code count is " + getCodeCount());
-
-    // first check to see if it's a .java file
-    for (int i = 0; i < getCodeCount(); i++) {
-      SketchCode code = getCode(i);
-      if (!code.isExtension(getDefaultExtension())) {
-        if (dotJavaFilename.equals(code.getFileName())) {
-          codeIndex = i;
-          codeLine = dotJavaLine;
-          return new RunnerException(message, codeIndex, codeLine);
-        }
-      }
-    }
-
-    // If not the preprocessed file at this point, then need to get out
-    if (!dotJavaFilename.equals(name + ".cpp")) {
-      return null;
-    }
-
-    // if it's not a .java file, codeIndex will still be 0
-    // this section searches through the list of .pde files
-    codeIndex = 0;
-    for (int i = 0; i < getCodeCount(); i++) {
-      SketchCode code = getCode(i);
-
-      if (code.isExtension(getDefaultExtension())) {
-//        System.out.println("preproc offset is " + code.getPreprocOffset());
-//        System.out.println("looking for line " + dotJavaLine);
-        if (code.getPreprocOffset() <= dotJavaLine) {
-          codeIndex = i;
-//          System.out.println("i'm thinkin file " + i);
-          codeLine = dotJavaLine - code.getPreprocOffset();
-        }
-      }
-    }
-    // could not find a proper line number, so deal with this differently.
-    // but if it was in fact the .java file we're looking for, though, 
-    // send the error message through.
-    // this is necessary because 'import' statements will be at a line
-    // that has a lower number than the preproc offset, for instance.
-//    if (codeLine == -1 && !dotJavaFilename.equals(name + ".java")) {
-//      return null;
-//    }
-    return new RunnerException(message, codeIndex, codeLine);
+     // Placing errors is simple, because we inserted #line directives
+     // into the preprocessed source.  The compiler gives us correct
+     // the file name and line number.  :-)
+     for (int codeIndex = 0; codeIndex < getCodeCount(); codeIndex++) {
+       SketchCode code = getCode(codeIndex);
+       if (dotJavaFilename.equals(code.getFileName())) {
+         return new RunnerException(message, codeIndex, dotJavaLine);
+       }
+     }
+     return null;
   }
 
 
@@ -1616,9 +1561,7 @@ public class Sketch {
    *
    * @return null if compilation failed, main class name if not
    */
-  public String build(String buildPath, boolean verbose)
-    throws RunnerException {
-    
+  public String build(String buildPath, boolean verbose) throws RunnerException {
     // run the preprocessor
     editor.status.progressUpdate(20);
     String primaryClassName = preprocess(buildPath);
@@ -1627,22 +1570,21 @@ public class Sketch {
     // that will bubble up to whomever called build().
     Compiler compiler = new Compiler();
     if (compiler.compile(this, buildPath, primaryClassName, verbose)) {
-      size(buildPath, primaryClassName);
+      size(compiler.getBuildPreferences());
       return primaryClassName;
     }
     return null;
-  }
+  }  
   
-  
-  protected boolean exportApplet(int exportOptions) throws Exception {
-    return exportApplet(tempBuildFolder.getAbsolutePath(), exportOptions);
+  protected boolean exportApplet(int programmingType) throws Exception {
+    return exportApplet(tempBuildFolder.getAbsolutePath(), programmingType);
   }
 
 
   /**
    * Handle export to applet.
    */
-  public boolean exportApplet(String appletPath, int exportOptions)
+  public boolean exportApplet(String appletPath, int programmingType)
     throws RunnerException, IOException, SerialException {
 
     prepare();
@@ -1663,7 +1605,7 @@ public class Sketch {
 //    }
 
     editor.status.progressNotice(_("Uploading..."));
-    upload(appletPath, foundName, exportOptions);
+    upload(appletPath, foundName, programmingType);
     editor.status.progressUpdate(100);
     return true;
   }
@@ -1673,119 +1615,62 @@ public class Sketch {
     editor.status.progressUpdate(percent);
   }
 
-  
-  protected void size(String buildPath, String suggestedClassName)
-    throws RunnerException {
-		List<Long> size;
-		long msize=-1;
-    long text=-1,data=-1,bss=-1;
-		String maxsizeString = Base.getBoardPreferences().get("upload.maximum_size");
-    String sizeSections = Base.getBoardPreferences().get("upload.size_sections");
-    if (maxsizeString == null) return;
+
+  protected void size(PreferencesMap prefs) throws RunnerException {
+    List<Long> sizes;
+    long size=-1,text,data,bss;
+    String maxsizeString = prefs.get("upload.maximum_size");
+    String sizeSections = prefs.get("upload.size_sections");
+    if (maxsizeString == null)
+      return;
     long maxsize = Integer.parseInt(maxsizeString);
-    Sizer sizer = new Sizer(buildPath, suggestedClassName);
-      try {
-//<<<<<<< HEAD
-	  size = sizer.computeSize();
-// First value is text, second data
-	  text=size.get(0);
-	  data=size.get(1);
-	  bss=size.get(2);
+    Sizer sizer = new Sizer(prefs);
+    try {
+      sizes = sizer.computeSize();
+      if (sizes.size()==1) {
+        size = sizes.get(0);
+        System.out.println(I18n
+            .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2}% used"),
+                    size, maxsize, size * 100 / maxsize));
+      } else {
+          text=sizes.get(0);
+	  data=sizes.get(1);
+	  bss=sizes.get(2);
 	  if (sizeSections!=null && sizeSections.equals("all")) {
-	      msize = text + data + bss;
+	      size = text + data + bss;
 	  } else {
-	      msize = text + data;
+	      size = text + data;
 	  }
-	  System.out.println(
-                             I18n.format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2} bytes ROM, {3} bytes memory"),
-		      msize, maxsize,(text+data),(data+bss)));
+          System.out.println(I18n
+                             .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2} bytes ROM, {3} bytes memory, {4}% used"),
+		                     size, maxsize,(text+data),(data+bss), size * 100 / maxsize));
+      }
     } catch (RunnerException e) {
-      System.err.println(I18n.format(_("Couldn't determine program size: {0}"), e.getMessage()));
+      System.err.println(I18n.format(_("Couldn't determine program size: {0}"),
+                                     e.getMessage()));
     }
 
-    if (msize > maxsize)
+    if (size > maxsize)
       throw new RunnerException(
-        _("Sketch too big; see http://www.arduino.cc/en/Guide/Troubleshooting#size for tips on reducing it."));
+          _("Sketch too big; see http://www.arduino.cc/en/Guide/Troubleshooting#size for tips on reducing it."));
   }
 
-
-  protected String upload(String buildPath, String suggestedClassName, int uploadOptions )
+  protected String upload(String buildPath, String suggestedClassName, int programmingType)
     throws RunnerException, SerialException {
 
-    Map<String, String> boardPreferences = Base.getBoardPreferences();
     Uploader uploader;
-    String core = boardPreferences.get("build.core");
 
     // download the program
     //
-    if (core.equals("arduino")) {
-      uploader = new AvrdudeUploader();
-    } else if (core.equals("zpuino")) {
-      uploader = new ZPUinoUploader();
-    } else {
-      System.err.println("Don't have a programmer for core "+core);
-      return null;
-    }
-
+    uploader = new BasicUploader();
     boolean success = uploader.uploadUsingPreferences(buildPath,
                                                       suggestedClassName,
-                                                      uploadOptions);
+                                                      programmingType);
 
     return success ? suggestedClassName : null;
   }
 
-  /**
-   * Replace all commented portions of a given String as spaces.
-   * Utility function used here and in the preprocessor.
-   */
-  static public String scrubComments(String what) {
-    char p[] = what.toCharArray();
-
-    int index = 0;
-    while (index < p.length) {
-      // for any double slash comments, ignore until the end of the line
-      if ((p[index] == '/') &&
-          (index < p.length - 1) &&
-          (p[index+1] == '/')) {
-        p[index++] = ' ';
-        p[index++] = ' ';
-        while ((index < p.length) &&
-               (p[index] != '\n')) {
-          p[index++] = ' ';
-        }
-
-        // check to see if this is the start of a new multiline comment.
-        // if it is, then make sure it's actually terminated somewhere.
-      } else if ((p[index] == '/') &&
-                 (index < p.length - 1) &&
-                 (p[index+1] == '*')) {
-        p[index++] = ' ';
-        p[index++] = ' ';
-        boolean endOfRainbow = false;
-        while (index < p.length - 1) {
-          if ((p[index] == '*') && (p[index+1] == '/')) {
-            p[index++] = ' ';
-            p[index++] = ' ';
-            endOfRainbow = true;
-            break;
-
-          } else {
-            // continue blanking this area
-            p[index++] = ' ';
-          }
-        }
-        if (!endOfRainbow) {
-          throw new RuntimeException(_("Missing the */ from the end of a " +
-                                       "/* comment */"));
-        }
-      } else {  // any old character, move along
-        index++;
-      }
-    }
-    return new String(p);
-  }
-
-
+  
   public boolean exportApplicationPrompt() throws IOException, RunnerException {
     return false;
   }
@@ -1847,28 +1732,28 @@ public class Sketch {
    */
   public boolean isReadOnly() {
     String apath = folder.getAbsolutePath();
+    for (File folder : Base.getLibrariesPath()) {
+      if (apath.startsWith(folder.getAbsolutePath()))
+        return true;
+    }
     if (apath.startsWith(Base.getExamplesPath()) ||
-        apath.startsWith(Base.getLibrariesPath()) ||
         apath.startsWith(Base.getSketchbookLibrariesPath())) {
       return true;
+    }
 
-      // canWrite() doesn't work on directories
-      //} else if (!folder.canWrite()) {
-    } else {
-      // check to see if each modified code file can be written to
-      for (int i = 0; i < codeCount; i++) {
-        if (code[i].isModified() &&
-            code[i].fileReadOnly() &&
-            code[i].fileExists()) {
-          //System.err.println("found a read-only file " + code[i].file);
-          return true;
-        }
+    // canWrite() doesn't work on directories
+    // } else if (!folder.canWrite()) {
+    
+    // check to see if each modified code file can be written to
+    for (int i = 0; i < codeCount; i++) {
+      if (code[i].isModified() && code[i].fileReadOnly() &&
+          code[i].fileExists()) {
+        // System.err.println("found a read-only file " + code[i].file);
+        return true;
       }
-      //return true;
     }
     return false;
   }
-
 
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -1931,7 +1816,7 @@ public class Sketch {
    * Returns a String[] array of proper extensions.
    */
   public String[] getExtensions() {
-    return new String[] { "ino", "pde", "c", "cpp", "h", "s" };
+    return new String[] { "ino", "pde", "c", "cpp", "h" };
   }
 
 
