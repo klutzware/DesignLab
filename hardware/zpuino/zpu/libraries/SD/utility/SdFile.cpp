@@ -1171,8 +1171,6 @@ uint8_t SdFile::truncate(uint32_t length) {
  */
 size_t SdFile::write(const void* buf, uint16_t nbyte) {
 #ifdef SD_WRITE_SUPPORT
-	// convert void* to uint8_t*  -  must be before goto statements
-size_t SdFile::write(const void* buf, uint16_t nbyte) {
   // convert void* to uint8_t*  -  must be before goto statements
   const uint8_t* src = reinterpret_cast<const uint8_t*>(buf);
 
