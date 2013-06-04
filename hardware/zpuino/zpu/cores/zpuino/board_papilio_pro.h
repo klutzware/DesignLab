@@ -20,6 +20,8 @@
 
 #define __SST_FLASH__
 
+#define SD_WRITE_SUPPORT
+
 // Wing1 Column A
 #define FPGA_PIN_P18 0
 #define FPGA_PIN_P23 1
