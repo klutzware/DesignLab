@@ -24,7 +24,9 @@
 #include <Arduino.h>
 
 #ifdef ZPU
+#ifndef SD_WRITE_SUPPORT
 #define SDLITE /* Lite version of SD. */
+#endif
 #endif
 
 //------------------------------------------------------------------------------
@@ -913,7 +915,7 @@ uint8_t SdFile::rmRfStar(void) {
     SdFile f;
 
     // remember position
-    uint16_t index = curPosition_/32;
+    int index = curPosition_/32;
 
     dir_t* p = readDirCache();
     if (!p) return false;
@@ -1171,8 +1173,6 @@ uint8_t SdFile::truncate(uint32_t length) {
  */
 size_t SdFile::write(const void* buf, uint16_t nbyte) {
 #ifdef SD_WRITE_SUPPORT
-	// convert void* to uint8_t*  -  must be before goto statements
-size_t SdFile::write(const void* buf, uint16_t nbyte) {
   // convert void* to uint8_t*  -  must be before goto statements
   const uint8_t* src = reinterpret_cast<const uint8_t*>(buf);
 
