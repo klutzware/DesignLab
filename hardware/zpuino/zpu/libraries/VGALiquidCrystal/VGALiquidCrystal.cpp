@@ -407,7 +407,7 @@ void VGALiquidCrystal::updateDisplay() {
 
 
 
-void VGALiquidCrystal::write(uint8_t value) {
+size_t VGALiquidCrystal::write(uint8_t value) {
 	ddram[AC] = value;
 	if(scrool_on){
 		shiftChars += increment;
@@ -445,6 +445,7 @@ void VGALiquidCrystal::write(uint8_t value) {
 	if (vmem_offset > sizeof(vmem))
 	vmem_offset=0;
     */
+	return 1;
 }
 
 unsigned char VGALiquidCrystal::chrtbl[2048] = {
