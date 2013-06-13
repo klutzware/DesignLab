@@ -362,13 +362,13 @@ public class Compiler implements MessageConsumer {
     if (Base.isMacOS() || Base.isLinux()) {
         delim=":";
     }
-
+/*
     String [] envp = new String[] {
 
         "PATH="  + System.getenv("PATH") + delim + path,
         "TEMP=" + System.getenv("TEMP")
     };
-    
+  */
     try {
       process = Runtime.getRuntime().exec(command);
     } catch (IOException e) {
