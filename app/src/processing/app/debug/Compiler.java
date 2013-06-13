@@ -221,7 +221,8 @@ public class Compiler implements MessageConsumer {
   private List<File> compileFiles(String outputPath, File sourcePath,
                                   boolean recurse, List<String> includePaths)
       throws RunnerException {
-    List<File> sSources = findFilesInFolder(sourcePath, "S", recurse);
+          List<File> sSources = findFilesInFolder(sourcePath, "S", recurse);
+          sSources.addAll(findFilesInFolder(sourcePath, "s", recurse));
     List<File> cSources = findFilesInFolder(sourcePath, "c", recurse);
     List<File> cppSources = findFilesInFolder(sourcePath, "cpp", recurse);
     List<File> objectPaths = new ArrayList<File>();

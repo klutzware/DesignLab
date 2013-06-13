@@ -1227,7 +1227,7 @@ public class Sketch {
       if (tempBuildFolder.exists()) {
         String files[] = tempBuildFolder.list();
         for (String file : files) {
-          if (file.endsWith(".c") || file.endsWith(".cpp") || file.endsWith(".s")) {
+          if (file.endsWith(".c") || file.endsWith(".cpp") || file.endsWith(".s") || file.endsWith(".S")) {
             File deleteMe = new File(tempBuildFolder, file);
             if (!deleteMe.delete()) {
               System.err.println("Could not delete " + deleteMe);
@@ -1439,7 +1439,7 @@ public class Sketch {
     // 3. then loop over the code[] and save each .java file
 
     for (SketchCode sc : code) {
-      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h")) {
+      if (sc.isExtension("c") || sc.isExtension("cpp") || sc.isExtension("h") | sc.isExtension("s")) {
         // no pre-processing services necessary for java files
         // just write the the contents of 'program' to a .java file
         // into the build directory. uses byte stream and reader/writer
@@ -1816,7 +1816,7 @@ public class Sketch {
    * Returns a String[] array of proper extensions.
    */
   public String[] getExtensions() {
-    return new String[] { "ino", "pde", "c", "cpp", "h" };
+    return new String[] { "ino", "pde", "c", "cpp", "h", "s" };
   }
 
 

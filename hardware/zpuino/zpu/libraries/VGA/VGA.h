@@ -6,6 +6,7 @@
 #include "zpuino.h"
 
 #if ( (BOARD_ID == 0xA4010E01) || \
+	  (BOARD_ID == 0xA4041700) || \ 
      (BOARD_ID == 0x83010E01) )
 
 #define VGABASE IO_SLOT(9)
