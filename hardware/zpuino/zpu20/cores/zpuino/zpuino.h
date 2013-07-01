@@ -10,6 +10,10 @@
 #define _BV(x) (1<<(x))
 #endif
 
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
+
 typedef volatile unsigned int* register_t;
 
 extern void itoa(int value, char *dest, int base);
