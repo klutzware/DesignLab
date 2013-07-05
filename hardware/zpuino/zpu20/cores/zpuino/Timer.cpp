@@ -77,10 +77,15 @@ namespace ZPUino {
     }
 #endif
 
-    int Timers_class::singleShot( int msec, void (*function)(void*), void *arg )
+    int Timers_class::singleShot( int msec, void (*function)(void*), void *arg, int timerid )
     {
         /* get a free timer */
-        timerindex_t tmr = getFreeTimer();
+        timerindex_t tmr;
+
+        if (timerid<0)
+            tmr = getFreeTimer();
+        else
+            tmr = acquireTimer(timerid);
 
         if (tmr<0)
             return -1;
@@ -104,14 +109,18 @@ namespace ZPUino {
         return tmr;
     }
 
-    int Timers_class::singleShot( int msec, void (*function)(void))
+    int Timers_class::singleShot( int msec, void (*function)(void), int timerid)
     {
-        return singleShot(msec, (void(*)(void*))function, 0);
+        return singleShot(msec, (void(*)(void*))function, 0, timerid);
     }
 
-    int Timers_class::periodic( int msec, bool (*function)(void*), void *arg )
+    int Timers_class::periodic( int msec, bool (*function)(void*), void *arg, int timerid )
     {
-        timerindex_t tmr = getFreeTimer();
+        timerindex_t tmr;
+        if (timerid<0)
+            tmr = getFreeTimer();
+        else
+            tmr = acquireTimer(timerid);
 
         if (tmr<0)
             return -1;
@@ -135,9 +144,9 @@ namespace ZPUino {
         return tmr;
     }
 
-    int Timers_class::periodic( int msec, bool (*function)(void) )
+    int Timers_class::periodic( int msec, bool (*function)(void), int timerid )
     {
-        return periodic(msec, (bool(*)(void*))function, 0);
+        return periodic(msec, (bool(*)(void*))function, 0, timerid);
     }
 
     void Timers_class::cancel()
@@ -185,18 +194,24 @@ namespace ZPUino {
         return false;
     }
 
-    Timers_class::timerindex_t Timers_class::getFreeTimer()
+    Timers_class::timerindex_t Timers_class::acquireTimer(timerindex_t timerid)
     {
-        if (!(m_timerlock&1)) {
-            m_timerlock|=1;
-            return 0;
-        }
-        if (!(m_timerlock&2)) {
-            m_timerlock|=2;
-            return 1;
+        if (!(m_timerlock&(1<<timerid))) {
+            m_timerlock|=(1<<timerid);
+            return timerid;
         }
         return -1;
     }
+
+    Timers_class::timerindex_t Timers_class::getFreeTimer()
+    {
+        if (acquireTimer(0)==0)
+            return 0;
+        if (acquireTimer(1)==0)
+            return 1;
+        return -1;
+    }
+
     void Timers_class::releaseTimer(timerindex_t idx)
     {
         m_timerlock &= ~(1<<idx);

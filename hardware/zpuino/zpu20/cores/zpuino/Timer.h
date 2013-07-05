@@ -185,10 +185,10 @@ namespace ZPUino
         void setPWMOutputPin(int);
         void setPWMDuty(uint8_t val);
 
-        int singleShot( int msec, void (*function)(void*), void *arg );
-        int singleShot( int msec, void (*function)(void));
-        int periodic( int msec, bool (*function)(void*), void *arg );
-        int periodic( int msec, bool (*function)(void) );
+        int singleShot( int msec, void (*function)(void*), void *arg, int timerid=-1 );
+        int singleShot( int msec, void (*function)(void), int timerid=-1);
+        int periodic( int msec, bool (*function)(void*), void *arg, int timerid=-1 );
+        int periodic( int msec, bool (*function)(void), int timerid=-1);
 
         void cancel();
     private:
@@ -199,6 +199,7 @@ namespace ZPUino
     protected:
         void isAvailable(timerindex_t id);
         timerindex_t getFreeTimer();
+        timerindex_t acquireTimer(timerindex_t timerid);
         void releaseTimer(timerindex_t);
         TimerInstance_class *timer(timerindex_t id) { return &m_timers[id]; }
     protected:
