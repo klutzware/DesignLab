@@ -1,4 +1,9 @@
 
+ZAP 2.0.5 BETA - 2013.07.17
+
+[avr8]
+* Ethercard library to support enc28J60 boards including the soon to come Ethernet Wing. Greg Samsa responded to the hacking challenge and made this library work with the Papilio.
+
 ZAP 2.0.4 BETA - 2013.07.03
 
 [avr8]
