@@ -324,6 +324,10 @@ papilio_custom: hex mem pcustom bf_program
 
 elf: *.elf
 hex: *.hex
+	$(SILENT) @echo
+	$(SILENT) @echo $(MSG_MEM)
+	$(SREC_CAT) $< -Intel -Byte_Swap 2  -Data_Only -o tmp.mem -vmem 8
+	$(GAWK) ' BEGIN{FS=" ";} { $$1= ""; print}' tmp.mem > out.mem
 eep: *.eep
 lss: *.lss
 sym: *.sym
