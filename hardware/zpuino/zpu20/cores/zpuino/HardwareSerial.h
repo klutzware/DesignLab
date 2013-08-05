@@ -13,6 +13,18 @@
 namespace ZPUino {
 };
 
+#define HWSERIAL_INTVAL(x) \
+struct x {                             \
+    explicit x(int i):v(i){};          \
+    inline operator int () { return v; } \
+private:                               \
+    x &operator=(int v);               \
+    int v;                             \
+}
+
+HWSERIAL_INTVAL(TX);
+HWSERIAL_INTVAL(RX);
+
 class HardwareSerial: public ZPUino::BaseDevice, public Stream
 {
 private:
@@ -28,11 +40,23 @@ public:
 			}
 		}
 	}
+
+        __attribute__((always_inline)) inline void begin(const unsigned int baudrate, TX tx, RX rx) {
+		if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_UART)==0) {
+			if (__builtin_constant_p(baudrate)) {
+				REG(1) = BAUDRATEGEN(baudrate) | BIT(UARTEN);
+			} else {
+				begin_slow(baudrate);
+			}
+                }
+                setPins(tx,rx);
+	}
 	void begin_slow(const unsigned int baudrate);
 
 	int available(void) {
 		return (REG(1) & 1);
 	}
+        void setPins(TX tx, RX rx);
 
 	virtual int read(void) {
 		return REG(0);
