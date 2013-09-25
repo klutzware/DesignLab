@@ -1,4 +1,33 @@
+/*!
+ *  @file		tinysid.cpp
+ *  Project		tinysid Library
+ *	@brief		tinysid library for the ZPUino
+ *	Version		1.0
+ *  @author		Jack Gassett 
+ *	@date		9/24/13
+ *  License		GPL-Unknown?
+ 
+TinySID library is the work of: 
+Tammo Hinrichs - 6510 and SID routines
+Rainer Sinsch  - PSP TinySID
+Alvaro Lopes - Made work with ZPUino Soft Processor
+ 
+See
+http://www.informatik.uni-frankfurt.de/~sinsch/TinySid.htm
+http://www.syntheticsw.com/~sinsch/?id=7298b&s=k2
+http://www.syntheticsw.com/~sinsch
+ 
+ */
 
+#include "tinysid.h"
+#include "SID.h"
+#include <SmallFS.h>
+#include "ramFS.h"
+
+SID sid;
+
+unsigned short play_addr;
+volatile int tick = 0;
 
 static uint8_t getmem(uint16_t addr)
 {
@@ -726,53 +755,105 @@ static void dumpregs()
     Serial.println("");
 }
 
-void _zpu_interrupt() {
+void tinysid_zpu_interrupt() {
 	tick=1;
 	TMR0CTL &= ~(BIT(TCTLIF));
 }
 static unsigned short init_addr;
-void setup()
+//void tinysetup()
+void tinyLoadFile(const char* name)
 {
 	unsigned short load_addr;
 	unsigned char subsongs,startsong,speed;
-	SmallFSFile file;
+	SmallFSFile sidSmallFSfile;
+	File sidSDfile;
 
-	Serial.begin(115200);
-	Serial.println("Starting");
-	if (SmallFS.begin()==0) {
-		file = SmallFS.open("music.sid");
-		if (file.valid()) {
-			unsigned size = file.size();
-            unsigned char *buf = (unsigned char*)malloc(size);
+  //fileLoaded = false;
+  if (SmallFS.begin()==0)
+	sidSmallFSfile = SmallFS.open(name);
+  sidSDfile = SD.open(name);	//TODO begin SD?
+  boolean smallFsCheck = sidSmallFSfile.valid();
+  boolean sdFsCheck = sidSDfile;
+  if (sdFsCheck){
+    Serial.println("Opening Mod File from SD Card.");
+    //modRAMfile = RamFS.open(&sidSDfile);
+	unsigned size = sidSDfile.size();
+	 unsigned char *buf = (unsigned char*)malloc(size);
+	/* Allocate */
+	sidSDfile.read(buf,size);	
+	LoadSIDFromMemory(buf,
+					  &load_addr,
+					  &init_addr,
+					  &play_addr,
+					  &subsongs,
+					  &startsong,
+					  &speed,
+					  size);	
+    sidSDfile.close();
+    //fileLoaded = true;
+  }
+  if (smallFsCheck){
+    Serial.println("Opening Mod File from SmallFS.");
+    //modRAMfile = RamFS.open(&sidSmallFSfile);
+    //fileLoaded = true;
+	 unsigned size = sidSmallFSfile.size();
+	 unsigned char *buf = (unsigned char*)malloc(size);
+	/* Allocate */
+	sidSmallFSfile.read(buf,size);	
+	LoadSIDFromMemory(buf,
+					  &load_addr,
+					  &init_addr,
+					  &play_addr,
+					  &subsongs,
+					  &startsong,
+					  &speed,
+					  size);	
+  }
+  else {
+    Serial.println("No mod files to play in SmallFS or on SD card.");
+    //fileLoaded = false; 
+  }
+
+	//SmallFSFile file;
+
+	//Serial.begin(115200);
+	//Serial.println("Starting");
+	// if (SmallFS.begin()==0) {
+		// file = SmallFS.open(name);
+		 //if (file.valid()) {
+/* 			 unsigned size = file->size();
+			 Serial.print("Size: ");
+			 Serial.println(size);
+             unsigned char *buf = (unsigned char*)malloc(size);
 			/* Allocate */
-			file.read(buf,size);
+			//file->read(buf,size); */
 
-			LoadSIDFromMemory(buf,
-							  &load_addr,
-							  &init_addr,
-							  &play_addr,
-							  &subsongs,
-							  &startsong,
-							  &speed,
-							  size);
+			// LoadSIDFromMemory(buf,
+							  // &load_addr,
+							  // &init_addr,
+							  // &play_addr,
+							  // &subsongs,
+							  // &startsong,
+							  // &speed,
+							  // size);
 
-		}
-	}
-	else {
-		LoadSIDFromMemory(  SIDTUNE,
-						  &load_addr,
-						  &init_addr,
-						  &play_addr,
-						  &subsongs,
-						  &startsong,
-						  &speed,
-						  sizeof(SIDTUNE));
-	}
+		//}
+	// }
+	// else {
+		// LoadSIDFromMemory(  SIDTUNE,
+						  // &load_addr,
+						  // &init_addr,
+						  // &play_addr,
+						  // &subsongs,
+						  // &startsong,
+						  // &speed,
+						  // sizeof(SIDTUNE));
+	// }
 
 	cpuReset();
 	memset(sidregs,0,sizeof(sidregs));
 
-#ifdef RETROCADE
+/* #ifdef RETROCADE
 	//Move the audio output to the appropriate pins on the Papilio Hardware
 	pinMode(AUDIO_J1_L,OUTPUT);
 	digitalWrite(AUDIO_J1_L,HIGH);
@@ -807,29 +888,30 @@ void setup()
 	outputPinForFunction(WING_C_1, 8);
 	pinModePPS(WING_C_1, HIGH);
 
-#endif
+#endif */
 
 	cpuJSR(init_addr, 0);
 	// Prescale 64 (101b), generate 50Hz tick
 
-	TMR0CMP = (CLK_FREQ/(50*64))-1;
+/* 	TMR0CMP = (CLK_FREQ/(50*64))-1;
 	TMR0CNT = 0x0;
 	TMR0CTL = BIT(TCTLENA)|BIT(TCTLCCM)|BIT(TCTLDIR)|BIT(TCTLCP2)|BIT(TCTLCP0)|BIT(TCTLIEN);
 	INTRMASK = BIT(INTRLINE_TIMER0); // Enable Timer0 interrupt
-	INTRCTL=1;
+	INTRCTL=1; */
 }
 
-void loop()
+void tinyloop()
 {
-	while (1) {
-		int clocks = cpuJSR(play_addr,0);
-		//printf("Ticck? %d\n",clocks);
-		tick=0;
-		while (!tick);
+	//while (1) {
+		if (tick == 1) {
+			int clocks = cpuJSR(play_addr,0);
+			tick=0;
+		}
+		 //while (!tick);
 		/* Write SID regs here */
 		//dumpregs();
                          
-		if (Serial.available()) {
+/* 		if (Serial.available()) {
 			int r=Serial.read();
 			if (r=='e') {
 				Serial.println("Enable");
@@ -846,6 +928,6 @@ void loop()
 				memset(sidregs,0,sizeof(sidregs));
 				cpuJSR(init_addr, 0);
 			}
-		}
-	}
+		} */
+	//}
 }

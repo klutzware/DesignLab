@@ -15,17 +15,24 @@
 #include <zpuino-types.h>
 #include <zpuino.h>
 #include "Arduino.h"
-#include "SmallFS.h"
-#include "cbuffer.h"
-#include "SID.h"
-#include <SD.h>
-#include "retrocade_defs.h"
+ #include "SmallFS.h"
+// #include "cbuffer.h"
+// #include "SID.h"
+ #include <SD.h>
+ #include "ramFS.h"
+// #include "retrocade_defs.h"
+
+enum kFileType {
+	SmallFSType               = 0,  
+	SDFSType                  = 1,  
+};
 
 class SIDPLAYER
 {
   public: 
     SIDPLAYER();
-    void setup(SID* sid);
+    //void setup(SID* newsid);
+	void setup();
     void loadFile(const char* name);
     void play(boolean play);    
     boolean getPlaying();
@@ -42,11 +49,15 @@ class SIDPLAYER
     byte volumeAdjust;
     int sidTimeStamp;
     int resetSIDFlag;
-    SID* sid;
-    SmallFSFile ymSmallFSfile;
+    //SID* sid;
+    SmallFSFile sidSmallFSfile;
     File sidSDfile;
     boolean playing; 
+	boolean fileLoaded;
     kFileType fileType;  
+    SmallFSFile modSmallFSfile;
+    File modSDfile;
+    RamFSFile modRAMfile;	
    
 };
 

@@ -1,9 +1,31 @@
+/*!
+ *  @file		tinysid.cpp
+ *  Project		tinysid Library
+ *	@brief		tinysid library for the ZPUino
+ *	Version		1.0
+ *  @author		Jack Gassett 
+ *	@date		9/24/13
+ *  License		GPL-Unknown?
+ 
+TinySID library is the work of: 
+Tammo Hinrichs - 6510 and SID routines
+Rainer Sinsch  - PSP TinySID
+Alvaro Lopes - Made work with ZPUino Soft Processor
+ 
+See
+http://www.informatik.uni-frankfurt.de/~sinsch/TinySid.htm
+http://www.syntheticsw.com/~sinsch/?id=7298b&s=k2
+http://www.syntheticsw.com/~sinsch
+ 
+ */
+
 #ifndef _TINYSID_H
 #define _TINYSID_H
 
-// #include "sidtune_Layla_Mix.h"
+#include "sidtune_Layla_Mix.h"
 #include "SID.h"
 #include <SmallFS.h>
+#include "ramFS.h"
 
 #define AUDIO_J1_L WING_B_1
 #define AUDIO_J1_R WING_B_0
@@ -17,10 +39,6 @@
 #define SIDTUNE sidtune_Layla_Mix
 #define RETROCADE // Define this if you have a retrocade hw
 
-unsigned short play_addr;
-volatile int tick = 0;
-
-SID sid;
 
 // -- do not touch this below, it's a C64 emulator.
 
@@ -108,5 +126,10 @@ static uint16_t pc;
 // ----------------------------------------------------------- DER HARTE KERN
 
 static uint8_t sidregs[32];
+
+//void tinysetup();
+void tinyLoadFile(const char* name);
+void tinyloop();
+void tinysid_zpu_interrupt();
 
 #endif

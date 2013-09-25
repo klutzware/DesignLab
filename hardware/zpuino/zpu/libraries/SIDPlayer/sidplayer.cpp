@@ -9,8 +9,9 @@
  */
  
 #include "sidplayer.h"
-#include "SID.h"
+//#include "SID.h"
 #include "tinysid.h"
+#include "ramFS.h"
 
 #define DEBUG
 
@@ -41,15 +42,16 @@ void loop() {}
 ~~~~~~~~
 \n
 */
-void SIDPLAYER::setup(SID* newsid){    
+//void SIDPLAYER::setup(SID* newsid){    
+void SIDPLAYER::setup(){ 
   //underruns = 0;
-  timerTicks = 0;
-  sidTimeStamp = 0;
-  resetSIDFlag = 0;
-  counter = 0;
-  playing = false;
-  sid = newsid;
-  volumeAdjust = 4;
+  // timerTicks = 0;
+  // sidTimeStamp = 0;
+  // resetSIDFlag = 0;
+  // counter = 0;
+   playing = false;
+  // sid = newsid;
+  // volumeAdjust = 4;
 }
 
 /*!
@@ -79,7 +81,8 @@ void loop() {}
 */
 void SIDPLAYER::loadFile(const char* name)
 {
-  sidSDfile.close();
+	tinyLoadFile(name);
+/*   sidSDfile.close();
   sidTimeStamp = 0;  
   sidSmallFSfile = SmallFS.open(name);
   if (!sidSmallFSfile.valid()) {
@@ -93,7 +96,7 @@ void SIDPLAYER::loadFile(const char* name)
     #ifdef DEBUG  
       Serial.println("There is no SD File.");
     #endif     
-  }
+  } */
 }
 
 /*!
@@ -123,19 +126,19 @@ void loop() {}
 */
 void SIDPLAYER::play(boolean play)
 {
-  boolean smallfscheck = sidSmallFSfile.valid();
-  if (!sidSDfile && !smallfscheck) {
-    play = false;
-    #ifdef DEBUG
-      Serial.println("Error: No SD or SmallFS File Available");
-    #endif  
-    return; 
-  }
+  // boolean smallfscheck = sidSmallFSfile.valid();
+  // if (!sidSDfile && !smallfscheck) {
+    // play = false;
+    // #ifdef DEBUG
+      // Serial.println("Error: No SD or SmallFS File Available");
+    // #endif  
+    // return; 
+  // }
   
-  if (smallfscheck)
-   fileType = SmallFSType;
-  if (sidSDfile)
-   fileType = SDFSType; 
+  // if (smallfscheck)
+   // fileType = SmallFSType;
+  // if (sidSDfile)
+   // fileType = SDFSType; 
   
   playing = play;
   if (play == true)
@@ -149,46 +152,8 @@ void SIDPLAYER::volume(int volume)
 
 void SIDPLAYER::audiofill()
 {
-	int r;
-	sidframe f;
-	while (!SIDaudioBuffer.isFull()) {
-          switch (fileType) {  
-            case SmallFSType:
-              r = sidSmallFSfile.read(&f.regval[0], 16);
-              break;
-            case SDFSType:
-              r = sidSDfile.read(&f.regval[0], 16);
-              break;     
-            default:
-              return;
-              break;       
-          }                    
-            
-  		if (r==0) {
-                    switch (fileType) {  
-                      case SmallFSType:
-  			      sidSmallFSfile.seek(0,SEEK_SET);
-  			      sidSmallFSfile.read(&f.regval[0], 16); 
-                        break;
-                      case SDFSType:
-  			      sidSDfile.seek(0);
-  			      sidSDfile.read(&f.regval[0], 16); 
-                        break;     
-                      default:
-                        return;
-                        break;       
-                    }    
-  		}
-                //Adjust the volume level
-//                f.regval[8] = constrain(f.regval[8] - volumeAdjust, 0, 15);
-//                f.regval[9] = constrain(f.regval[9] - volumeAdjust, 0, 15);
-//                f.regval[10] = constrain(f.regval[10] - volumeAdjust, 0, 15);  
-                //Adjust the volume level individually
-                f.regval[8] = constrain((f.regval[8] - (15-sid->V1.getVolume())), 0, 15);
-                f.regval[9] = constrain((f.regval[9] - (15-sid->V2.getVolume())), 0, 15);
-                f.regval[10] = constrain((f.regval[10] - (15-sid->V3.getVolume())), 0, 15);                                 
-  		SIDaudioBuffer.push(f);
-	}
+	if (playing == true)
+		tinyloop();
 }
 
 boolean SIDPLAYER::getPlaying()
@@ -198,29 +163,6 @@ boolean SIDPLAYER::getPlaying()
 
 void SIDPLAYER::zpu_interrupt()
 {
-  counter++;
-  if ( counter == 340 ) {
-        counter = 1;
-        sidTimeStamp++;
-	// Play SID file
-	if (SIDaudioBuffer.hasData()) {
-		int i;
-		sidframe f = SIDaudioBuffer.pop();
-		for (i=0;i<14; i++) {
-                  SID::writeData(i, f.regval[i]);
-			//SIDREG(i) = f.regval[i];
-		}
-	}
-        else{ 
-          if (resetSIDFlag == 1){
-            sid->reset();
-            sid->V1.setVolume(11);
-            sid->V2.setVolume(11);
-            sid->V3.setVolume(11);
-            resetSIDFlag = 0;
-            sidTimeStamp = 1;
-          }
-        }
-  }
+	tinysid_zpu_interrupt();
 }
 
