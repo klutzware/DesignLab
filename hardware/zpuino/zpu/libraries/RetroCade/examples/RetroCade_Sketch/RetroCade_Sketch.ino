@@ -143,8 +143,8 @@ void setup(){
   retrocade.ymplayer.setup(&retrocade.ym2149); 
   retrocade.sidplayer.setup();
   
-  retrocade.sidplayer.loadFile("music.sid");
-  retrocade.sidplayer.play(true);
+  //retrocade.sidplayer.loadFile("music.sid");
+  //retrocade.sidplayer.play(true);
 
 }
 

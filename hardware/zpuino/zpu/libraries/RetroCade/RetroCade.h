@@ -90,7 +90,8 @@ class RETROCADE
    void smallfsModFileJoystick(byte type);
    void instrumentJoystick();
    void modFileJoystick();
-   void ymFileJoystick();   
+   void ymFileJoystick(); 
+   void sidFileJoystick(); 
    byte lcdMode;
    kButtonDirection buttonPressed;
    byte activeChannel;

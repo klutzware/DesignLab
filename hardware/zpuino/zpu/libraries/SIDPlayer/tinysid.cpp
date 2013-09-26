@@ -775,7 +775,7 @@ void tinyLoadFile(const char* name)
   boolean smallFsCheck = sidSmallFSfile.valid();
   boolean sdFsCheck = sidSDfile;
   if (sdFsCheck){
-    Serial.println("Opening Mod File from SD Card.");
+    Serial.println("Opening SID File from SD Card.");
     //modRAMfile = RamFS.open(&sidSDfile);
 	unsigned size = sidSDfile.size();
 	 unsigned char *buf = (unsigned char*)malloc(size);
@@ -792,8 +792,8 @@ void tinyLoadFile(const char* name)
     sidSDfile.close();
     //fileLoaded = true;
   }
-  if (smallFsCheck){
-    Serial.println("Opening Mod File from SmallFS.");
+  else if (smallFsCheck){
+    Serial.println("Opening SID File from SmallFS.");
     //modRAMfile = RamFS.open(&sidSmallFSfile);
     //fileLoaded = true;
 	 unsigned size = sidSmallFSfile.size();
@@ -810,7 +810,7 @@ void tinyLoadFile(const char* name)
 					  size);	
   }
   else {
-    Serial.println("No mod files to play in SmallFS or on SD card.");
+    Serial.println("No sid files to play in SmallFS or on SD card.");
     //fileLoaded = false; 
   }
 

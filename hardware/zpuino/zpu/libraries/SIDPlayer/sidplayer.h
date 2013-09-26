@@ -20,12 +20,12 @@
 // #include "SID.h"
  #include <SD.h>
  #include "ramFS.h"
-// #include "retrocade_defs.h"
+ //#include "retrocade_defs.h"
 
-enum kFileType {
-	SmallFSType               = 0,  
-	SDFSType                  = 1,  
-};
+// enum kFileType {
+	// SmallFSType               = 0,  
+	// SDFSType                  = 1,  
+// };
 
 class SIDPLAYER
 {
@@ -54,7 +54,7 @@ class SIDPLAYER
     File sidSDfile;
     boolean playing; 
 	boolean fileLoaded;
-    kFileType fileType;  
+    //kFileType fileType;  
     SmallFSFile modSmallFSfile;
     File modSDfile;
     RamFSFile modRAMfile;	

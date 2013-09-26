@@ -22,10 +22,12 @@
 #define INSTRUMENT 2
 #define MODFILE 3
 #define SMALLFSMODFILE 4
-#define YMFILE 5
-#define SMALLFSYMFILE 6
-#define ABOUT 7
-#define LCDMODEMAX 8
+#define SIDFILE 5
+#define SMALLFSSIDFILE 6
+#define YMFILE 7
+#define SMALLFSYMFILE 8
+#define ABOUT 9
+#define LCDMODEMAX 10
 
 char smallfsModTrack[] = "track1.mod";
 //char smallfsYmTrack[] = "track1.mod";
@@ -118,7 +120,7 @@ void RETROCADE::setupMegaWing()
  // clear the LCD screen:
  lcd.clear();
 
- //Setup timer for YM and mod players
+ //Setup timer for YM and mod players, this generates an interrupt at 1700hz
   TMR0CTL = 0;
   TMR0CNT = 0;
   TMR0CMP = ((CLK_FREQ/2) / FREQ )- 1;
@@ -239,7 +241,13 @@ void RETROCADE::handleJoystick()
         break;
       case SMALLFSMODFILE:
         smallfsModFileJoystick(0);
-        break;        
+        break;  
+      case SIDFILE:
+        sidFileJoystick();
+        break;
+      case SMALLFSSIDFILE:
+        smallfsModFileJoystick(2);
+        break; 		
       case YMFILE:
         ymFileJoystick();
         break; 
@@ -273,6 +281,7 @@ void RETROCADE::ymFileJoystick()
         }      
         if (buttonPressed == Up) {
           ymplayer.play(false);
+		  ym2149.reset();
         }            
         if (buttonPressed == Select) {
           //Serial.println("Select Pressed");
@@ -302,6 +311,30 @@ void RETROCADE::modFileJoystick()
           //Serial.println(fileName);
           modplayer.loadFile(fileName);
           modplayer.play(true);  
+          lcd.setCursor(0,1);   
+          lcd.print(fileName);
+          lcd.print(" ");
+          lcd.print(curFile.size(), DEC);
+        }    
+}
+
+void RETROCADE::sidFileJoystick() 
+{
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("SID File SD Card");
+        if (buttonPressed == Down) {
+          printFile("SID");
+        }      
+        if (buttonPressed == Up) {
+          sidplayer.play(false);
+		  sid.reset();
+        }            
+        if (buttonPressed == Select) {
+          //Serial.println("Select Pressed");
+          //Serial.println(fileName);
+          sidplayer.loadFile(fileName);
+          sidplayer.play(true);  
           lcd.setCursor(0,1);   
           lcd.print(fileName);
           lcd.print(" ");
@@ -347,6 +380,12 @@ void RETROCADE::smallfsModFileJoystick(byte type)
     smallfsModTrack[8] = 0x6d;  //m
     smallfsModTrack[9] = 0x64;  //d
   }
+  if (type == 2){
+    lcd.print("SID File SmallFS");
+    smallfsModTrack[7] = 0x73;  //s
+    smallfsModTrack[8] = 0x69;  //i
+    smallfsModTrack[9] = 0x64;  //d
+  }  
   if (buttonPressed == Down) {          
     if (smallfsActiveTrack<=8) {
       smallfsActiveTrack++;
@@ -363,7 +402,10 @@ void RETROCADE::smallfsModFileJoystick(byte type)
 //    if (type == 0)    
       modplayer.play(false);
 //    if (type == 1)
-      ymplayer.play(false);  
+      ymplayer.play(false);
+	  sidplayer.play(false);
+	  sid.reset();
+	  ym2149.reset();
     lcd.setCursor(0,1);   
     lcd.print("Stop Track");    
   }            
@@ -377,7 +419,11 @@ void RETROCADE::smallfsModFileJoystick(byte type)
     if (type == 1){
       ymplayer.loadFile(smallfsModTrack);
       ymplayer.play(true);  
-    }    
+    }   
+    if (type == 2){
+      sidplayer.loadFile(smallfsModTrack);
+      sidplayer.play(true);  
+    }   	
     lcd.setCursor(0,1);   
     lcd.print(smallfsModTrack);
   }    
