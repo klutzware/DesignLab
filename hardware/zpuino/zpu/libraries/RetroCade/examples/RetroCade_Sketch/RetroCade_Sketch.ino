@@ -91,10 +91,13 @@ ChangeLog:
 #include "modplayer.h"
 #include "ramFS.h"
 #include "cbuffer.h"
+#include "sidplayer.h"
 
 
 byte lastpitch[8];
 File root;
+
+int sidplayercounter = 0;
 
 #undef DO_CHECKS
 //#define DEBUG
@@ -138,14 +141,23 @@ void setup(){
   
   retrocade.modplayer.setup();
   retrocade.ymplayer.setup(&retrocade.ym2149); 
+  retrocade.sidplayer.setup();
+  
+  retrocade.sidplayer.loadFile("music.sid");
+  retrocade.sidplayer.play(true);
 
 }
 
 
 void _zpu_interrupt()
 {
+  sidplayercounter++;
   retrocade.modplayer.zpu_interrupt();
   retrocade.ymplayer.zpu_interrupt(); 
+  if (sidplayercounter == 340) {
+    retrocade.sidplayer.zpu_interrupt(); 
+    sidplayercounter = 1;
+  }
   retrocade.setTimeout();
 }
 
@@ -368,7 +380,7 @@ void loop(){
     retrocade.spaceInvadersLCD();          //Don't move the space invader when a mod file is playing
   if (retrocade.ymplayer.getPlaying() == 1)
     retrocade.ymplayer.audiofill(); 
-  retrocade.handleJoystick();     
+  retrocade.handleJoystick(); 
+  retrocade.sidplayer.audiofill();  
 }
-
 

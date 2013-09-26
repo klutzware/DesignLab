@@ -20,6 +20,7 @@
 #include "SmallFS.h"
 #include "modplayer.h"
 #include "ymplayer.h"
+#include "sidplayer.h"
 #include "SID.h"
 #include "YM2149.h"
 
@@ -70,7 +71,8 @@ class RETROCADE
 { 
   public:
    YMPLAYER ymplayer;
-   MODPLAYER modplayer; 
+   MODPLAYER modplayer;
+   SIDPLAYER sidplayer;
    YM2149 ym2149;
    SID sid;   
    void setupMegaWing(); 
