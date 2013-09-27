@@ -260,7 +260,7 @@ void RETROCADE::handleJoystick()
         lcd.setCursor(0,0);
         lcd.print("RetroCade Synth");          
         lcd.setCursor(0,1);
-        lcd.print("Version: 1.02");          
+        lcd.print("Version: 1.1");          
         break;        
       default:
         //return;
