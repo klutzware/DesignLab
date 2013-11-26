@@ -1,3 +1,8 @@
+ZAP 2.0.7 BETA - 2013.11.26
+
+[zpuino]
+* Updated audio libraries to allow specifying the wishbone slot. This is for Papilio Schematic Library.
+* Removed ZPU 2.0, it was confusing people.
 
 ZAP 2.0.6 BETA - 2013.10.16
 
