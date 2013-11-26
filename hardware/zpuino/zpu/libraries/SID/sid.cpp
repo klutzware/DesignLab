@@ -41,11 +41,8 @@ int sidInstrument[SIDINSTRUMENTS][9]=
           {0,9,0,0,0,0,0,1,0},
           {9,4,4,0,0,0,0,1,0} };
           
-//byte sidInstrumentName[SIDINSTRUMENTS][20]=        //TODO: Goofy way to do this, change to struct or function when strcpy works.
-//        { "Calliope",                                              
-//          "Accordian",                                                                                           
-//          "Harpsicord" };  
-
+#define SIDREG(x) REGISTER(sidbase,x)	  
+		  
 /*!
 @par Description
 	Contructor that creates an instance of the SID object that contains three SIDVoice objects. V1, V2, V3 
@@ -76,10 +73,8 @@ void loop() {}
 ~~~~~~~~
 \n
 */
-SID::SID(){  
-  V1.setBase(SID_ADDR_BASE_V1);
-  V2.setBase(SID_ADDR_BASE_V2);
-  V3.setBase(SID_ADDR_BASE_V3);
+SID::SID(unsigned int slot){
+  //setBase(slot);	//Makes things go haywire...
 
   //reset whole sid and initialize values.
   reset();
@@ -112,6 +107,15 @@ void loop() {}
 void SID::writeData(unsigned char address, unsigned char data)
 {
   SIDREG(address) = data;
+  //REGISTER(sidbase,address) = data;
+}
+
+void SID::setup(unsigned int wishboneSlot)
+{
+  sidbase = IO_SLOT(wishboneSlot);
+  V1.setBase(wishboneSlot,SID_ADDR_BASE_V1);
+  V2.setBase(wishboneSlot,SID_ADDR_BASE_V2);
+  V3.setBase(wishboneSlot,SID_ADDR_BASE_V3);
 }
 
 SIDVoice::SIDVoice()
@@ -124,8 +128,9 @@ SIDVoice::SIDVoice(int address)    //TODO: Remove this or make it work right.
 
 }
 
-void SIDVoice::setBase(int address)
+void SIDVoice::setBase(unsigned int wbSlot,int address)
 {
+  sidbase = IO_SLOT(wbSlot);
   baseAddress = address;
   SID_ADDR_FREQ_LOW = baseAddress;
   SID_ADDR_FREQ_HI = baseAddress + 1;
@@ -215,8 +220,10 @@ void loop() {}
 */
 void SIDVoice::setNote(int note, boolean active)
 {
-  SID::writeData(SID_ADDR_FREQ_LOW, SID::MIDI2freq[note]);
-  SID::writeData(SID_ADDR_FREQ_HI, (SID::MIDI2freq[note] >> 8)); 
+  SIDREG(SID_ADDR_FREQ_LOW) = SID::MIDI2freq[note];
+  SIDREG(SID_ADDR_FREQ_HI) = (SID::MIDI2freq[note] >> 8);
+  //SID::writeData(SID_ADDR_FREQ_LOW, SID::MIDI2freq[note]);
+  //SID::writeData(SID_ADDR_FREQ_HI, (SID::MIDI2freq[note] >> 8)); 
   setGate(active); 
   currentFreq = SID::MIDI2freq[note];
 }
@@ -257,8 +264,10 @@ void loop() {}
 */
 void SIDVoice::setFreq(int freq)
 {
-  SID::writeData(SID_ADDR_FREQ_LOW, freq);
-  SID::writeData(SID_ADDR_FREQ_HI, (freq >> 8)); 
+  SIDREG(SID_ADDR_FREQ_LOW) = freq;
+  SIDREG(SID_ADDR_FREQ_HI) = (freq >> 8);
+  //SID::writeData(SID_ADDR_FREQ_LOW, freq);
+  //SID::writeData(SID_ADDR_FREQ_HI, (freq >> 8)); 
 }
 
 /*!

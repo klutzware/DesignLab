@@ -8,6 +8,8 @@
  *  License		GPL
  */
 #include "YM2149.h"
+
+#define YM2149REG(x) REGISTER(ymbase,x) 
  
 const int YM2149::MIDI2freq[129] = {//MIDI note number
   15289, 14431, 13621, 12856, 12135, 11454, 10811, 10204,//0-7
@@ -50,8 +52,9 @@ struct YM_REG_ENVSHAPE_STRUCT{
 } ;
 YM_REG_ENVSHAPE_STRUCT YM_REG_ENVSHAPE;   
 
-void YMVoice::setBase(int freqAddress, int volumeAddress)
+void YMVoice::setBase(int freqAddress, int volumeAddress,unsigned int wishboneSlot)
 {
+  ymbase = IO_SLOT(wishboneSlot);
   YM_ADDR_FREQ = freqAddress;
   YM_ADDR_LEVEL = volumeAddress; 
 }
@@ -86,9 +89,10 @@ void loop() {}
 */
 void YMVoice::setNote(int note, boolean active)
 {
-  //setTone(active);
-  YM2149::writeData(YM_ADDR_FREQ, YM2149::MIDI2freq[note]);
-  YM2149::writeData(YM_ADDR_FREQ+1, (YM2149::MIDI2freq[note] >> 8));
+  YM2149REG(YM_ADDR_FREQ) = YM2149::MIDI2freq[note];
+  YM2149REG(YM_ADDR_FREQ+1) = (YM2149::MIDI2freq[note] >> 8);
+  // YM2149::writeData(YM_ADDR_FREQ, YM2149::MIDI2freq[note]);
+  // YM2149::writeData(YM_ADDR_FREQ+1, (YM2149::MIDI2freq[note] >> 8));
   currentFreq = YM2149::MIDI2freq[note];
 }
 
@@ -125,8 +129,10 @@ void loop() {}
 */
 void YMVoice::setFreq(int freq)
 {
-  YM2149::writeData(YM_ADDR_FREQ, freq);
-  YM2149::writeData(YM_ADDR_FREQ+1, (freq >> 8));  
+  YM2149REG(YM_ADDR_FREQ) = freq;
+  YM2149REG(YM_ADDR_FREQ+1) = (freq >> 8);
+  // YM2149::writeData(YM_ADDR_FREQ, freq);
+  // YM2149::writeData(YM_ADDR_FREQ+1, (freq >> 8));  
 }
 
 /*!
@@ -268,7 +274,145 @@ void YMVoice::setVolume(byte volume)
 {
   YM_REG_LEVEL.LEVEL = volume;   
   YM2149REG(YM_ADDR_LEVEL) = *(char*)&YM_REG_LEVEL;  
-  //YM2149::writeData(YM_ADDR_LEVEL, volume & 0x0f);
+}
+
+
+/*!
+@par Description
+Sets the Noise frequency bits of the Noise Frequency register
+@par Datasheet
+[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
+![noise] (noise.png)
+
+@par Syntax
+ym2149.V1.setNoiseFrequency(freq)
+
+@param freq 5 bit noise frequency
+
+\n
+*/
+void YMVoice::setNoiseFrequency(byte freq)
+{    
+  YM2149REG(YM_ADDR_NOISE) = freq;
+  //writeData(YM_ADDR_NOISE, freq);
+}
+
+/*!
+@par Description
+Sets the 16 bit Envelope Frequency registers
+@par Datasheet
+[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
+![envelope] (envelope.png)
+
+@par Syntax
+ym2149.V1.setEnvelopeFrequency(freq)
+
+@param freq 16 bit Envelope Frequency
+
+\n
+*/
+void YMVoice::setEnvelopeFrequency(int freq)
+{    
+  YM2149REG(YM_ADDR_FREQ_E) = freq;
+  YM2149REG(YM_ADDR_FREQ_E+1) = (freq >> 8);
+  //writeData(YM_ADDR_FREQ_E, freq);
+  //writeData(YM_ADDR_FREQ_E+1, (freq >> 8));
+}
+
+void YMVoice::setEnvelopeFrequencyLo(byte freq)
+{   
+  YM2149REG(YM_ADDR_FREQ_E) = freq; 
+  //writeData(YM_ADDR_FREQ_E, freq);
+}
+
+void YMVoice::setEnvelopeFrequencyHi(byte freq)
+{    
+  YM2149REG(YM_ADDR_FREQ_E+1) = (freq >> 8);
+  //writeData(YM_ADDR_FREQ_E+1, (freq >> 8));
+}
+
+/*!
+@par Description
+Sets the CONT bit of the Envelope Shape Register
+@par Datasheet
+[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
+![envelope] (envshape1.png)
+![envelope] (envshape2.png)
+
+@par Syntax
+ym2149.V1.setEnvelopeCONT(active)
+
+@param active 1 for on 0 for off
+
+\n
+*/
+void YMVoice::setEnvelopeCONT(boolean active)
+{
+  YM_REG_ENVSHAPE.CONT = active; 
+  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
+}
+
+/*!
+@par Description
+Sets the ATT bit of the Envelope Shape Register
+@par Datasheet
+[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
+![envelope] (envshape1.png)
+![envelope] (envshape2.png)
+
+@par Syntax
+ym2149.V1.setEnvelopeATT(active)
+
+@param active 1 for on 0 for off
+
+\n
+*/
+void YMVoice::setEnvelopeATT(boolean active)
+{
+  YM_REG_ENVSHAPE.ATT = active; 
+  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
+}
+
+/*!
+@par Description
+Sets the ALT bit of the Envelope Shape Register
+@par Datasheet
+[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
+![envelope] (envshape1.png)
+![envelope] (envshape2.png)
+
+@par Syntax
+ym2149.V1.setEnvelopeALT(active)
+
+@param active 1 for on 0 for off
+
+\n
+*/
+void YMVoice::setEnvelopeALT(boolean active)
+{
+  YM_REG_ENVSHAPE.ALT = active; 
+  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
+}
+
+/*!
+@par Description
+Sets the HOLD bit of the Envelope Shape Register
+@par Datasheet
+[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
+![envelope] (envshape1.png)
+![envelope] (envshape2.png)
+
+@par Syntax
+ym2149.V1.setEnvelopeHOLD(active)
+
+@param active 1 for on 0 for off
+
+\n
+*/
+void YMVoice::setEnvelopeHOLD(boolean active)
+{
+  YM_REG_ENVSHAPE.HOLD = active; 
+  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
 }
 
 /*!
@@ -329,16 +473,16 @@ void YMVoice::handleCC(byte number, byte value)
   //Handle the Control Changes for YM2149
   switch (number) {  
     case 2:
-      YM2149::setEnvelopeCONT(value);
+      setEnvelopeCONT(value);
       break;
     case 3:
-      YM2149::setEnvelopeATT(value);
+      setEnvelopeATT(value);
       break;
     case 4:
-      YM2149::setEnvelopeALT(value);
+      setEnvelopeALT(value);
       break;
     case 5:
-      YM2149::setEnvelopeHOLD(value);
+      setEnvelopeHOLD(value);
       break;    
     case 6:
       setNoise(value);
@@ -353,13 +497,13 @@ void YMVoice::handleCC(byte number, byte value)
       setVolume(value/8);
       break;       
     case 74:
-      YM2149::setNoiseFrequency(value);
+      setNoiseFrequency(value);
       break;        
     case 75:
-      YM2149::setEnvelopeFrequencyLo(value << 1);
+      setEnvelopeFrequencyLo(value << 1);
       break;    
     case 76:
-      YM2149::setEnvelopeFrequencyHi(value << 1);
+      setEnvelopeFrequencyHi(value << 1);
       break;                 
     default:
       return;
@@ -399,10 +543,7 @@ void loop() {}
 \n
 */
 YM2149::YM2149(){  
-  V1.setBase(YM_ADDR_FREQ_A, YM_ADDR_LEVEL_A);
-  V2.setBase(YM_ADDR_FREQ_B, YM_ADDR_LEVEL_B);
-  V3.setBase(YM_ADDR_FREQ_C, YM_ADDR_LEVEL_C);  
-  reset();
+
 }
 
 /*!
@@ -432,139 +573,6 @@ void loop() {}
 void YM2149::writeData(unsigned char address, unsigned char data)
 {
   YM2149REG(address) = data;
-}
-
-/*!
-@par Description
-Sets the Noise frequency bits of the Noise Frequency register
-@par Datasheet
-[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
-![noise] (noise.png)
-
-@par Syntax
-ym2149.V1.setNoiseFrequency(freq)
-
-@param freq 5 bit noise frequency
-
-\n
-*/
-void YM2149::setNoiseFrequency(byte freq)
-{    
-  writeData(YM_ADDR_NOISE, freq);
-}
-
-/*!
-@par Description
-Sets the 16 bit Envelope Frequency registers
-@par Datasheet
-[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
-![envelope] (envelope.png)
-
-@par Syntax
-ym2149.V1.setEnvelopeFrequency(freq)
-
-@param freq 16 bit Envelope Frequency
-
-\n
-*/
-void YM2149::setEnvelopeFrequency(int freq)
-{    
-  writeData(YM_ADDR_FREQ_E, freq);
-  writeData(YM_ADDR_FREQ_E+1, (freq >> 8));
-}
-
-void YM2149::setEnvelopeFrequencyLo(byte freq)
-{    
-  writeData(YM_ADDR_FREQ_E, freq);
-}
-
-void YM2149::setEnvelopeFrequencyHi(byte freq)
-{    
-  writeData(YM_ADDR_FREQ_E+1, (freq >> 8));
-}
-
-/*!
-@par Description
-Sets the CONT bit of the Envelope Shape Register
-@par Datasheet
-[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
-![envelope] (envshape1.png)
-![envelope] (envshape2.png)
-
-@par Syntax
-ym2149.V1.setEnvelopeCONT(active)
-
-@param active 1 for on 0 for off
-
-\n
-*/
-void YM2149::setEnvelopeCONT(boolean active)
-{
-  YM_REG_ENVSHAPE.CONT = active; 
-  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
-}
-
-/*!
-@par Description
-Sets the ATT bit of the Envelope Shape Register
-@par Datasheet
-[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
-![envelope] (envshape1.png)
-![envelope] (envshape2.png)
-
-@par Syntax
-ym2149.V1.setEnvelopeATT(active)
-
-@param active 1 for on 0 for off
-
-\n
-*/
-void YM2149::setEnvelopeATT(boolean active)
-{
-  YM_REG_ENVSHAPE.ATT = active; 
-  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
-}
-
-/*!
-@par Description
-Sets the ALT bit of the Envelope Shape Register
-@par Datasheet
-[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
-![envelope] (envshape1.png)
-![envelope] (envshape2.png)
-
-@par Syntax
-ym2149.V1.setEnvelopeALT(active)
-
-@param active 1 for on 0 for off
-
-\n
-*/
-void YM2149::setEnvelopeALT(boolean active)
-{
-  YM_REG_ENVSHAPE.ALT = active; 
-  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
-}
-
-/*!
-@par Description
-Sets the HOLD bit of the Envelope Shape Register
-@par Datasheet
-[From Datasheet] (https://github.com/GadgetFactory/RetroCade_Synth/blob/master/docs/ym2149.pdf?raw=true)\n
-![envelope] (envshape1.png)
-![envelope] (envshape2.png)
-
-@par Syntax
-ym2149.V1.setEnvelopeHOLD(active)
-
-@param active 1 for on 0 for off
-
-\n
-*/
-void YM2149::setEnvelopeHOLD(boolean active)
-{
-  YM_REG_ENVSHAPE.HOLD = active; 
-  YM2149REG(YM_ADDR_SHAPE_E) = *(char*)&YM_REG_ENVSHAPE;
 }
 
 /*!
@@ -604,7 +612,9 @@ void YM2149::reset(){
   YM2149REG(YM_ADDR_MIXER) = *(char*)&YM_REG_MIXER;   
   
   //set freq of envelope to zero
-  setEnvelopeFrequency(0);
+  YM2149REG(YM_ADDR_FREQ_E) = 0;
+  YM2149REG(YM_ADDR_FREQ_E+1) = 0;
+  //setEnvelopeFrequency(0);
   
   //set shape of envelope to defaults
   YM_REG_ENVSHAPE.EMPTY = 0;
@@ -619,3 +629,11 @@ void YM2149::reset(){
   V2.reset();
   V3.reset();
 }  
+
+void YM2149::setup(unsigned int wishboneSlot){
+  ymbase = IO_SLOT(wishboneSlot);
+  V1.setBase(YM_ADDR_FREQ_A, YM_ADDR_LEVEL_A,wishboneSlot);
+  V2.setBase(YM_ADDR_FREQ_B, YM_ADDR_LEVEL_B,wishboneSlot);
+  V3.setBase(YM_ADDR_FREQ_C, YM_ADDR_LEVEL_C,wishboneSlot);  
+  reset();
+}

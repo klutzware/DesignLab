@@ -1,4 +1,9 @@
 
+ZAP 2.0.6 BETA - 2013.10.16
+
+[zpuino]
+* Added all RetroCade libraries, YM2149, SID, YM2149 Player, SID Player, Modplayer
+
 ZAP 2.0.5 BETA - 2013.07.17
 
 [avr8]

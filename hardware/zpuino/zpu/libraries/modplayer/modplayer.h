@@ -27,7 +27,7 @@ class MODPLAYER
 {
   public: 
     MODPLAYER();
-    void setup();
+    void setup(unsigned int wishboneSlot);
     void loadFile(const char* name);
     void play(boolean play);    
     boolean getPlaying();
@@ -35,6 +35,7 @@ class MODPLAYER
     void zpu_interrupt(); 
     void volume(int volume);   
   private:
+	unsigned int modbase;
     CircularBuffer<unsigned,7> audioBuffer;   
     unsigned underruns;
     pt_mod_s *pt_init_smallfs();

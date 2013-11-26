@@ -19,7 +19,8 @@ MODPLAYER::MODPLAYER(){
   
 }
  
-void MODPLAYER::setup(){    
+void MODPLAYER::setup(unsigned int wishboneSlot){ 
+  modbase = IO_SLOT(wishboneSlot);
   underruns = 0;
   playing = false;
   fileLoaded = false;
@@ -88,7 +89,8 @@ void MODPLAYER::zpu_interrupt()
 	// Play mod file
 	if (audioBuffer.hasData()) {
 		unsigned v = audioBuffer.pop();
-		SIGMADELTADATA = v;
+		//SIGMADELTADATA = v;
+		REGISTER(modbase,1) = v;
 	} else {
           underruns++;
 	}

@@ -24,10 +24,16 @@ http://www.syntheticsw.com/~sinsch
 #include <SmallFS.h>
 #include "ramFS.h"
 
-SID sid;
-
 unsigned short play_addr;
 volatile int tick = 0;
+//unsigned int slot = 13;
+
+SID sid;
+
+void tinysetup(unsigned int wbSlot)
+{
+	sid.setup(wbSlot);
+}
 
 static uint8_t getmem(uint16_t addr)
 {

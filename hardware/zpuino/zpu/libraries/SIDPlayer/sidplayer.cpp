@@ -16,7 +16,7 @@
 #define DEBUG
 
 SIDPLAYER::SIDPLAYER(){
-  
+
 }
  
 /*!
@@ -43,7 +43,8 @@ void loop() {}
 \n
 */
 //void SIDPLAYER::setup(SID* newsid){    
-void SIDPLAYER::setup(){ 
+void SIDPLAYER::setup(unsigned int wishboneSlot){
+  tinysetup(wishboneSlot); 
   //underruns = 0;
   // timerTicks = 0;
   // sidTimeStamp = 0;

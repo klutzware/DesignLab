@@ -33,9 +33,6 @@ http://www.syntheticsw.com/~sinsch
 #define AUDIO_J2_L WING_B_3
 #define AUDIO_J2_R WING_B_2
 
-#define SIDBASE IO_SLOT(14)
-#define SIDREG(x) REGISTER(SIDBASE,x)
-
 #define SIDTUNE sidtune_Layla_Mix
 #define RETROCADE // Define this if you have a retrocade hw
 
@@ -126,8 +123,7 @@ static uint16_t pc;
 // ----------------------------------------------------------- DER HARTE KERN
 
 static uint8_t sidregs[32];
-
-//void tinysetup();
+void tinysetup(unsigned int wbSlot);
 void tinyLoadFile(const char* name);
 void tinyloop();
 void tinysid_zpu_interrupt();

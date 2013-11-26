@@ -27,15 +27,15 @@
 
 #define SID_ADDR_MISC_ENV3           0x1C
 
-#define SIDBASE IO_SLOT(14)
-#define SIDREG(x) REGISTER(SIDBASE,x)
+// #define SIDBASE IO_SLOT(14)
+// #define SIDREG(x) REGISTER(SIDBASE,x)
 
 class SIDVoice
 { 
   public:
     SIDVoice();
     SIDVoice(int address);
-    void setBase(int address);   
+    void setBase(unsigned int wbSlot,int address);   
     void setNote(int note, boolean active);
     void setFreq(int freq);
     void setPWLo(byte dutyCycle); 
@@ -61,6 +61,7 @@ class SIDVoice
   private:
     void writeData(unsigned char address, unsigned char data);
     void ringMod(byte baseOffset, byte valueOffset, byte value);
+	unsigned int sidbase;
     int baseAddress;
     int currentFreq;
     int SID_ADDR_FREQ_LOW;
@@ -101,13 +102,15 @@ class SID
   public:
     SIDVoice V1;  
     SIDVoice V2;  
-    SIDVoice V3;  
-    SID();
-    static void writeData(unsigned char address, unsigned char data);   
+    SIDVoice V3; 
+    SID(unsigned int slot=14);
+    void writeData(unsigned char address, unsigned char data); 
+	void setup(unsigned int wishboneSlot);
     void setVolume(byte volume);      
     void reset();
     static const int MIDI2freq[129];
-  private:  
+  private:
+	unsigned int sidbase;
     struct SID_REG_MODE_VOLUME_STRUCT{
         unsigned int OFF : 1; 
         unsigned int HP : 1;

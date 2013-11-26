@@ -41,8 +41,8 @@ void loop() {}
 ~~~~~~~~
 \n
 */
-void YMPLAYER::setup(YM2149* ym){    
-  //underruns = 0;
+void YMPLAYER::setup(YM2149* ym, unsigned int wishboneSlot){    
+  ym->setup(wishboneSlot);
   timerTicks = 0;
   ymTimeStamp = 0;
   resetYMFlag = 0;
@@ -207,7 +207,7 @@ void YMPLAYER::zpu_interrupt()
 		int i;
 		ymframe f = YMaudioBuffer.pop();
 		for (i=0;i<14; i++) {
-                  YM2149::writeData(i, f.regval[i]);
+                  ym2149->writeData(i, f.regval[i]);
 			//YM2149REG(i) = f.regval[i];
 		}
 	}
@@ -222,5 +222,6 @@ void YMPLAYER::zpu_interrupt()
           }
         }
   }
+  TMR0CTL &= ~(BIT(TCTLIF));
 }
 

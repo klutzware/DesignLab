@@ -32,7 +32,7 @@ class SIDPLAYER
   public: 
     SIDPLAYER();
     //void setup(SID* newsid);
-	void setup();
+	void setup(unsigned int wishboneSlot=14);
     void loadFile(const char* name);
     void play(boolean play);    
     boolean getPlaying();

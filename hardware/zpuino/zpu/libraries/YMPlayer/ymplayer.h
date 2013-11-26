@@ -26,7 +26,7 @@ class YMPLAYER
 {
   public: 
     YMPLAYER();
-    void setup(YM2149* ym);
+    void setup(YM2149* ym, unsigned int wishboneSlot);
     void loadFile(const char* name);
     void play(boolean play);    
     boolean getPlaying();

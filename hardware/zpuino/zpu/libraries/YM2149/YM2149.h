@@ -28,24 +28,33 @@
 #define YM_ADDR_FREQ_E 0x0B
 #define YM_ADDR_SHAPE_E 0x0D
 
-#define YM2149BASE IO_SLOT(13)
-#define YM2149REG(x) REGISTER(YM2149BASE,x)  
+// #define YM2149BASE IO_SLOT(12)
+// #define YM2149REG(x) REGISTER(YM2149BASE,x)  
 
 class YMVoice
 { 
   public:
-    void setBase(int freqAddress, int volumeAddress);
+    void setBase(int freqAddress, int volumeAddress,unsigned int wishboneSlot);
     void setNote(int note, boolean active);
     void setFreq(int freq);
     void setVolume(byte volume);
     void setEnvelope(boolean active);
     void setTone(boolean active);
     void setNoise(boolean active);
+    void setNoiseFrequency(byte freq);    
+    void setEnvelopeFrequency(int freq);
+    void setEnvelopeFrequencyLo(byte freq);
+    void setEnvelopeFrequencyHi(byte freq);    
+    void setEnvelopeCONT(boolean active);
+    void setEnvelopeATT(boolean active);
+    void setEnvelopeALT(boolean active);
+    void setEnvelopeHOLD(boolean active); 	
     void reset(); 
     void handleCC(byte number, byte value); 
     int getCurrentFreq(); 
     byte getVolume();   
   private:
+	unsigned int ymbase;
     int baseAddress;
     int currentFreq;
     int YM_ADDR_FREQ;
@@ -65,18 +74,11 @@ class YM2149
     YMVoice V2;
     YMVoice V3;    
     YM2149();
-    static void writeData(unsigned char address, unsigned char data);
-    static void setNoiseFrequency(byte freq);    
-    static void setEnvelopeFrequency(int freq);
-    static void setEnvelopeFrequencyLo(byte freq);
-    static void setEnvelopeFrequencyHi(byte freq);    
-    static void setEnvelopeCONT(boolean active);
-    static void setEnvelopeATT(boolean active);
-    static void setEnvelopeALT(boolean active);
-    static void setEnvelopeHOLD(boolean active);       
+	void setup(unsigned int wishboneSlot);
+    void writeData(unsigned char address, unsigned char data);      
     void reset();    
     static const int MIDI2freq[129];  
   private:
-
+	unsigned int ymbase;
 };
 #endif // LIB_YM2149_H_
