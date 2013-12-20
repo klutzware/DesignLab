@@ -30,7 +30,7 @@
 
 #include <HardwareSerial.h>
 #include <SmallFS.h>
-#include "ptplay.h"
+#include "ptplaylocal.h"
 #include <string.h>
 #include <math.h>
 #include <stdio.h>

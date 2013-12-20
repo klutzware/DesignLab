@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "ptplay.h"
+#include "ptplaylocal.h"
 #include <SmallFS.h>
 
 static pt_mod_s mymod;

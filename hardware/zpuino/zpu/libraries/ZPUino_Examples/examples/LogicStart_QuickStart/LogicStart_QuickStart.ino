@@ -3,7 +3,7 @@
 #include "VGAZX.h"
 #include "fixedpoint.h"
 #include "cbuffer.h"
-#include "ptplay.h"
+#include "ptplaylocal.h"
 
 #define USPIDATA16 *((&USPIDATA)+2)
 
