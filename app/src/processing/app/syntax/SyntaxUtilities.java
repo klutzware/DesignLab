@@ -188,7 +188,7 @@ public class SyntaxUtilities
   }
 
   static private Pattern urlPattern = Pattern.compile(
-      "((?:https?|ftp)://" +                // ( Protocol
+      "((?:https?|ftp|file|sketchdir)://" +                // ( Protocol
       "(?:(?:[\\w_\\-]+:)?[\\w_\\-]+@)?" +  // Username and password
       "(?:[\\w_\\-]+\\.)+[\\w_\\-]+" +      // Domain name
       "(?::[0-9]{1,5})?" +                  // Port 

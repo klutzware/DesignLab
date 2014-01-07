@@ -109,7 +109,7 @@ public class Base {
 
 //  int editorCount;
   List<Editor> editors = Collections.synchronizedList(new ArrayList<Editor>());
-  Editor activeEditor;
+  static Editor activeEditor;
 
   static File portableFolder = null;
   static final String portableSketchbookFolder = "sketchbook";
@@ -2089,6 +2089,8 @@ public class Base {
    */
   static public void openURL(String url) {
     try {
+	  if (url.startsWith("sketchdir://"))
+		url = "file://" + Base.getActiveSketchPath() + "\\" + url.substring(12);	
       platform.openURL(url);
 
     } catch (Exception e) {
@@ -2497,6 +2499,10 @@ public class Base {
     }
     File working = new File(path);
     return new File(working, name);
+  }
+  
+  static public String getActiveSketchPath() {
+	return activeEditor.getSketch().getFolder().toString();
   }
 
 
