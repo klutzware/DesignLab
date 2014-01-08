@@ -44,6 +44,7 @@ import javax.swing.text.*;
 import javax.swing.undo.*;
 
 import gnu.io.*;
+import java.io.File;
 
 /**
  * Main editor panel for the Processing Development Environment.
@@ -485,6 +486,7 @@ public class Editor extends JFrame implements RunnerListener {
     menubar.add(buildEditMenu());
     menubar.add(buildSketchMenu());
     menubar.add(buildToolsMenu());
+	menubar.add(buildPapilioMenu());
     menubar.add(buildHelpMenu());
     setJMenuBar(menubar);
   }
@@ -1027,6 +1029,65 @@ public class Editor extends JFrame implements RunnerListener {
     //serialMenu.add(item);
   }
 
+  protected JMenu buildPapilioMenu() {
+    JMenu menu = new JMenu(_("Papilio"));
+    JMenuItem item;
+
+
+    item = new JMenuItem(_("Edit Examples"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+		  // File f1 = new File(Base.getExamplesPath());
+          // Base.openFolder(f1);
+		  String pslPath = Base.getHardwareFolder().getPath();
+		  File f1 = new File(pslPath+"/zpuino/libraries/Papilio_Schematic_Library/examples");
+		  Base.openFolder(f1);
+        }
+      });
+    menu.add(item);
+
+    item = new JMenuItem(_("Tutorials"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://learn.gadgetfactory.net/"));
+        }
+      });
+    menu.add(item);
+
+    item = new JMenuItem(_("Reference"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://www.papilio.cc/index.php?n=Papilio.ReferenceAll"));
+        }
+      });
+    menu.add(item);
+
+    item = new JMenuItem(_("Wiki"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://papilio.cc/"));
+        }
+      });
+    menu.add(item);
+
+    item = new JMenuItem(_("Visit GadgetFactory.net"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://www.GadgetFactory.net/"));
+        }
+      });
+    menu.add(item);
+	
+    item = new JMenuItem(_("Visit Papilio Store"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://store.GadgetFactory.net/"));
+        }
+      });
+    menu.add(item);	
+
+    return menu;
+  }  
 
   protected JMenu buildHelpMenu() {
     // To deal with a Mac OS X 10.5 bug, add an extra space after the name
