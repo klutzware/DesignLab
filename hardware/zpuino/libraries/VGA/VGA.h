@@ -49,10 +49,12 @@ typedef volatile unsigned int *vgaptr_t;
 typedef volatile unsigned int *charptr_t;
 
 static inline vgaptr_t getVgaMem() {
+	//return &REGISTER(IO_SLOT(vgaWishboneSlot),0);
 	return &VGAPTR;
 }
 
 static inline vgaptr_t getCharRam() {
+	//return &REGISTER(IO_SLOT(charMapWishboneSlot),0)
 	return &CHARRAMPTR;
 }
 
@@ -145,6 +147,8 @@ public:
 	void printtext(unsigned x, unsigned y, const char *text, bool trans=false);
 
 	void clear();
+	
+	void begin(VGAWISHBONESLOT vgaslot, CHARMAPWISHBONESLOT charslot);
 
 	void moveArea(unsigned x, unsigned y, unsigned width, unsigned height, unsigned tx, unsigned ty);
 
@@ -156,6 +160,10 @@ public:
 	}
     void drawLine(int x0,int y0,int x1,int y1);
 
+private:
+	int charMapWishboneSlot;
+	int vgaWishboneSlot;
+	
 protected:
 	vgaptr_t blitpos;
 	int blitw,cblit;
@@ -170,6 +178,9 @@ const VGA_class::pixel_t PURPLE = (RED|BLUE);
 const VGA_class::pixel_t CYAN = (GREEN|BLUE);
 const VGA_class::pixel_t WHITE = (RED|GREEN|BLUE);
 const VGA_class::pixel_t BLACK = 0;
+
+INTVAL(VGAWISHBONESLOT);
+INTVAL(CHARMAPWISHBONESLOT);
 
 extern VGA_class VGA;
 

@@ -121,6 +121,12 @@ void VGA_class::moveArea(unsigned x, unsigned y, unsigned width, unsigned height
 	}
 }
 
+void VGA_class::begin(VGAWISHBONESLOT vgaslot, CHARMAPWISHBONESLOT charslot)
+{
+	vgaWishboneSlot = vgaslot;
+	charMapWishboneSlot = charslot;
+}
+
 void VGA_class::clear()
 {
 	vgaptr_t vmem = getBasePointer();
