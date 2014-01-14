@@ -3,7 +3,21 @@
 
 #if defined(ZPU)
 
-#include "zpuino.h"
+
+#include <Arduino.h>
+#include <zpuino-types.h>
+#include <zpuino.h>
+
+#define INTVAL(x) \
+struct x {                             \
+    explicit x(int i):v(i){};          \
+    inline operator int () { return v; } \
+private:                               \
+    x &operator=(int v);               \
+    int v;                             \
+}
+ INTVAL(VGAWISHBONESLOT);
+ INTVAL(CHARMAPWISHBONESLOT);
 
 #if ( (BOARD_ID == 0xA4010E01) || \
 	  (BOARD_ID == 0xA4041700) || \ 
@@ -48,15 +62,7 @@ const unsigned int VGA_VSIZE = 420;
 typedef volatile unsigned int *vgaptr_t;
 typedef volatile unsigned int *charptr_t;
 
-static inline vgaptr_t getVgaMem() {
-	//return &REGISTER(IO_SLOT(vgaWishboneSlot),0);
-	return &VGAPTR;
-}
 
-static inline vgaptr_t getCharRam() {
-	//return &REGISTER(IO_SLOT(charMapWishboneSlot),0)
-	return &CHARRAMPTR;
-}
 
 #elif defined(__linux__)
 
@@ -91,20 +97,6 @@ public:
 
 	inline unsigned int getHSize() const { return VGA_HSIZE; }
 	inline unsigned int getVSize() const { return VGA_VSIZE; }
-
-	inline vgaptr_t getBasePointer() const {
-		return getVgaMem();
-	}
-    vgaptr_t getBasePointer(unsigned x, unsigned y) const {
-		vgaptr_t p = getBasePointer();
-		p += x;
-		p += (y * getHSize());
-		return p;
-	}
-
-	inline vgaptr_t getCharacterBasePointer() const {
-		return getCharRam();
-	}
 
 	void readArea(int x, int y, int width, int height, pixel_t *dest);
 	void writeArea(int x, int y, int width, int height, pixel_t *source);
@@ -149,6 +141,7 @@ public:
 	void clear();
 	
 	void begin(VGAWISHBONESLOT vgaslot, CHARMAPWISHBONESLOT charslot);
+	//void begin(int vgaslot, int charslot);
 
 	void moveArea(unsigned x, unsigned y, unsigned width, unsigned height, unsigned tx, unsigned ty);
 
@@ -159,15 +152,18 @@ public:
 		me->blitStreamAppend(c);
 	}
     void drawLine(int x0,int y0,int x1,int y1);
+	vgaptr_t getVgaMem();
+	vgaptr_t getCharRam();
+	vgaptr_t getBasePointer();
+	vgaptr_t getBasePointer(unsigned x, unsigned y);
+	vgaptr_t getCharacterBasePointer();
 
-private:
-	int charMapWishboneSlot;
-	int vgaWishboneSlot;
-	
 protected:
 	vgaptr_t blitpos;
 	int blitw,cblit;
 	pixel_t fg,bg;
+	int charMapWishboneSlot;
+	int vgaWishboneSlot;	
 };
 
 const VGA_class::pixel_t RED = (((1<<COLOR_WEIGHT_R)-1) << COLOR_SHIFT_R);
@@ -178,9 +174,6 @@ const VGA_class::pixel_t PURPLE = (RED|BLUE);
 const VGA_class::pixel_t CYAN = (GREEN|BLUE);
 const VGA_class::pixel_t WHITE = (RED|GREEN|BLUE);
 const VGA_class::pixel_t BLACK = 0;
-
-INTVAL(VGAWISHBONESLOT);
-INTVAL(CHARMAPWISHBONESLOT);
 
 extern VGA_class VGA;
 

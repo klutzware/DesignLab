@@ -121,7 +121,32 @@ void VGA_class::moveArea(unsigned x, unsigned y, unsigned width, unsigned height
 	}
 }
 
+vgaptr_t VGA_class::getBasePointer(){
+	return getVgaMem();
+}
+vgaptr_t VGA_class::getBasePointer(unsigned x, unsigned y){
+	vgaptr_t p = getBasePointer();
+	p += x;
+	p += (y * getHSize());
+	return p;
+}
+
+vgaptr_t VGA_class::getCharacterBasePointer(){
+	return getCharRam();
+}
+
+vgaptr_t VGA_class::getVgaMem() {
+	return &REGISTER(IO_SLOT(vgaWishboneSlot),0);
+	// return &VGAPTR;
+}
+
+vgaptr_t VGA_class::getCharRam() {
+	return &REGISTER(IO_SLOT(charMapWishboneSlot),0);
+	// return &CHARRAMPTR;
+}
+
 void VGA_class::begin(VGAWISHBONESLOT vgaslot, CHARMAPWISHBONESLOT charslot)
+//void VGA_class::begin(int vgaslot, int charslot)
 {
 	vgaWishboneSlot = vgaslot;
 	charMapWishboneSlot = charslot;
