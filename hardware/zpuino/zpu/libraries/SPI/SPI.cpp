@@ -22,7 +22,8 @@ SPIClass SPI;
 
 void SPIClass::begin(MOSI mosi, MISO miso, SCK sck)
 {
-    USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+	REGISTER(IO_SLOT(wishboneSlot),0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+    // USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 
     pinMode(mosi, OUTPUT);
     pinMode(miso, INPUT);
@@ -38,28 +39,34 @@ void SPIClass::begin(MOSI mosi, MISO miso, SCK sck)
 
 void SPIClass::begin(int wishboneSlot)
 {
-    USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
-	
 	this->wishboneSlot = wishboneSlot;
+	REGISTER(IO_SLOT(wishboneSlot),0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 }
 
 byte SPIClass::transfer(unsigned _data) {
-    USPIDATA = _data;
-    return USPIDATA;
+	REGISTER(IO_SLOT(wishboneSlot),1) = _data;
+	return REGISTER(IO_SLOT(wishboneSlot),1);
+	// USPIDATA = _data;
+    // return USPIDATA;
 }
 
 uint16_t SPIClass::transfer16(unsigned _data) {
-    REGISTER(USERSPIBASE,3) = _data;
-    return REGISTER(USERSPIBASE,3);
+    REGISTER(IO_SLOT(wishboneSlot),3) = _data;
+    return REGISTER(IO_SLOT(wishboneSlot),3);    
+	// REGISTER(USERSPIBASE,3) = _data;
+    // return REGISTER(USERSPIBASE,3);
 }
 
 uint32_t SPIClass::transfer32(unsigned _data) {
-    REGISTER(USERSPIBASE,5) = _data;
-    return REGISTER(USERSPIBASE,5);
+    REGISTER(IO_SLOT(wishboneSlot),5) = _data;
+    return REGISTER(IO_SLOT(wishboneSlot),5);
+    // REGISTER(USERSPIBASE,5) = _data;
+    // return REGISTER(USERSPIBASE,5);
 }
 
 void SPIClass::end() {
-    USPICTL = USPICTL &  ~(_BV(SPIEN)|_BV(SPIBLOCK));
+    REGISTER(IO_SLOT(wishboneSlot),0) = REGISTER(IO_SLOT(wishboneSlot),0) &  ~(_BV(SPIEN)|_BV(SPIBLOCK));
+    // USPICTL = USPICTL &  ~(_BV(SPIEN)|_BV(SPIBLOCK));
 }
 
 void SPIClass::setBitOrder(int bitOrder)
@@ -69,20 +76,14 @@ void SPIClass::setBitOrder(int bitOrder)
 
 void SPIClass::setDataMode(int mode)
 {
-	// Serial.print("Mode: ");
-	// Serial.println(mode,BIN);
-	// Serial.print("Mask: ");
-	// Serial.println(SPI_MODE_MASK,BIN);
-	// Serial.print("Applied: ");
-	// Serial.println((USPICTL & ~SPI_MODE_MASK) | mode,BIN);
-	USPICTL = (USPICTL & ~SPI_MODE_MASK) | mode;
-	// Serial.print("USPICTL: ");
-	// Serial.println(USPICTL,BIN);
+	REGISTER(IO_SLOT(wishboneSlot),0) = (REGISTER(IO_SLOT(wishboneSlot),0) & ~SPI_MODE_MASK) | mode;
+	// USPICTL = (USPICTL & ~SPI_MODE_MASK) | mode;
 }
 
 void SPIClass::setClockDivider(int rate)
 {
-    USPICTL = (USPICTL & ~SPI_CLOCK_MASK) | rate;
+	REGISTER(IO_SLOT(wishboneSlot),0) = (REGISTER(IO_SLOT(wishboneSlot),0) & ~SPI_CLOCK_MASK) | rate;
+    // USPICTL = (USPICTL & ~SPI_CLOCK_MASK) | rate;
 }
 
 
