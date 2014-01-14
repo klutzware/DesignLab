@@ -76,6 +76,7 @@ void setup() {
   //Uncomment this if you are using the pinselect variant
   setup_pin_select();
 
+  VGA.begin(VGAWISHBONESLOT(9),CHARMAPWISHBONESLOT(10));
   VGA.clear();
   VGA.setBackgroundColor(BLACK);
   VGA.setColor(RED);
