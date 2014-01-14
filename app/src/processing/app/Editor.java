@@ -1039,12 +1039,28 @@ public class Editor extends JFrame implements RunnerListener {
         public void actionPerformed(ActionEvent e) {
 		  // File f1 = new File(Base.getExamplesPath());
           // Base.openFolder(f1);
-		  String pslPath = Base.getHardwareFolder().getPath();
-		  File f1 = new File(pslPath+"/zpuino/libraries/Papilio_Schematic_Library/examples");
+		  //String pslPath = Base.getHardwareFolder().getPath();
+		  String pslPath = Base.getExamplesPath();
+		  File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples");
 		  Base.openFolder(f1);
+		  //Base.openFolder(Base.getExamplesPath()+"Papilio_Schematic_Library/examples");
         }
       });
     menu.add(item);
+	
+    item = new JMenuItem(_("Edit Libraries"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+		  // File f1 = new File(Base.getExamplesPath());
+          // Base.openFolder(f1);
+		  //String pslPath = Base.getHardwareFolder().getPath();
+		  String pslPath = Base.getLibrariesPath().get(1).getPath();
+		  File f1 = new File(pslPath);
+		  Base.openFolder(f1);
+		  //Base.openFolder(Base.getExamplesPath()+"Papilio_Schematic_Library/examples");
+        }
+      });
+    menu.add(item);	
 
     item = new JMenuItem(_("Tutorials"));
     item.addActionListener(new ActionListener() {
