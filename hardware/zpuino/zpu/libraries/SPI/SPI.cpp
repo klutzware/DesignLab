@@ -36,6 +36,13 @@ void SPIClass::begin(MOSI mosi, MISO miso, SCK sck)
     inputPinForFunction( miso, IOPIN_USPI_MISO );
 }
 
+void SPIClass::begin(int wishboneSlot)
+{
+    USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+	
+	this->wishboneSlot = wishboneSlot;
+}
+
 byte SPIClass::transfer(unsigned _data) {
     USPIDATA = _data;
     return USPIDATA;
@@ -62,7 +69,15 @@ void SPIClass::setBitOrder(int bitOrder)
 
 void SPIClass::setDataMode(int mode)
 {
-    USPICTL = (USPICTL & ~SPI_MODE_MASK) | mode;
+	// Serial.print("Mode: ");
+	// Serial.println(mode,BIN);
+	// Serial.print("Mask: ");
+	// Serial.println(SPI_MODE_MASK,BIN);
+	// Serial.print("Applied: ");
+	// Serial.println((USPICTL & ~SPI_MODE_MASK) | mode,BIN);
+	USPICTL = (USPICTL & ~SPI_MODE_MASK) | mode;
+	// Serial.print("USPICTL: ");
+	// Serial.println(USPICTL,BIN);
 }
 
 void SPIClass::setClockDivider(int rate)
