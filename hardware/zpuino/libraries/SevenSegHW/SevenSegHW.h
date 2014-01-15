@@ -5,13 +5,21 @@
 #include "zpuino.h"
 #endif
 
-#define SEVENSEGBASE IO_SLOT(9)
+#define SEVENSEGBASE IO_SLOT(11)
 #define SEVSEGDIGITO  REGISTER(SEVENSEGBASE,7)
 #define SEVSEGDIGIT1  REGISTER(SEVENSEGBASE,6)
 #define SEVSEGDIGIT2  REGISTER(SEVENSEGBASE,5)
 #define SEVSEGDIGIT3  REGISTER(SEVENSEGBASE,4)
 #define SEVSEGBRIGHT  REGISTER(SEVENSEGBASE,0)
 #define SEVSEGEXTRA   REGISTER(SEVENSEGBASE,1)
+
+#define SEGA 1
+#define SEGB 2
+#define SEGC 4
+#define SEGD 8
+#define SEGE 16
+#define SEGF 32
+#define SEGG 64
 
 
 class SEVENSEGHW {
@@ -33,6 +41,8 @@ public:
     unsigned int getDotPosition () ;
     // Set a Hexadecimal value
     void setHexValue (unsigned int value, unsigned int digit) ;
+    // Set a custom value
+    void custom (unsigned int value, unsigned int digit) ;	
 
 	// Set Brightness
     void setBrightness (unsigned int value) ;

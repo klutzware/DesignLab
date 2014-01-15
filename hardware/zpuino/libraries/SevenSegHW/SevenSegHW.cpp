@@ -102,6 +102,13 @@ void SEVENSEGHW::setHexValue(unsigned int value, unsigned int digit)
 
 }
 
+// Set a Custom value
+void SEVENSEGHW::custom(unsigned int value, unsigned int digit)
+{
+    REGISTER( IO_SLOT(wishboneSlot), (4 + digit) ) = value ;
+
+}
+
 // Set Brightness
 void SEVENSEGHW::setBrightness(unsigned int value)
 {
