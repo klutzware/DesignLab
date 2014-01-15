@@ -28,7 +28,7 @@
 SEVENSEGHW sevenseg;
 
 void setup () {
-  // 
+  sevenseg.begin(11);
 }
 
 void loop () {
@@ -37,6 +37,7 @@ void loop () {
     // hmmm, but I don't know what the Extra register is used for :)
     //sevenseg.setExtra(34);
 
+	
     // change Brightness
     sevenseg.setBrightness(1);
 

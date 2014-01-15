@@ -49,6 +49,11 @@ public:
     void setSegmentStatus (unsigned int enabled );
 	// get segment status 
     unsigned int getSegmentStatus ();
+	
+	void begin(int wishboneSlot);
+	
+private:
+	int wishboneSlot;
 };
 
 #endif

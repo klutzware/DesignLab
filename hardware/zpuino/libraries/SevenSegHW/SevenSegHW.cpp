@@ -13,7 +13,7 @@ static unsigned char table7seg[16] =
     0x7F, //0111 1111  8
     0x6F, //0110 1111  9
     0x77, //0111 0111  A
-    0x7A, //0111 1100  B
+    0x7C, //0110 1110  B
     0x39, //0011 1001  C
     0x2E, //0010 1110  D
     0x79, //0111 1001  E
@@ -31,57 +31,63 @@ SEVENSEGHW::SEVENSEGHW()
 {
 }
 
+void SEVENSEGHW::begin(int wishboneSlot)
+{
+	this->wishboneSlot = wishboneSlot;
+}
+
 // Set the 4 digits Int value
 void SEVENSEGHW::setIntValue(unsigned int value, unsigned int pos_dot)
 {
-    REGISTER( SEVENSEGBASE, 7 ) = int_to_7seg( value      %10) | (pos_dot==4 ? 0x80:0x00);
-    REGISTER( SEVENSEGBASE, 6 ) = int_to_7seg((value/10  )%10) | (pos_dot==3 ? 0x80:0x00);
-    REGISTER( SEVENSEGBASE, 5 ) = int_to_7seg((value/100 )%10) | (pos_dot==2 ? 0x80:0x00);
-    REGISTER( SEVENSEGBASE, 4 ) = int_to_7seg((value/1000)%10) | (pos_dot==1 ? 0x80:0x00);
+    REGISTER( IO_SLOT(wishboneSlot), 7 ) = int_to_7seg( value      %10) | (pos_dot==4 ? 0x80:0x00);
+    REGISTER( IO_SLOT(wishboneSlot), 6 ) = int_to_7seg((value/10  )%10) | (pos_dot==3 ? 0x80:0x00);
+    REGISTER( IO_SLOT(wishboneSlot), 5 ) = int_to_7seg((value/100 )%10) | (pos_dot==2 ? 0x80:0x00);
+    REGISTER( IO_SLOT(wishboneSlot), 4 ) = int_to_7seg((value/1000)%10) | (pos_dot==1 ? 0x80:0x00);
 }
 
 // Set a digit value
 void SEVENSEGHW::setDigitValue(unsigned int value, unsigned int dot, unsigned int digit)
 {
-    REGISTER( SEVENSEGBASE, (4 + digit) ) = int_to_7seg(value%10) | (dot==1 ? 0x80:0x00);
+    REGISTER( IO_SLOT(wishboneSlot), (4 + digit) ) = int_to_7seg(value%10) | (dot==1 ? 0x80:0x00);
 
 }
 
 // Set 16 bits Hex value
 void SEVENSEGHW::setHexValue(unsigned int value)
 {
-    REGISTER( SEVENSEGBASE, 7 ) = int_to_7seg( value            %16) ;
-    REGISTER( SEVENSEGBASE, 6 ) = int_to_7seg((value/16        )%16) ;
-    REGISTER( SEVENSEGBASE, 5 ) = int_to_7seg((value/(16*16)   )%16) ;
-    REGISTER( SEVENSEGBASE, 4 ) = int_to_7seg((value/(16*16*16))%16) ;
+    REGISTER( IO_SLOT(wishboneSlot), 7 ) = int_to_7seg( value            %16) ;
+    REGISTER( IO_SLOT(wishboneSlot), 6 ) = int_to_7seg((value/16        )%16) ;
+    REGISTER( IO_SLOT(wishboneSlot), 5 ) = int_to_7seg((value/(16*16)   )%16) ;
+    REGISTER( IO_SLOT(wishboneSlot), 4 ) = int_to_7seg((value/(16*16*16))%16) ;
 }
 
 // Get the 4 digits Int value
 unsigned int SEVENSEGHW::getIntValue()
 {
-    return SEVSEGDIGITO + (SEVSEGDIGIT1 *10) + (SEVSEGDIGIT2 *100) + (SEVSEGDIGIT3 *1000)   ;
+    return REGISTER( IO_SLOT(wishboneSlot), 7 ) + (REGISTER( IO_SLOT(wishboneSlot), 6 ) *10) + (REGISTER( IO_SLOT(wishboneSlot), 5 ) *100) + (REGISTER( IO_SLOT(wishboneSlot), 4 ) *1000)   ;
+	//return SEVSEGDIGITO + (SEVSEGDIGIT1 *10) + (SEVSEGDIGIT2 *100) + (SEVSEGDIGIT3 *1000)   ;
 }
 
 
 // Get a digit value
 unsigned int SEVENSEGHW::getDigitValue(unsigned int digit)
 {
-    return REGISTER( SEVENSEGBASE, 4+ digit );
+    return REGISTER( IO_SLOT(wishboneSlot), 4+ digit );
 }
 
 // Get Dot position
 unsigned int SEVENSEGHW::getDotPosition()
 {
-    if ((SEVSEGDIGITO & 0x80) == 0x80)
+    if ((REGISTER( IO_SLOT(wishboneSlot), 7 ) & 0x80) == 0x80)
     {
         return 1;
-    } else if ((SEVSEGDIGIT1 & 0x80) == 0x80)
+    } else if ((REGISTER( IO_SLOT(wishboneSlot), 6 ) & 0x80) == 0x80)
     {
         return 2;
-    } else if ((SEVSEGDIGIT2 & 0x80) == 0x80)
+    } else if ((REGISTER( IO_SLOT(wishboneSlot), 5 ) & 0x80) == 0x80)
     {
         return 3;
-    } else if ((SEVSEGDIGIT3 & 0x80) == 0x80)
+    } else if ((REGISTER( IO_SLOT(wishboneSlot), 4 ) & 0x80) == 0x80)
     {
         return 4;
     }
@@ -92,7 +98,7 @@ unsigned int SEVENSEGHW::getDotPosition()
 // Set a Hexadecimal value
 void SEVENSEGHW::setHexValue(unsigned int value, unsigned int digit)
 {
-    REGISTER( SEVENSEGBASE, (4 + digit) ) = int_to_7seg(value%16) ;
+    REGISTER( IO_SLOT(wishboneSlot), (4 + digit) ) = int_to_7seg(value%16) ;
 
 }
 
@@ -101,36 +107,36 @@ void SEVENSEGHW::setBrightness(unsigned int value)
 {
     //SEVSEGBRIGHT = (value << 4 )| getSegmentStatus();
 	//SEVSEGBRIGHT = (0xE000F);
-	SEVSEGBRIGHT = (0xF | (value<<16));
+	REGISTER( IO_SLOT(wishboneSlot), 0 ) = (0xF | (value<<16));
 }
 
 // Get Brightness
 unsigned int SEVENSEGHW::getBrightness()
 {
-    return SEVSEGBRIGHT >> 4 ;
+    return REGISTER( IO_SLOT(wishboneSlot), 0 ) >> 4 ;
 }
 
 // Set Extra value
 void SEVENSEGHW::setExtra(unsigned int value)
 {
-    SEVSEGEXTRA = value;
+    REGISTER( IO_SLOT(wishboneSlot), 1 ) = value;
 }
 
 // Get Extra value
 unsigned int SEVENSEGHW::getExtra()
 {
-    return SEVSEGEXTRA ;
+    return REGISTER( IO_SLOT(wishboneSlot), 1 ) ;
 }
 
 // enable/disable segment
 void SEVENSEGHW::setSegmentStatus(unsigned int enabled)
 {
-    SEVSEGBRIGHT = enabled & 0xF | (getBrightness() << 4);
+    REGISTER( IO_SLOT(wishboneSlot), 0 ) = enabled & 0xF | (getBrightness() << 4);
 }
 
 unsigned int SEVENSEGHW::getSegmentStatus()
 {
-    return SEVSEGBRIGHT & 0xF ;
+    return REGISTER( IO_SLOT(wishboneSlot), 0 ) & 0xF ;
 }
 
 
