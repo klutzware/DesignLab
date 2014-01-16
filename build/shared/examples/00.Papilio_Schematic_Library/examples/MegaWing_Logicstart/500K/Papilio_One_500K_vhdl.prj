@@ -47,4 +47,4 @@ vhdl wishbone "C:\dropbox\GadgetFactory\GadgetFactory_Engineering\Papilio-Schema
 vhdl wishbone "C:\dropbox\GadgetFactory\GadgetFactory_Engineering\Papilio-Schematic-Library\Libraries\Wishbone_Peripherals\clk_32to50_dcm.vhd"
 vhdl wishbone "C:\dropbox\GadgetFactory\GadgetFactory_Engineering\Papilio-Schematic-Library\Libraries\Wishbone_Peripherals\AUDIO_zpuino_wb_passthrough.vhd"
 vhdl wishbone "C:\dropbox\GadgetFactory\GadgetFactory_Engineering\Papilio-Schematic-Library\Libraries\Wishbone_Peripherals\AUDIO_zpuino_sa_sigmadeltaDAC.vhd"
-vhdl work "C:\dropbox\GadgetFactory\GadgetFactory_Engineering\Papilio-Schematic-Library\Papilio_Schematic_Projects\MegaWing_Logicstart\500K\Papilio_One_500K.vhf"
+vhdl work "C:\dropbox\GadgetFactory\GadgetFactory_Engineering\Papilio-Schematic-Library\examples\MegaWing_Logicstart\500K\Papilio_One_500K.vhf"

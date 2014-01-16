@@ -7,11 +7,11 @@
 -- \   \   \/     Version : 14.6
 --  \   \         Application : sch2hdl
 --  /   /         Filename : Papilio_Pro.vhf
--- /___/   /\     Timestamp : 01/08/2014 15:46:17
+-- /___/   /\     Timestamp : 01/16/2014 15:55:33
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
---Command: sch2hdl -intstyle ise -family spartan6 -flat -suppress -vhdl C:/dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/Papilio_Schematic_Projects/MegaWing_Logicstart/LX9/Papilio_Pro.vhf -w C:/dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/Papilio_Schematic_Projects/MegaWing_Logicstart/Papilio_Pro.sch
+--Command: sch2hdl -intstyle ise -family spartan6 -flat -suppress -vhdl C:/dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/MegaWing_Logicstart/LX9/Papilio_Pro.vhf -w C:/dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/MegaWing_Logicstart/Papilio_Pro.sch
 --Design Name: Papilio_Pro
 --Device: spartan6
 --Purpose:
@@ -155,13 +155,13 @@ architecture BEHAVIORAL of Papilio_Pro is
    signal XLXN_592                                  : std_logic;
    signal XLXN_593                                  : std_logic;
    signal XLXN_596                                  : std_logic;
-   signal XLXN_602                                  : std_logic;
    signal XLXN_603                                  : std_logic;
    signal XLXN_604                                  : std_logic;
    signal XLXN_605                                  : std_logic;
    signal XLXN_610                                  : std_logic;
    signal XLXI_28_wishbone_slot_video_in_openSignal : std_logic_vector (63 
          downto 0);
+   signal XLXI_63_SPI_CS_openSignal                 : std_logic;
    component ZPUino_Papilio_Pro_V1
       port ( gpio_bus_out            : out   std_logic_vector (147 downto 0); 
              gpio_bus_in             : in    std_logic_vector (97 downto 0); 
@@ -441,7 +441,7 @@ begin
    XLXI_60 : COMM_zpuino_wb_SPI
       port map (miso=>XLXN_605,
                 wishbone_in(61 downto 0)=>XLXN_559(61 downto 0),
-                enabled=>XLXN_602,
+                enabled=>open,
                 mosi=>XLXN_604,
                 sck=>XLXN_603,
                 wishbone_out(33 downto 0)=>XLXN_560(33 downto 0));
@@ -457,7 +457,7 @@ begin
                 Seg7_enable(3 downto 0)=>XLXN_543(3 downto 0),
                 Seg7_segdata(6 downto 0)=>XLXN_542(6 downto 0),
                 SPI_CLK=>XLXN_603,
-                SPI_CS=>XLXN_602,
+                SPI_CS=>XLXI_63_SPI_CS_openSignal,
                 SPI_MOSI=>XLXN_604,
                 VGA_Blue0=>XLXN_593,
                 VGA_Blue1=>XLXN_592,
