@@ -580,7 +580,7 @@
 
     <tar compression="gzip" destfile="linux/arduino-${version}-linux.tgz">
       <tarfileset dir="linux/work"
-		  prefix="arduino-${version}"
+		  prefix="papilio-zap-ide"
 		  excludes="arduino,
 			    hardware/tools/avrdude,
           hardware/tools/zpuinoprogrammer,
@@ -596,17 +596,17 @@
 		  prefix="arduino-${version}/hardware/tools" />
     </tar>
 -->
-    <move file="linux/work" tofile="linux/arduino-${version}" />
+    <move file="linux/work" tofile="linux/papilio-zap-ide" />
 
     <exec executable="tar" dir="linux">
       <arg value="-z"/>
       <arg value="-c"/>
       <arg value="-f"/>
       <arg value="arduino-${version}-${platform}.tgz"/>
-      <arg value="arduino-${version}"/>
+      <arg value="papilio-zap-ide"/>
     </exec>
 
-    <move file="linux/arduino-${version}" tofile="linux/work" />
+    <move file="linux/papilio-zap-ide" tofile="linux/work" />
 
     <echo>
       =======================================================
@@ -782,12 +782,12 @@
 
     <zip destfile="windows/zap-${version}-${platform}.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="zap-${version}" />
+		  prefix="papilio-zap-ide" />
     </zip>
 
     <zip destfile="windows/zap-${version}-${platform}-expert.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="zap-${version}" 
+		  prefix="papilio-zap-ide" 
 		  excludes="java/**" />
     </zip>
 
