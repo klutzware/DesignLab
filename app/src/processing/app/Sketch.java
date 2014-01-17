@@ -1732,14 +1732,14 @@ public class Sketch {
    */
   public boolean isReadOnly() {
     String apath = folder.getAbsolutePath();
-    for (File folder : Base.getLibrariesPath()) {
-      if (apath.startsWith(folder.getAbsolutePath()))
-        return true;
-    }
-    if (apath.startsWith(Base.getExamplesPath()) ||
-        apath.startsWith(Base.getSketchbookLibrariesPath())) {
-      return true;
-    }
+    // for (File folder : Base.getLibrariesPath()) {
+      // if (apath.startsWith(folder.getAbsolutePath()))
+        // return true;
+    // }
+    // if (apath.startsWith(Base.getExamplesPath()) ||
+        // apath.startsWith(Base.getSketchbookLibrariesPath())) {
+      // return true;
+    // }
 
     // canWrite() doesn't work on directories
     // } else if (!folder.canWrite()) {
