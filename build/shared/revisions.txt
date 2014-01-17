@@ -1,4 +1,4 @@
-ZAP 2.1	- 2014.1.16
+ZAP 2.1.0	- 2014.1.16
 [ide]
 * Allow clickable URLs in the sketch for bit files, ISE projects, and schematics.
 * Add Papilio Menu
