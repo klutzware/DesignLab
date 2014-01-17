@@ -602,7 +602,7 @@
       <arg value="-z"/>
       <arg value="-c"/>
       <arg value="-f"/>
-      <arg value="arduino-${version}-${platform}.tgz"/>
+      <arg value="zap-${version}-${platform}.tgz"/>
       <arg value="papilio-zap-ide"/>
     </exec>
 
