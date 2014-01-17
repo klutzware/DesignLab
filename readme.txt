@@ -1,3 +1,6 @@
+ZAP IDE - A modified version of the Arduino IDE for the Papilio FPGA board. 
+ZAP stands for ZPUino Arduino Papilio IDE.
+
 Arduino is an open-source physical computing platform based on a simple i/o
 board and a development environment that implements the Processing/Wiring
 language. Arduino can be used to develop stand-alone interactive objects or
@@ -29,4 +32,62 @@ Arduino uses the GNU avr-gcc toolchain, avrdude, avr-libc, and code from
 Processing and Wiring.
 
 Icon and about image designed by ToDo: http://www.todo.to.it/
+
+ZAP 2.1	- 2014.1.16
+[ide]
+* Allow clickable URLs in the sketch for bit files, ISE projects, and schematics.
+* Add Papilio Menu
+* Add Papilio Schematic Library 1.5
+
+[zpuino]
+* Fix missing Papilio Pro ID from bootloader/board type.
+* Add SPI library
+* Add SPIADC library
+* Add SevenSegment Hardware library
+* Update all libraries to allow selecting what wishbone slot to use.
+
+ZAP 2.0.7 BETA - 2013.11.26
+
+[zpuino]
+* Updated audio libraries to allow specifying the wishbone slot. This is for Papilio Schematic Library.
+* Removed ZPU 2.0, it was confusing people.
+
+ZAP 2.0.6 BETA - 2013.10.16
+
+[zpuino]
+* Added all RetroCade libraries, YM2149, SID, YM2149 Player, SID Player, Modplayer
+
+ZAP 2.0.5 BETA - 2013.07.17
+
+[avr8]
+* Ethercard library to support enc28J60 boards including the soon to come Ethernet Wing. Greg Samsa responded to the hacking challenge and made this library work with the Papilio.
+
+ZAP 2.0.4 BETA - 2013.07.03
+
+[avr8]
+* BUG Fix: Compiling a sketch more then once would not result in updated code loaded to Papilio board. Makefile was updated to detect change to the hex file.
+
+ZAP 2.0.3 BETA - 2013.06.26
+
+[zpuino]
+* Removed 2.0 interrupts from 1.0 code base.
+
+ZAP 2.0.2 BETA - 2013.06.05
+
+[zpuino]
+* Fix for bootloader issue introduced in 2.0.1
+* Fix for VGALiquidCrystal library
+
+ZAP 2.0.1 BETA - 2013.06.04
+
+[zpuino]
+* Fix for missing Hyperion board type from VGA.h
+
+ZAP 2.0.0 BETA - 2013.06.04
+
+[zpuino]
+* Added Hyperion variants for LogicStart and Arcade MegaWing board types
+* Added bootloader functionality that associates bit files with each board type
+* Libraries moved to ZPUino hardware type
+* Experimental ZPUino 2.0 plugin added
 
