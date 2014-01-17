@@ -459,8 +459,8 @@
       <param name="target.path" value="linux/work" />
     </antcall>
 
-    <copy todir="linux/work" file="linux/dist/arduino" />
-    <chmod perm="755" file="linux/work/arduino" />
+    <copy todir="linux/work" file="linux/dist/zap" />
+    <chmod perm="755" file="linux/work/zap" />
 
     <copy todir="linux/work/hardware">
       <fileset dir="linux/dist" includes="tools/**" />
@@ -474,8 +474,8 @@
     <chmod perm="755" file="linux/work/hardware/tools/adk2tool" />
     <chmod perm="755" file="linux/work/hardware/tools/adk2install" />
 
-    <copy todir="linux/work" file="linux/dist/arduino" />
-    <chmod perm="755" file="linux/work/arduino" />
+    <copy todir="linux/work" file="linux/dist/zap" />
+    <chmod perm="755" file="linux/work/zap" />
 
     <antcall target="linux-unzip-arm-toolchain" />
   </target>
