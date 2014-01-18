@@ -897,6 +897,18 @@ public class Sketch {
 
     // now make a fresh copy of the folder
     newFolder.mkdirs();
+	
+	//Copy all folder contents for Papilio
+	Base.copyDir(folder, newFolder);
+	
+	//Delete the old ino file
+	File[] inoFiles = newFolder.listFiles(new FilenameFilter() {
+	public boolean accept(File dir, String name) {
+	  return name.toLowerCase().endsWith(".ino");
+	}
+	});	
+	for (File inoFile : inoFiles)
+		inoFile.delete();	
 
     // grab the contents of the current tab before saving
     // first get the contents of the editor text area
@@ -1732,14 +1744,14 @@ public class Sketch {
    */
   public boolean isReadOnly() {
     String apath = folder.getAbsolutePath();
-    // for (File folder : Base.getLibrariesPath()) {
-      // if (apath.startsWith(folder.getAbsolutePath()))
-        // return true;
-    // }
-    // if (apath.startsWith(Base.getExamplesPath()) ||
-        // apath.startsWith(Base.getSketchbookLibrariesPath())) {
-      // return true;
-    // }
+    for (File folder : Base.getLibrariesPath()) {
+      if (apath.startsWith(folder.getAbsolutePath()))
+        return true;
+    }
+    if (apath.startsWith(Base.getExamplesPath()) ||
+        apath.startsWith(Base.getSketchbookLibrariesPath())) {
+      return true;
+    }
 
     // canWrite() doesn't work on directories
     // } else if (!folder.canWrite()) {
