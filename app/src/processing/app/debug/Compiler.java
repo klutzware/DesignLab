@@ -629,6 +629,8 @@ public class Compiler implements MessageConsumer {
                                       utilityFolder, false, includePaths));
       // other libraries should not see this library's utility/ folder
       includePaths.remove(includePaths.size() - 1);
+      /* Now, if library offers prebuilt (.a) files , just add them */
+      objectFiles.addAll( findFilesInFolder(libraryFolder,"a",false) );
     }
   }
 	
