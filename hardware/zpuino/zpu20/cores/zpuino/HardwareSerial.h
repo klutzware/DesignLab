@@ -1,17 +1,24 @@
 #ifndef __HardwareSerial_h__
 #define __HardwareSerial_h__
 
+#include "zstdio.h"
+
 #include <zpuino.h>
 #include <zpuino-types.h>
 #include "Stream.h"
 #include "Print.h"
 #include "BaseDevice.h"
+#include "zfdevice.h"
 
 #define VENDOR_ZPUINO       0x08
 #define PRODUCT_ZPUINO_UART 0x11
 
 namespace ZPUino {
 };
+
+#ifdef HAVE_ZFDEVICE
+int serial_register_device(const char *name, void*data);
+#endif
 
 class HardwareSerial: public ZPUino::BaseDevice, public Stream
 {
@@ -25,7 +32,15 @@ public:
 				REG(1) = BAUDRATEGEN(baudrate) | BIT(UARTEN);
 			} else {
 				begin_slow(baudrate);
-			}
+                        }
+#ifdef HAVE_ZFDEVICE
+                        if (getInstance()!=0xff) {
+                            /* Register it */
+                            char name[16];
+                            sprintf(name,"serial%d",getInstance());
+                            serial_register_device(name,this);
+                        }
+#endif
 		}
 	}
 	void begin_slow(const unsigned int baudrate);
@@ -52,6 +67,6 @@ private:
 extern void serialEventRun(void) __attribute__((weak));
 
 extern HardwareSerial Serial; /* 1st slot */
-extern HardwareSerial Serial1; /* 1st slot */
+extern HardwareSerial Serial1; /* 2nd slot */
 
 #endif
