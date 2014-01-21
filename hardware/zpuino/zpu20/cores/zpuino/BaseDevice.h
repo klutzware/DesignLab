@@ -60,6 +60,7 @@ namespace ZPUino {
         int deviceBegin(uint8_t vendor, uint8_t product);
         int isError() { return m_slot==0xff; }
         inline uint8_t getSlot() const { return m_slot; }
+        inline uint8_t getInstance() const { return m_instance; }
     protected:
     private:
         uint8_t m_slot;
