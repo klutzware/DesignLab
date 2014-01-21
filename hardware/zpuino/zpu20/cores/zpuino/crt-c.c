@@ -33,8 +33,19 @@ int main(int argc, char **argv)
 }
 #endif
 
+extern int __bss_start__, __bss_end__;
+
+static void __clear_bss()
+{
+    int *i  = &__bss_start__;
+    while (i<&__bss_end__) {
+        *i++=0;
+    }
+}
+
 void __attribute__((noreturn)) _premain(void)
 {
+        __clear_bss();
 	___do_global_ctors();
 	main(0,0);
 	while(1);
