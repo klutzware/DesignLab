@@ -5,21 +5,23 @@
 #include <inttypes.h>
 #include <new>
 
-
 extern "C" {
     extern void *__end__;
     static void *alloc_buffer = &__end__;
-	void * malloc(int size)
-	{
-		void *ret = alloc_buffer;
-		/* Align */
-		alloc_buffer = (void*)((unsigned)alloc_buffer + size);
+    void * malloc(int size)
+    {
+        void *ret = alloc_buffer;
+        /* Align */
+        alloc_buffer = (void*)((unsigned)alloc_buffer + size);
         alloc_buffer = (void*)(((unsigned)alloc_buffer + 3) & ~3);
-		return ret;
-	}
-	void free(void*)
-	{
-	}
+        return ret;
+    }
+    void free(void*)
+    {
+    }
+    void *realloc(void *ptr, int size) {
+        return NULL;
+    }
 };
 
 void * operator new(size_t size)
