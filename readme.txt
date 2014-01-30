@@ -33,6 +33,17 @@ Processing and Wiring.
 
 Icon and about image designed by ToDo: http://www.todo.to.it/
 
+ZAP 2.2.0 - 2014.1.30
+[ide]
+*Updates to make linux build work
+*Copy entire contents of a sketch directory when doing a SaveAs
+
+[Papilio Schematic Libary - Version 1.6]
+-Moved libraries into sketch folder so sketches can be saved in any location
+-JTAG Logic Analyzer Example
+-Analog Wing Example
+-Updated RetroCade Synth example with support for Analog readout
+
 ZAP 2.1	- 2014.1.16
 [ide]
 * Allow clickable URLs in the sketch for bit files, ISE projects, and schematics.
