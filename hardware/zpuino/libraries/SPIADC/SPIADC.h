@@ -25,11 +25,12 @@ class SPIADC {
     SPIClass SPI;
 
   private   :
-  byte SELPIN ;
+  byte SPI_ADC_CS ;
   bool adcBits ;
 };
 
 extern SPIADC analog;
+extern SPIADC analog1;
 
 
 #endif
