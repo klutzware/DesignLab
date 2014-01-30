@@ -1,0 +1,385 @@
+--------------------------------------------------------------------------------
+Release 14.6 Trace  (nt64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+C:\Xilinx\14.6\ISE_DS\ISE\bin\nt64\unwrapped\trce.exe -intstyle ise -v 3 -s 2
+-n 3 -fastpaths -xml Papilio_Pro.twx Papilio_Pro.ncd -o Papilio_Pro.twr
+Papilio_Pro.pcf
+
+Design file:              Papilio_Pro.ncd
+Physical constraint file: Papilio_Pro.pcf
+Device,package,speed:     xc6slx9,tqg144,C,-2 (PRODUCTION 1.23 2013-06-08)
+Report level:             verbose report
+
+Environment Variable      Effect 
+--------------------      ------ 
+NONE                      No environment variables were set
+--------------------------------------------------------------------------------
+
+INFO:Timing:3412 - To improve timing, see the Timing Closure User Guide (UG612).
+INFO:Timing:2752 - To get complete path coverage, use the unconstrained paths 
+   option. All paths that are not constrained will be reported in the 
+   unconstrained paths section(s) of the report.
+INFO:Timing:3339 - The clock-to-out numbers in this timing report are based on 
+   a 50 Ohm transmission line loading model.  For the details of this model, 
+   and for more information on accounting for different loading conditions, 
+   please see the device datasheet.
+
+================================================================================
+Timing constraint: NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 component switching limit errors)
+ Minimum period is  10.000ns.
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;
+--------------------------------------------------------------------------------
+Slack: 21.250ns (period - (min low pulse limit / (low pulse / period)))
+  Period: 31.250ns
+  Low pulse: 15.625ns
+  Low pulse limit: 5.000ns (Tdcmpw_CLKIN_25_50)
+  Physical resource: XLXI_44/clkgen_inst/pll_base_inst/CLKIN1
+  Logical resource: XLXI_44/clkgen_inst/pll_base_inst/CLKIN1
+  Location pin: PLL_ADV_X0Y1.CLKIN1
+  Clock network: XLXI_44/clkgen_inst/pll_base_inst_ML_NEW_DIVCLK
+--------------------------------------------------------------------------------
+Slack: 21.250ns (period - (min high pulse limit / (high pulse / period)))
+  Period: 31.250ns
+  High pulse: 15.625ns
+  High pulse limit: 5.000ns (Tdcmpw_CLKIN_25_50)
+  Physical resource: XLXI_44/clkgen_inst/pll_base_inst/CLKIN1
+  Logical resource: XLXI_44/clkgen_inst/pll_base_inst/CLKIN1
+  Location pin: PLL_ADV_X0Y1.CLKIN1
+  Clock network: XLXI_44/clkgen_inst/pll_base_inst_ML_NEW_DIVCLK
+--------------------------------------------------------------------------------
+Slack: 21.380ns (max period limit - period)
+  Period: 31.250ns
+  Max period limit: 52.630ns (19.001MHz) (Tpllper_CLKIN)
+  Physical resource: XLXI_44/clkgen_inst/pll_base_inst/CLKIN1
+  Logical resource: XLXI_44/clkgen_inst/pll_base_inst/CLKIN1
+  Location pin: PLL_ADV_X0Y1.CLKIN1
+  Clock network: XLXI_44/clkgen_inst/pll_base_inst_ML_NEW_DIVCLK
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PERIOD analysis for net "XLXI_44/clkgen_inst/clk0" derived 
+from  NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;  divided by 3.00 to 10.417 nS  
+ 
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 118589 paths analyzed, 7021 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 setup errors, 0 hold errors, 0 component switching limit errors)
+ Minimum period is   9.709ns.
+--------------------------------------------------------------------------------
+
+Paths for end point XLXI_44/sram_inst/wb_dat_o_14 (SLICE_X3Y35.CX), 1 path
+--------------------------------------------------------------------------------
+Slack (setup path):     0.655ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               XLXI_44/sram_inst/ctrl/captured_14 (FF)
+  Destination:          XLXI_44/sram_inst/wb_dat_o_14 (FF)
+  Requirement:          5.208ns
+  Data Path Delay:      3.825ns (Levels of Logic = 0)
+  Clock Path Skew:      -0.619ns (0.731 - 1.350)
+  Source Clock:         XLXN_408<147> falling at 5.208ns
+  Destination Clock:    XLXN_408<147> rising at 10.416ns
+  Clock Uncertainty:    0.109ns
+
+  Clock Uncertainty:          0.109ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter (TSJ):  0.070ns
+    Discrete Jitter (DJ):       0.205ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path at Slow Process Corner: XLXI_44/sram_inst/ctrl/captured_14 to XLXI_44/sram_inst/wb_dat_o_14
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    ILOGIC_X0Y18.Q4      Tickq                 1.778   XLXI_44/sram_inst/ctrl/captured<14>
+                                                       XLXI_44/sram_inst/ctrl/captured_14
+    SLICE_X3Y35.CX       net (fanout=2)        1.933   XLXI_44/sram_inst/ctrl/captured<14>
+    SLICE_X3Y35.CLK      Tdick                 0.114   XLXI_44/sram_inst/wb_dat_o<15>
+                                                       XLXI_44/sram_inst/wb_dat_o_14
+    -------------------------------------------------  ---------------------------
+    Total                                      3.825ns (1.892ns logic, 1.933ns route)
+                                                       (49.5% logic, 50.5% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point XLXI_44/sram_inst/wb_dat_o_13 (SLICE_X3Y35.BX), 1 path
+--------------------------------------------------------------------------------
+Slack (setup path):     0.662ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               XLXI_44/sram_inst/ctrl/captured_13 (FF)
+  Destination:          XLXI_44/sram_inst/wb_dat_o_13 (FF)
+  Requirement:          5.208ns
+  Data Path Delay:      3.823ns (Levels of Logic = 0)
+  Clock Path Skew:      -0.614ns (0.731 - 1.345)
+  Source Clock:         XLXN_408<147> falling at 5.208ns
+  Destination Clock:    XLXN_408<147> rising at 10.416ns
+  Clock Uncertainty:    0.109ns
+
+  Clock Uncertainty:          0.109ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter (TSJ):  0.070ns
+    Discrete Jitter (DJ):       0.205ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path at Slow Process Corner: XLXI_44/sram_inst/ctrl/captured_13 to XLXI_44/sram_inst/wb_dat_o_13
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    ILOGIC_X0Y21.Q4      Tickq                 1.778   XLXI_44/sram_inst/ctrl/captured<13>
+                                                       XLXI_44/sram_inst/ctrl/captured_13
+    SLICE_X3Y35.BX       net (fanout=2)        1.931   XLXI_44/sram_inst/ctrl/captured<13>
+    SLICE_X3Y35.CLK      Tdick                 0.114   XLXI_44/sram_inst/wb_dat_o<15>
+                                                       XLXI_44/sram_inst/wb_dat_o_13
+    -------------------------------------------------  ---------------------------
+    Total                                      3.823ns (1.892ns logic, 1.931ns route)
+                                                       (49.5% logic, 50.5% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point XLXI_44/sram_inst/ctrl/r_data_out_low_12 (SLICE_X4Y33.AX), 1 path
+--------------------------------------------------------------------------------
+Slack (setup path):     0.665ns (requirement - (data path - clock path skew + uncertainty))
+  Source:               XLXI_44/sram_inst/ctrl/captured_12 (FF)
+  Destination:          XLXI_44/sram_inst/ctrl/r_data_out_low_12 (FF)
+  Requirement:          5.208ns
+  Data Path Delay:      3.818ns (Levels of Logic = 0)
+  Clock Path Skew:      -0.616ns (0.729 - 1.345)
+  Source Clock:         XLXN_408<147> falling at 5.208ns
+  Destination Clock:    XLXN_408<147> rising at 10.416ns
+  Clock Uncertainty:    0.109ns
+
+  Clock Uncertainty:          0.109ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter (TSJ):  0.070ns
+    Discrete Jitter (DJ):       0.205ns
+    Phase Error (PE):           0.000ns
+
+  Maximum Data Path at Slow Process Corner: XLXI_44/sram_inst/ctrl/captured_12 to XLXI_44/sram_inst/ctrl/r_data_out_low_12
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    ILOGIC_X0Y20.Q4      Tickq                 1.778   XLXI_44/sram_inst/ctrl/captured<12>
+                                                       XLXI_44/sram_inst/ctrl/captured_12
+    SLICE_X4Y33.AX       net (fanout=2)        1.955   XLXI_44/sram_inst/ctrl/captured<12>
+    SLICE_X4Y33.CLK      Tdick                 0.085   XLXI_44/sram_inst/ctrl/r_data_out_low<15>
+                                                       XLXI_44/sram_inst/ctrl/r_data_out_low_12
+    -------------------------------------------------  ---------------------------
+    Total                                      3.818ns (1.863ns logic, 1.955ns route)
+                                                       (48.8% logic, 51.2% route)
+
+--------------------------------------------------------------------------------
+
+Hold Paths: PERIOD analysis for net "XLXI_44/clkgen_inst/clk0" derived from
+ NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;
+ divided by 3.00 to 10.417 nS  
+
+--------------------------------------------------------------------------------
+
+Paths for end point XLXI_44/slot0/zspi/read_reg_q_31 (SLICE_X14Y12.DX), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.392ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               XLXI_44/slot0/zspi/read_reg_q_30 (FF)
+  Destination:          XLXI_44/slot0/zspi/read_reg_q_31 (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      0.392ns (Levels of Logic = 0)
+  Clock Path Skew:      0.000ns
+  Source Clock:         XLXN_408<147> rising at 0.000ns
+  Destination Clock:    XLXN_408<147> rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path at Fast Process Corner: XLXI_44/slot0/zspi/read_reg_q_30 to XLXI_44/slot0/zspi/read_reg_q_31
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X14Y12.CQ      Tcko                  0.200   XLXI_44/slot0/zspi/read_reg_q<31>
+                                                       XLXI_44/slot0/zspi/read_reg_q_30
+    SLICE_X14Y12.DX      net (fanout=2)        0.144   XLXI_44/slot0/zspi/read_reg_q<30>
+    SLICE_X14Y12.CLK     Tckdi       (-Th)    -0.048   XLXI_44/slot0/zspi/read_reg_q<31>
+                                                       XLXI_44/slot0/zspi/read_reg_q_31
+    -------------------------------------------------  ---------------------------
+    Total                                      0.392ns (0.248ns logic, 0.144ns route)
+                                                       (63.3% logic, 36.7% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point XLXI_44/zpuino/io/intr_inst/intr_served_q_4 (SLICE_X6Y22.D5), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.393ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               XLXI_44/zpuino/io/intr_inst/intr_detected_q_4 (FF)
+  Destination:          XLXI_44/zpuino/io/intr_inst/intr_served_q_4 (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      0.395ns (Levels of Logic = 1)
+  Clock Path Skew:      0.002ns (0.034 - 0.032)
+  Source Clock:         XLXN_408<147> rising at 0.000ns
+  Destination Clock:    XLXN_408<147> rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path at Fast Process Corner: XLXI_44/zpuino/io/intr_inst/intr_detected_q_4 to XLXI_44/zpuino/io/intr_inst/intr_served_q_4
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X7Y22.CQ       Tcko                  0.198   XLXI_44/zpuino/io/intr_inst/intr_detected_q<4>
+                                                       XLXI_44/zpuino/io/intr_inst/intr_detected_q_4
+    SLICE_X6Y22.D5       net (fanout=3)        0.076   XLXI_44/zpuino/io/intr_inst/intr_detected_q<4>
+    SLICE_X6Y22.CLK      Tah         (-Th)    -0.121   XLXI_44/zpuino/io/intr_inst/intr_served_q<3>
+                                                       XLXI_44/zpuino/io/intr_inst/Mmux_intr_line131
+                                                       XLXI_44/zpuino/io/intr_inst/intr_served_q_4
+    -------------------------------------------------  ---------------------------
+    Total                                      0.395ns (0.319ns logic, 0.076ns route)
+                                                       (80.8% logic, 19.2% route)
+
+--------------------------------------------------------------------------------
+
+Paths for end point XLXI_44/slot0/zspiclk/pr/ck64_q (SLICE_X17Y6.SR), 1 path
+--------------------------------------------------------------------------------
+Slack (hold path):      0.398ns (requirement - (clock path skew + uncertainty - data path))
+  Source:               XLXI_44/slot0/zspiclk/prescale_reset (FF)
+  Destination:          XLXI_44/slot0/zspiclk/pr/ck64_q (FF)
+  Requirement:          0.000ns
+  Data Path Delay:      0.402ns (Levels of Logic = 0)
+  Clock Path Skew:      0.004ns (0.033 - 0.029)
+  Source Clock:         XLXN_408<147> rising at 0.000ns
+  Destination Clock:    XLXN_408<147> rising at 0.000ns
+  Clock Uncertainty:    0.000ns
+
+  Minimum Data Path at Fast Process Corner: XLXI_44/slot0/zspiclk/prescale_reset to XLXI_44/slot0/zspiclk/pr/ck64_q
+    Location             Delay type         Delay(ns)  Physical Resource
+                                                       Logical Resource(s)
+    -------------------------------------------------  -------------------
+    SLICE_X17Y7.CMUX     Tshcko                0.244   XLXI_44/slot0/zspiclk/clk_i
+                                                       XLXI_44/slot0/zspiclk/prescale_reset
+    SLICE_X17Y6.SR       net (fanout=8)        0.285   XLXI_44/slot0/zspiclk/prescale_reset
+    SLICE_X17Y6.CLK      Tcksr       (-Th)     0.127   XLXI_44/slot0/zspiclk/pr/ck64_q
+                                                       XLXI_44/slot0/zspiclk/pr/ck64_q
+    -------------------------------------------------  ---------------------------
+    Total                                      0.402ns (0.117ns logic, 0.285ns route)
+                                                       (29.1% logic, 70.9% route)
+
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: PERIOD analysis for net "XLXI_44/clkgen_inst/clk0" derived from
+ NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;
+ divided by 3.00 to 10.417 nS  
+
+--------------------------------------------------------------------------------
+Slack: 6.846ns (period - min period limit)
+  Period: 10.416ns
+  Min period limit: 3.570ns (280.112MHz) (Trper_CLKA(Fmax))
+  Physical resource: XLXI_44/zpuino/stack/stackram[0].stackmem/CLKA
+  Logical resource: XLXI_44/zpuino/stack/stackram[0].stackmem/CLKA
+  Location pin: RAMB16_X1Y16.CLKA
+  Clock network: XLXN_408<147>
+--------------------------------------------------------------------------------
+Slack: 6.846ns (period - min period limit)
+  Period: 10.416ns
+  Min period limit: 3.570ns (280.112MHz) (Trper_CLKB(Fmax))
+  Physical resource: XLXI_44/zpuino/stack/stackram[0].stackmem/CLKB
+  Logical resource: XLXI_44/zpuino/stack/stackram[0].stackmem/CLKB
+  Location pin: RAMB16_X1Y16.CLKB
+  Clock network: XLXN_408<147>
+--------------------------------------------------------------------------------
+Slack: 6.846ns (period - min period limit)
+  Period: 10.416ns
+  Min period limit: 3.570ns (280.112MHz) (Trper_CLKA(Fmax))
+  Physical resource: XLXI_44/zpuino/stack/stackram[1].stackmem/CLKA
+  Logical resource: XLXI_44/zpuino/stack/stackram[1].stackmem/CLKA
+  Location pin: RAMB16_X1Y18.CLKA
+  Clock network: XLXN_408<147>
+--------------------------------------------------------------------------------
+
+================================================================================
+Timing constraint: PERIOD analysis for net "XLXI_44/clkgen_inst/clk1" derived 
+from  NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;  divided by 3.00 to 10.417 nS  
+ 
+For more information, see Period Analysis in the Timing Closure User Guide (UG612).
+
+ 0 paths analyzed, 0 endpoints analyzed, 0 failing endpoints
+ 0 timing errors detected. (0 component switching limit errors)
+ Minimum period is   2.666ns.
+--------------------------------------------------------------------------------
+
+Component Switching Limit Checks: PERIOD analysis for net "XLXI_44/clkgen_inst/clk1" derived from
+ NET "XLXN_457" PERIOD = 31.25 ns HIGH 50%;
+ divided by 3.00 to 10.417 nS  
+
+--------------------------------------------------------------------------------
+Slack: 7.750ns (period - min period limit)
+  Period: 10.416ns
+  Min period limit: 2.666ns (375.094MHz) (Tbcper_I)
+  Physical resource: XLXI_44/clkgen_inst/clk1_inst/I0
+  Logical resource: XLXI_44/clkgen_inst/clk1_inst/I0
+  Location pin: BUFGMUX_X2Y2.I0
+  Clock network: XLXI_44/clkgen_inst/clk1
+--------------------------------------------------------------------------------
+Slack: 8.167ns (period - min period limit)
+  Period: 10.416ns
+  Min period limit: 2.249ns (444.642MHz) (Tockper)
+  Physical resource: DRAM_CLK_OBUF/CLK0
+  Logical resource: XLXI_44/sram_inst/ctrl/clock/CK0
+  Location pin: OLOGIC_X0Y6.CLK0
+  Clock network: XLXI_44/sysclk_sram_we
+--------------------------------------------------------------------------------
+Slack: 8.376ns (period - min period limit)
+  Period: 10.416ns
+  Min period limit: 2.040ns (490.196MHz) (Tockper)
+  Physical resource: DRAM_CLK_OBUF/CLK1
+  Logical resource: XLXI_44/sram_inst/ctrl/clock/CK1
+  Location pin: OLOGIC_X0Y6.CLK1
+  Clock network: XLXI_44/sysclk_sram_we
+--------------------------------------------------------------------------------
+
+
+Derived Constraint Report
+Derived Constraints for XLXN_457
++-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+|                               |   Period    |       Actual Period       |      Timing Errors        |      Paths Analyzed       |
+|           Constraint          | Requirement |-------------+-------------|-------------+-------------|-------------+-------------|
+|                               |             |   Direct    | Derivative  |   Direct    | Derivative  |   Direct    | Derivative  |
++-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+|XLXN_457                       |     31.250ns|     10.000ns|     29.127ns|            0|            0|            0|       118589|
+| XLXI_44/clkgen_inst/clk0      |     10.417ns|      9.709ns|          N/A|            0|            0|       118589|            0|
+| XLXI_44/clkgen_inst/clk1      |     10.417ns|      2.666ns|          N/A|            0|            0|            0|            0|
++-------------------------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+
+
+All constraints were met.
+
+
+Data Sheet report:
+-----------------
+All values displayed in nanoseconds (ns)
+
+Clock to Setup on destination clock CLK
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+CLK            |    9.709|    4.553|         |         |
+---------------+---------+---------+---------+---------+
+
+
+Timing summary:
+---------------
+
+Timing errors: 0  Score: 0  (Setup/Max: 0, Hold: 0)
+
+Constraints cover 118589 paths, 0 nets, and 12433 connections
+
+Design statistics:
+   Minimum period:  10.000ns{1}   (Maximum frequency: 100.000MHz)
+
+
+------------------------------------Footnotes-----------------------------------
+1)  The minimum period statistic assumes all single cycle delays.
+
+Analysis completed Mon Jan 20 02:19:43 2014 
+--------------------------------------------------------------------------------
+
+Trace Settings:
+-------------------------
+Trace Settings 
+
+Peak Memory Usage: 279 MB
+
+
+

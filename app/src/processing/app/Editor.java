@@ -1033,6 +1033,15 @@ public class Editor extends JFrame implements RunnerListener {
     JMenu menu = new JMenu(_("Papilio"));
     JMenuItem item;
 
+    // item = new JMenuItem(_("New Papilio Project"));
+    // item.addActionListener(new ActionListener() {
+        // public void actionPerformed(ActionEvent e) {
+			// String pslPath = Base.getExamplesPath();
+			// File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");		
+			// Base.handleOpen(f1.getAbsolutePath());
+        // }
+      // });
+    // menu.add(item);	
 
     item = new JMenuItem(_("Edit Examples"));
     item.addActionListener(new ActionListener() {

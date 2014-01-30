@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--This is an ISE project configuration file.-->
+<!--It holds project specific layout data for the projectmgr plugin.-->
+<!--Copyright (c) 1995-2009 Xilinx, Inc.  All rights reserved.-->
+<Project version="2" owner="projectmgr" name="PSL_Papilio_Pro_LX9" >
+   <!--This is an ISE project configuration file.-->
+   <ItemView engineview="SynthesisOnly" guiview="Source" compilemode="AutoCompile" >
+      <ClosedNodes>
+         <ClosedNodesVersion>2</ClosedNodesVersion>
+         <ClosedNode>/BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|Libraries|Benchy|BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi.vhd</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|bscan|Papilio_Pro.sch</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_20 - Papilio_Wing_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_44 - ZPUino_Papilio_Pro_V1 - behave</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_muldex - muldex - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_rle - rle - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_sync - sync - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_trigger - trigger - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_spi_slave - spi_slave - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan3|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_sram - sram_bram - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_muldex - muldex - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_rle - rle - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_sync - sync - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_core - core - behavioral/Inst_trigger - trigger - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Papilio_Pro.sch/XLXI_60 - BENCHY_sa_SumpBlaze_LogicAnalyzer8_spi - behavioral/Inst_sram - sram_bram - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan|Papilio_Pro.sch/XLXI_20 - Papilio_Wing_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan|Papilio_Pro.sch/XLXI_41 - COMM_zpuino_wb_UART - behave</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan|Papilio_Pro.sch/XLXI_44 - ZPUino_Papilio_Pro_V1 - behave</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan|Papilio_Pro.sch/XLXI_47 - BENCHY_sa_SumpBlaze_LogicAnalyzer8 - behavioral</ClosedNode>
+         <ClosedNode>/Papilio_Pro C:|dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan|Papilio_Pro.sch</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/AUDIO_zpuino_sa_audiomixer - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/AUDIO_zpuino_wb_sid6581 - rtl</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/Arcade_MegaWing_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/BENCHY_sa_SumpBlaze_LogicAnalyzer8 - behavioral/Inst_core - core - behavioral/Inst_muldex - muldex - behavioral</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/BENCHY_sa_SumpBlaze_LogicAnalyzer8 - behavioral/Inst_core - core - behavioral/Inst_rle - rle - behavioral</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/BENCHY_sa_SumpBlaze_LogicAnalyzer8 - behavioral/Inst_core - core - behavioral/Inst_sync - sync - behavioral</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/BENCHY_sa_SumpBlaze_LogicAnalyzer8 - behavioral/Inst_core - core - behavioral/Inst_trigger - trigger - behavioral</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/BENCHY_sa_SumpBlaze_LogicAnalyzer8 - behavioral/Inst_sram - sram_bram - behavioral</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/BENCHY_zpuino_wb_waveform_generator - rtl</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/COMM_zpuino_wb_SPI - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/COMM_zpuino_wb_UART - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/COMM_zpuino_wb_i2c - structural</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/LogicStart_MegaWing_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/Papilio_Default_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/Papilio_Default_Wing_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/Papilio_Wing_Pinout - BEHAVIORAL</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/VIDEO_zpuino_wb_vga_hqvga - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/VIDEO_zpuino_wb_vga_zxspectrum - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/ZPUino_Papilio_One_V1 - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/ZPUino_Papilio_One_V1_hyperion - behave</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules/ZPUino_Papilio_Pro_V1 - behave</ClosedNode>
+         <ClosedNode>/Utility C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|bscan|Libraries|ZPUino_1|Utility.sch</ClosedNode>
+         <ClosedNode>/Utility C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Libraries|ZPUino_1|Utility.sch</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem>Papilio_Pro (C:/Dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/experimental/bscan4/Papilio_Pro.sch)</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >52</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000002020000000100000001000000640000036e000000020000000000000000000000000200000064ffffffff0000008100000003000000020000036e0000000100000003000000000000000100000003</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
+      <CurrentItem>Papilio_Pro (C:/Dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/experimental/bscan4/Papilio_Pro.sch)</CurrentItem>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_SCHEMATIC" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>Configure Target Device</ClosedNode>
+         <ClosedNode>Implement Design</ClosedNode>
+         <ClosedNode>Synthesize - XST</ClosedNode>
+         <ClosedNode>User Constraints</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem>Generate Programming File</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000016c000000010000000100000000000000000000000064ffffffff0000008100000000000000010000016c0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>Generate Programming File</CurrentItem>
+   </ItemView>
+   <ItemView guiview="File" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems/>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000000000000001000000000000000000000000000000000000038e000000040101000100000000000000000000000064ffffffff000000810000000000000004000001610000000100000000000000bb0000000100000000000000760000000100000000000000fc0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>Arcade_MegaWing_Pinout.vhd</CurrentItem>
+   </ItemView>
+   <ItemView guiview="Library" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>benchy</ClosedNode>
+         <ClosedNode>board</ClosedNode>
+         <ClosedNode>wishbone</ClosedNode>
+         <ClosedNode>work</ClosedNode>
+         <ClosedNode>zpuino</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems/>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000118000000010001000100000000000000000000000064ffffffff000000810000000000000001000001180000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>board</CurrentItem>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020e000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020e0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <SourceProcessView>000000ff0000000000000002000001390000011b01000000050100000002</SourceProcessView>
+   <CurrentView>Implementation</CurrentView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_VHDL_ARCHITECTURE" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem></SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000016c000000010000000100000000000000000000000064ffffffff0000008100000000000000010000016c0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem></CurrentItem>
+   </ItemView>
+   <ItemView engineview="SynthesisOnly" sourcetype="DESUT_UCF" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>User Constraints</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem></SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000016c000000010000000100000000000000000000000064ffffffff0000008100000000000000010000016c0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem></CurrentItem>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" guiview="Source" compilemode="AutoCompile" >
+      <ClosedNodes>
+         <ClosedNodesVersion>2</ClosedNodesVersion>
+         <ClosedNode>/Papilio_Pro C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Papilio_Pro.sch</ClosedNode>
+         <ClosedNode>/Unassigned User Library Modules</ClosedNode>
+         <ClosedNode>/Utility C:|Dropbox|GadgetFactory|GadgetFactory_Engineering|Papilio-Schematic-Library|examples|experimental|bscan4|Libraries|ZPUino_1|Utility.sch</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem>Papilio_Pro (C:/Dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/experimental/bscan4/Papilio_Pro.sch)</SelectedItem>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000124000000020000000000000000000000000200000064ffffffff000000810000000300000002000001240000000100000003000000000000000100000003</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem>Papilio_Pro (C:/Dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/experimental/bscan4/Papilio_Pro.sch)</CurrentItem>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>Design Utilities</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020e000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020e0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+   <ItemView engineview="BehavioralSim" sourcetype="DESUT_SCHEMATIC" guiview="Process" >
+      <ClosedNodes>
+         <ClosedNodesVersion>1</ClosedNodesVersion>
+         <ClosedNode>ISim Simulator</ClosedNode>
+      </ClosedNodes>
+      <SelectedItems>
+         <SelectedItem/>
+      </SelectedItems>
+      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
+      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000000000000000000020e000000010000000100000000000000000000000064ffffffff0000008100000000000000010000020e0000000100000000</ViewHeaderState>
+      <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
+      <CurrentItem/>
+   </ItemView>
+</Project>
