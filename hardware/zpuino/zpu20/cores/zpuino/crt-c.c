@@ -37,8 +37,9 @@ extern int __bss_start__, __bss_end__;
 
 static void __clear_bss()
 {
+    register int *end = &__bss_end__;
     int *i  = &__bss_start__;
-    while (i<&__bss_end__) {
+    while (i!=end) {
         *i++=0;
     }
 }
