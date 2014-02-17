@@ -30,7 +30,7 @@ extern "C" int open(const char *pathname, int flags,...)
     int newfd=-1;
     int i;
 
-    for (i=0;i<MAX_FILES;i++) {
+    for (i=0;i!=MAX_FILES;i++) {
         if (__fds[i].ops == NULL) {
             newfd=i;
             break;
@@ -113,6 +113,7 @@ extern "C" ssize_t write(int fd, const void *buf, size_t count)
 
 extern "C" void abort()
 {
+    while(1);
 }
 
 extern "C" char *strerror(int err)
@@ -141,7 +142,7 @@ extern "C" void __attribute__((constructor)) __posix_init()
 
     if (initialized)
         return;
-    for (i=0;i<MAX_FILES;i++) {
+    for (i=0;i!=MAX_FILES;i++) {
         __fds[i].ops=NULL;
     }
     initialized=1;

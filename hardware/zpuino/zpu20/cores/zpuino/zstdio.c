@@ -2,6 +2,7 @@
 #include "zposix.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 static struct __zFILE __files[MAX_FILES];
 
@@ -225,16 +226,22 @@ FILE *fopen(const char *path, const char *mode)
 
 FILE *fdopen(int fd, const char *mode)
 {
-    UNIMPLEMENTED();
+    FILE *r = __find_free_file();
+    if (NULL==r)
+        return r;
+    r->fd = fd;
+    return r;
 }
 
 int fseek(FILE *stream, long offset, int whence)
 {
     UNIMPLEMENTED();
+    return -1;
 }
 long ftell(FILE *stream)
 {
     UNIMPLEMENTED();
+    return -1;
 }
 void rewind(FILE *stream)
 {
@@ -243,10 +250,12 @@ void rewind(FILE *stream)
 int fgetpos(FILE *stream, fpos_t *pos)
 {
     UNIMPLEMENTED();
+    return -1;
 }
 int fsetpos(FILE *stream, fpos_t *pos)
 {
     UNIMPLEMENTED();
+    return -1;
 }
 
 
@@ -304,7 +313,46 @@ void stdio_register_console(const char *device)
 }
 
 
-static void __attribute__((constructor)) __stdio_init()
+
+void fclose(FILE*p)
+{
+    if (p->fd==-1)
+        return;
+    close(p->fd);
+    p->fd=-1;
+}
+
+int fflush(FILE*p)
+{
+    return 0;
+}
+
+int fputc(int c, FILE *stream)
+{
+    return fwrite(&c,1,1,stream);
+}
+
+int fputs(const char *s, FILE *stream)
+{
+    return fwrite(s,strlen(s),1,stream);
+}
+
+int putc(int c, FILE *stream)
+{
+    return fwrite(&c,1,1,stream);
+}
+
+int putchar(int c)
+{
+    return putc(c,stdout);
+}
+
+int puts(const char *s)
+{
+    return fputs(s,stdout);
+}
+
+void __attribute__((constructor)) __stdio_init()
 {
     static int __stdio_initialized=0;
 
@@ -313,39 +361,8 @@ static void __attribute__((constructor)) __stdio_init()
 
     int i=0;
     __posix_init();
-    for (i=0;i<MAX_FILES;i++) {
+    for (i=0;i!=MAX_FILES;i++) {
         __files[i].fd = -1;
     }
     __stdio_initialized=1;
-}
-
-void fclose(FILE*p)
-{
-    UNIMPLEMENTED();
-}
-
-int fflush(FILE*p)
-{
-    UNIMPLEMENTED();
-}
-
-int fputc(int c, FILE *stream)
-{
-    UNIMPLEMENTED();
-}
-int fputs(const char *s, FILE *stream)
-{
-    return fwrite(s,strlen(s),1,stream);
-}
-int putc(int c, FILE *stream)
-{
-    UNIMPLEMENTED();
-}
-int putchar(int c)
-{
-    return putc(c,stdout);
-}
-int puts(const char *s)
-{
-    return fputs(s,stdout);
 }

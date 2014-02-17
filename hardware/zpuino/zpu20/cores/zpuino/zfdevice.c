@@ -23,7 +23,7 @@ static struct zfdevice __devices[ZF_MAX_DEVICES];
 int zfRegisterFileBackend(const char *name, struct zfops *ops)
 {
     int i;
-    for (i=0;i<ZF_MAX_BACKENDS;i++) {
+    for (i=0;i!=ZF_MAX_BACKENDS;i++) {
         if (__backends[i].ops==NULL) {
             __backends[i].ops = ops;
             strncpy(__backends[i].name,name,16);
@@ -35,7 +35,7 @@ int zfRegisterFileBackend(const char *name, struct zfops *ops)
 struct zfops *zfFindBackend(const char *name)
 {
     int i;
-    for (i=0;i<ZF_MAX_BACKENDS;i++) {
+    for (i=0;i!=ZF_MAX_BACKENDS;i++) {
         if (__backends[i].ops!=NULL) {
             if (strncmp(__backends[i].name,name,15)==0)
                 return __backends[i].ops;
@@ -47,7 +47,7 @@ struct zfops *zfFindBackend(const char *name)
 static struct zfdevice *zfFindDevice(const char *name)
 {
     int i;
-    for (i=0;i<ZF_MAX_DEVICES;i++) {
+    for (i=0;i!=ZF_MAX_DEVICES;i++) {
         if (__devices[i].ops!=NULL) {
             if (strncmp(__devices[i].name,name,15)==0)
                 return &__devices[i];
@@ -66,14 +66,14 @@ static void zf_dev_close(void *handle)
 {
 }
 
-static size_t zf_dev_read(void *handle,void *dest,size_t size)
+static ssize_t zf_dev_read(void *handle,void *dest,size_t size)
 {
     struct zfdevice *dev = (struct zfdevice*)handle;
 
     return dev->ops->read(dev->data,dest,size);
 }
 
-static size_t zf_dev_write(void *handle,const void *src,size_t size)
+static ssize_t zf_dev_write(void *handle,const void *src,size_t size)
 {
     struct zfdevice *dev = (struct zfdevice*)handle;
 
@@ -109,7 +109,7 @@ int zfRegisterDevice(const char *name, struct zfdevops *ops, void *data)
         if (__zfIntializeDev()!=0)
             return -1;
 
-    for (i=0;i<ZF_MAX_DEVICES;i++) {
+    for (i=0;i!=ZF_MAX_DEVICES;i++) {
         if (__devices[i].ops==NULL) {
             strncpy(__devices[i].name, name, sizeof(__devices[i].name));
             __devices[i].ops = ops;
