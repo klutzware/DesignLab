@@ -276,7 +276,6 @@ int SmallFSFile::read(void *buf, int s)
 void *SmallFSFile::readIntoMemory()
 {
     void *ret = malloc( getSize() );
-    int r;
 
     if (NULL==ret)
         return NULL;
