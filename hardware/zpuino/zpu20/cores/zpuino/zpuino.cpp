@@ -20,6 +20,10 @@ int attachInterrupt(unsigned int line, void (*function)(void*), void *arg)
     itable[line].func = function;
     itable[line].arg = arg;
     // sei();
+
+    // Set mask
+    INTRMASK |= _BV(line);
+
     return 0;
 }
 
@@ -32,6 +36,9 @@ void detachInterrupt(unsigned int line)
 {
     if (line>=ZPUINO_MAX_INTERRUPTS)
         return;
+
+    INTRMASK &= ~_BV(line);
+
     itable[line].func = 0;
 }
 
@@ -42,3 +49,5 @@ void _zpu_interrupt(unsigned int line)
     if (itable[line].func)
         itable[line].func(itable[line].arg);
 }
+
+

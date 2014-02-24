@@ -15,10 +15,12 @@ extern void detachInterrupt(unsigned int);
 
 typedef volatile unsigned int* register_t;
 
-extern void itoa(int value, char *dest, int base);
-extern void utoa(unsigned int value, char *dest, int base);
-extern char *ultoa ( unsigned long value, char * str, int base );
-extern char *ltoa (long value, char * str, int base );
+extern "C" void utoa(unsigned int value, char *dest, int base);
+extern "C" char *ultoa ( unsigned long value, char * str, int base );
+extern "C" char *ltoa (long value, char * str, int base );
+extern "C" inline void itoa(int value, char *dest, int base) {
+    (void)ltoa(value,dest,base);
+}
 
 static inline __attribute__((always_inline)) register_t outputRegisterForPin(unsigned int pin)
 {

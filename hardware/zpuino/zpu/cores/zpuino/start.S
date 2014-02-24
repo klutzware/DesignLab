@@ -20,15 +20,17 @@ __executable_start:
 	poppc      
         
 .balign 4,0
-       .globl _Z14_zpu_interruptj
+       .globl _Z14_zpu_interruptv
 
 .type ___zpu_interrupt_vector,@function
 .globl ___zpu_interrupt_vector
 ___zpu_interrupt_vector:
-	loadsp 4
-	im _Z14_zpu_interruptj
+	im _memreg+0
+        load
+	im _Z14_zpu_interruptv
         call
-        storesp 0
+        im _memreg+0
+        store
         poppc
 .size ___zpu_interrupt_vector, . - ___zpu_interrupt_vector
         
@@ -46,12 +48,11 @@ _cpu_config:
         .weak _initIO
 _initIO:
 	poppc
-/*
+
 	.globl _Z14_zpu_interruptv
         .weak  _Z14_zpu_interruptv
 _Z14_zpu_interruptv:
 	poppc
-        */
         .weak _initIO
 .section ".vectors"
 

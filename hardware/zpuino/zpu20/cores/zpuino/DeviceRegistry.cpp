@@ -48,19 +48,19 @@ namespace ZPUino {
     int DeviceRegistry::getPPSPin(int masterslot, int offset, int shift)
     {
         unsigned count = REGISTER(SYSCTLBASE, 32+shift);
-        //unsigned i;
+        unsigned start = -1;
         register_t startreg = &REGISTER(SYSCTLBASE, 64);
         
-        //for (i=0;i<count;i++) {
         while(count--) {
-            unsigned val = *startreg++;//REGISTER(SYSCTLBASE, 64+i);
+            start++;
+            unsigned val = *startreg++;
             unsigned char dev = (val>>shift)&0xff;
             if (dev!=masterslot) {
                 continue;
             } else {
                 int pin = (val>>(8+shift))&0xff;
                 if (offset==0)
-                    return pin;
+                    return start;
                 offset--;
             }
         }

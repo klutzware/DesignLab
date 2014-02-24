@@ -224,3 +224,17 @@ oho_godil.build.pins=standard
 oho_godil.build.toolchain=zpu
 oho_godil.build.extra_flags=-D__ZPUINO_OHO_GODIL__ -D__S3E_500__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0xa5010F00 -nostartfiles
 oho_godil.build.extraSflags=-DBOARD_ID=0xa5010F00
+##############################################################
+zpuino_xula2.name=ZPUino on Xess XuLA2 board (LX9)
+zpuino_xula2.boardid=0xA6011900
+zpuino_xula2.upload.protocol=zpuino-serial
+zpuino_xula2.upload.maximum_size=33554432
+zpuino_xula2.upload.size_sections=all
+zpuino_xula2.upload.speed=1000000
+zpuino_xula2.upload.tool=zpuinoprogrammer
+zpuino_xula2.build.f_cpu=96000000L
+zpuino_xula2.build.core=zpuino
+zpuino_xula2.build.mcu=zpu
+zpuino_xula2.build.toolchain=zpu
+zpuino_xula2.build.extra_flags=-D__ZPUINO_XULA2__ -DBOARD_ID=0xA6011900 -DBOARD_MEMORYSIZE=0x2000000 -nostartfiles
+zpuino_xula2.build.extraSflags=-DBOARD_ID=0xA6011900
