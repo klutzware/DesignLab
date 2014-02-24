@@ -677,8 +677,6 @@
 
     <!-- Unzip AVR tools -->
     <unzip dest="windows/work/hardware" src="windows/avr_tools.zip" overwrite="false"/>
-    <!-- Unzip ZPU tools -->
-    <unzip dest="windows/work/hardware" src="windows/zpu_tools.zip" overwrite="false"/>
 
     <copy todir="windows/work/hardware/tools">
       <fileset dir="windows/zpu-tools32" includes="zpu/**" />
