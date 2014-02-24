@@ -183,7 +183,7 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap)
         size--,*str++=*format++;
     }
     *str++='\0';
-    return (str-start-1);
+    return (str-start);
 }
 
 int snprintf(char *dest, size_t size, const char *format, ...)
