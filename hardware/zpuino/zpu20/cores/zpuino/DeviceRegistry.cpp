@@ -14,7 +14,7 @@ namespace ZPUino {
 
     uint8_t DeviceRegistry::scanDevice(unsigned vendor, unsigned product, int instance) {
         int i;
-        for (i=0;i<16;i++) {
+        for (i=0;i!=16;i++) {
             unsigned val = REGISTER(SYSCTLBASE,16+i);
             if (val!=0) {
                 if (vendor!=VENDOR_ANY) {
