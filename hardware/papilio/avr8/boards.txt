@@ -13,7 +13,7 @@ papilio_papilioPlusLX9.upload.using=papilio_papilioPlusLX9
 papilio_papilioPlusLX9.build.mcu=atmega103
 papilio_papilioPlusLX9.build.f_cpu=16000000L
 papilio_papilioPlusLX9.build.core=arduino
-
+papilio_papilioPlusLX9.build.board=AVR_SHIFTY
 ##############################################################
 
 ##############################################################
@@ -31,6 +31,7 @@ papilio_papilioPlusLX9Burn.upload.using=papilio_papilioPlusLX9Burn
 papilio_papilioPlusLX9Burn.build.mcu=atmega103
 papilio_papilioPlusLX9Burn.build.f_cpu=16000000L
 papilio_papilioPlusLX9Burn.build.core=arduino
+papilio_papilioPlusLX9Burn.build.board=AVR_SHIFTY
 
 ##############################################################
 
@@ -49,6 +50,7 @@ papilio_PapilioOne500.upload.using=papilio_papilioOne_500
 papilio_PapilioOne500.build.mcu=atmega103
 papilio_PapilioOne500.build.f_cpu=16000000L
 papilio_PapilioOne500.build.core=arduino
+papilio_PapilioOne500.build.board=AVR_SHIFTY
 
 ##############################################################
 
@@ -67,6 +69,7 @@ papilio_PapilioOne500burn.upload.using=papilio_papilioOne_500Burn
 papilio_PapilioOne500burn.build.mcu=atmega103
 papilio_PapilioOne500burn.build.f_cpu=16000000L
 papilio_PapilioOne500burn.build.core=arduino
+papilio_PapilioOne500burn.build.board=AVR_SHIFTY
 
 ##############################################################
 
@@ -85,6 +88,7 @@ papilio_PapilioOne.upload.maximum_size=16384
 papilio_PapilioOne.build.mcu=atmega103
 papilio_PapilioOne.build.f_cpu=16000000L
 papilio_PapilioOne.build.core=arduino
+papilio_PapilioOne.build.board=AVR_SHIFTY
 
 ##############################################################
 
@@ -103,6 +107,7 @@ papilio_PapilioOneBurn.upload.maximum_size=16384
 papilio_PapilioOneBurn.build.mcu=atmega103
 papilio_PapilioOneBurn.build.f_cpu=16000000L
 papilio_PapilioOneBurn.build.core=arduino
+papilio_PapilioOneBurn.build.board=AVR_SHIFTY
 
 ##############################################################
 
@@ -121,5 +126,6 @@ papilio_Custom.upload.maximum_size=16384
 papilio_Custom.build.mcu=atmega103
 papilio_Custom.build.f_cpu=16000000L
 papilio_Custom.build.core=arduino
+papilio_Custom.build.board=AVR_CUSTOM
 
 ##############################################################

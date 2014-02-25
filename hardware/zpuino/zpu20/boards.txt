@@ -12,6 +12,7 @@ zpuino15_papilio_one500.build.mcu=zpu
 zpuino15_papilio_one500.build.ldscript=zpuelf.lds
 zpuino15_papilio_one500.build.pins=standard
 zpuino15_papilio_one500.build.toolchain=zpu
+zpuino15_papilio_one500.build.board=ZPUINO_PAPILIO_ONE
 zpuino15_papilio_one500.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DZPU20 -DBOARD_ID=0xA5010F00 -DBOARD_MEMORYSIZE=0x8000 -D__S3E_500__ -nostartfiles
 zpuino15_papilio_one500.build.extraSflags=-DBOARD_ID=0xA5010F00 -DZPU20
 ##############################################################
@@ -26,5 +27,6 @@ zpuino20_papilio_prolx9v.build.f_cpu=96000000L
 zpuino20_papilio_prolx9v.build.core=zpuino
 zpuino20_papilio_prolx9v.build.mcu=zpu
 zpuino20_papilio_prolx9v.build.toolchain=zpu
+zpuino20_papilio_prolx9v.build.board=ZPUINO_PAPILIO_PRO
 zpuino20_papilio_prolx9v.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA5041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
 zpuino20_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xA5041700

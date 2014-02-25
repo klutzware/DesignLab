@@ -12,6 +12,7 @@ zpuino_s3e_eval.build.mcu=zpu
 zpuino_s3e_eval.build.ldscript=zpuelf.lds
 zpuino_s3e_eval.build.pins=standard
 zpuino_s3e_eval.build.toolchain=zpu
+zpuino_s3e_eval.build.board=ZPUINO_S3E_EVAL
 zpuino_s3e_eval.build.extra_flags=-D__ZPUINO_S3E_EVAL__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0x83010F00
 zpuino_s3e_eval.build.extraSflags=-DBOARD_ID=0x83010F00
 ##############################################################
@@ -27,6 +28,7 @@ zpuino_s3e_eval_ddr.build.core=zpuino
 zpuino_s3e_eval_ddr.build.mcu=zpu
 zpuino_s3e_eval_ddr.build.pins=standard 
 zpuino_s3e_eval_ddr.build.toolchain=zpu
+zpuino_s3e_eval_ddr.build.board=ZPUINO_S3E_EVAL
 zpuino_s3e_eval_ddr.build.extra_flags=-D__ZPUINO_S3E_EVAL__ -DBOARD_MEMORYSIZE=0x04000000 -DBOARD_ID=0x83011900
 zpuino_s3e_eval_ddr.build.extraSflags=-DBOARD_ID=0x83011900
 ##############################################################
@@ -42,6 +44,7 @@ zpuino_s3e_eval_v.build.core=zpuino
 zpuino_s3e_eval_v.build.mcu=zpu
 zpuino_s3e_eval_v.build.pins=standard
 zpuino_s3e_eval_v.build.toolchain=zpu
+zpuino_s3e_eval_v.build.board=ZPUINO_S3E_EVAL
 zpuino_s3e_eval_v.build.extra_flags=-D__ZPUINO_S3E_EVAL__ -DCLK_FREQ=92000000 -DBOARD_MEMORYSIZE=0x4000 -DBOARD_ID=0x83010E01 -nostartfiles 
 zpuino_s3e_eval_v.build.extraSflags=-DBOARD_ID=0x83010E01
 ##############################################################
@@ -57,6 +60,7 @@ zpuino_papilio_one250.build.core=zpuino
 zpuino_papilio_one250.build.mcu=zpu
 zpuino_papilio_one250.build.pins=standard
 zpuino_papilio_one250.build.toolchain=zpu
+zpuino_papilio_one250.build.board=ZPUINO_PAPILIO_ONE
 zpuino_papilio_one250.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4020E00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
 zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA4020E00
 zpuino_papilio_one250.bootloader.tool=papilioprog
@@ -75,6 +79,7 @@ zpuino_papilio_one500.build.mcu=zpu
 zpuino_papilio_one500.build.ldscript=zpuelf.lds
 zpuino_papilio_one500.build.pins=standard
 zpuino_papilio_one500.build.toolchain=zpu
+zpuino_papilio_one500.build.board=ZPUINO_PAPILIO_ONE
 zpuino_papilio_one500.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA4010F00 -DBOARD_MEMORYSIZE=0x8000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500.build.extraSflags=-DBOARD_ID=0xA4010F00
 zpuino_papilio_one500.bootloader.tool=papilioprog
@@ -92,6 +97,7 @@ zpuino_papilio_one500vam.build.core=zpuino
 zpuino_papilio_one500vam.build.mcu=zpu
 zpuino_papilio_one500vam.build.pins=standard
 zpuino_papilio_one500vam.build.toolchain=zpu
+zpuino_papilio_one500vam.build.board=ZPUINO_PAPILIO_ONE
 zpuino_papilio_one500vam.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500vam.build.extraSflags=-DBOARD_ID=0xA4010E01
 zpuino_papilio_one500vam.bootloader.tool=papilioprog
@@ -109,6 +115,7 @@ zpuino_papilio_one500vlm.build.core=zpuino
 zpuino_papilio_one500vlm.build.mcu=zpu
 zpuino_papilio_one500vlm.build.pins=standard
 zpuino_papilio_one500vlm.build.toolchain=zpu
+zpuino_papilio_one500vlm.build.board=ZPUINO_PAPILIO_ONE
 zpuino_papilio_one500vlm.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500vlm.build.extraSflags=-DBOARD_ID=0xA4010E01
 zpuino_papilio_one500vlm.bootloader.tool=papilioprog
@@ -126,6 +133,7 @@ zpuino_papilio_one500vps.build.core=zpuino
 zpuino_papilio_one500vps.build.mcu=zpu
 zpuino_papilio_one500vps.build.pins=standard
 zpuino_papilio_one500vps.build.toolchain=zpu
+zpuino_papilio_one500vps.build.board=ZPUINO_PAPILIO_ONE
 zpuino_papilio_one500vps.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
 zpuino_papilio_one500vps.build.extraSflags=-DBOARD_ID=0xA4010E01
 zpuino_papilio_one500vps.bootloader.tool=papilioprog
@@ -142,6 +150,7 @@ zpuino_papilio_prolx9van.build.f_cpu=96000000L
 zpuino_papilio_prolx9van.build.core=zpuino
 zpuino_papilio_prolx9van.build.mcu=zpu
 zpuino_papilio_prolx9van.build.toolchain=zpu
+zpuino_papilio_prolx9van.build.board=ZPUINO_PAPILIO_PRO
 zpuino_papilio_prolx9van.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
 zpuino_papilio_prolx9van.build.extraSflags=-DBOARD_ID=0xA4041700
 zpuino_papilio_prolx9van.bootloader.tool=papilioprog
@@ -158,6 +167,7 @@ zpuino_papilio_prolx9vam.build.f_cpu=96000000L
 zpuino_papilio_prolx9vam.build.core=zpuino
 zpuino_papilio_prolx9vam.build.mcu=zpu
 zpuino_papilio_prolx9vam.build.toolchain=zpu
+zpuino_papilio_prolx9vam.build.board=ZPUINO_PAPILIO_PRO
 zpuino_papilio_prolx9vam.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
 zpuino_papilio_prolx9vam.build.extraSflags=-DBOARD_ID=0xA4041700
 zpuino_papilio_prolx9vam.bootloader.tool=papilioprog
@@ -174,6 +184,7 @@ zpuino_papilio_prolx9vlm.build.f_cpu=96000000L
 zpuino_papilio_prolx9vlm.build.core=zpuino
 zpuino_papilio_prolx9vlm.build.mcu=zpu
 zpuino_papilio_prolx9vlm.build.toolchain=zpu
+zpuino_papilio_prolx9vlm.build.board=ZPUINO_PAPILIO_PRO
 zpuino_papilio_prolx9vlm.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
 zpuino_papilio_prolx9vlm.build.extraSflags=-DBOARD_ID=0xA4041700
 zpuino_papilio_prolx9vlm.bootloader.tool=papilioprog
@@ -190,6 +201,7 @@ zpuino_papilio_prolx9rrm.build.f_cpu=96000000L
 zpuino_papilio_prolx9rrm.build.core=zpuino
 zpuino_papilio_prolx9rrm.build.mcu=zpu
 zpuino_papilio_prolx9rrm.build.toolchain=zpu
+zpuino_papilio_prolx9rrm.build.board=ZPUINO_PAPILIO_PRO
 zpuino_papilio_prolx9rrm.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
 zpuino_papilio_prolx9rrm.build.extraSflags=-DBOARD_ID=0xA4041700
 zpuino_papilio_prolx9rrm.bootloader.tool=papilioprog
@@ -207,6 +219,7 @@ zpuino_nexys2.build.core=zpuino
 zpuino_nexys2.build.mcu=zpu
 zpuino_nexys2.build.pins=standard
 zpuino_nexys2.build.toolchain=zpu
+zpuino_nexys2.build.board=ZPUINO_NEXYS2
 zpuino_nexys2.build.extra_flags=-D__ZPUINO_NEXYS2__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0x84010F00 -nostartfiles 
 zpuino_nexys2.build.extraSflags=-DBOARD_ID=0x84010F00
 ##############################################################
@@ -222,6 +235,7 @@ oho_godil.build.core=zpuino
 oho_godil.build.mcu=zpu
 oho_godil.build.pins=standard
 oho_godil.build.toolchain=zpu
+oho_godil.build.board=ZPUINO_OHO_GODIL
 oho_godil.build.extra_flags=-D__ZPUINO_OHO_GODIL__ -D__S3E_500__ -DBOARD_MEMORYSIZE=0x8000 -DBOARD_ID=0xa5010F00 -nostartfiles
 oho_godil.build.extraSflags=-DBOARD_ID=0xa5010F00
 ##############################################################
@@ -236,5 +250,6 @@ zpuino_xula2.build.f_cpu=96000000L
 zpuino_xula2.build.core=zpuino
 zpuino_xula2.build.mcu=zpu
 zpuino_xula2.build.toolchain=zpu
+zpuino_xula2.build.board=ZPUINO_XULA2
 zpuino_xula2.build.extra_flags=-D__ZPUINO_XULA2__ -DBOARD_ID=0xA6011900 -DBOARD_MEMORYSIZE=0x2000000 -nostartfiles
 zpuino_xula2.build.extraSflags=-DBOARD_ID=0xA6011900
