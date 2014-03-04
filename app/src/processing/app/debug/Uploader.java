@@ -31,6 +31,7 @@ import static processing.app.I18n._;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.io.IOException;
 
 import processing.app.I18n;
 import processing.app.Preferences;
@@ -109,9 +110,20 @@ public abstract class Uploader implements MessageConsumer  {
         }
         System.out.println();
       }
-      Process process = Runtime.getRuntime().exec(commandArray);
-      new MessageSiphon(process.getInputStream(), this);
-      new MessageSiphon(process.getErrorStream(), this);
+	  Process process;
+	  
+      //Process process = Runtime.getRuntime().exec(commandArray);
+	  
+    try {
+      process = Runtime.getRuntime().exec(commandArray);
+    } catch (IOException e) {
+      RunnerException re = new RunnerException(e.getMessage());
+      re.hideStackTrace();
+      throw re;
+    }	  
+	  
+    MessageSiphon in = new MessageSiphon(process.getInputStream(), this);
+    MessageSiphon err = new MessageSiphon(process.getErrorStream(), this);
 
       // wait for the process to finish.  if interrupted
       // before waitFor returns, continue waiting
@@ -119,6 +131,8 @@ public abstract class Uploader implements MessageConsumer  {
       boolean compiling = true;
       while (compiling) {
         try {
+          in.join();
+		  err.join();		
           result = process.waitFor();
           compiling = false;
         } catch (InterruptedException intExc) {

@@ -153,6 +153,7 @@ public class Editor extends JFrame implements RunnerListener {
   Runnable presentHandler;
   Runnable stopHandler;
   Runnable exportHandler;
+  Runnable bitFileHandler;
   Runnable exportAppHandler;
   
   String bitFilePath;
@@ -1528,11 +1529,12 @@ public class Editor extends JFrame implements RunnerListener {
 
   public void setHandlers(Runnable runHandler, Runnable presentHandler,
                           Runnable stopHandler,
-                          Runnable exportHandler, Runnable exportAppHandler) {
+                          Runnable exportHandler, Runnable bitFileHandler, Runnable exportAppHandler) {
     this.runHandler = runHandler;
     this.presentHandler = presentHandler;
     this.stopHandler = stopHandler;
     this.exportHandler = exportHandler;
+	this.bitFileHandler = bitFileHandler;
     this.exportAppHandler = exportAppHandler;
   }
 
@@ -1542,6 +1544,7 @@ public class Editor extends JFrame implements RunnerListener {
     presentHandler = new DefaultPresentHandler();
     stopHandler = new DefaultStopHandler();
     exportHandler = new DefaultExportHandler();
+	bitFileHandler = new BurnBitFileHandler();
     exportAppHandler = new DefaultExportAppHandler();
   }
 
@@ -2650,32 +2653,74 @@ public class Editor extends JFrame implements RunnerListener {
       }});
   }
 
-  protected void handleBurnBitfile(String path) {
+  synchronized public void handleBurnBitfile(String path) {
     bitFilePath = path;
     console.clear();
     statusNotice(_("Burning bitfile to Papilio Board (this may take a minute)..."));
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        try {
+
+    //((DefaultExportHandler)exportHandler).setExportOptions(uploadType);
+	//((BurnBitFileHandler)bitFileHandler).setExportOptions();
+    new Thread(bitFileHandler).start();
+  }
+
+  class BurnBitFileHandler implements Runnable 
+  {
+    int exportOptions;
+    public void setExportOptions(int op) 
+	{
+      exportOptions=op;
+    }
+    public void run() 
+	{
+
+        try 
+		{
           Uploader uploader = new BasicUploader();
-          if (uploader.burnBitfile(bitFilePath)) {
+          if (uploader.burnBitfile(bitFilePath)) 
+		  {
             statusNotice(_("Done burning bitfile."));
-          } else {
+          } else 
+		  {
             statusError(_("Error while burning bitfile."));
             // error message will already be visible
           }
-        } catch (RunnerException e) {
+        } catch (RunnerException e) 
+		{
           statusError(_("Error while burning bitfile."));
           e.printStackTrace();
           //statusError(e);
-        } catch (Exception e) {
+        } catch (Exception e) 
+		{
           statusError(_("Error while burning bitfile."));
           e.printStackTrace();
         }
-      }});
-  }
-
+    } 
+   }
   
+  // protected void handleBurnBitfile(String path) {
+    // bitFilePath = path;
+    // console.clear();
+    // statusNotice(_("Burning bitfile to Papilio Board (this may take a minute)..."));
+    // SwingUtilities.invokeLater(new Runnable() {
+      // public void run() {
+        // try {
+          // Uploader uploader = new BasicUploader();
+          // if (uploader.burnBitfile(bitFilePath)) {
+            // statusNotice(_("Done burning bitfile."));
+          // } else {
+            // statusError(_("Error while burning bitfile."));
+            // // error message will already be visible
+          // }
+        // } catch (RunnerException e) {
+          // statusError(_("Error while burning bitfile."));
+          // e.printStackTrace();
+          // // statusError(e);
+        // } catch (Exception e) {
+          // statusError(_("Error while burning bitfile."));
+          // e.printStackTrace();
+        // }
+      // }});
+  // }
 
   /**
    * Handler for File &rarr; Page Setup.
