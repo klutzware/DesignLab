@@ -55,6 +55,7 @@ public abstract class Uploader implements MessageConsumer  {
     throws RunnerException, SerialException;
   
   public abstract boolean burnBootloader() throws RunnerException;
+  public abstract boolean burnBitfile(String path) throws RunnerException;
   
   protected void flushSerialBuffer() throws RunnerException, SerialException {
     // Cleanup the serial buffer

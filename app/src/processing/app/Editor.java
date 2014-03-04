@@ -154,6 +154,8 @@ public class Editor extends JFrame implements RunnerListener {
   Runnable stopHandler;
   Runnable exportHandler;
   Runnable exportAppHandler;
+  
+  String bitFilePath;
 
 
   public Editor(Base ibase, String path, int[] location) {
@@ -720,6 +722,14 @@ public class Editor extends JFrame implements RunnerListener {
       }
     });
     menu.add(item);
+	
+    // item = new JMenuItem(_("Burn BitFile"));
+    // item.addActionListener(new ActionListener() {
+      // public void actionPerformed(ActionEvent e) {
+        // handleBurnBitfile("Test");
+      // }
+    // });
+    // menu.add(item);	
         
     menu.addMenuListener(new MenuListener() {
       public void menuCanceled(MenuEvent e) {}
@@ -2640,7 +2650,32 @@ public class Editor extends JFrame implements RunnerListener {
       }});
   }
 
+  protected void handleBurnBitfile(String path) {
+    bitFilePath = path;
+    console.clear();
+    statusNotice(_("Burning bitfile to Papilio Board (this may take a minute)..."));
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        try {
+          Uploader uploader = new BasicUploader();
+          if (uploader.burnBitfile(bitFilePath)) {
+            statusNotice(_("Done burning bitfile."));
+          } else {
+            statusError(_("Error while burning bitfile."));
+            // error message will already be visible
+          }
+        } catch (RunnerException e) {
+          statusError(_("Error while burning bitfile."));
+          e.printStackTrace();
+          //statusError(e);
+        } catch (Exception e) {
+          statusError(_("Error while burning bitfile."));
+          e.printStackTrace();
+        }
+      }});
+  }
 
+  
 
   /**
    * Handler for File &rarr; Page Setup.

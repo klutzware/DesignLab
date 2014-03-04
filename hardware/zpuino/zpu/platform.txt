@@ -81,6 +81,7 @@ tools.papilioprog.path={runtime.ide.path}/hardware/tools/papilio/papilio_loader
 tools.papilioprog.bootloader.params.verbose=-v
 tools.papilioprog.bootloader.params.quiet=
 tools.papilioprog.bootloader.pattern="{path}/{cmd}" "{runtime.ide.path}/hardware/zpuino/zpu/bootloaders/{bootloader.file}"
+tools.papilioprog.bootloader.pattern2="{path}/{cmd}" 
 
 # This is not necessary but not sure how to disable the erase.
 tools.papilioprog.erase.params.verbose=

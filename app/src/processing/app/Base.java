@@ -2090,8 +2090,12 @@ public class Base {
   static public void openURL(String url) {
     try {
 	  if (url.startsWith("sketchdir://"))
-		url = "file://" + Base.getActiveSketchPath() + "\\" + url.substring(12);	
-      platform.openURL(url);
+		url = "file://" + Base.getActiveSketchPath() + "\\" + url.substring(12);
+	  if (url.endsWith(".bit"))
+			activeEditor.handleBurnBitfile(url.substring(7));
+	  else
+		platform.openURL(url);
+	  
 
     } catch (Exception e) {
       showWarning(_("Problem Opening URL"),

@@ -315,10 +315,50 @@ public class BasicUploader extends Uploader  {
         return false;
 
       pattern = prefs.get("bootloader.pattern");
+	  System.out.println(_("Burning bit file to Papilio Board."));
       cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       return executeUploadCommand(cmd);
     } catch (Exception e) {
       throw new RunnerException(e);
     }
   }
+  
+  public boolean burnBitfile(String path) throws RunnerException {
+    String programmer = Preferences.get("programmer");
+    TargetPlatform targetPlatform = Base.getTargetPlatform();
+    if (programmer.contains(":")) {
+      String[] split = programmer.split(":", 2);
+      targetPlatform = Base.getCurrentTargetPlatformFromPackage(split[0]);
+      programmer = split[1];
+    }
+    
+    PreferencesMap prefs = Preferences.getMap();
+    prefs.putAll(Base.getBoardPreferences());
+    prefs.putAll(targetPlatform.getProgrammer(programmer));
+    prefs.putAll(targetPlatform.getTool(prefs.get("bootloader.tool")));
+    if (verbose) {
+      prefs.put("erase.verbose", prefs.get("erase.params.verbose"));
+      prefs.put("bootloader.verbose", prefs.get("bootloader.params.verbose"));
+    } else {
+      prefs.put("erase.verbose", prefs.get("erase.params.quiet"));
+      prefs.put("bootloader.verbose", prefs.get("bootloader.params.quiet"));
+    }
+    
+    try {
+      // if (prefs.get("program.disable_flushing") == null
+      // || prefs.get("program.disable_flushing").toLowerCase().equals("false"))
+      // {
+      // flushSerialBuffer();
+      // }
+
+      String pattern = prefs.get("bootloader.pattern2") + " \"" + path + "\"";
+	  //Base.showMessage("Title", pattern);
+	  System.out.println(_("Burning bit file to Papilio Board."));
+      String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+      return executeUploadCommand(cmd);
+    } catch (Exception e) {
+      throw new RunnerException(e);
+    }
+  } 
+  
 }
