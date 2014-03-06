@@ -188,7 +188,7 @@ public class SyntaxUtilities
   }
 
   static private Pattern urlPattern = Pattern.compile(
-	"((https?|ftp|gopher|telnet|file|sketchdir):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+	"((https?|ftp|gopher|telnet|file|sketchdir|example):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
 /*       "((?:https?|ftp|file|sketchdir)://" +                // ( Protocol
       "(?:(?:[\\w_\\-]+:)?[\\w_\\-]+@)?" +  // Username and password
       "(?:[\\w_\\-]+\\.)+[\\w_\\-]+" +      // Domain name

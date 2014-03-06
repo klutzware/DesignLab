@@ -44,6 +44,7 @@ import javax.swing.text.*;
 import javax.swing.undo.*;
 
 import gnu.io.*;
+
 import java.io.File;
 
 /**
@@ -86,6 +87,7 @@ public class Editor extends JFrame implements RunnerListener {
 
   // file, sketch, and tools menus for re-inserting items
   JMenu fileMenu;
+  JMenu papilioMenu;
   JMenu sketchMenu;
   JMenu toolsMenu;
 
@@ -97,6 +99,7 @@ public class Editor extends JFrame implements RunnerListener {
   static JMenu toolbarMenu;
   static JMenu sketchbookMenu;
   static JMenu examplesMenu;
+  static JMenu papilioExamplesMenu;
   static JMenu importMenu;
 
   // these menus are shared so that the board and serial port selections
@@ -157,11 +160,13 @@ public class Editor extends JFrame implements RunnerListener {
   Runnable exportAppHandler;
   
   String bitFilePath;
+  boolean saveAtStart;
 
 
   public Editor(Base ibase, String path, int[] location) {
     super("ZAP");
     this.base = ibase;
+    saveAtStart = false;
 
     Base.setIcon(this);
 
@@ -187,6 +192,7 @@ public class Editor extends JFrame implements RunnerListener {
           // re-add the sub-menus that are shared by all windows
           fileMenu.insert(sketchbookMenu, 2);
           fileMenu.insert(examplesMenu, 3);
+          papilioMenu.insert(papilioExamplesMenu, 0);
           sketchMenu.insert(importMenu, 4);
           int offset = 0;
           for (JMenu menu : boardsMenus) {
@@ -194,6 +200,13 @@ public class Editor extends JFrame implements RunnerListener {
             offset++;
           }
           toolsMenu.insert(serialMenu, numTools + offset);
+          
+          if (saveAtStart == true)
+          {
+            Base.activeEditor.handleSaveAs();
+            saveAtStart = false;
+          }
+          
         }
 
         // added for 1.0.5
@@ -202,6 +215,7 @@ public class Editor extends JFrame implements RunnerListener {
 //          System.err.println("deactivate");  // not coming through
           fileMenu.remove(sketchbookMenu);
           fileMenu.remove(examplesMenu);
+          papilioMenu.remove(papilioExamplesMenu);
           sketchMenu.remove(importMenu);
           for (JMenu menu : boardsMenus) {
             toolsMenu.remove(menu);
@@ -489,7 +503,7 @@ public class Editor extends JFrame implements RunnerListener {
     menubar.add(buildEditMenu());
     menubar.add(buildSketchMenu());
     menubar.add(buildToolsMenu());
-	menubar.add(buildPapilioMenu());
+    menubar.add(buildPapilioMenu());
     menubar.add(buildHelpMenu());
     setJMenuBar(menubar);
   }
@@ -612,7 +626,126 @@ public class Editor extends JFrame implements RunnerListener {
     return fileMenu;
   }
 
+  protected JMenu buildPapilioMenu() {
+    
+    JMenuItem item;
+    papilioMenu = new JMenu(_("Papilio"));
 
+     item = new JMenuItem(_("New Papilio Project"));
+     item.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+           String pslPath = Base.getExamplesPath();
+           File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");    
+           Editor newproj = base.handleOpen(f1.getAbsolutePath());
+           newproj.handlesaveAtStart();
+         }
+       });
+     papilioMenu.add(item);  
+    
+    if (papilioExamplesMenu == null) {
+      papilioExamplesMenu = new JMenu(_("Papilio Examples"));
+      MenuScroller.setScrollerFor(papilioExamplesMenu);
+      base.rebuildPapilioExamplesMenu(papilioExamplesMenu);
+    }
+    papilioMenu.add(papilioExamplesMenu);
+    
+    papilioMenu.addSeparator();
+
+    item = new JMenuItem(_("Papilio Examples Directory"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          String pslPath = Base.getExamplesPath();
+          File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples");
+          Base.openFolder(f1);
+        }
+      });
+    papilioMenu.add(item);
+  
+    item = new JMenuItem(_("Sketch Libraries Directory"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+      String pslPath = Base.getLibrariesPath().get(1).getPath();
+      File f1 = new File(pslPath);
+      Base.openFolder(f1);
+        }
+      });
+    papilioMenu.add(item); 
+    
+    item = new JMenuItem(_("Xilinx Symbol Library Directory"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          String pslPath = Base.getExamplesPath();
+          File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library");
+          Base.openFolder(f1);
+        }
+      });
+    papilioMenu.add(item);    
+
+    papilioMenu.addSeparator();
+    
+    item = new JMenuItem(_("Getting Started"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://learn.gadgetfactory.net/"));
+        }
+      });
+    papilioMenu.add(item);
+
+    item = new JMenuItem(_("Common Problems"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://learn.gadgetfactory.net/"));
+        }
+      });
+    papilioMenu.add(item);   
+    
+    papilioMenu.addSeparator();    
+    
+    item = new JMenuItem(_("Tutorials"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://learn.gadgetfactory.net/"));
+        }
+      });
+    papilioMenu.add(item);
+
+    item = new JMenuItem(_("Reference"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://www.papilio.cc/index.php?n=Papilio.ReferenceAll"));
+        }
+      });
+    papilioMenu.add(item);
+
+    item = new JMenuItem(_("Wiki"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://papilio.cc/"));
+        }
+      });
+    papilioMenu.add(item);
+    
+    papilioMenu.addSeparator();
+
+    item = new JMenuItem(_("Visit GadgetFactory.net"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://www.GadgetFactory.net/"));
+        }
+      });
+    papilioMenu.add(item);
+  
+    item = new JMenuItem(_("Visit Papilio Store"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("http://store.GadgetFactory.net/"));
+        }
+      });
+    papilioMenu.add(item);  
+
+    return papilioMenu;
+  } 
+  
   protected JMenu buildSketchMenu() {
     JMenuItem item;
     sketchMenu = new JMenu(_("Sketch"));
@@ -1038,92 +1171,7 @@ public class Editor extends JFrame implements RunnerListener {
 
     //serialMenu.addSeparator();
     //serialMenu.add(item);
-  }
-
-  protected JMenu buildPapilioMenu() {
-    JMenu menu = new JMenu(_("Papilio"));
-    JMenuItem item;
-
-    // item = new JMenuItem(_("New Papilio Project"));
-    // item.addActionListener(new ActionListener() {
-        // public void actionPerformed(ActionEvent e) {
-			// String pslPath = Base.getExamplesPath();
-			// File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");		
-			// Base.handleOpen(f1.getAbsolutePath());
-        // }
-      // });
-    // menu.add(item);	
-
-    item = new JMenuItem(_("Edit Examples"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-		  // File f1 = new File(Base.getExamplesPath());
-          // Base.openFolder(f1);
-		  //String pslPath = Base.getHardwareFolder().getPath();
-		  String pslPath = Base.getExamplesPath();
-		  File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples");
-		  Base.openFolder(f1);
-		  //Base.openFolder(Base.getExamplesPath()+"Papilio_Schematic_Library/examples");
-        }
-      });
-    menu.add(item);
-	
-    item = new JMenuItem(_("Edit Libraries"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-		  // File f1 = new File(Base.getExamplesPath());
-          // Base.openFolder(f1);
-		  //String pslPath = Base.getHardwareFolder().getPath();
-		  String pslPath = Base.getLibrariesPath().get(1).getPath();
-		  File f1 = new File(pslPath);
-		  Base.openFolder(f1);
-		  //Base.openFolder(Base.getExamplesPath()+"Papilio_Schematic_Library/examples");
-        }
-      });
-    menu.add(item);	
-
-    item = new JMenuItem(_("Tutorials"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://learn.gadgetfactory.net/"));
-        }
-      });
-    menu.add(item);
-
-    item = new JMenuItem(_("Reference"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://www.papilio.cc/index.php?n=Papilio.ReferenceAll"));
-        }
-      });
-    menu.add(item);
-
-    item = new JMenuItem(_("Wiki"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://papilio.cc/"));
-        }
-      });
-    menu.add(item);
-
-    item = new JMenuItem(_("Visit GadgetFactory.net"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://www.GadgetFactory.net/"));
-        }
-      });
-    menu.add(item);
-	
-    item = new JMenuItem(_("Visit Papilio Store"));
-    item.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://store.GadgetFactory.net/"));
-        }
-      });
-    menu.add(item);	
-
-    return menu;
-  }  
+  } 
 
   protected JMenu buildHelpMenu() {
     // To deal with a Mac OS X 10.5 bug, add an extra space after the name
@@ -2004,7 +2052,10 @@ public class Editor extends JFrame implements RunnerListener {
 
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-
+  public void handlesaveAtStart() {
+    saveAtStart = true;
+  }
+	
   /**
    * Implements Sketch &rarr; Run.
    * @param verbose Set true to run with verbose output.

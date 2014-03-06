@@ -655,7 +655,8 @@ public class Base {
     if (!newbieFile.createNewFile()) {
       throw new IOException();
     }
-    FileUtils.copyFile(new File(getContentFile("examples"), "01.Basics" + File.separator + "BareMinimum" + File.separator + "BareMinimum.ino"), newbieFile);
+    //FileUtils.copyFile(new File(getContentFile("examples"), "01.Basics" + File.separator + "BareMinimum" + File.separator + "BareMinimum.ino"), newbieFile);
+    FileUtils.copyFile(new File(getContentFile("examples"), "00.Papilio_Schematic_Library" + File.separator + "examples" + File.separator + "TOC.ino"), newbieFile);
     return newbieFile.getAbsolutePath();
   }
 
@@ -842,6 +843,7 @@ public class Base {
     // now that we're ready, show the window
     // (don't do earlier, cuz we might move it based on a window being closed)
     editor.setVisible(true);
+    
 
 //    System.err.println("exiting handleOpen");
 
@@ -1149,6 +1151,20 @@ public class Base {
       e.printStackTrace();
     }
   }
+  
+  public void rebuildPapilioExamplesMenu(JMenu menu) {
+    try {
+      menu.removeAll();
+
+      // Add examples from distribution "example" folder
+       String pslPath = Base.getExamplesPath();
+       File f1 = new File(pslPath+"/00.Papilio_Schematic_Library");      
+      boolean found = addSketches(menu, f1, false);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }  
 
   public Map<String, File> scanLibraries(List<File> folders) {
     Map<String, File> res = new HashMap<String, File>();
@@ -2089,7 +2105,13 @@ public class Base {
    */
   static public void openURL(String url) {
     try {
-	  if (url.startsWith("sketchdir://"))
+      if (url.startsWith("example://")){
+        String pslPath = Base.getExamplesPath();
+        File f1 = new File(pslPath+ "\\00.Papilio_Schematic_Library\\examples\\" + url.substring(10));    
+        activeEditor.base.handleOpen(f1.getAbsolutePath());
+        return;
+      }
+    if (url.startsWith("sketchdir://"))
 		url = "file://" + Base.getActiveSketchPath() + "\\" + url.substring(12);
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));
