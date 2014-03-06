@@ -192,7 +192,7 @@ public class Editor extends JFrame implements RunnerListener {
           // re-add the sub-menus that are shared by all windows
           fileMenu.insert(sketchbookMenu, 2);
           fileMenu.insert(examplesMenu, 3);
-          papilioMenu.insert(papilioExamplesMenu, 0);
+          papilioMenu.insert(papilioExamplesMenu, 1);
           sketchMenu.insert(importMenu, 4);
           int offset = 0;
           for (JMenu menu : boardsMenus) {
@@ -686,7 +686,7 @@ public class Editor extends JFrame implements RunnerListener {
     item = new JMenuItem(_("Getting Started"));
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://learn.gadgetfactory.net/"));
+          Base.openURL(_("http://gadgetfactory.net/learn/2013/10/29/papilio-schematic-library-getting-started/"));
         }
       });
     papilioMenu.add(item);
@@ -694,7 +694,7 @@ public class Editor extends JFrame implements RunnerListener {
     item = new JMenuItem(_("Common Problems"));
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Base.openURL(_("http://learn.gadgetfactory.net/"));
+          Base.openURL(_("http://gadgetfactory.net/learn/2014/03/06/papilio-designlab-software-common-problems/"));
         }
       });
     papilioMenu.add(item);   
