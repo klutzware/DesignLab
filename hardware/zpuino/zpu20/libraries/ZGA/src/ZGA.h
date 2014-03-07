@@ -1,5 +1,6 @@
-#include <SmallFS.h>
-#include <Adafruit_GFX.h>
+#include "Adafruit_GFX.h"
+
+using namespace ZPUino;
 
 class Font
 {
