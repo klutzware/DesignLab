@@ -136,6 +136,8 @@ strcpy:
         .size strcpy,.-strcpy
 #endif
 
+#if 0 /* Not used for ZPU 2.0 */
+
         .section        .text.udivmodsi4,"ax",@progbits
         .globl udivmodsi4
         .type        udivmodsi4, @function
@@ -172,5 +174,6 @@ strcmp:
         load
         poppc
         .size strcmp,.-strcmp
-
+#endif
+ 
 #endif
