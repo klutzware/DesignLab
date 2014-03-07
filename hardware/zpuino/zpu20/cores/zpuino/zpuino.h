@@ -3,6 +3,7 @@
 
 #include "register.h"
 #include "interrupt.h"
+#include "cbuffer.h"
 
 #define __ZPUINO__ 1
 
