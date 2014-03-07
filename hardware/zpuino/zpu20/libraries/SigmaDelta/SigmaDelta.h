@@ -26,7 +26,7 @@ public:
      * @brief Construct a new SigmaDelta_class instance.
      * @param instance Then Nth Hardware SigmaDelta instance to attach to.
      */
-    SigmaDelta_class(uint8_t instance=0xff): BaseDevice(instance), m_leftPin(-1), m_rightPin(-1) {}
+    SigmaDelta_class(uint8_t instance=1): BaseDevice(instance), m_leftPin(-1), m_rightPin(-1) {}
     /**
      * @brief Start and initialize the SigmaDelta.
      *
