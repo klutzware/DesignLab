@@ -41,7 +41,7 @@ recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -D
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} "{build.path}/{archive_file}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-Wl,-Map,{build.path}/{build.project_name}.map" --cref -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -Wl,--warn-common -Wl,--warn-section-align -Wl,--whole-archive {object_files} "{build.path}/{archive_file}" -Wl,--no-whole-archive -lz
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-Wl,-Map,{build.path}/{build.project_name}.map" --cref -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -Wl,--warn-common -Wl,--warn-section-align -Wl,--whole-archive {object_files} "{build.path}/{archive_file}" -Wl,--no-whole-archive
 
 ## Create eeprom
 recipe.objcopy.eep.pattern=
