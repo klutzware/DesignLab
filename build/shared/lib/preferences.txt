@@ -63,7 +63,7 @@ last.sketch.count=0
 # by default, check the processing server for any updates
 # (please avoid disabling, this also helps us know basic numbers 
 # on how many people are using Processing)
-update.check = true
+update.check = false
 
 # on windows, automatically associate .pde files with processing.exe
 platform.auto_file_type_associations = true
@@ -242,12 +242,12 @@ run.present.exclusive = false
 run.present.exclusive.macosx = true
 
 # ARDUINO PREFERENCES
-target_package = arduino
-target_platform = avr
-board = uno
+target_package = zpuino
+target_platform = zpu
+board = zpuino_papilio_prolx9van
 software=ARDUINO
 
-programmer = arduino:avrispmkii
+programmer = zpuino:papilioprog
 
 upload.using = bootloader
 upload.verify = true
