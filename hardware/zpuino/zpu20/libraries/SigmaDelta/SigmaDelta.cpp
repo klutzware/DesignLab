@@ -44,6 +44,7 @@ int SigmaDelta_class::setChannelPin(channel_t channel, int pin)
         if (ppspin<0)
             return -1;
         pinModePPS( pin, HIGH );
+        pinMode( pin, OUTPUT) ;
         outputPinForFunction( pin, ppspin );
 
         *i_pin = pin;
