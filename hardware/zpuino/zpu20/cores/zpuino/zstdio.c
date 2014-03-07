@@ -6,7 +6,7 @@
 
 static struct __zFILE __files[MAX_FILES];
 
-static char _snprintfbuf[256];
+static char _snprintfbuf[512];
 
 FILE*stdout=&__files[1];
 FILE*stderr=&__files[2];
@@ -183,7 +183,7 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap)
         size--,*str++=*format++;
     }
     *str++='\0';
-    return (str-start);
+    return (str-start-1);
 }
 
 int snprintf(char *dest, size_t size, const char *format, ...)
