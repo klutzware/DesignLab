@@ -1372,14 +1372,12 @@ public class Base {
   public void rebuildBoardsMenu(JMenu toolsMenu, Editor editor) throws Exception {
     JMenu boardsMenu = getBoardCustomMenu();
 
-    boolean first = true;
-
     List<JMenuItem> menuItemsToClickAfterStartup = new LinkedList<JMenuItem>();
-    JMenuItem lastResortItem = null;
 
     ButtonGroup boardsButtonGroup = new ButtonGroup();
     Map<String, ButtonGroup> buttonGroupsMap = new HashMap<String, ButtonGroup>();
     JMenu currentMenu = null;
+    JMenu firstSubMenu = null;
 
     // Generate custom menus for all platforms
     Set<String> titles = new HashSet<String>();
@@ -1397,8 +1395,11 @@ public class Base {
         // Add a title for each platform
         String platformLabel = targetPlatform.getPreferences().get("name"); 
         if (platformLabel != null && !targetPlatform.getBoards().isEmpty()) {
-          currentMenu =  new JMenu(_(targetPlatform.getPreferences().get("name")));
+          currentMenu = new JMenu(_(platformName));
           boardsMenu.add(currentMenu);
+          if (firstSubMenu==null) {
+            firstSubMenu = currentMenu;
+          }
         }
 
         // Cycle through all boards of this platform
@@ -1413,7 +1414,7 @@ public class Base {
     }
 
     if (menuItemsToClickAfterStartup.isEmpty()) {
-      menuItemsToClickAfterStartup.add(lastResortItem);//selectFirstEnabledMenuItem(boardsMenu));
+      menuItemsToClickAfterStartup.add(selectFirstEnabledMenuItem(firstSubMenu));
     }
 
     for (JMenuItem menuItemToClick : menuItemsToClickAfterStartup) {
