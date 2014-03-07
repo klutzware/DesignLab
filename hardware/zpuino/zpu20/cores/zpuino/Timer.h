@@ -128,6 +128,11 @@ namespace ZPUino
          */
         int setPeriodMilliseconds(unsigned ms);
         /**
+         * @brief Set the frequency, in Hertz, for a timer callback (periodic call)
+         * @param freq_hz The frequency in Hz requested
+         */
+        int setFrequency(unsigned freq_hz);
+        /**
          * @brief Acknowledge a timer interrupt
          */
         void ackInterrupt()
@@ -188,6 +193,7 @@ namespace ZPUino
         int singleShot( int msec, void (*function)(void*), void *arg, int timerid=-1 );
         int singleShot( int msec, void (*function)(void), int timerid=-1);
         int periodic( int msec, bool (*function)(void*), void *arg, int timerid=-1 );
+        int periodicHz( unsigned int hz, bool (*function)(void*), void *arg, int timerid=-1 );
         int periodic( int msec, bool (*function)(void), int timerid=-1);
 
         void cancel();

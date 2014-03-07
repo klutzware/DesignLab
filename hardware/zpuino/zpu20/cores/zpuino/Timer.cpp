@@ -50,6 +50,39 @@ namespace ZPUino {
         return 0;
     }
 
+    int TimerInstance_class::setFrequency(unsigned freq_hz) {
+        /* Shifting more than 31 is not valid */
+        unsigned size=getSize();
+        unsigned maxvalue = size>=32 ? -1: (1<<size)-1;
+        unsigned cmp=0,pres=0;
+        if (hasPrescaler()) {
+            int i;
+            for (i=0;i<8;i++) {
+                unsigned long count = (CLK_FREQ/timerPrescalerDividers[i]) / freq_hz;
+                cmp = count-1;
+                pres=i;
+                if (cmp<maxvalue)
+                    break;
+                cmp=0;
+            }
+        } else {
+            unsigned long count = CLK_FREQ; /* This is one second */
+            cmp = count/freq_hz;
+            if (cmp>maxvalue)
+                cmp=0;
+        }
+        if (cmp==0)
+            return -1;
+
+        setPrescaler(pres);
+        setComparator(cmp);
+        setCounter(0);
+        setUpDirection(true);
+        return 0;
+    }
+
+
+
 #if 0
     void TimerClass::setPWMDuty(uint8_t val)
     {
@@ -132,6 +165,36 @@ namespace ZPUino {
             return -2;
         }
         if (timer(tmr)->setPeriodMilliseconds(msec)<0) {
+            detachInterrupt(timer(tmr)->getInterruptLine());
+            releaseTimer(m_intrTimer);
+            m_intrTimer = -1;
+            return -3;
+        }
+        m_cb[tmr].function = function;
+        m_cb[tmr].arg = arg;
+        timer(tmr)->start(true);
+        sei();
+        return tmr;
+    }
+
+    int Timers_class::periodicHz( unsigned int freq_hz, bool (*function)(void*), void *arg, int timerid )
+    {
+        timerindex_t tmr;
+        if (timerid<0)
+            tmr = getFreeTimer();
+        else
+            tmr = acquireTimer(timerid);
+
+        if (tmr<0)
+            return -1;
+
+        m_intrTimer = tmr;
+        if (attachInterrupt(timer(tmr)->getInterruptLine(), &timerInterruptHandler, (void*)this)<0) {
+            releaseTimer(m_intrTimer);
+            m_intrTimer = -1;
+            return -2;
+        }
+        if (timer(tmr)->setFrequency(freq_hz)<0) {
             detachInterrupt(timer(tmr)->getInterruptLine());
             releaseTimer(m_intrTimer);
             m_intrTimer = -1;
