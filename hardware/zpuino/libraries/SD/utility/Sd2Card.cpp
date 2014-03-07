@@ -31,8 +31,12 @@
 #ifdef ZPU
 #include <zpuino.h>
 
+#ifndef SPISD_SPIDATA
+#define SPISD_SPIDATA USPIDATA
+#endif
+
 static void spiSend(uint8_t b) {
-	USPIDATA=b;
+	SPISD_SPIDATA=b;
 }
 /*
 static void spiSetMode32()
@@ -54,7 +58,7 @@ static uint32_t spiRec(void) {
 	spiSend(0XFF);
 //Serial.print(USPIDATA&0xff);
 //Serial.print(" ");
-	return USPIDATA&0xff;
+	return SPISD_SPIDATA&0xff;
 }
 
 #else
@@ -405,11 +409,11 @@ int Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
 
 	idst = (unsigned int*)dst;
 	for (i=128;i!=0;i--) {
-		USPIDATA=0xff;
-		USPIDATA=0xff;
-		USPIDATA=0xff;
-		USPIDATA=0xff;
-		*idst++=USPIDATA;
+		SPISD_SPIDATA=0xff;
+		SPISD_SPIDATA=0xff;
+		SPISD_SPIDATA=0xff;
+		SPISD_SPIDATA=0xff;
+		*idst++=SPISD_SPIDATA;
 	}
 	chipSelectHigh();
 	inBlock_ = 0;
