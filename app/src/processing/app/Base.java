@@ -2107,12 +2107,12 @@ public class Base {
     try {
       if (url.startsWith("example://")){
         String pslPath = Base.getExamplesPath();
-        File f1 = new File(pslPath+ "\\00.Papilio_Schematic_Library\\examples\\" + url.substring(10));    
+        File f1 = new File(pslPath+ "//00.Papilio_Schematic_Library//examples//" + url.substring(10));    
         activeEditor.base.handleOpen(f1.getAbsolutePath());
         return;
       }
     if (url.startsWith("sketchdir://"))
-		url = "file://" + Base.getActiveSketchPath() + "\\" + url.substring(12);
+		url = "file://" + Base.getActiveSketchPath() + "//" + url.substring(12);
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));
 	  else
