@@ -28,7 +28,7 @@ namespace ZPUino {
                 if (isRegistered(i))
                     continue;
 
-                if (--instance==0)
+                if (instance=0xff || --instance==0)
                     return i;
             }
         }
