@@ -474,6 +474,15 @@
     <chmod perm="755" file="linux/work/hardware/tools/adk2tool" />
     <chmod perm="755" file="linux/work/hardware/tools/adk2install" />
 
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/Papilio_Programmer.sh" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/papilio_programmer_linux.sh" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/papilio-prog" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/gawk" />
+
+
+
+    <copy todir="linux/work" file="linux/dist/zap" />
+
     <copy todir="linux/work" file="linux/dist/zap" />
     <chmod perm="755" file="linux/work/zap" />
 
