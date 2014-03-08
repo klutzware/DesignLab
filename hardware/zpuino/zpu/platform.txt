@@ -74,7 +74,7 @@ tools.zpuinoprogrammer.upload.params.smallfs=-e "{build.path}/smallfs.dat"
 
 # Papilio Programmer
 # ------------------
-tools.papilioprog.cmd=papilioprog
+tools.papilioprog.cmd=papilio_programmer_linux.sh 
 tools.papilioprog.cmd.windows=Papilio_Programmer.bat
 tools.papilioprog.path={runtime.ide.path}/hardware/tools/papilio/papilio_loader
 
