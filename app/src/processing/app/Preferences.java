@@ -75,47 +75,47 @@ public class Preferences {
 
   String[] languages = {
                         _("System Default"),
-                        "العربية" + " (" + _("Arabic") + ")",
-                        "Aragonés" + " (" + _("Aragonese") + ")",
-                        "български" + " (" + _("Bulgarian") + ")",
-                        "Català" + " (" + _("Catalan") + ")",
+                        "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©" + " (" + _("Arabic") + ")",
+                        "AragonÃ©s" + " (" + _("Aragonese") + ")",
+                        "Ð±ÑŠÐ»Ð³Ð°Ñ€Ñ�ÐºÐ¸" + " (" + _("Bulgarian") + ")",
+                        "CatalÃ " + " (" + _("Catalan") + ")",
                         "Hrvatski" + " (" + _("Croatian") + ")",
-                        "český" + " (" + _("Czech") + ")",
-                        "简体中文" + " (" + _("Chinese Simplified") + ")",
-                        "繁體中文" + " (" + _("Chinese Traditional") + ")",
+                        "Ä�eskÃ½" + " (" + _("Czech") + ")",
+                        "ç®€ä½“ä¸­æ–‡" + " (" + _("Chinese Simplified") + ")",
+                        "ç¹�é«”ä¸­æ–‡" + " (" + _("Chinese Traditional") + ")",
                         "Dansk" + " (" + _("Danish") + ")",
                         "Nederlands" + " (" + _("Dutch") + ")",
                         "English" + " (" + _("English") + ")",
                         "Eesti" + " (" + _("Estonian") + ")",
                         "Pilipino" + " (" + _("Filipino") + ")",
-                        "Français" + " (" + _("French") + ")",
-                        "Canadienne-français" + " (" + _("Canadian French") + ")",
+                        "FranÃ§ais" + " (" + _("French") + ")",
+                        "Canadienne-franÃ§ais" + " (" + _("Canadian French") + ")",
                         "Galego" + " (" + _("Galician") + ")",
-                        "საქართველოს" + " (" + _("Georgian") + ")",
-                        "עברית" + " (" + _("Hebrew") + ")",
+                        "áƒ¡áƒ�áƒ¥áƒ�áƒ áƒ—áƒ•áƒ”áƒšáƒ�áƒ¡" + " (" + _("Georgian") + ")",
+                        "×¢×‘×¨×™×ª" + " (" + _("Hebrew") + ")",
                         "Deutsch" + " (" + _("German") + ")",
-                        "ελληνικά" + " (" + _("Greek") + ")",
+                        "ÎµÎ»Î»Î·Î½Î¹ÎºÎ¬" + " (" + _("Greek") + ")",
                         "Magyar" + " (" + _("Hindi") + ")",
                         "Magyar" + " (" + _("Hungarian") + ")",
                         "Bahasa Indonesia" + " (" + _("Indonesian") + ")",
                         "Italiano" + " (" + _("Italian") + ")",
-                        "日本語" + " (" + _("Japanese") + ")",
-                                                                "한국어" + " (" + _("Korean") + ")",
-                        "Latviešu" + " (" + _("Latvian") + ")",
-                        "Lietuvių Kalba" + " (" + _("Lithuaninan") + ")",
-                        "मराठी" + " (" + _("Marathi") + ")",
+                        "æ—¥æœ¬èªž" + " (" + _("Japanese") + ")",
+                                                                "í•œêµ­ì–´" + " (" + _("Korean") + ")",
+                        "LatvieÅ¡u" + " (" + _("Latvian") + ")",
+                        "LietuviÅ³ Kalba" + " (" + _("Lithuaninan") + ")",
+                        "à¤®à¤°à¤¾à¤ à¥€" + " (" + _("Marathi") + ")",
                         "Norsk" + " (" + _("Norwegian") + ")",
-                        "Norsk bokmål" + " (" + _("Norwegian Bokmål") + ")",
-                        "فارسی" + " (" + _("Persian") + ")",
-                        "Język Polski" + " (" + _("Polish") + ")",
-                        "Português" + " (" + _("Portuguese") + " - Brazil)",
-                        "Português" + " (" + _("Portuguese") + " - Portugal)",
-                        "Română" + " (" + _("Romanian") + ")",
-                        "Русский" + " (" + _("Russian") + ")",
-                        "Español" + " (" + _("Spanish") + ")",
-                        "தமிழ்" + " (" + _("Tamil") + ")",
-                        "Türk" + " (" + _("Turkish") + ")",
-                        "Український" + " (" + _("Ukrainian") + ")"
+                        "Norsk bokmÃ¥l" + " (" + _("Norwegian BokmÃ¥l") + ")",
+                        "Ù�Ø§Ø±Ø³ÛŒ" + " (" + _("Persian") + ")",
+                        "JÄ™zyk Polski" + " (" + _("Polish") + ")",
+                        "PortuguÃªs" + " (" + _("Portuguese") + " - Brazil)",
+                        "PortuguÃªs" + " (" + _("Portuguese") + " - Portugal)",
+                        "RomÃ¢nÄƒ" + " (" + _("Romanian") + ")",
+                        "Ð ÑƒÑ�Ñ�ÐºÐ¸Ð¹" + " (" + _("Russian") + ")",
+                        "EspaÃ±ol" + " (" + _("Spanish") + ")",
+                        "à®¤à®®à®¿à®´à¯�" + " (" + _("Tamil") + ")",
+                        "TÃ¼rk" + " (" + _("Turkish") + ")",
+                        "Ð£ÐºÑ€Ð°Ñ—Ð½Ñ�ÑŒÐºÐ¸Ð¹" + " (" + _("Ukrainian") + ")"
                         };
   String[] languagesISO = {
                         "",
@@ -196,6 +196,8 @@ public class Preferences {
   int wide, high;
 
   JTextField sketchbookLocationField;
+  JTextField iseLocationField;
+  JTextField adobeReaderLocationField;
   JCheckBox exportSeparateBox;
   JCheckBox verboseCompilationBox;
   JCheckBox verboseUploadBox;
@@ -360,7 +362,8 @@ public class Preferences {
       });
     pain.add(button);
     d2 = button.getPreferredSize();
-
+    //top += d2.height; // + GUI_SMALL;
+    
     // take max height of all components to vertically align em
     vmax = Math.max(d.height, d2.height);
     sketchbookLocationField.setBounds(left, top + (vmax-d.height)/2,
@@ -370,8 +373,98 @@ public class Preferences {
                      d2.width, d2.height);
 
     right = Math.max(right, h + d2.width + GUI_BIG);
+    top += vmax + GUI_BETWEEN;    
+    
+    // Linux ISE location:
+    // [...............................]  [ Browse ]
+
+    label = new JLabel(_("Linux ISE location:"));
+    pain.add(label);
+    d = label.getPreferredSize();
+    label.setBounds(left, top, d.width, d.height);
+    top += d.height; // + GUI_SMALL;
+
+    iseLocationField = new JTextField(40);
+    pain.add(iseLocationField);
+    d = iseLocationField.getPreferredSize();
+
+    button = new JButton(I18n.PROMPT_BROWSE);
+    button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          File dflt = new File(iseLocationField.getText());
+          File file =
+                  Base.selectFolder(_("Select ise executable location"), dflt, dialog);
+          if (file != null) {
+            String path = file.getAbsolutePath();
+            if (Base.getPortableFolder() != null) {
+              path = FileUtils.relativePath(Base.getPortableFolder().toString(), path);
+              if (path == null) {
+                path = Base.getPortableSketchbookFolder();
+              }
+            }
+            iseLocationField.setText(path);
+          }
+        }
+      });
+    pain.add(button);
+    d2 = button.getPreferredSize();    
+
+    // take max height of all components to vertically align em
+    vmax = Math.max(d.height, d2.height);
+    iseLocationField.setBounds(left, top + (vmax-d.height)/2,
+                                      d.width, d.height);
+    h = left + d.width + GUI_SMALL;
+    button.setBounds(h, top + (vmax-d2.height)/2,
+                     d2.width, d2.height);
+
+    right = Math.max(right, h + d2.width + GUI_BIG);
     top += vmax + GUI_BETWEEN;
 
+    // Linux Adobe Reader location:
+    // [...............................]  [ Browse ]
+
+    label = new JLabel(_("Linux Adobe Reader location:"));
+    pain.add(label);
+    d = label.getPreferredSize();
+    label.setBounds(left, top, d.width, d.height);
+    top += d.height; // + GUI_SMALL;
+
+    adobeReaderLocationField = new JTextField(40);
+    pain.add(adobeReaderLocationField);
+    d = adobeReaderLocationField.getPreferredSize();
+
+    button = new JButton(I18n.PROMPT_BROWSE);
+    button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          File dflt = new File(adobeReaderLocationField.getText());
+          File file =
+                  Base.selectFolder(_("Select Adobe Reader executable location"), dflt, dialog);
+          if (file != null) {
+            String path = file.getAbsolutePath();
+            if (Base.getPortableFolder() != null) {
+              path = FileUtils.relativePath(Base.getPortableFolder().toString(), path);
+              if (path == null) {
+                path = Base.getPortableSketchbookFolder();
+              }
+            }
+            adobeReaderLocationField.setText(path);
+          }
+        }
+      });
+    pain.add(button);
+    d2 = button.getPreferredSize();    
+
+    // take max height of all components to vertically align em
+    vmax = Math.max(d.height, d2.height);
+    adobeReaderLocationField.setBounds(left, top + (vmax-d.height)/2,
+                                      d.width, d.height);
+    h = left + d.width + GUI_SMALL;
+    button.setBounds(h, top + (vmax-d2.height)/2,
+                     d2.width, d2.height);
+
+    right = Math.max(right, h + d2.width + GUI_BIG);
+    top += vmax + GUI_BETWEEN;
+    
 
     // Preferred language: [        ] (requires restart of Arduino)
     Container box = Box.createHorizontalBox();
@@ -633,6 +726,18 @@ public class Preferences {
       editor.base.rebuildSketchbookMenus();
       set("sketchbook.path", newPath);
     }
+    
+    String iseoldPath = get("ise.path");
+    String isenewPath = iseLocationField.getText();
+    if (!isenewPath.equals(iseoldPath)) {
+      set("ise.path", isenewPath);
+    }    
+    
+    String adobeoldPath = get("adobeLinux.path");
+    String adobenewPath = adobeReaderLocationField.getText();
+    if (!adobenewPath.equals(adobeoldPath)) {
+      set("adobeLinux.path", adobenewPath);
+    }        
 
     setBoolean("editor.external", externalEditorBox.isSelected());
     setBoolean("update.check", checkUpdatesBox.isSelected());
@@ -693,6 +798,10 @@ public class Preferences {
 
     sketchbookLocationField.
       setText(get("sketchbook.path"));
+    iseLocationField.
+      setText(get("ise.path"));  
+    adobeReaderLocationField.
+      setText(get("adobeLinux.path"));     
     externalEditorBox.
       setSelected(getBoolean("editor.external"));
     checkUpdatesBox.
