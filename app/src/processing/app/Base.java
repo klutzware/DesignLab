@@ -2112,7 +2112,7 @@ public class Base {
         return;
       }
     if (url.startsWith("sketchdir://"))
-		url = "file://" + Base.getActiveSketchPath() + "//" + url.substring(12);
+		url = "file://" + Base.getActiveSketchPath() + "/" + url.substring(12);
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));
 	  else

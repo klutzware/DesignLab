@@ -197,7 +197,7 @@ public class Preferences {
 
   JTextField sketchbookLocationField;
   JTextField iseLocationField;
-  JTextField adobeReaderLocationField;
+  //JTextField adobeReaderLocationField;
   JCheckBox exportSeparateBox;
   JCheckBox verboseCompilationBox;
   JCheckBox verboseUploadBox;
@@ -423,47 +423,47 @@ public class Preferences {
     // Linux Adobe Reader location:
     // [...............................]  [ Browse ]
 
-    label = new JLabel(_("Linux Adobe Reader location:"));
-    pain.add(label);
-    d = label.getPreferredSize();
-    label.setBounds(left, top, d.width, d.height);
-    top += d.height; // + GUI_SMALL;
-
-    adobeReaderLocationField = new JTextField(40);
-    pain.add(adobeReaderLocationField);
-    d = adobeReaderLocationField.getPreferredSize();
-
-    button = new JButton(I18n.PROMPT_BROWSE);
-    button.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          File dflt = new File(adobeReaderLocationField.getText());
-          File file =
-                  Base.selectFolder(_("Select Adobe Reader executable location"), dflt, dialog);
-          if (file != null) {
-            String path = file.getAbsolutePath();
-            if (Base.getPortableFolder() != null) {
-              path = FileUtils.relativePath(Base.getPortableFolder().toString(), path);
-              if (path == null) {
-                path = Base.getPortableSketchbookFolder();
-              }
-            }
-            adobeReaderLocationField.setText(path);
-          }
-        }
-      });
-    pain.add(button);
-    d2 = button.getPreferredSize();    
-
-    // take max height of all components to vertically align em
-    vmax = Math.max(d.height, d2.height);
-    adobeReaderLocationField.setBounds(left, top + (vmax-d.height)/2,
-                                      d.width, d.height);
-    h = left + d.width + GUI_SMALL;
-    button.setBounds(h, top + (vmax-d2.height)/2,
-                     d2.width, d2.height);
-
-    right = Math.max(right, h + d2.width + GUI_BIG);
-    top += vmax + GUI_BETWEEN;
+//    label = new JLabel(_("Linux Adobe Reader location:"));
+//    pain.add(label);
+//    d = label.getPreferredSize();
+//    label.setBounds(left, top, d.width, d.height);
+//    top += d.height; // + GUI_SMALL;
+//
+//    adobeReaderLocationField = new JTextField(40);
+//    pain.add(adobeReaderLocationField);
+//    d = adobeReaderLocationField.getPreferredSize();
+//
+//    button = new JButton(I18n.PROMPT_BROWSE);
+//    button.addActionListener(new ActionListener() {
+//        public void actionPerformed(ActionEvent e) {
+//          File dflt = new File(adobeReaderLocationField.getText());
+//          File file =
+//                  Base.selectFolder(_("Select Adobe Reader executable location"), dflt, dialog);
+//          if (file != null) {
+//            String path = file.getAbsolutePath();
+//            if (Base.getPortableFolder() != null) {
+//              path = FileUtils.relativePath(Base.getPortableFolder().toString(), path);
+//              if (path == null) {
+//                path = Base.getPortableSketchbookFolder();
+//              }
+//            }
+//            adobeReaderLocationField.setText(path);
+//          }
+//        }
+//      });
+//    pain.add(button);
+//    d2 = button.getPreferredSize();    
+//
+//    // take max height of all components to vertically align em
+//    vmax = Math.max(d.height, d2.height);
+//    adobeReaderLocationField.setBounds(left, top + (vmax-d.height)/2,
+//                                      d.width, d.height);
+//    h = left + d.width + GUI_SMALL;
+//    button.setBounds(h, top + (vmax-d2.height)/2,
+//                     d2.width, d2.height);
+//
+//    right = Math.max(right, h + d2.width + GUI_BIG);
+//    top += vmax + GUI_BETWEEN;
     
 
     // Preferred language: [        ] (requires restart of Arduino)
@@ -733,11 +733,11 @@ public class Preferences {
       set("ise.path", isenewPath);
     }    
     
-    String adobeoldPath = get("adobeLinux.path");
-    String adobenewPath = adobeReaderLocationField.getText();
-    if (!adobenewPath.equals(adobeoldPath)) {
-      set("adobeLinux.path", adobenewPath);
-    }        
+    //String adobeoldPath = get("adobeLinux.path");
+    //String adobenewPath = adobeReaderLocationField.getText();
+    //if (!adobenewPath.equals(adobeoldPath)) {
+    //  set("adobeLinux.path", adobenewPath);
+    //}        
 
     setBoolean("editor.external", externalEditorBox.isSelected());
     setBoolean("update.check", checkUpdatesBox.isSelected());
@@ -800,8 +800,8 @@ public class Preferences {
       setText(get("sketchbook.path"));
     iseLocationField.
       setText(get("ise.path"));  
-    adobeReaderLocationField.
-      setText(get("adobeLinux.path"));     
+    //adobeReaderLocationField.
+      //setText(get("adobeLinux.path"));     
     externalEditorBox.
       setSelected(getBoolean("editor.external"));
     checkUpdatesBox.

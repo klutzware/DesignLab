@@ -62,10 +62,14 @@ public class Platform extends processing.app.Platform {
   public void openURL(String url) throws Exception {
     if (openFolderAvailable()) {
       String launcher = Preferences.get("launcher");
-      if (url.endsWith(".pdf"))
-        launcher = Preferences.get("adobeLinux.path");
-      if (url.endsWith(".xise"))
-        launcher = Preferences.get("ise.path");      
+//      if (url.endsWith(".pdf")){
+//        //launcher = Preferences.get("adobeLinux.path");
+//        url = url.substring(7);
+//      } 
+      if (url.endsWith(".xise")){
+        launcher = Preferences.get("ise.path");
+        url = url.substring(7);
+      }    
       if (launcher != null) {
         Runtime.getRuntime().exec(new String[] { launcher, url });
       }

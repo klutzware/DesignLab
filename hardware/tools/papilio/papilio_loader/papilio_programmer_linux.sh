@@ -1,6 +1,9 @@
 #!/bin/bash
+
+set -e
+
 cd ${0%/*}
 
 pwd
 
-sudo ./Papilio_Programmer.sh $1 $0\..
+./Papilio_Programmer.sh $1 $0\..

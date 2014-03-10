@@ -2,6 +2,8 @@
 # Creative Commons Attribution license
 # Made for the Papilio FPGA boards
 
+set -e
+
 bitfile=bitfile
 	
 # ./dialog --timeout 3 --title "Papilio Programmer" \

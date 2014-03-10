@@ -2733,6 +2733,7 @@ public class Editor extends JFrame implements RunnerListener {
           } else 
 		  {
             statusError(_("Error while burning bitfile."));
+            Base.showMessage("BitFile Error", "Please ensure that a Papilio Board is plugged in. If this is linux then be sure to run the ftdi_user.sh script to give the FTDI drivers userspace permissions.");
             // error message will already be visible
           }
         } catch (RunnerException e) 
