@@ -465,6 +465,26 @@
     <copy todir="linux/work" file="../hardware/tools/papilio/papilio_loader/ftdi_user.sh" />
     <chmod perm="755" file="linux/work/ftdi_user.sh" />
 
+    <copy todir="linux/work/hardware/tools/papilio" file="../hardware/tools/papilio/lin32/cp" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/cp" />
+
+    <copy todir="linux/work/hardware/tools/papilio" file="../hardware/tools/papilio/lin32/gawk" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/gawk" />
+
+    <copy todir="linux/work/hardware/tools/papilio" file="../hardware/tools/papilio/lin32/srec_cat" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/srec_cat" />
+
+    <copy todir="linux/work/hardware/tools/papilio" file="../hardware/tools/papilio/lin32/data2mem" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/data2mem" />
+
+    <copy todir="linux/work/hardware/tools/papilio" file="../hardware/tools/papilio/lin32/papilio-prog" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio-prog" />
+
+    <copy todir="linux/work/hardware/tools/papilio" file="../hardware/tools/papilio/lin32/libsrecord.so.0" />
+
+    <copy todir="linux/work/hardware/tools/avr/utils/bin" file="../hardware/tools/papilio/lin32/make" />
+    <chmod perm="755" file="linux/work/hardware/tools/avr/utils/bin/make" />
+
     <copy todir="linux/work/hardware">
       <fileset dir="linux/dist" includes="tools/**" />
     </copy>
@@ -481,6 +501,10 @@
     <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/papilio_programmer_linux.sh" />
     <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/papilio-prog" />
     <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/gawk" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/lin32/gawk" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/lin32/srec_cat" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/lin32/data2mem" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/lin32/papilio-prog" />
 
 
 

@@ -61,7 +61,7 @@ tools.papilio.path={runtime.ide.path}/hardware/tools/avr/utils/bin
 
 tools.papilio.upload.params.verbose=-i -d
 tools.papilio.upload.params.quiet=
-tools.papilio.upload.pattern="{path}/{cmd}" -f "{runtime.ide.path}\hardware\tools\papilio\Makefile" -C "{build.path}" {upload.using}
+tools.papilio.upload.pattern="{path}/{cmd}" -f "{runtime.ide.path}/hardware/tools/papilio/Makefile" -C "{build.path}" {upload.using}
 
 tools.bossac.cmd=bossac
 tools.bossac.cmd.windows=bossac.exe
