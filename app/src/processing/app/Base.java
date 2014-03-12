@@ -2104,14 +2104,18 @@ public class Base {
    * trickier than just removing this method.
    */
   static public void openURL(String url) {
-    try {
+    try {     
+      if (url.startsWith("tools://")){
+        //url = Base.getToolsPath() + "\\sh.exe " + url.substring(8);
+        url = Base.getToolsPath() + "\\" + url.substring(8);
+      }
       if (url.startsWith("example://")){
         String pslPath = Base.getExamplesPath();
         File f1 = new File(pslPath+ "//00.Papilio_Schematic_Library//examples//" + url.substring(10));    
         activeEditor.base.handleOpen(f1.getAbsolutePath());
         return;
       }
-    if (url.startsWith("sketchdir://"))
+      if (url.startsWith("sketchdir://"))
 		url = "file://" + Base.getActiveSketchPath() + "/" + url.substring(12);
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));

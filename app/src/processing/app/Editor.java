@@ -679,6 +679,24 @@ public class Editor extends JFrame implements RunnerListener {
           Base.openFolder(f1);
         }
       });
+    papilioMenu.add(item);  
+    
+    papilioMenu.addSeparator();
+    
+    item = new JMenuItem(_("Papilio Loader"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("tools://Papilio_Loader.sh"));
+        }
+      });
+    papilioMenu.add(item);
+    
+    item = new JMenuItem(_("Logic Analyzer"));
+    item.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          Base.openURL(_("tools://Logic_Analyzer.sh"));
+        }
+      });
     papilioMenu.add(item);    
 
     papilioMenu.addSeparator();
