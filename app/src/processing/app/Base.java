@@ -1395,7 +1395,7 @@ public class Base {
         // Add a title for each platform
         String platformLabel = targetPlatform.getPreferences().get("name"); 
         if (platformLabel != null && !targetPlatform.getBoards().isEmpty()) {
-          currentMenu = new JMenu(_(platformName));
+          currentMenu = new JMenu(_(platformLabel));
           boardsMenu.add(currentMenu);
           if (firstSubMenu==null) {
             firstSubMenu = currentMenu;
