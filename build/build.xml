@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="ZAP" default="build">
+<project name="ZPUino" default="build">
   <!--echo message="os.name = ${os.name}" /-->
   <!--echo message="os.arch = ${os.arch}" /-->
   <!--echo message="os.version = ${os.version}" /-->
@@ -152,8 +152,8 @@
         <tokenfilter>
           <linetokenizer includeDelims="false" />
           <!-- grab the thing from the first line that's 4 digits -->
-          <containsregex pattern="ZAP (.*) " />
-          <replaceregex pattern="ZAP ([^ ]*).*" replace="\1" />
+          <containsregex pattern="ZPUINO (.*) " />
+          <replaceregex pattern="ZPUINO ([^ ]*).*" replace="\1" />
         </tokenfilter>
         <tokenfilter>
           <stringtokenizer suppressdelims="true" />
@@ -767,7 +767,7 @@
 
   <target name="windows-run" depends="windows-build"
 	  description="Run windows version">
-    <exec executable="windows/work/zap.exe"
+    <exec executable="windows/work/zpuino.exe"
 	  dir="windows/work" spawn="true"/>
   </target>
 
@@ -788,14 +788,14 @@
 	 excludes="java/**" />
     -->
 
-    <zip destfile="windows/zap-${version}-${platform}.zip" level="9">
+    <zip destfile="windows/zpuino-${version}-${platform}.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="zap-${version}" />
+		  prefix="zpuino-${version}" />
     </zip>
 
-    <zip destfile="windows/zap-${version}-${platform}-expert.zip" level="9">
+    <zip destfile="windows/zpuino-${version}-${platform}-expert.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="zap-${version}" 
+		  prefix="zpuino-${version}" 
 		  excludes="java/**" />
     </zip>
 
@@ -803,8 +803,8 @@
       =======================================================
       Arduino for Windows was built. Grab the archive from
       
-      windows/zap-${version}-${platform}.zip
-      windows/zap-${version}-${platform}-expert.zip
+      windows/zpuino-${version}-${platform}.zip
+      windows/zpuino-${version}-${platform}-expert.zip
       =======================================================
     </echo>
   </target>
@@ -820,9 +820,9 @@
 	   addproperty="version"
 	   defaultvalue="${revision}" />
 
-    <tar compression="gzip" destfile="zap-${version}-src.tar.gz">
+    <tar compression="gzip" destfile="zpuino-${version}-src.tar.gz">
       <tarfileset dir="../"
-		  prefix="zap-${version}"
+		  prefix="zpuino-${version}"
 		  excludes="**/*.tgz,
 			     **/*.bz2,
 			     **/build/macosx/,
@@ -837,7 +837,7 @@
       =======================================================
       Arduino source distribution was built. Grab the archive from
 
-      arduino-${version}-src.tar.gz
+      zpuino-${version}-src.tar.gz
       =======================================================
     </echo>
   </target>
