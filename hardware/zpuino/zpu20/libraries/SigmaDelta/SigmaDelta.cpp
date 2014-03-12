@@ -26,6 +26,16 @@ void SigmaDelta_class::setEndianness(endian_t endianess)
     }
 }
 
+void SigmaDelta_class::setSignedness(bool is_signed)
+{
+    if (!isError()) {
+        if (is_signed)
+            REG(0).setBit(5);
+        else
+            REG(0).clearBit(5);
+    }
+}
+
 int SigmaDelta_class::setPins(int left_pin, int right_pin)
 {
     setChannelPin(CHANNEL_LEFT, left_pin);

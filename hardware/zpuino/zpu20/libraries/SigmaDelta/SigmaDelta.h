@@ -43,6 +43,10 @@ public:
      */
     void setEndianness(endian_t endianess);
     /**
+     * @brief Set SigmaDelta signedness.
+     */
+    void setSignedness(bool is_signed);
+    /**
      * @brief Set the output pin for a specified channel
      */
     int setChannelPin(channel_t channel, int pin);
