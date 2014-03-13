@@ -47,7 +47,7 @@
  Related library documentation:
    
  Related Software:
-   Click here to open Jawi's Logic Analyzer client: sketchdir://ols-0.9.7/run.bat
+   Click here to open Jawi's Logic Analyzer client: tools://Logic_Analyzer.sh
    You must have Java installed and in the path.
    
  Hardware:
@@ -60,7 +60,7 @@
  The network server will make a connection with Channel A of the Papilio, which is connected to the JTAG port of the FPGA, and will forward all data to the Logic Analyzer client.
    1) Load the bit file:  sketchdir://LX9/papilio_pro.bit
    2) Start the JTAG server
-     For Windows: sketchdir://papilio-prog-jtag-server/papilio-prog-jtag-server.exe
+     For Windows: tools://papilio-prog-jtag-server/papilio-prog-jtag-server.exe
      For Linux: Coming soon
    3) Start Logic Analyzer client:
      For Windows: sketchdir://ols-0.9.7/run.bat
