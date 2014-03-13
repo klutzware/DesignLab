@@ -341,12 +341,12 @@ SEND-PR: support             I need help with gcc.
 `[ -n "$ARCH" ] && echo Architecture: $ARCH`
 `[ -n "$MACHINE" ] && echo Machine: $MACHINE`
 	$ENVIRONMENT_C
-host: i686-pc-linux-gnu
-build: i686-pc-linux-gnu
+host: x86_64-unknown-linux-gnu
+build: x86_64-unknown-linux-gnu
 target: zpu-unknown-none
 __EOF__
       cat >> $file << \__EOF__
-configured with: ../gcc/configure --target=zpu-elf --prefix=/home/alvieboy/zpu/toolchain/toolchain/toolchain/gccbuild/../install --enable-languages=c,c++ --with-gnu-as --with-gnu-ld --with-newlib --disable-shared --enable-newlib -v --enable-multilib --disable-threads --enable-sjlj-exceptions --enable-libstdcxx-allocator=malloc
+configured with: ../gcc/configure --target=zpu-elf --prefix=/home/alvieboy/zpu/toolchain/toolchain/toolchain/install-amd64 --enable-lanages=c,c++ --with-gnu-as --with-gnu-ld --with-newlib --disable-shared --enable-newlib -v --enable-multilib --disable-threads --enable-sjlj-exceptions --enable-libstdcxx-allocator=malloc --with-gcc-version-trigger=/home/alvieboy/zpu/toolchain/toolchain/toolchain/gcc/gcc/version.c : (reconfigured) ../gcc/configure --target=zpu-elf --prefix=/home/alvieboy/zpu/toolchain/toolchain/toolchain/install-amd64 --enable-lanages=c,c++ --with-gnu-as --with-gnu-ld --with-newlib --disable-shared --enable-newlib -v --enable-multilib --disable-threads --enable-sjlj-exceptions --enable-libstdcxx-allocator=malloc --with-gcc-version-trigger=/home/alvieboy/zpu/toolchain/toolchain/toolchain/gcc/gcc/version.c
 __EOF__
       cat >> $file << __EOF__
 >Description:

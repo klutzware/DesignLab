@@ -53,7 +53,7 @@ fi
 if [ x$1 != x ] ; then
   prefix=$1
 else
-  prefix=/home/alvieboy/zpu/toolchain/toolchain/toolchain/gccbuild/../install
+  prefix=/home/alvieboy/zpu/toolchain/toolchain/toolchain/install-amd64
 fi
 # Directory in which to put localized header files. On the systems with
 # gcc as the native cc, `local_prefix' may not be `prefix' which is
