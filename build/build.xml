@@ -427,7 +427,7 @@
   <target name="linux-clean" depends="subprojects-clean" description="Clean linux version">
     <delete dir="linux/work" />
     <delete>
-      <fileset dir="linux" includes="arduino-*linux*.tgz"/>
+      <fileset dir="linux" includes="zpuino-*linux*.tgz"/>
     </delete>
   </target>
 
@@ -536,11 +536,11 @@
   </target>
 
   <target name="linux32-run" depends="linux32-build" description="Run Linux (32-bit) version">
-    <exec executable="./linux/work/arduino" spawn="false"/>
+    <exec executable="./linux/work/zpuino" spawn="false"/>
   </target>
 
   <target name="linux64-run" depends="linux64-build" description="Run Linux (64-bit) version">
-    <exec executable="./linux/work/arduino" spawn="false"/>
+    <exec executable="./linux/work/zpuino" spawn="false"/>
   </target>
 
   <!-- Set 'arm_disfile_available' property if ARM toolchain dist_file is downloaded             -->
@@ -609,23 +609,23 @@
 		  prefix="arduino-${version}/hardware/tools" />
     </tar>
 -->
-    <move file="linux/work" tofile="linux/arduino-${version}" />
+    <move file="linux/work" tofile="linux/zpuino-${version}" />
 
     <exec executable="tar" dir="linux">
       <arg value="-z"/>
       <arg value="-c"/>
       <arg value="-f"/>
-      <arg value="arduino-${version}-${platform}.tgz"/>
-      <arg value="arduino-${version}"/>
+      <arg value="zpuino-${version}-${platform}.tgz"/>
+      <arg value="zpuino-${version}"/>
     </exec>
 
-    <move file="linux/arduino-${version}" tofile="linux/work" />
+    <move file="linux/zpuino-${version}" tofile="linux/work" />
 
     <echo>
       =======================================================
-      Arduino for Linux was built. Grab the archive from
+      ZPUino for Linux was built. Grab the archive from
 
-      build/linux/arduino-${version}-${platform}.tgz
+      build/linux/zpuino-${version}-${platform}.tgz
       =======================================================
     </echo>
   </target>
