@@ -1,3 +1,7 @@
+ZPUINO 2.0.0 BETA - 2014.03.13
+
+* Too many changes all along.
+
 
 ZAP 2.0.4 BETA - 2013.07.03
 
