@@ -2107,7 +2107,7 @@ public class Base {
     try {     
       if (url.startsWith("tools://")){
         //url = Base.getToolsPath() + "\\sh.exe " + url.substring(8);
-        url = Base.getToolsPath() + "\\" + url.substring(8);
+        url = Base.getToolsPath() + "/" + url.substring(8);
       }
       if (url.startsWith("example://")){
         String pslPath = Base.getExamplesPath();

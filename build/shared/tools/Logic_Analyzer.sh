@@ -10,32 +10,27 @@ fi
 
 # cross-platform "readlink -f" function; taken and modified (clean ups and made 
 # recursive) from <http://stackoverflow.com/questions/1055671>. 
-# canonical_readlink() {
-	# local targetFile=$1
+canonical_readlink() {
+	local targetFile=$1
 
-	# cd $(dirname "$targetFile")
-	# targetFile=$(basename "$targetFile")
+	cd $(dirname "$targetFile")
+	targetFile=$(basename "$targetFile")
 
-	# if [ -L "$targetFile" ]; then
-    	# canonical_readlink $(readlink "$targetFile")
-	# else
-		# echo "`pwd -P`/$targetFile"
-	# fi
-# }
+	if [ -L "$targetFile" ]; then
+    	canonical_readlink $(readlink "$targetFile")
+	else
+		echo "`pwd -P`/$targetFile"
+	fi
+}
 
 # determine the location this script is run in
-# scriptname=$(canonical_readlink "$0")
-# basedir=$(dirname "$scriptname")
-# basedir = .
-
+scriptname=$(canonical_readlink "$0")
+basedir=$(dirname "$scriptname")
 
 # all paths are used relatively from the base dir...
-# plugindir="$basedir/plugins/"
-# classpath="$basedir/bin/*"
+plugindir="$basedir/ols-0.9.7/plugins/"
+classpath="$basedir/ols-0.9.7/bin/*"
 
 # give the client roughly 1gigabyte of memory 
 MEMSETTINGS=-Xmx1024m
-#java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="$plugindir" -DPlastic.defaultTheme=SkyBluer -cp "$classpath" nl.lxtreme.ols.runner.Runner
-java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="ols-0.9.7/plugins/" -DPlastic.defaultTheme=SkyBluer -cp ".;ols-0.9.7/bin/*" nl.lxtreme.ols.runner.Runner
-
-#read -n1 -r -p "Press any key to continue..." key
+java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="$plugindir" -DPlastic.defaultTheme=SkyBluer -cp "$classpath" nl.lxtreme.ols.runner.Runner

@@ -69,7 +69,11 @@ public class Platform extends processing.app.Platform {
       if (url.endsWith(".xise")){
         launcher = Preferences.get("ise.path");
         url = url.substring(7);
-      }    
+      } 
+      if (url.endsWith(".sh"))
+      {
+        launcher = "sh";
+      }
       if (launcher != null) {
         Runtime.getRuntime().exec(new String[] { launcher, url });
       }
