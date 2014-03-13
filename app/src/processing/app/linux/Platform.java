@@ -72,7 +72,7 @@ public class Platform extends processing.app.Platform {
       } 
       if (url.endsWith(".sh"))
       {
-        launcher = "sh";
+        launcher = "bash";
       }
       if (launcher != null) {
         Runtime.getRuntime().exec(new String[] { launcher, url });

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Simple check to see whether the "magic" Java binary is available on our path;
 java -version 1>/dev/null 2>&1
