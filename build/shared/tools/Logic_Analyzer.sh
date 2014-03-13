@@ -31,6 +31,21 @@ basedir=$(dirname "$scriptname")
 plugindir="$basedir/ols-0.9.7/plugins/"
 classpath="$basedir/ols-0.9.7/bin/*"
 
-# give the client roughly 1gigabyte of memory 
+# give the client roughly 1gigabyte of memory
 MEMSETTINGS=-Xmx1024m
-java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="$plugindir" -DPlastic.defaultTheme=SkyBluer -cp "$classpath" nl.lxtreme.ols.runner.Runner
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="$plugindir" -DPlastic.defaultTheme=SkyBluer -cp "$classpath" nl.lxtreme.ols.runner.Runner
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+        java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="$plugindir" -DPlastic.defaultTheme=SkyBluer -cp "$classpath" nl.lxtreme.ols.runner.Runner
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+		java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="ols-0.9.7/plugins/" -DPlastic.defaultTheme=SkyBluer -cp ".;ols-0.9.7/bin/*" nl.lxtreme.ols.runner.Runner
+elif [[ "$OSTYPE" == "win32" ]]; then
+		java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="ols-0.9.7/plugins/" -DPlastic.defaultTheme=SkyBluer -cp ".;ols-0.9.7/bin/*" nl.lxtreme.ols.runner.Runner
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        echo No Freebsd support
+else
+        java "$@" "$MEMSETTINGS" -Djna.nosys=true -Dnl.lxtreme.ols.bundle.dir="$plugindir" -DPlastic.defaultTheme=SkyBluer -cp "$classpath" nl.lxtreme.ols.runner.Runner
+fi
+
+ 

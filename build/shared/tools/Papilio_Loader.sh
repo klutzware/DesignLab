@@ -31,6 +31,31 @@ basedir=$(dirname "$scriptname")
 plugindir="$basedir/ols-0.9.7/plugins/"
 classpath="$basedir/ols-0.9.7/bin/*"
 
+
 echo Starting Papilio Loader
-java -jar $basedir/Papilio_Loader/papilio-loader.jar
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        java -jar $basedir/Papilio_Loader/papilio-loader.jar
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+        java -jar $basedir/Papilio_Loader/papilio-loader.jar
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+        java -jar Papilio_Loader/papilio-loader.jar
+elif [[ "$OSTYPE" == "win32" ]]; then
+        java -jar Papilio_Loader/papilio-loader.jar
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        echo No Freebsd support
+else
+        java -jar Papilio_Loader/papilio-loader.jar
+fi
+
+# uname=`uname`
+# if [ "$(uname)" == "Darwin" ]; then
+    # # Do something under Mac OS X platform        
+# elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    # # Do something under Linux platform
+	# java -jar $basedir/Papilio_Loader/papilio-loader.jar
+# elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    # # Do something under Windows NT platform
+	# java -jar Papilio_Loader/papilio-loader.jar
+# fi
+
 read -n1 -r -p "Press any key to continue..." key

@@ -25,3 +25,7 @@ build/linux/*.tgz
 test-bin
 *.iml
 *.rar
+
+*.stackdump
+
+felix-cache/
