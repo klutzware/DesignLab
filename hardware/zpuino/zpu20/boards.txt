@@ -1,5 +1,5 @@
 zpuino20_papilio_prolx9v.name=ZPUino 2.0 on Papilio Pro (LX9)
-zpuino20_papilio_prolx9v.boardid=0xB4031700
+zpuino20_papilio_prolx9v.boardid=0xB4041700
 zpuino20_papilio_prolx9v.upload.protocol=zpuino-serial
 zpuino20_papilio_prolx9v.upload.maximum_size=8388608
 zpuino20_papilio_prolx9v.upload.size_sections=all
@@ -10,8 +10,8 @@ zpuino20_papilio_prolx9v.build.core=zpuino
 zpuino20_papilio_prolx9v.build.mcu=zpu
 zpuino20_papilio_prolx9v.build.toolchain=zpu
 zpuino20_papilio_prolx9v.build.board=ZPUINO_PAPILIO_PRO
-zpuino20_papilio_prolx9v.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DZPU20 -DBOARD_ID=0xB4031700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
-zpuino20_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xB4031700
+zpuino20_papilio_prolx9v.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DZPU20 -DBOARD_ID=0xB4041700 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino20_papilio_prolx9v.build.extraSflags=-DBOARD_ID=0xB4041700
 ##############################################################
 zpuino20_xula2_lx9.name=ZPUino 2.0 on XuLA2 (LX9)
 zpuino20_xula2_lx9.boardid=0xB6011900
