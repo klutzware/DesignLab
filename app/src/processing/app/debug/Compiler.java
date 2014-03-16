@@ -114,7 +114,7 @@ public class Compiler implements MessageConsumer {
     File smallfsdir = new File(sketch.getFolder(),"smallfs");
     if (smallfsdir.isDirectory()) {
         System.err.println("Found smallfs directory");
-        Preferences.set("sketch.path", sketch.getFolder().getPath());
+        prefs.put("sketch.path", sketch.getFolder().getPath());
         generateSmallFS();
 
     } else {
