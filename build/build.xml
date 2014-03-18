@@ -503,7 +503,7 @@
       <arg value="../../avr_tools_linux32.tar.bz2"/>
     </exec>
 
-    <exec executable="cp" dir="linux/zpu-tools64">
+    <exec executable="cp" dir="linux/zpu-tools32">
       <arg value="-a"/>
       <arg value="zpu"/>
       <arg value="../work/hardware/tools"/>
