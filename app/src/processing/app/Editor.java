@@ -47,6 +47,8 @@ import gnu.io.*;
 
 import java.io.File;
 
+import processing.arduinoupdater.Updater;
+
 /**
  * Main editor panel for the Processing Development Environment.
  */
@@ -54,6 +56,8 @@ import java.io.File;
 public class Editor extends JFrame implements RunnerListener {
 
   Base base;
+  
+  Updater update;
 
   // This should be imported from Uploader...
   static final int uploadNormal = 0;
@@ -1299,6 +1303,16 @@ public class Editor extends JFrame implements RunnerListener {
       item.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             base.handleAbout();
+          }
+        });
+      menu.add(item);
+      
+      item = new JMenuItem(_("Check For Updates"));
+      item.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            update=new Updater();
+            update.run(null);
+         
           }
         });
       menu.add(item);
