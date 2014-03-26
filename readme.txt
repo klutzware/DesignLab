@@ -33,6 +33,18 @@ Processing and Wiring.
 
 Icon and about image designed by ToDo: http://www.todo.to.it/
 
+ZAP 2.3.0 - 2014.3.25
+[ide]
+*Program bit files with the internal loader instead of loading externally.
+*Made a table of contents for all projects that is loaded as the default sketch.
+*Everything works in Linux now.
+*There is a option in the preferences window to set location of adobe reader and ISE.
+*AVR8 works under Linux now.
+*Logic Analyzer client is in a shared location now.
+*Papilio Loader is included in a shared location.
+*Papilio menu is re-organized.
+*New project option added to the Papilio menu.
+
 ZAP 2.2.0 - 2014.1.30
 [ide]
 *Updates to make linux build work
