@@ -38,7 +38,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
 
   /** Rollover titles for each button. */
   static final String title[] = {
-    _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor")
+    _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor"), _("Logic Analyzer"), _("Papilio Loader")
   };
 
   /** Titles for each button when the shift key is pressed. */ 
@@ -70,6 +70,9 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   static final int SAVE     = 4;
 
   static final int SERIAL   = 5;
+ //dhia 
+  static final int OLS   = 6;
+  static final int PAPILIO   = 7;
 
   static final int INACTIVE = 0;
   static final int ROLLOVER = 1;
@@ -115,6 +118,9 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     which[buttonCount++] = OPEN;
     which[buttonCount++] = SAVE;
     which[buttonCount++] = SERIAL;
+    //dhia
+    which[buttonCount++] = OLS;
+    which[buttonCount++] = PAPILIO;
 
     currentRollover = -1;
 
@@ -180,6 +186,9 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       // Serial button must be on the right
       x1[SERIAL] = width - BUTTON_WIDTH - 14;
       x2[SERIAL] = width - 14;
+      
+//      x1[DHIA] = width - BUTTON_WIDTH - 60;
+//      x2[DHIA] = width - 60;
     }
     Graphics g = offscreen.getGraphics();
     g.setColor(bgcolor); //getBackground());
@@ -208,7 +217,8 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       String status = controlPressed ? titleControl[currentRollover] :
            shiftPressed ? titleShift[currentRollover] : title[currentRollover];
       if (currentRollover != SERIAL)
-        g.drawString(status, (buttonCount-1) * BUTTON_WIDTH + 3 * BUTTON_GAP, statusY);
+        //by dhia
+        g.drawString(status, (buttonCount-1) * BUTTON_WIDTH + 10 * BUTTON_GAP, statusY);
       else {
         int statusX = x1[SERIAL] - BUTTON_GAP;
         statusX -= g.getFontMetrics().stringWidth(status);
@@ -363,6 +373,14 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     case SERIAL:
       editor.handleSerial();
       break;
+      //by dhia
+    case PAPILIO:
+      Base.openURL(_("tools://Papilio_Loader.sh"));
+      break;
+    case OLS:
+      Base.openURL(_("tools://Logic_Analyzer.sh"));
+      break;
+      
     }
   }
 
