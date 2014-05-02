@@ -38,7 +38,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
 
   /** Rollover titles for each button. */
   static final String title[] = {
-    _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor"), _("Logic Analyzer"), _("Papilio Loader")
+    _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor"), _("Logic Analyzer"), _("Papilio Loader"), _("Virtual Instruments") , _("New Papilio Project"), _("Load Circuit"), _("View Circuit"), _("Edit Circuit")
   };
 
   /** Titles for each button when the shift key is pressed. */ 
@@ -73,6 +73,11 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
  //dhia 
   static final int OLS   = 6;
   static final int PAPILIO   = 7;
+  static final int VIRTUAL_INSTRUMENTS   = 8;
+  static final int NEW_PROJECT   = 9;
+  static final int LOAD_CIRCUIT   = 10;
+  static final int VIEW_CIRCUIT   = 11;
+  static final int EDIT_CIRCUIT   = 12;
 
   static final int INACTIVE = 0;
   static final int ROLLOVER = 1;
@@ -121,6 +126,11 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     //dhia
     which[buttonCount++] = OLS;
     which[buttonCount++] = PAPILIO;
+	which[buttonCount++] = VIRTUAL_INSTRUMENTS;
+    which[buttonCount++] = NEW_PROJECT;
+	which[buttonCount++] = LOAD_CIRCUIT;
+	which[buttonCount++] = VIEW_CIRCUIT;
+	which[buttonCount++] = EDIT_CIRCUIT;
 
     currentRollover = -1;
 
@@ -380,10 +390,23 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     case OLS:
       Base.openURL(_("tools://Logic_Analyzer.sh"));
       break;
-      
+    case VIRTUAL_INSTRUMENTS:
+      Base.openURL(_("tools://Logic_Analyzer.sh"));
+      break;	  
+    case NEW_PROJECT:
+      Base.openURL(_("sketchdir://PSL_Papilio_Pro_LX9.xise"));
+      break;	
+    case LOAD_CIRCUIT:
+      Base.openURL(_("sketchdir://LX9/papilio_pro.bit"));
+      break;	
+    case VIEW_CIRCUIT:
+      Base.openURL(_("sketchdir://schematic_papilio_pro.pdf"));
+      break;	
+    case EDIT_CIRCUIT:
+      Base.openURL(_("sketchdir://PSL_Papilio_Pro_LX9.xise"));
+      break;		  
     }
   }
-
 
   public void mouseClicked(MouseEvent e) { }
 
