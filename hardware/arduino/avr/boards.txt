@@ -179,6 +179,33 @@ leonardo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
 
 ##############################################################
 
+duo.name=Papilio DUO - AVR
+duo.upload.tool=avrdude
+duo.upload.protocol=avr109
+duo.upload.maximum_size=28672
+duo.upload.speed=57600
+duo.upload.disable_flushing=true
+duo.upload.use_1200bps_touch=true
+duo.upload.wait_for_upload_port=true
+
+duo.bootloader.tool=avrdude
+duo.bootloader.low_fuses=0xff
+duo.bootloader.high_fuses=0xd8
+duo.bootloader.extended_fuses=0xcb
+duo.bootloader.file=caterina/Caterina-Leonardo.hex
+duo.bootloader.unlock_bits=0x3F
+duo.bootloader.lock_bits=0x2F
+
+duo.build.mcu=atmega32u4
+duo.build.f_cpu=16000000L
+duo.build.vid=0x2341
+duo.build.pid=0x8036
+duo.build.core=arduino
+duo.build.variant=papilioDUO
+duo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
+
+##############################################################
+
 micro.name=Arduino Micro
 micro.upload.tool=avrdude
 micro.upload.protocol=avr109
