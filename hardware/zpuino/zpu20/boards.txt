@@ -42,3 +42,19 @@ zpuino20_ems11_bb_lx45.build.toolchain=zpu
 zpuino20_ems11_bb_lx45.build.board=ZPUINO_EMS11
 zpuino20_ems11_bb_lx45.build.extra_flags=-D__ZPUINO_EMS11__ -DBOARD_REV=22 -DBOARD_ID=0xB8011900 -DBOARD_MEMORYSIZE=0x2000000 -nostartfiles
 zpuino20_ems11_bb_lx45.build.extraSflags=-DBOARD_ID=0xB8011900 -DBOARD_REV=22
+##############################################################
+zpuino20_pipistrello_lx45.name=ZPUino 2.0 on Saanlima Pipistrello (LX45)
+zpuino20_pipistrello_lx45.boardid=0xBA011A00
+zpuino20_pipistrello_lx45.upload.protocol=zpuino-serial
+zpuino20_pipistrello_lx45.upload.maximum_size=67108864
+zpuino20_pipistrello_lx45.upload.size_sections=all
+zpuino20_pipistrello_lx45.upload.speed=1000000
+zpuino20_pipistrello_lx45.upload.tool=zpuinoprogrammer
+zpuino20_pipistrello_lx45.build.f_cpu=100000000L
+zpuino20_pipistrello_lx45.build.core=zpuino
+zpuino20_pipistrello_lx45.build.mcu=zpu
+zpuino20_pipistrello_lx45.build.toolchain=zpu
+zpuino20_pipistrello_lx45.build.board=ZPUINO_PIPISTRELLO
+zpuino20_pipistrello_lx45.build.extra_flags=-D__ZPUINO_PIPISTRELLO__ -DBOARD_ID=0xBA011A00 -DBOARD_MEMORYSIZE=0x4000000 -nostartfiles
+zpuino20_pipistrello_lx45.build.extraSflags=-DBOARD_ID=0xBA011A00 
+
