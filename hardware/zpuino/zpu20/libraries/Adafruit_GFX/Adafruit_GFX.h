@@ -8,51 +8,52 @@
  #include "WProgram.h"
 #endif
 
-#define swap(a, b) { int16_t t = a; a = b; b = t; }
+#define swap(a, b) { int t = a; a = b; b = t; }
 
 class Adafruit_GFX : public Print {
 
  public:
 
-  Adafruit_GFX(int16_t w, int16_t h); // Constructor
+  Adafruit_GFX(); // Constructor
+  void begin(int w, int h);
 
   // This MUST be defined by the subclass:
-  virtual void drawPixel(int16_t x, int16_t y, uint16_t color) = 0;
+  virtual void drawPixel(int x, int y, unsigned int color) = 0;
 
   // These MAY be overridden by the subclass to provide device-specific
   // optimized code.  Otherwise 'generic' versions are used.
   virtual void
-    drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color),
-    drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color),
-    drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color),
-    drawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color),
-    fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color),
-    fillScreen(uint16_t color),
+    drawLine(int x0, int y0, int x1, int y1, unsigned int color),
+    drawFastVLine(int x, int y, int h, unsigned int color),
+    drawFastHLine(int x, int y, int w, unsigned int color),
+    drawRect(int x, int y, int w, int h, unsigned int color),
+    fillRect(int x, int y, int w, int h, unsigned int color),
+    fillScreen(unsigned int color),
     invertDisplay(boolean i);
 
   // These exist only with Adafruit_GFX (no subclass overrides)
   void
-    drawCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color),
-    drawCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername,
-      uint16_t color),
-    fillCircle(int16_t x0, int16_t y0, int16_t r, uint16_t color),
-    fillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername,
-      int16_t delta, uint16_t color),
-    drawTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
-      int16_t x2, int16_t y2, uint16_t color),
-    fillTriangle(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
-      int16_t x2, int16_t y2, uint16_t color),
-    drawRoundRect(int16_t x0, int16_t y0, int16_t w, int16_t h,
-      int16_t radius, uint16_t color),
-    fillRoundRect(int16_t x0, int16_t y0, int16_t w, int16_t h,
-      int16_t radius, uint16_t color),
-    drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap,
-      int16_t w, int16_t h, uint16_t color),
-    drawChar(int16_t x, int16_t y, unsigned char c, uint16_t color,
-      uint16_t bg, uint8_t size),
-    setCursor(int16_t x, int16_t y),
-    setTextColor(uint16_t c),
-    setTextColor(uint16_t c, uint16_t bg),
+    drawCircle(int x0, int y0, int r, unsigned int color),
+    drawCircleHelper(int x0, int y0, int r, uint8_t cornername,
+      unsigned int color),
+    fillCircle(int x0, int y0, int r, unsigned int color),
+    fillCircleHelper(int x0, int y0, int r, uint8_t cornername,
+      int delta, unsigned int color),
+    drawTriangle(int x0, int y0, int x1, int y1,
+      int x2, int y2, unsigned int color),
+    fillTriangle(int x0, int y0, int x1, int y1,
+      int x2, int y2, unsigned int color),
+    drawRoundRect(int x0, int y0, int w, int h,
+      int radius, unsigned int color),
+    fillRoundRect(int x0, int y0, int w, int h,
+      int radius, unsigned int color),
+    drawBitmap(int x, int y, const uint8_t *bitmap,
+      int w, int h, unsigned int color),
+    drawChar(int x, int y, unsigned char c, unsigned int color,
+      unsigned int bg, uint8_t size),
+    setCursor(int x, int y),
+    setTextColor(unsigned int c),
+    setTextColor(unsigned int c, unsigned int bg),
     setTextSize(uint8_t s),
     setTextWrap(boolean w),
     setRotation(uint8_t r);
@@ -63,19 +64,24 @@ class Adafruit_GFX : public Print {
   virtual void   write(uint8_t);
 #endif
 
-  int16_t
-    height(void),
-    width(void);
+  // Return the size of the display (per current rotation)
+  int width(void) const {
+      return _width;
+  }
+ 
+  int height(void) const {
+      return _height;
+  }
 
   uint8_t getRotation(void);
 
  protected:
-  const int16_t
+  int
     WIDTH, HEIGHT;   // This is the 'raw' display w/h - never changes
-  int16_t
+  int
     _width, _height, // Display w/h as modified by current rotation
     cursor_x, cursor_y;
-  uint16_t
+  unsigned int
     textcolor, textbgcolor;
   uint8_t
     textsize,
