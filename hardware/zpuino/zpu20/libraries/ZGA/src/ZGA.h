@@ -25,11 +25,14 @@ class ZGA_class: public BaseDevice, public Adafruit_GFX
 {
     int buffered;
 public:
-    ZGA_class(): Adafruit_GFX(640,480) {
+    ZGA_class(): Adafruit_GFX() {
         buffered=0;
+        framebuffers[0]=NULL;
+        framebuffers[1]=NULL;
         cbuf=0;
     }
     void begin();
+
 
     uint16_t *getFramebuffer() {
         return (uint16_t*)&framebuffers[cbuf ^ buffered][0];
@@ -40,19 +43,19 @@ public:
     }
 
     unsigned getFramebufferSizeBytes() const {
-        return sizeof(framebuffers)/2;
+        return width()*height()*2;
     }
 
     uint16_t *getPosition(int x, int y) {
-        return &getFramebuffer()[x + y*640];
+        return &getFramebuffer()[x + y*width()];
     }
 
     void setPixel(unsigned x, unsigned y, uint16_t value) {
-        if (x>639)
-            x=639;
-        if (y>479)
-            y=479;
-        getFramebuffer()[x + y*640] = value;
+        if (x>=width())
+            x=width();
+        if (y>=height())
+            y=height();
+        getFramebuffer()[x + y*width()] = value;
     }
 
     void putChar(int x, int y, int c, Font &font);
@@ -68,7 +71,7 @@ public:
 
     void swapBuffersAndCopy();
 
-    virtual void drawPixel(int16_t x, int16_t y, uint16_t color) {
+    virtual void drawPixel(int x, int y, unsigned int color) {
         setPixel(x,y,color);
     }
 
@@ -81,10 +84,11 @@ public:
         b+=r;
         return b;
     }
+private:
+    void allocateBuffers();
 
     int cbuf;
-    uint32_t framebuffers[2][640*480/2];
-
+    uint32_t *framebuffers[2];
 };
 
 extern ZGA_class ZGA;

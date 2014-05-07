@@ -11,15 +11,42 @@ int Font::loadFromFile(const char *filename)
     return 0;
 }
 
+void ZGA_class::allocateBuffers()
+{
+    framebuffers[0] = (uint32_t*)malloc( getFramebufferSizeBytes() );
+    framebuffers[1] = (uint32_t*)malloc( getFramebufferSizeBytes() );
+}
+
 void ZGA_class::begin() {
+    unsigned characteristics;
+    int width, height;
     if (deviceBegin(0x08, 0x1B)==0) {
-        REG(0) = (unsigned)&framebuffers[0][0];
+        /* Allocate buffers */
+        characteristics = REG(1);
+        width  = characteristics>>16;
+        height = characteristics&0xffff;
+        Adafruit_GFX::begin(width,height);
+        allocateBuffers();
         Serial.println("Device is HDMI");
-        memset(framebuffers,0,sizeof(framebuffers));
-    }  else if (deviceBegin(0x08, 0x1A)==0) {
+
+        memset(framebuffers[0],0,getFramebufferSizeBytes());
+        memset(framebuffers[1],0,getFramebufferSizeBytes());
+
         REG(0) = (unsigned)&framebuffers[0][0];
+        
+    }  else if (deviceBegin(0x08, 0x1A)==0) {
+        characteristics = REG(1);
+        width  = characteristics>>16;
+        height = characteristics&0xffff;
+        Adafruit_GFX::begin(width,height);
+        allocateBuffers();
         Serial.println("Device is VGA");
-        memset(framebuffers,0,sizeof(framebuffers));
+
+        memset(framebuffers[0],0,getFramebufferSizeBytes());
+        memset(framebuffers[1],0,getFramebufferSizeBytes());
+
+        REG(0) = (unsigned)&framebuffers[0][0];
+        
     } else {
         Serial.println("Device not found");
     }
@@ -50,11 +77,12 @@ void ZGA_class::putString(int x, int y, const char *c, Font &font)
         putChar(x,y,*c,font);
         c++;
         x++;
-        if (x> 640/font.getWidth()) {
+        if (x>width()/font.getWidth()) {
             y++,x=0;
         }
     }
 }
+
 void ZGA_class::syncVBlank()
 {
     while (!(REG(0)&1));
@@ -65,14 +93,14 @@ void ZGA_class::syncVBlank()
 void ZGA_class::clearArea(int sx, int sy, int w, int h, uint16_t color)
 {
     uint16_t *dest = getFramebuffer();
-    dest+=sx+(sy*640);
+    dest+=sx+(sy*width());
     while (h--) {
         int z = w;
         while (z--) {
             *dest++=color;
         }
         /* Move dest forward, to next line */
-        dest+=640-w;
+        dest+=width()-w;
         sy++;
     }
 }
@@ -86,7 +114,7 @@ void ZGA_class::swapBuffersAndCopy() {
     swapBuffers();
     syncVBlank();
     /* Copy old buffer into new buffer */
-    memcpy( getFramebuffer(), getDisplayFramebuffer(), 640*480*2 );
+    memcpy( getFramebuffer(), getDisplayFramebuffer(), width()*height()*2 );
 }
 
 ZGA_class ZGA;
