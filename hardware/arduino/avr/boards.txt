@@ -192,14 +192,14 @@ duo.bootloader.tool=avrdude
 duo.bootloader.low_fuses=0xff
 duo.bootloader.high_fuses=0xd8
 duo.bootloader.extended_fuses=0xcb
-duo.bootloader.file=caterina/Caterina-Leonardo.hex
+duo.bootloader.file=caterina/Caterina-PapilioDUO.hex
 duo.bootloader.unlock_bits=0x3F
 duo.bootloader.lock_bits=0x2F
 
 duo.build.mcu=atmega32u4
 duo.build.f_cpu=16000000L
-duo.build.vid=0x2341
-duo.build.pid=0x8036
+duo.build.vid=0x1d50
+duo.build.pid=0x60a5
 duo.build.core=arduino
 duo.build.variant=papilioDUO
 duo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}

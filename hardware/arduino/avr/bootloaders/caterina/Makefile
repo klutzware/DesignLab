@@ -50,6 +50,9 @@
 # reuse of this VID by others is forbidden by USB-IF
 # official Arduino LLC VID
 # VID = 0x2341
+# Papilio DUO OpenMoko PID/VID
+VID = 0x1d50
+PID = 0x60a4
 
 
 # USB product ID (PID)
@@ -127,7 +130,7 @@ OBJDIR = .
 
 
 # Path to the LUFA library
-LUFA_PATH = ../../../../../../LUFA/LUFA-111009
+LUFA_PATH = LUFA-111009
 
 
 # LUFA library compile-time options and predefined tokens
