@@ -1,7 +1,7 @@
 // BMM LOC annotation file.
 //
-// Release 13.2 - Data2MEM O.61xd, build 2.2 May 20, 2011
-// Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+// Release 14.6 -  P.20131013, build 3.0.10 Apr 3, 2013
+// Copyright (c) 1995-2014 Xilinx, Inc.  All rights reserved.
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,6 @@
 
 ADDRESS_MAP avrmap PPC405 0
 
-
     ///////////////////////////////////////////////////////////////////////////////
     //
     // Processor 'avrmap' address space 'rom_code' 0x00000000:0x00003FFF (16 KBytes).
@@ -21,35 +20,35 @@ ADDRESS_MAP avrmap PPC405 0
 
     ADDRESS_SPACE rom_code RAMB16 [0x00000000:0x00003FFF]
         BUS_BLOCK
-            PM_Inst/RAM_Word0 [15:0] PLACED = X0Y0;
+            PM_Inst/RAM_Inst[0].RAM_Word RAMB16 [15:0] [0:1023] PLACED = X1Y26;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word1 [15:0] PLACED = X0Y2;
+            PM_Inst/RAM_Inst[1].RAM_Word RAMB16 [15:0] [1024:2047] PLACED = X1Y12;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word2 [15:0] PLACED = X0Y4;
+            PM_Inst/RAM_Inst[2].RAM_Word RAMB16 [15:0] [2048:3071] PLACED = X1Y14;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word3 [15:0] PLACED = X0Y6;
+            PM_Inst/RAM_Inst[3].RAM_Word RAMB16 [15:0] [3072:4095] PLACED = X1Y24;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word4 [15:0] PLACED = X0Y8;
+            PM_Inst/RAM_Inst[4].RAM_Word RAMB16 [15:0] [4096:5119] PLACED = X1Y16;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word5 [15:0] PLACED = X0Y10;
+            PM_Inst/RAM_Inst[5].RAM_Word RAMB16 [15:0] [5120:6143] PLACED = X1Y18;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word6 [15:0] PLACED = X0Y12;
+            PM_Inst/RAM_Inst[6].RAM_Word RAMB16 [15:0] [6144:7167] PLACED = X1Y20;
         END_BUS_BLOCK;
 
         BUS_BLOCK
-            PM_Inst/RAM_Word7 [15:0] PLACED = X0Y14;
+            PM_Inst/RAM_Inst[7].RAM_Word RAMB16 [15:0] [7168:8191] PLACED = X1Y22;
         END_BUS_BLOCK;
     END_ADDRESS_SPACE;
 
