@@ -39,3 +39,12 @@ arduinoisp.program.protocol=stk500v1
 arduinoisp.program.speed=9600
 arduinoisp.program.tool=avrdude
 arduinoisp.program.extra_params=-P{serial.port} -b{program.speed}
+
+duoisp.name=Papilio DUO as ISP
+duoisp.communication=serial
+duoisp.protocol=stk500v1
+duoisp.speed=57600
+duoisp.program.protocol=stk500v1
+duoisp.program.speed=57600
+duoisp.program.tool=avrdude
+duoisp.program.extra_params=-P{serial.port} -b{program.speed}

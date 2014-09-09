@@ -147,6 +147,22 @@ zpuino_papilio_prolx9van.build.extraSflags=-DBOARD_ID=0xA4041700
 zpuino_papilio_prolx9van.bootloader.tool=papilioprog
 zpuino_papilio_prolx9van.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
 ##############################################################
+zpuino_papilio_duolx9van.name=ZPUino on Papilio DUO (LX9), Vanilla Variant
+zpuino_papilio_duolx9van.boardid=0xa4051300
+zpuino_papilio_duolx9van.upload.protocol=zpuino-serial
+zpuino_papilio_duolx9van.upload.maximum_size=8388608
+zpuino_papilio_duolx9van.upload.size_sections=all
+zpuino_papilio_duolx9van.upload.speed=1000000
+zpuino_papilio_duolx9van.upload.tool=zpuinoprogrammer
+zpuino_papilio_duolx9van.build.f_cpu=96000000L
+zpuino_papilio_duolx9van.build.core=zpuino
+zpuino_papilio_duolx9van.build.mcu=zpu
+zpuino_papilio_duolx9van.build.toolchain=zpu
+zpuino_papilio_duolx9van.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xa4051300 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino_papilio_duolx9van.build.extraSflags=-DBOARD_ID=0xa4051300
+zpuino_papilio_duolx9van.bootloader.tool=papilioprog
+zpuino_papilio_duolx9van.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
+##############################################################
 zpuino_papilio_prolx9vam.name=ZPUino on Papilio Pro (LX9), Hyperion with 8-bit HQVGA on Arcade MegaWing
 zpuino_papilio_prolx9vam.boardid=0xA4041700
 zpuino_papilio_prolx9vam.upload.protocol=zpuino-serial

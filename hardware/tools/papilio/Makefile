@@ -318,6 +318,8 @@ papilio_papilioLogicLX4: hex mem logiclx4bit bf_program
 apilio_papilioLogicLX4Burn: hex mem logiclx4bit bf_programBurn250K
 papilio_papilioLogicLX9: hex mem logiclx9bit bf_program
 papilio_papilioLogicLX9Burn: hex mem logiclx9bit bf_programBurnLX9
+papilio_papilioDUOLX9: hex mem duolx9bit bf_program
+papilio_papilioDUOLX9Burn: hex mem duolx9bit bf_programBurnLX9
 
 papilio_custom: hex mem pcustom bf_program
 
@@ -396,7 +398,23 @@ logiclx9bit:
 	@echo
 	@echo $(MSG_BIT)
 	$(DATA2MEM) -bm bitstreams/AVR8_Shifty_PapilioLogic_LX9_bd.bmm -bt bitstreams/AVR8_Shifty_PapilioLogic_LX9.bit -bd out.mem -o b out.bit
-	#$(DATA2MEM) -bm bitstreams/AVR8_Shifty_PapilioLogic_LX9_bd.bmm -bt out.bit -d > out.dmp		
+	#$(DATA2MEM) -bm bitstreams/AVR8_Shifty_PapilioLogic_LX9_bd.bmm -bt out.bit -d > out.dmp	
+
+duolx4bit:
+	@echo
+	@echo Selecting Papilio DUO LX4 Bit file.
+	@echo
+	@echo $(MSG_BIT)
+	$(DATA2MEM) -bm bitstreams/AVR8_Vanilla_PapilioLogic_LX4_bd.bmm -bt bitstreams/AVR8_Vanilla_PapilioLogic_LX4.bit -bd out.mem -o b out.bit
+	#$(DATA2MEM) -bm bitstreams/AVR8_Vanilla_PapilioLogic_LX4_bd.bmm -bt out.bit -d > out.dmp	
+
+duolx9bit:
+	@echo
+	@echo Selecting Papilio DUO LX9 Bit file.
+	@echo
+	@echo $(MSG_BIT)
+	$(DATA2MEM) -bm bitstreams/AVR8_Shifty_PapilioDUO_LX9_bd.bmm -bt bitstreams/AVR8_Shifty_PapilioDUO_LX9.bit -bd out.mem -o b out.bit
+	#$(DATA2MEM) -bm bitstreams/AVR8_Shifty_PapilioLogic_LX9_bd.bmm -bt out.bit -d > out.dmp	
 
 pcustom:
 	@echo

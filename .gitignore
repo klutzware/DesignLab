@@ -30,3 +30,4 @@ test-bin
 *.stackdump
 
 felix-cache/
+build/windows/zap-2.3.0-linux32.tgz

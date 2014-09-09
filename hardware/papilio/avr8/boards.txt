@@ -8,7 +8,7 @@ papilio_papilioDUOLX9.upload.protocol=sam-ba
 papilio_papilioDUOLX9.upload.use_1200bps_touch=true
 papilio_papilioDUOLX9.upload.wait_for_upload_port=false
 papilio_papilioDUOLX9.upload.native_usb=false
-papilio_papilioDUOLX9.upload.using=papilio_papilioLogicLX9
+papilio_papilioDUOLX9.upload.using=papilio_papilioDUOLX9
 
 papilio_papilioDUOLX9.build.mcu=atmega103
 papilio_papilioDUOLX9.build.f_cpu=16000000L
@@ -26,7 +26,7 @@ papilio_papilioDUOLX9Burn.upload.protocol=sam-ba
 papilio_papilioDUOLX9Burn.upload.use_1200bps_touch=true
 papilio_papilioDUOLX9Burn.upload.wait_for_upload_port=false
 papilio_papilioDUOLX9Burn.upload.native_usb=false
-papilio_papilioDUOLX9Burn.upload.using=papilio_papilioLogicLX9Burn
+papilio_papilioDUOLX9Burn.upload.using=papilio_papilioDUOLX9Burn
 
 papilio_papilioDUOLX9Burn.build.mcu=atmega103
 papilio_papilioDUOLX9Burn.build.f_cpu=16000000L
