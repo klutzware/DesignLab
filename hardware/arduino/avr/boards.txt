@@ -190,7 +190,8 @@ duo.upload.wait_for_upload_port=true
 
 duo.bootloader.tool=avrdude
 duo.bootloader.low_fuses=0xff
-duo.bootloader.high_fuses=0xd8
+duo.bootloader.high_fuses=0x98
+#duo.bootloader.high_fuses=0xd8 #Without JTAG enabled
 duo.bootloader.extended_fuses=0xcb
 duo.bootloader.file=caterina/Caterina-Papilio-DUO.hex
 duo.bootloader.unlock_bits=0x3F

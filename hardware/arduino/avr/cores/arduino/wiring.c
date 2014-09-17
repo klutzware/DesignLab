@@ -322,4 +322,10 @@ void init()
 #elif defined(UCSR0B)
 	UCSR0B = 0;
 #endif
+
+#if defined(__AVR_ATmega32U4__)	
+	//Disable JTAG - For Papilio DUO - JPG
+	MCUCR = (1<<JTD);
+	MCUCR = (1<<JTD);
+#endif
 }
