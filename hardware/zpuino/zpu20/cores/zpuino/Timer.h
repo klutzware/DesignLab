@@ -197,6 +197,8 @@ namespace ZPUino
         int periodic( int msec, bool (*function)(void), int timerid=-1);
 
         void cancel();
+
+        TimerInstance_class *timer(timerindex_t id) { return &m_timers[id]; }
     private:
         int installTimerInterruptHandler(int line);
         static void timerInterruptHandler(void *arg);
@@ -207,7 +209,6 @@ namespace ZPUino
         timerindex_t getFreeTimer();
         timerindex_t acquireTimer(timerindex_t timerid);
         void releaseTimer(timerindex_t);
-        TimerInstance_class *timer(timerindex_t id) { return &m_timers[id]; }
     protected:
         TimerInstance_class m_timers[2];
         TimerCallback m_cb[2];
