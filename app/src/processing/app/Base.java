@@ -2836,7 +2836,118 @@ public class Base {
     }
     return fileName.getName();
   }
+  
+	static public void renameSymbolLibrary(String currentName, String newName) {
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.sym", Base.getActiveSketchPath() + "\\" + newName + ".sym", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.vhd", Base.getActiveSketchPath() + "\\" + newName + ".vhd", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Edit_Your_CCL_Design.sch", Base.getActiveSketchPath() + "\\Edit_Your_CCL_Design.sch", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Simulate_Your_CCL_Design.vhd", Base.getActiveSketchPath() + "\\Simulate_Your_CCL_Design.vhd", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\CCL_Designer.xise", Base.getActiveSketchPath() + "\\CCL_Designer.xise", currentName, newName);
+	}
 
+	static public void replaceFileContents(String fileName, String newFileName, String toReplace, String replaceWith) {
+	  //String oldFileName = "try.dat";
+	  String tmpFileName = fileName + ".tmp";
+
+	  BufferedReader br = null;
+	  BufferedWriter bw = null;
+	  try {
+		 br = new BufferedReader(new FileReader(fileName));
+		 bw = new BufferedWriter(new FileWriter(tmpFileName));
+		 String line;
+		 while ((line = br.readLine()) != null) {
+			if (line.contains(toReplace))
+			   line = line.replace(toReplace, replaceWith);
+			bw.write(line+"\n");
+		 }
+	  } catch (Exception e) {
+		 return;
+	  } finally {
+		 try {
+			if(br != null)
+			   br.close();
+		 } catch (IOException e) {
+			//
+		 }
+		 try {
+			if(bw != null)
+			   bw.close();
+		 } catch (IOException e) {
+			//
+		 }
+	  }
+	  // Once everything is complete, delete old file..
+	  File oldFile = new File(fileName);
+	  oldFile.delete();
+
+	  // And rename tmp file's name to old file name
+	  File tmpFile = new File(tmpFileName);
+	  File newFile = new File(newFileName);
+	  tmpFile.renameTo(newFile);
+
+
+	}  
+	
+	static public void installIseSymbol(String fileName, String newFileName, String toFind) {
+	  //String oldFileName = "try.dat";
+	  String tmpFileName = fileName + ".tmp";
+	  boolean skipLines = false;
+	  boolean headerFound = false;
+
+	  BufferedReader br = null;
+	  BufferedWriter bw = null;
+	  try {
+		br = new BufferedReader(new FileReader(fileName));
+		bw = new BufferedWriter(new FileWriter(tmpFileName));
+		String line;
+		
+		while ((line = br.readLine()) != null) {
+			if (headerFound) {
+				if (line.contains("<symbol version=\"7\" name=\"" + toFind)) {//The symbol we are checking for exists
+					skipLines = true;
+					headerFound = false;
+				} else {
+					bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+					headerFound = false;
+				}
+			}			
+			if (line.contains("<?xml version=")) //Header found
+				headerFound = true;
+			if (skipLines || headerFound) {
+				if (line.contains("</symbol>")) {	//This is what comes right after </symbol>
+					skipLines = false;
+				}
+			} else {
+				bw.write(line+"\n");
+			}
+		}	
+
+	  } catch (Exception e) {
+		 return;
+	  } finally {
+		 try {
+			if(br != null)
+			   br.close();
+		 } catch (IOException e) {
+			//
+		 }
+		 try {
+			if(bw != null)
+			   bw.close();
+		 } catch (IOException e) {
+			//
+		 }
+	  }
+	  // Once everything is complete, delete old file..
+	  File oldFile = new File(fileName);
+	  oldFile.delete();
+
+	  // And rename tmp file's name to old file name
+	  File tmpFile = new File(tmpFileName);
+	  File newFile = new File(newFileName);
+	  tmpFile.renameTo(newFile);
+	}  	
+  
   public void handleAddLibrary(Editor editor) {
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home"));
     fileChooser.setDialogTitle(_("Select a zip file or a folder containing the library you'd like to add"));

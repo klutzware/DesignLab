@@ -165,6 +165,7 @@ public class Editor extends JFrame implements RunnerListener {
   
   String bitFilePath;
   boolean saveAtStart;
+  boolean renameSymbol;
 
 
   public Editor(Base ibase, String path, int[] location) {
@@ -209,6 +210,12 @@ public class Editor extends JFrame implements RunnerListener {
           {
             Base.activeEditor.handleSaveAs();
             saveAtStart = false;
+			if (renameSymbol == true) {
+				//Base.showMessage("title", "Renaming Symbol Lib");
+				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketch.getName());
+				renameSymbol = false;
+			}
+			
           }
           
         }
@@ -641,10 +648,21 @@ public class Editor extends JFrame implements RunnerListener {
            String pslPath = Base.getExamplesPath();
            File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");    
            Editor newproj = base.handleOpen(f1.getAbsolutePath());
-           newproj.handlesaveAtStart();
+           newproj.handlesaveAtStart(false);
          }
        });
      papilioMenu.add(item);  
+	 
+     item = new JMenuItem(_("New Papilio Community Core Library"));
+     item.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+           String pslPath = Base.getExamplesPath();
+           File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_Community_Core_Library/Template_Community_Core_Library.ino");    
+           Editor newproj = base.handleOpen(f1.getAbsolutePath());
+           newproj.handlesaveAtStart(true);
+         }
+       });
+     papilioMenu.add(item); 	 
     
     if (papilioExamplesMenu == null) {
       papilioExamplesMenu = new JMenu(_("Papilio Examples"));
@@ -2084,8 +2102,9 @@ public class Editor extends JFrame implements RunnerListener {
 
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-  public void handlesaveAtStart() {
+  public void handlesaveAtStart(boolean renameSymbolLib) {
     saveAtStart = true;
+	renameSymbol = renameSymbolLib;
   }
 	
   /**
