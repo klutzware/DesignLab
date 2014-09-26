@@ -1,0 +1,1 @@
+vhdtdtfi -prj PSL_Papilio_DUO_LX9 -o D:/Dropbox/GadgetFactory/GadgetFactory_Engineering/Papilio-Schematic-Library/examples/Community_Core_Wishbone_Template/DUO_LX9/TEMPLATE_zpuino_wb_Wishbone.vhi -module TEMPLATE_zpuino_wb_Wishbone -template C:/Xilinx/14.7/ISE_DS/ISE//data/vhdlinst.tft -deleteonerror -lib wishbone ../Libraries/Wishbone_Peripherals/TEMPLATE_zpuino_wb_Wishbone.vhd 
