@@ -243,18 +243,17 @@ public class Platform extends processing.app.Platform {
       Runtime.getRuntime().exec("cmd /c start " + bashPath + url );
       return;
     }
-    if (url.endsWith(".xtcl")){
-      //String bashPath = Base.getToolsPath() + "\\sh.bat ";
-	  //String mainFilename = Base.getActiveSketchPath();
-	  //String path = mainFilename.substring(0, mainFilename.length() - 3);
-	  //String name = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
-      //Base.showMessage("title","cmd /c start cd " + Base.getActiveSketchPath() + "; xtclsh " + url.substring(7) + " " + name);
-	  //Base.showMessage("title", "The right place");
-      //Runtime.getRuntime().exec("cmd /c start cd /D " + Base.getActiveSketchPath() + "; xtclsh " + url.substring(7) + " " + name);
-	  //Base.renameSymbolLibrary("Wishbone_Symbol_Example", "JackAttack");
-	  Base.installIseSymbol(Base.getActiveSketchPath() + "\\Papilio_Schematic_Library.lib", Base.getActiveSketchPath() + "\\Papilio_Schematic_Library.bak", "Papilio_DUO_Wing_Pinout");
-      return;
-    }	
+/* 	if (url.endsWith(".xtcl")){
+		String mainFilename = Base.getActiveSketchPath();
+		String sketchName = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
+		String pslPath = Base.getExamplesPath();
+		String pslLibName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.lib";
+		String pslCatName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.cat";
+		
+		Base.removeIseSymbol(pslLibName, pslLibName, sketchName);
+		Base.installIseSymbol(pslLibName, pslCatName, Base.getActiveSketchPath() + "/" + sketchName + ".sym", sketchName);
+		return;
+	}	 */
     if (url.startsWith("http://") || url.startsWith("file://")) {
       // open dos prompt, give it 'start' command, which will
       // open the url properly. start by itself won't work since

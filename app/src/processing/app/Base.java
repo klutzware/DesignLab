@@ -2119,7 +2119,15 @@ public class Base {
 		url = "file://" + Base.getActiveSketchPath() + "/" + url.substring(12);
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));
-	  else
+	  else if (url.endsWith(".xise")) {
+			platform.openURL(url);
+			try {
+				Thread.sleep(5000);                 //1000 milliseconds is one second.
+			} catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}			
+			platform.openURL("file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd");
+	  } else
 		platform.openURL(url);
 	  
 
@@ -2888,43 +2896,86 @@ public class Base {
 
 	}  
 	
-	static public void installIseSymbol(String fileName, String newFileName, String toFind) {
-	  //String oldFileName = "try.dat";
-	  String tmpFileName = fileName + ".tmp";
-	  boolean skipLines = false;
-	  boolean headerFound = false;
+	static public void installIseSymbol(String libFileName, String catFileName, String newSymbolFileName, String symbolName) {
+		BufferedReader br = null;
+		PrintWriter pw = null;
+		PrintWriter catPw = null;
+		try {
+			br = new BufferedReader(new FileReader(newSymbolFileName));
+			pw = new PrintWriter(new FileWriter(libFileName, true));
+			catPw = new PrintWriter(new FileWriter(catFileName, true));
+			String line;
 
-	  BufferedReader br = null;
-	  BufferedWriter bw = null;
-	  try {
-		br = new BufferedReader(new FileReader(fileName));
-		bw = new BufferedWriter(new FileWriter(tmpFileName));
-		String line;
-		
-		while ((line = br.readLine()) != null) {
-			if (headerFound) {
-				if (line.contains("<symbol version=\"7\" name=\"" + toFind)) {//The symbol we are checking for exists
-					skipLines = true;
-					headerFound = false;
-				} else {
-					bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-					headerFound = false;
-				}
-			}			
-			if (line.contains("<?xml version=")) //Header found
-				headerFound = true;
-			if (skipLines || headerFound) {
-				if (line.contains("</symbol>")) {	//This is what comes right after </symbol>
-					skipLines = false;
-				}
-			} else {
-				bw.write(line+"\n");
+			//Append the symbol to the end of the end of the lib file
+			while ((line = br.readLine()) != null) {
+				pw.append(line+"\n");
 			}
-		}	
-
-	  } catch (Exception e) {
+			pw.append("\0");	//add null character to the end.
+			
+			//Add the symbol to the cat file
+			catPw.append("\"." + symbolName + "\"\n{\n\"" + symbolName + "\"\n}\n");
+			
+		} catch (Exception e) {
 		 return;
-	  } finally {
+		} finally {
+		 try {
+			if(br != null)
+			   br.close();
+		 } catch (IOException e) {
+			//
+		 }
+		 try {
+			if(pw != null)
+			   pw.close();
+		 } catch (Exception e) {
+			//
+		 }
+		 try {
+			if(catPw != null)
+			   catPw.close();
+		 } catch (Exception e) {
+			//
+		 }		 
+		}
+	}
+	
+	static public void removeIseSymbol(String fileName, String newFileName, String toFind) {
+		//String oldFileName = "try.dat";
+		String tmpFileName = fileName + ".tmp";
+		boolean skipLines = false;
+		boolean headerFound = false;
+
+		BufferedReader br = null;
+		BufferedWriter bw = null;
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+			bw = new BufferedWriter(new FileWriter(tmpFileName));
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				if (headerFound) {
+					if (line.contains("<symbol version=\"7\" name=\"" + toFind)) {//The symbol we are checking for exists
+						skipLines = true;
+						headerFound = false;
+					} else {
+						bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+						headerFound = false;
+					}
+				}			
+				if (line.contains("<?xml version=")) //Header found
+					headerFound = true;
+				if (skipLines || headerFound) {
+					if (line.contains("</symbol>")) {	//This is what comes right after </symbol>
+						skipLines = false;
+					}
+				} else {
+					bw.write(line.replaceAll("\0", "")+"\n");		//remove null characters
+				}
+			}	
+
+		} catch (Exception e) {
+		 return;
+		} finally {
 		 try {
 			if(br != null)
 			   br.close();
@@ -2937,15 +2988,15 @@ public class Base {
 		 } catch (IOException e) {
 			//
 		 }
-	  }
-	  // Once everything is complete, delete old file..
-	  File oldFile = new File(fileName);
-	  oldFile.delete();
+		}
+		// Once everything is complete, delete old file..
+		File oldFile = new File(fileName);
+		oldFile.delete();
 
-	  // And rename tmp file's name to old file name
-	  File tmpFile = new File(tmpFileName);
-	  File newFile = new File(newFileName);
-	  tmpFile.renameTo(newFile);
+		// And rename tmp file's name to old file name
+		File tmpFile = new File(tmpFileName);
+		File newFile = new File(newFileName);
+		tmpFile.renameTo(newFile);
 	}  	
   
   public void handleAddLibrary(Editor editor) {
@@ -3008,6 +3059,21 @@ public class Base {
         editor.statusError(e);
         return;
       }
+	  
+	  // is this a Xilinx symbol library
+	  File f = new File(destinationFolder.getPath() + "/CCL_Designer.xise");
+	  if (f.exists()) { 
+		//String mainFilename = Base.getActiveSketchPath();
+		//String sketchName = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
+		String pslPath = Base.getExamplesPath();
+		String pslLibName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.lib";
+		String pslCatName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.cat";
+		
+		Base.removeIseSymbol(pslLibName, pslLibName, libName);
+		Base.installIseSymbol(pslLibName, pslCatName, destinationFolder.getPath() + "/" + libName + ".sym", libName);
+		Base.showMessage("title", "Finished installing Xilinx symbol");
+	  }
+	  
       editor.statusNotice(_("Library added to your libraries. Check \"Import library\" menu"));
     } finally {
       // delete zip created temp folder, if exists
