@@ -2120,13 +2120,24 @@ public class Base {
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));
 	  else if (url.endsWith(".xise")) {
-			platform.openURL(url);
-			try {
+			activeEditor.statusNotice("Loading Xilinx User Libraries");
+			Base.updateIsePaths(url.substring(7), url.substring(7));
+			//platform.openURL("file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd");
+			File sketchLocation = new File(Base.getActiveSketchPath());
+			//Base.showMessage("Test", getLibrariesPath().get(3).getPath() + "/*");	//TODO JPG process the arduino app library path too, it is get(1)
+			Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + url.substring(7) + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);	//Important to redirect std error
+			//Process proc = Runtime.getRuntime().exec("C:/Xilinx/14.7/ISE_DS/ISE/bin/nt64/xtclsh", new String[] { "import_user_libraries.xtcl"} ,sketchLocation);
+			//Process proc = Runtime.getRuntime().exec("cmd /c xtclsh ", new String[] { "import_user_libraries.xtcl", " ;pause" } ,sketchLocation);
+			//Process proc = Runtime.getRuntime().exec("cmd /c start " + "file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd");
+			int exitVal = proc.waitFor();
+			activeEditor.statusNotice("Opening Xilinx ISE");
+			platform.openURL(url); 
+/* 			try {
 				Thread.sleep(5000);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
 				Thread.currentThread().interrupt();
 			}			
-			platform.openURL("file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd");
+			platform.openURL("file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd"); */
 	  } else
 		platform.openURL(url);
 	  
@@ -2998,6 +3009,62 @@ public class Base {
 		File newFile = new File(newFileName);
 		tmpFile.renameTo(newFile);
 	}  	
+	
+	static public void updateIsePaths(String fileName, String newFileName) {
+		//String oldFileName = "try.dat";
+		String tmpFileName = fileName + ".tmp";
+		boolean skipLines = false;
+		boolean headerFound = false;
+		String pslPath = Base.getExamplesPath();
+		String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";		
+
+		//Base.showMessage("Test", "In UpdatePaths");
+		
+		BufferedReader br = null;
+		BufferedWriter bw = null;
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+			bw = new BufferedWriter(new FileWriter(tmpFileName));
+			String line, newLine;
+
+			while ((line = br.readLine()) != null) {
+				if (headerFound) {
+					newLine = line.replaceAll("xil_pn:name=\"(.*)Libraries", "xil_pn:name=\"" + pslLibName);
+					bw.write(newLine + "\n");
+				} else {
+					bw.write(line + "\n");
+				}
+				if (line.contains("<files>")) //Header found
+					headerFound = true;
+				if (line.contains("</files>")) //Header ends
+					headerFound = false;					
+			}	
+
+		} catch (Exception e) {
+		 return;
+		} finally {
+		 try {
+			if(br != null)
+			   br.close();
+		 } catch (IOException e) {
+			//
+		 }
+		 try {
+			if(bw != null)
+			   bw.close();
+		 } catch (IOException e) {
+			//
+		 }
+		}
+		// Once everything is complete, delete old file..
+		File oldFile = new File(fileName);
+		oldFile.delete();
+
+		// And rename tmp file's name to old file name
+		File tmpFile = new File(tmpFileName);
+		File newFile = new File(newFileName);
+		tmpFile.renameTo(newFile);
+	} 	
   
   public void handleAddLibrary(Editor editor) {
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home"));

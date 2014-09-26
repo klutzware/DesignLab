@@ -252,6 +252,7 @@ public class Platform extends processing.app.Platform {
 		
 		Base.removeIseSymbol(pslLibName, pslLibName, sketchName);
 		Base.installIseSymbol(pslLibName, pslCatName, Base.getActiveSketchPath() + "/" + sketchName + ".sym", sketchName);
+		Base.updateIsePaths(mainFilename + "/PSL_Papilio_Pro_LX9.xise", mainFilename + "/PSL_Papilio_Pro_LX9.xise");
 		return;
 	}	 */
     if (url.startsWith("http://") || url.startsWith("file://")) {
