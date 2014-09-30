@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="ZAP" default="build">
+<project name="DesignLab" default="build">
   <!--echo message="os.name = ${os.name}" /-->
   <!--echo message="os.arch = ${os.arch}" /-->
   <!--echo message="os.version = ${os.version}" /-->
@@ -124,8 +124,8 @@
         <tokenfilter>
           <linetokenizer includeDelims="false" />
           <!-- grab the thing from the first line that's 4 digits -->
-          <containsregex pattern="ZAP (.*) " />
-          <replaceregex pattern="ZAP ([^ ]*).*" replace="\1" />
+          <containsregex pattern="DesignLab (.*) " />
+          <replaceregex pattern="DesignLab ([^ ]*).*" replace="\1" />
         </tokenfilter>
         <tokenfilter>
           <stringtokenizer suppressdelims="true" />
@@ -459,8 +459,8 @@
       <param name="target.path" value="linux/work" />
     </antcall>
 
-    <copy todir="linux/work" file="linux/dist/zap" />
-    <chmod perm="755" file="linux/work/zap" />
+    <copy todir="linux/work" file="linux/dist/DesignLab" />
+    <chmod perm="755" file="linux/work/DesignLab" />
 
     <copy todir="linux/work" file="../hardware/tools/papilio/papilio_loader/ftdi_user.sh" />
     <chmod perm="755" file="linux/work/ftdi_user.sh" />
@@ -508,10 +508,10 @@
 
 
 
-    <copy todir="linux/work" file="linux/dist/zap" />
+    <copy todir="linux/work" file="linux/dist/DesignLab" />
 
-    <copy todir="linux/work" file="linux/dist/zap" />
-    <chmod perm="755" file="linux/work/zap" />
+    <copy todir="linux/work" file="linux/dist/DesignLab" />
+    <chmod perm="755" file="linux/work/DesignLab" />
 
     <antcall target="linux-unzip-arm-toolchain" />
   </target>
@@ -616,7 +616,7 @@
 
     <tar compression="gzip" destfile="linux/arduino-${version}-linux.tgz">
       <tarfileset dir="linux/work"
-		  prefix="papilio-zap-ide"
+		  prefix="papilio-DesignLab-ide"
 		  excludes="arduino,
 			    hardware/tools/avrdude,
           hardware/tools/zpuinoprogrammer,
@@ -632,17 +632,17 @@
 		  prefix="arduino-${version}/hardware/tools" />
     </tar>
 -->
-    <move file="linux/work" tofile="linux/papilio-zap-ide" />
+    <move file="linux/work" tofile="linux/papilio-DesignLab-ide" />
 
     <exec executable="tar" dir="linux">
       <arg value="-z"/>
       <arg value="-c"/>
       <arg value="-f"/>
-      <arg value="zap-${version}-${platform}.tgz"/>
-      <arg value="papilio-zap-ide"/>
+      <arg value="DesignLab-${version}-${platform}.tgz"/>
+      <arg value="papilio-DesignLab-ide"/>
     </exec>
 
-    <move file="linux/papilio-zap-ide" tofile="linux/work" />
+    <move file="linux/papilio-DesignLab-ide" tofile="linux/work" />
 
     <echo>
       =======================================================
@@ -757,7 +757,7 @@
 
   <target name="windows-run" depends="windows-build"
 	  description="Run windows version">
-    <exec executable="windows/work/zap.exe"
+    <exec executable="windows/work/DesignLab.exe"
 	  dir="windows/work" spawn="true"/>
   </target>
 
@@ -816,14 +816,14 @@
 	 excludes="java/**" />
     -->
 
-    <zip destfile="windows/zap-${version}-${platform}.zip" level="9">
+    <zip destfile="windows/DesignLab-${version}-${platform}.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="papilio-zap-ide" />
+		  prefix="papilio-DesignLab-ide" />
     </zip>
 
-    <zip destfile="windows/zap-${version}-${platform}-expert.zip" level="9">
+    <zip destfile="windows/DesignLab-${version}-${platform}-expert.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="papilio-zap-ide" 
+		  prefix="papilio-DesignLab-ide" 
 		  excludes="java/**" />
     </zip>
 
@@ -831,8 +831,8 @@
       =======================================================
       Arduino for Windows was built. Grab the archive from
       
-      windows/zap-${version}-${platform}.zip
-      windows/zap-${version}-${platform}-expert.zip
+      windows/DesignLab-${version}-${platform}.zip
+      windows/DesignLab-${version}-${platform}-expert.zip
       =======================================================
     </echo>
   </target>
@@ -848,9 +848,9 @@
 	   addproperty="version"
 	   defaultvalue="${revision}" />
 
-    <tar compression="gzip" destfile="zap-${version}-src.tar.gz">
+    <tar compression="gzip" destfile="DesignLab-${version}-src.tar.gz">
       <tarfileset dir="../"
-		  prefix="zap-${version}"
+		  prefix="DesignLab-${version}"
 		  excludes="**/*.tgz,
 			     **/*.bz2,
 			     **/build/macosx/,

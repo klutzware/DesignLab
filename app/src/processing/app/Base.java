@@ -2221,17 +2221,38 @@ public class Base {
   // .................................................................
 
 
-  /**
-   * Give this Frame a Processing icon.
-   */
+  
   static public void setIcon(Frame frame) {
     // don't use the low-res icon on Mac OS X; the window should
     // already have the right icon from the .app file.
     if (Base.isMacOS()) return;
+    
 
-    Image image = Toolkit.getDefaultToolkit().createImage(PApplet.ICON_IMAGE);
-    frame.setIconImage(image);
+    ArrayList<Image> images = new ArrayList<Image>();
+    images.add(createImageFromLib("arduino_16.png"));
+    images.add(createImageFromLib("arduino_24.png"));
+    images.add(createImageFromLib("arduino_32.png"));
+    images.add(createImageFromLib("arduino_48.png"));
+    frame.setIconImages(images);
   }
+  
+  static private Image createImageFromLib(String filename)
+  {
+   return Toolkit.getDefaultToolkit().createImage(new File("lib/" + filename).getAbsolutePath());
+  }  
+  
+  
+//  /**
+//   * Give this Frame a Processing icon.
+//   */
+//  static public void setIcon(Frame frame) {
+//    // don't use the low-res icon on Mac OS X; the window should
+//    // already have the right icon from the .app file.
+//    if (Base.isMacOS()) return;
+//
+//    Image image = Toolkit.getDefaultToolkit().createImage(PApplet.ICON_IMAGE);
+//    frame.setIconImage(image);
+//  }
 
 
   // someone needs to be slapped
