@@ -3,7 +3,7 @@
 #include <DeviceRegistry.h>
 
 HardwareSerial Serial(1); /* 1st instance/slot */
-HardwareSerial Serial1(2); /* 1st instance/slot */
+//HardwareSerial Serial1(2); /* 1st instance/slot */
 
 using namespace ZPUino;
 
