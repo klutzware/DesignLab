@@ -844,7 +844,31 @@ public class Base {
     // (don't do earlier, cuz we might move it based on a window being closed)
     editor.setVisible(true);
     
-
+    //Update ISE Library location
+    //TODO Find all *.xise files and process them dynamically JPG
+    //Base.showMessage("Test", "Updating ISE Library Location Now");
+    editor.statusNotice("Updating Xilinx ISE Library Location");
+    File sketchLocation = new File(editor.getSketch().getFolder().getPath());
+    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_Pro_LX9.xise", sketchLocation + "/PSL_Papilio_Pro_LX9.xise");
+    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_One_500K.xise", sketchLocation + "/PSL_Papilio_One_500K.xise");
+    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_One_250K.xise", sketchLocation + "/PSL_Papilio_One_250K.xise");
+    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_DUO_LX9.xise", sketchLocation + "/PSL_Papilio_DUO_LX9.xise");
+    
+    //Import Xilinx User Libraries
+    //Base.showMessage("Test", "Importing User Libraries Now");
+    //TODO JPG Cleanup user libraries that have been deleted.
+    editor.statusNotice("Updating Xilinx ISE User Libraries");
+    try {   //TODO JPG setup a notification to know when these processes are finished and update the editor window. Don't let any xise files be opened before these processes finish.
+      Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_Pro_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+      Process proc1 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_500K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+      Process proc2 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_250K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+      Process proc3 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_DUO_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+      //int exitVal = proc.waitFor();
+    } catch (Exception e) {
+      showWarning(_("Problem Updating Xilinx User Library"),
+                  I18n.format(_("Could not update the Xilinx User Library\n{0}")), e);
+    }
+    //Base.showMessage("Test", "Finished Importing User Libraries");
 //    System.err.println("exiting handleOpen");
 
     return editor;
@@ -2120,17 +2144,13 @@ public class Base {
 	  if (url.endsWith(".bit"))
 			activeEditor.handleBurnBitfile(url.substring(7));
 	  else if (url.endsWith(".xise")) {
-			activeEditor.statusNotice("Loading Xilinx User Libraries");
-			Base.updateIsePaths(url.substring(7), url.substring(7));
-			//platform.openURL("file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd");
-			File sketchLocation = new File(Base.getActiveSketchPath());
-			//Base.showMessage("Test", getLibrariesPath().get(3).getPath() + "/*");	//TODO JPG process the arduino app library path too, it is get(1)
-			Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + url.substring(7) + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);	//Important to redirect std error
-			//Process proc = Runtime.getRuntime().exec("C:/Xilinx/14.7/ISE_DS/ISE/bin/nt64/xtclsh", new String[] { "import_user_libraries.xtcl"} ,sketchLocation);
-			//Process proc = Runtime.getRuntime().exec("cmd /c xtclsh ", new String[] { "import_user_libraries.xtcl", " ;pause" } ,sketchLocation);
-			//Process proc = Runtime.getRuntime().exec("cmd /c start " + "file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd");
-			int exitVal = proc.waitFor();
-			activeEditor.statusNotice("Opening Xilinx ISE");
+			//activeEditor.statusNotice("Loading Xilinx User Libraries");
+			//Base.updateIsePaths(url.substring(7), url.substring(7));
+			//File sketchLocation = new File(Base.getActiveSketchPath());
+			//TODO JPG process the arduino app library path too, it is get(1)
+			//Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + url.substring(7) + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);	//Important to redirect std error
+			//int exitVal = proc.waitFor();
+			//activeEditor.statusNotice("Opening Xilinx ISE");
 			platform.openURL(url); 
 /* 			try {
 				Thread.sleep(5000);                 //1000 milliseconds is one second.

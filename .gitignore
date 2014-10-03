@@ -31,3 +31,5 @@ test-bin
 
 felix-cache/
 build/windows/zap-2.3.0-linux32.tgz
+build/windows/launcher/application-old (2).ico
+build/windows/launcher/application-old.ico
