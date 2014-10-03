@@ -23,6 +23,7 @@
 package processing.app;
 
 import java.awt.*;
+
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
@@ -845,31 +846,30 @@ public class Base {
     editor.setVisible(true);
     
     //Update ISE Library location
-    //TODO Find all *.xise files and process them dynamically JPG
-    //Base.showMessage("Test", "Updating ISE Library Location Now");
     editor.statusNotice("Updating Xilinx ISE Library Location");
+   try {
     File sketchLocation = new File(editor.getSketch().getFolder().getPath());
-    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_Pro_LX9.xise", sketchLocation + "/PSL_Papilio_Pro_LX9.xise");
-    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_One_500K.xise", sketchLocation + "/PSL_Papilio_One_500K.xise");
-    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_One_250K.xise", sketchLocation + "/PSL_Papilio_One_250K.xise");
-    Base.updateIsePaths(sketchLocation + "/PSL_Papilio_DUO_LX9.xise", sketchLocation + "/PSL_Papilio_DUO_LX9.xise");
+    String files[] = listExtensions(sketchLocation, ".xise");    
+    for (String xilinxFile : files) {
+      Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
+    }    
     
     //Import Xilinx User Libraries
-    //Base.showMessage("Test", "Importing User Libraries Now");
-    //TODO JPG Cleanup user libraries that have been deleted.
+    //TODO JPG Cleanup user libraries that have been deleted. Maybe we should just import all libraries here too? Using import_libraries.xtcl then we can delete all libraries.
     editor.statusNotice("Updating Xilinx ISE User Libraries");
-    try {   //TODO JPG setup a notification to know when these processes are finished and update the editor window. Don't let any xise files be opened before these processes finish.
-      Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_Pro_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-      Process proc1 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_500K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-      Process proc2 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_250K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-      Process proc3 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_DUO_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+    //TODO JPG setup a notification to know when these processes are finished and update the editor window. Don't let any xise files be opened before these processes finish.
+    for (String xilinxFile : files) {
+      Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+    } 
+//      Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_Pro_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+//      Process proc1 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_500K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+//      Process proc2 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_250K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+//      Process proc3 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_DUO_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
       //int exitVal = proc.waitFor();
     } catch (Exception e) {
       showWarning(_("Problem Updating Xilinx User Library"),
                   I18n.format(_("Could not update the Xilinx User Library\n{0}")), e);
     }
-    //Base.showMessage("Test", "Finished Importing User Libraries");
-//    System.err.println("exiting handleOpen");
 
     return editor;
   }
@@ -1670,6 +1670,14 @@ public class Base {
     }
     return list;
   }
+  
+  static public String[] listExtensions(File path, String extension) throws IOException {
+    String[] list = path.list(new OnlyFilesWithExtension(extension));
+    if (list == null) {
+      throw new IOException();
+    }
+    return list;
+  }  
 
   protected void loadHardware(File folder) {
     if (!folder.isDirectory()) return;
