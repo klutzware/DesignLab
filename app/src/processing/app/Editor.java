@@ -34,6 +34,8 @@ import java.awt.event.*;
 import java.awt.print.*;
 import java.io.*;
 import java.net.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.zip.*;
@@ -210,12 +212,32 @@ public class Editor extends JFrame implements RunnerListener {
           {
             Base.activeEditor.handleSaveAs();
             saveAtStart = false;
-			if (renameSymbol == true) {
-				//Base.showMessage("title", "Renaming Symbol Lib");
-				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketch.getName());
-				renameSymbol = false;
-			}
-			
+      			if (renameSymbol == true) {
+      				//Base.showMessage("title", "Renaming Symbol Lib");
+      			  String sketchName = sketch.getName();
+      			  
+      				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketchName);
+      				renameSymbol = false;
+      				
+      				try {
+        		    File newFile = new File(Base.getActiveSketchPath(), "edit_library.ino");
+        		    File oldFile = new File(Base.activeEditor.sketch.getPrimaryFile().toString());
+        		    File exampleFolder = new File(Base.getActiveSketchPath() + "/examples/Template_Community_Core_Library");
+        		    Base.activeEditor.sketch.getCode(0).saveAs(newFile);
+                exampleFolder.renameTo(new File(Base.getActiveSketchPath() + "/examples/" + sketchName));
+        		    oldFile.delete();
+        		    Base.activeEditor.handleOpenUnchecked(newFile.toString(),
+        		                               0,
+        		                               Base.activeEditor.getSelectionStart(),
+        		                               Base.activeEditor.getSelectionStop(),
+        		                               Base.activeEditor.getScrollPosition());
+      				} catch (IOException ie) { }
+      				Base.activeEditor.base.rebuildSketchbookMenus();
+              Base.activeEditor.base.onBoardOrPortChange();
+              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu, Base.activeEditor);
+              Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
+              base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+      			}
           }
           
         }
@@ -653,16 +675,28 @@ public class Editor extends JFrame implements RunnerListener {
        });
      papilioMenu.add(item);  
 	 
-     item = new JMenuItem(_("New Papilio Community Core Library"));
+     item = new JMenuItem(_("New DesignLab Library"));
      item.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
            String pslPath = Base.getExamplesPath();
-           File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_Community_Core_Library/Template_Community_Core_Library.ino");    
+           File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_Community_Core_Library/edit_library.ino");
            Editor newproj = base.handleOpen(f1.getAbsolutePath());
            newproj.handlesaveAtStart(true);
          }
        });
-     papilioMenu.add(item); 	 
+     papilioMenu.add(item); 	
+     
+     item = new JMenuItem(_("Edit Library"));
+     item.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+           String editPath = Base.getActiveSketchPath();
+           Path path = Paths.get(editPath+"\\..\\..\\edit_library.ino");
+           //File f1 = new File(editPath+"/../../edit_library.ino");
+           Editor newproj = base.handleOpen(path.normalize().toString());
+           //newproj.handlesaveAtStart(true);
+         }
+       });
+     papilioMenu.add(item);      
     
     if (papilioExamplesMenu == null) {
       papilioExamplesMenu = new JMenu(_("Papilio Examples"));
@@ -2104,7 +2138,7 @@ public class Editor extends JFrame implements RunnerListener {
 
   public void handlesaveAtStart(boolean renameSymbolLib) {
     saveAtStart = true;
-	renameSymbol = renameSymbolLib;
+    renameSymbol = renameSymbolLib;
   }
 	
   /**
@@ -2351,8 +2385,9 @@ public class Editor extends JFrame implements RunnerListener {
     File altPdeFile = new File(parent, pdeName);
     String inoName = parentName + ".ino";
     File altInoFile = new File(parent, pdeName);
+   
     
-    if (pdeName.equals(fileName) || inoName.equals(fileName)) {
+    if (pdeName.equals(fileName) || inoName.equals(fileName) || fileName.equals("edit_library.ino")) {
       // no beef with this guy
 
     } else if (altPdeFile.exists()) {

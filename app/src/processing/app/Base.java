@@ -23,7 +23,6 @@
 package processing.app;
 
 import java.awt.*;
-
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
@@ -846,7 +845,7 @@ public class Base {
     editor.setVisible(true);
     
     //Update ISE Library location
-    editor.statusNotice("Updating Xilinx ISE Library Location");
+    //editor.statusNotice("Updating Xilinx ISE Library Location");
    try {
     File sketchLocation = new File(editor.getSketch().getFolder().getPath());
     String files[] = listExtensions(sketchLocation, ".xise");    
@@ -854,9 +853,36 @@ public class Base {
       Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
     }    
     
+    //Add Xilinx Symbols from Library directories to the catalog
+    String pslPath = Base.getExamplesPath();    
+    String pslLibName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.lib";
+    String pslCatName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.cat";
+    
+    //Reset the symbols back to the base symbols
+    Base.copyFile(new File(pslLibName + ".base"), new File(pslLibName));
+    Base.copyFile(new File(pslCatName + ".base"), new File(pslCatName));
+    
+    List <File> libraryFolders = getLibrariesPath();
+    for (File libRoot : libraryFolders ) {
+      File[] libFiles = libRoot.listFiles();
+      if (libFiles != null) {
+        for (File lib : libFiles) {
+          if (lib.isDirectory()) {
+            String symbols[] = listExtensions(lib, ".sym");
+            for (String symbol : symbols) {
+              //showMessage("Test", symbol);
+              String libName = getFileNameWithoutExtension(new File(symbol));
+              Base.removeIseSymbol(pslLibName, pslLibName, libName);
+              Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
+            }
+          }   
+        } 
+      }   
+    }
+    
     //Import Xilinx User Libraries
     //TODO JPG Cleanup user libraries that have been deleted. Maybe we should just import all libraries here too? Using import_libraries.xtcl then we can delete all libraries.
-    editor.statusNotice("Updating Xilinx ISE User Libraries");
+    //editor.statusNotice("Updating Xilinx ISE User Libraries");
     //TODO JPG setup a notification to know when these processes are finished and update the editor window. Don't let any xise files be opened before these processes finish.
     for (String xilinxFile : files) {
       Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
@@ -2159,7 +2185,18 @@ public class Base {
 			//Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + url.substring(7) + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);	//Important to redirect std error
 			//int exitVal = proc.waitFor();
 			//activeEditor.statusNotice("Opening Xilinx ISE");
-			platform.openURL(url); 
+	    int nbThreads =  Thread.getAllStackTraces().keySet().size();
+//	    int nbRunning = 0;
+//	    for (Thread t : Thread.getAllStackTraces().keySet()) {
+//	        if (t.getState()==Thread.State.RUNNABLE) nbRunning++;
+//	        Thread.State.
+//	    }
+	    //showMessage("test", Integer.toString(nbThreads));
+	    //TODO JPG This is a bit of a shortcut, we should capture the processes to update the symbols and check if those are done...
+			if (nbThreads > 11)
+			   showMessage("Not Ready Yet.","Still updating all Xilinx symbol libraries. Please try again.");
+			else
+			  platform.openURL(url); 
 /* 			try {
 				Thread.sleep(5000);                 //1000 milliseconds is one second.
 			} catch(InterruptedException ex) {
@@ -2910,7 +2947,26 @@ public class Base {
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.vhd", Base.getActiveSketchPath() + "\\" + newName + ".vhd", currentName, newName);
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Edit_Your_CCL_Design.sch", Base.getActiveSketchPath() + "\\Edit_Your_CCL_Design.sch", currentName, newName);
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Simulate_Your_CCL_Design.vhd", Base.getActiveSketchPath() + "\\Simulate_Your_CCL_Design.vhd", currentName, newName);
-		Base.replaceFileContents(Base.getActiveSketchPath() + "\\CCL_Designer.xise", Base.getActiveSketchPath() + "\\CCL_Designer.xise", currentName, newName);
+		
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\keywords.txt", Base.getActiveSketchPath() + "\\keywords.txt", currentName, newName);		
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.cpp", Base.getActiveSketchPath() + "\\" + newName + ".cpp", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.h", Base.getActiveSketchPath() + "\\" + newName + ".h", currentName, newName);
+		
+		//TODO Should just do this for all *.xise files JPG
+//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\CCL_Designer.xise", Base.getActiveSketchPath() + "\\CCL_Designer.xise", currentName, newName);
+//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_DUO_LX9.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_DUO_LX9.xise", currentName, newName);
+//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_One_250K.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_One_250K.xise", currentName, newName);
+//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_One_500K.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_One_500K.xise", currentName, newName);
+//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_Pro_LX9.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_Pro_LX9.xise", currentName, newName);
+
+    //TODO Should just do this for all *.sch files JPG
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_DUO_LX9.sch", Base.getActiveSketchPath() + "\\Papilio_DUO_LX9.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_One_250K.sch", Base.getActiveSketchPath() + "\\Papilio_One_250K.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_One_500K.sch", Base.getActiveSketchPath() + "\\Papilio_One_500K.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_Pro.sch", Base.getActiveSketchPath() + "\\Papilio_Pro.sch", currentName, newName);
+		
+		
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\examples\\Template_Community_Core_Library\\Template_Community_Core_Library.ino", Base.getActiveSketchPath() + "\\examples\\Template_Community_Core_Library\\" + newName + ".ino", currentName, newName);
 	}
 
 	static public void replaceFileContents(String fileName, String newFileName, String toReplace, String replaceWith) {
@@ -3176,19 +3232,19 @@ public class Base {
         return;
       }
 	  
-	  // is this a Xilinx symbol library
-	  File f = new File(destinationFolder.getPath() + "/CCL_Designer.xise");
-	  if (f.exists()) { 
-		//String mainFilename = Base.getActiveSketchPath();
-		//String sketchName = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
-		String pslPath = Base.getExamplesPath();
-		String pslLibName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.lib";
-		String pslCatName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.cat";
-		
-		Base.removeIseSymbol(pslLibName, pslLibName, libName);
-		Base.installIseSymbol(pslLibName, pslCatName, destinationFolder.getPath() + "/" + libName + ".sym", libName);
-		Base.showMessage("title", "Finished installing Xilinx symbol");
-	  }
+//	  // is this a Xilinx symbol library
+//	  File f = new File(destinationFolder.getPath() + "/CCL_Designer.xise");
+//	  if (f.exists()) { 
+//		//String mainFilename = Base.getActiveSketchPath();
+//		//String sketchName = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
+//		String pslPath = Base.getExamplesPath();
+//		String pslLibName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.lib";
+//		String pslCatName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.cat";
+//		
+//		Base.removeIseSymbol(pslLibName, pslLibName, libName);
+//		Base.installIseSymbol(pslLibName, pslCatName, destinationFolder.getPath() + "/" + libName + ".sym", libName);
+//		Base.showMessage("title", "Finished installing Xilinx symbol");
+//	  }
 	  
       editor.statusNotice(_("Library added to your libraries. Check \"Import library\" menu"));
     } finally {

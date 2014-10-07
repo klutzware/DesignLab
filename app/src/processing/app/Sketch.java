@@ -826,6 +826,9 @@ public class Sketch {
                                    FileDialog.SAVE);
     if (isReadOnly() || isUntitled()) {
       // default to the sketchbook folder
+      if (this.getName().contains("edit_library"))
+        fd.setDirectory(Base.getSketchbookLibrariesFolder().toString());
+      else
       fd.setDirectory(Base.getSketchbookFolder().getAbsolutePath());
     } else {
       // default to the parent folder of where this was
