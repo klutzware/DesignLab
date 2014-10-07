@@ -24,11 +24,14 @@
 package processing.app;
 import static processing.app.I18n._;
 
+import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+
+import processing.app.helpers.PreferencesMap;
 
 
 /**
@@ -344,6 +347,9 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     ///if (sel == -1) return false;
     if (sel == -1) return;
     currentRollover = -1;
+    
+    PreferencesMap prefs = Preferences.getMap();
+    prefs.putAll(Base.getBoardPreferences());
 
     switch (sel) {
     case RUN:
@@ -394,16 +400,34 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       Base.openURL(_("tools://Logic_Analyzer.sh"));
       break;	  
     case NEW_PROJECT:
-      Base.openURL(_("sketchdir://PSL_Papilio_Pro_LX9.xise"));
+      String pslPath = Base.getExamplesPath();
+      File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");    
+      Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
+      newproj.handlesaveAtStart(false);
       break;	
     case LOAD_CIRCUIT:
-      Base.openURL(_("sketchdir://LX9/papilio_pro.bit"));
+      String bitFile = prefs.get("bit.file");
+      File fileBit = new File(Base.getActiveSketchPath() + "/" + bitFile);
+      if (fileBit.exists())
+        Base.openURL(_("sketchdir://" + bitFile));
+      else
+        Base.showMessage("Not Found", "Sorry, this project does not support your board.");
       break;	
     case VIEW_CIRCUIT:
-      Base.openURL(_("sketchdir://schematic_papilio_pro.pdf"));
+      String pdfFile = prefs.get("pdf.file");
+      File filePdf = new File(Base.getActiveSketchPath() + "/" + pdfFile);
+      if (filePdf.exists())
+        Base.openURL(_("sketchdir://" + pdfFile));
+      else
+        Base.showMessage("Not Found", "Sorry, this project does not support your board.");
       break;	
     case EDIT_CIRCUIT:
-      Base.openURL(_("sketchdir://PSL_Papilio_Pro_LX9.xise"));
+      String xiseFile = prefs.get("xise.file");
+      File fileXise = new File(Base.getActiveSketchPath() + "/" + xiseFile);
+      if (fileXise.exists())
+        Base.openURL(_("sketchdir://" + xiseFile));
+      else
+        Base.showMessage("Not Found", "Sorry, this project does not support your board.");
       break;		  
     }
   }
