@@ -1,0 +1,19 @@
+Release 14.7 - par P.20131013 (nt64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+Wed Oct 01 17:14:15 2014
+
+All signals are completely routed.
+
+WARNING:ParHelpers:361 - There are 7 loadless signals in this design. This design will cause Bitgen to issue DRC
+   warnings.
+
+   Arduino_29_IBUF
+   Arduino_31_IBUF
+   Arduino_36_IBUF
+   Arduino_39_IBUF
+   Arduino_41_IBUF
+   Arduino_45_IBUF
+   Arduino_47_IBUF
+
+
