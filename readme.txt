@@ -1,5 +1,5 @@
-ZAP IDE - A modified version of the Arduino IDE for the Papilio FPGA board. 
-ZAP stands for ZPUino Arduino Papilio IDE.
+DesignLab IDE - A modified version of the Arduino IDE for the Papilio FPGA board. 
+previously name ZAP IDE
 
 Arduino is an open-source physical computing platform based on a simple i/o
 board and a development environment that implements the Processing/Wiring
