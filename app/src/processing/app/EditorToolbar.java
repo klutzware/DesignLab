@@ -25,6 +25,7 @@ package processing.app;
 import static processing.app.I18n._;
 
 import java.io.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -41,8 +42,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
 
   /** Rollover titles for each button. */
   static final String title[] = {
-   // _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor"), _("Logic Analyzer"), _("Papilio Loader"), _("Virtual Instruments") , _("New Papilio Project"), _("Load Circuit"), _("View Circuit"), _("Edit Circuit")
-     _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor"), _("Logic Analyzer"), _("Papilio Loader"), _("Virtual Instruments") , _("Load Circuit"), _("View Circuit"), _("Edit Circuit")    
+    _("Verify"), _("Upload"), _("New"), _("Open"), _("Save"), _("Serial Monitor"), _("Logic Analyzer"), _("Papilio Loader"), _("Virtual Instruments") , _("New Papilio Project"), _("Load Circuit"), _("View Circuit"), _("Edit Circuit")
   };
 
   /** Titles for each button when the shift key is pressed. */ 
@@ -78,10 +78,10 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   static final int OLS   = 6;
   static final int PAPILIO   = 7;
   static final int VIRTUAL_INSTRUMENTS   = 8;
-  //static final int NEW_PROJECT   = 9;
-  static final int LOAD_CIRCUIT   = 9;
-  static final int VIEW_CIRCUIT   = 10;
-  static final int EDIT_CIRCUIT   = 11;
+  static final int NEW_PROJECT   = 9;
+  static final int LOAD_CIRCUIT   = 10;
+  static final int VIEW_CIRCUIT   = 11;
+  static final int EDIT_CIRCUIT   = 12;
 
   static final int INACTIVE = 0;
   static final int ROLLOVER = 1;
@@ -131,7 +131,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     which[buttonCount++] = OLS;
     which[buttonCount++] = PAPILIO;
 	which[buttonCount++] = VIRTUAL_INSTRUMENTS;
-    //which[buttonCount++] = NEW_PROJECT;
+    which[buttonCount++] = NEW_PROJECT;
 	which[buttonCount++] = LOAD_CIRCUIT;
 	which[buttonCount++] = VIEW_CIRCUIT;
 	which[buttonCount++] = EDIT_CIRCUIT;
@@ -400,38 +400,77 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     case VIRTUAL_INSTRUMENTS:
       Base.openURL(_("tools://Logic_Analyzer.sh"));
       break;	  
-//    case NEW_PROJECT:
-//      String pslPath = Base.getExamplesPath();
-//      File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino"); 
-//      Base.
-//      Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
-//      newproj.handlesaveAtStart(false);
-//      break;	
+    case NEW_PROJECT:
+      String pslPath = Base.getExamplesPath();
+      File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");    
+      Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
+      newproj.handlesaveAtStart(false);
+      break;	
     case LOAD_CIRCUIT:
-      String bitFile = prefs.get("bit.file");
-      File fileBit = new File(Base.getActiveSketchPath() + "/" + bitFile);
+      File fileBit = getLibraryFile("#define circuit", "bit.file");
       if (fileBit.exists())
-        Base.openURL(_("sketchdir://" + bitFile));
+        Base.openURL("file://" + fileBit.toString());
       else
-        Base.showMessage("Not Found", "Sorry, this project does not support your board.");
+        Base.showMessage("Not Found", "Sorry, no bit file found in the libraries or project directory.");
       break;	
     case VIEW_CIRCUIT:
-      String pdfFile = prefs.get("pdf.file");
-      File filePdf = new File(Base.getActiveSketchPath() + "/" + pdfFile);
+      File filePdf = getLibraryFile("#define circuit", "pdf.file");
       if (filePdf.exists())
-        Base.openURL(_("sketchdir://" + pdfFile));
+        Base.openURL("file://" + filePdf.toString());
       else
-        Base.showMessage("Not Found", "Sorry, this project does not support your board.");
-      break;	
+        Base.showMessage("Not Found", "Sorry, no schematic pdf file found in the libraries or project directory.");
+      break;        
     case EDIT_CIRCUIT:
-      String xiseFile = prefs.get("xise.file");
-      File fileXise = new File(Base.getActiveSketchPath() + "/" + xiseFile);
+      File fileXise = getLibraryFile("#define circuit", "xise.file");
       if (fileXise.exists())
-        Base.openURL(_("sketchdir://" + xiseFile));
+        Base.openURL("file://" + fileXise.toString());
       else
-        Base.showMessage("Not Found", "Sorry, this project does not support your board.");
-      break;		  
+        Base.showMessage("Not Found", "Sorry, no Xilinx ISE project file found in the libraries or project directory.");
+      break; 	  
     }
+  }
+  
+  private File getLibraryFile(String keyWord, String prefKey) {
+    String keyWordVal = getKeyWord(keyWord);
+    PreferencesMap prefs = Preferences.getMap();
+    prefs.putAll(Base.getBoardPreferences());
+    
+    String prefFile = prefs.get(prefKey);
+    File libFile = null;
+    
+    List <File> libraryFolders = Base.getLibrariesPath();
+    for (File libRoot : libraryFolders ) {
+      File[] libFiles = libRoot.listFiles();
+      if (libFiles != null) {
+        for (File lib : libFiles) {
+          if (lib.isDirectory()) {
+            if (lib.getName().toLowerCase().equals(keyWordVal)) {
+              libFile = new File(lib.getPath() + "/" + prefFile);
+            }
+          }   
+        } 
+      }   
+    }
+    
+    //Default to local sketch directory if there is no library file
+    if (libFile == null)
+      libFile = new File(Base.getActiveSketchPath() + "/" + prefFile);    
+    
+    return libFile;
+    
+  }
+  
+  private String getKeyWord(String keyword) {
+    String result = null;
+    String text = editor.getText();
+    text = text.toLowerCase();
+    int start = text.indexOf(keyword, 0);
+    int end = text.indexOf("\n", start);
+    if (start >= 0) {
+      result = text.substring(start + keyword.length(), end);
+      result = result.trim();
+    }
+    return result;
   }
 
   public void mouseClicked(MouseEvent e) { }
