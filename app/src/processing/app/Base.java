@@ -844,6 +844,13 @@ public class Base {
     // (don't do earlier, cuz we might move it based on a window being closed)
     editor.setVisible(true);
     
+    updateXilinxProject(editor);
+   
+
+    return editor;
+  }
+
+  public static void updateXilinxProject(Editor editor){
     //Update ISE Library location
     //editor.statusNotice("Updating Xilinx ISE Library Location");
    try {
@@ -896,11 +903,9 @@ public class Base {
       showWarning(_("Problem Updating Xilinx User Library"),
                   I18n.format(_("Could not update the Xilinx User Library\n{0}")), e);
     }
-
-    return editor;
   }
 
-
+  
   /**
    * Close a sketch as specified by its editor window.
    * @param editor Editor object of the sketch to be closed.

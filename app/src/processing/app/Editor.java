@@ -212,6 +212,7 @@ public class Editor extends JFrame implements RunnerListener {
           {
             Base.activeEditor.handleSaveAs();
             saveAtStart = false;
+            Base.updateXilinxProject(Base.activeEditor);
       			if (renameSymbol == true) {
       				//Base.showMessage("title", "Renaming Symbol Lib");
       			  String sketchName = sketch.getName();
