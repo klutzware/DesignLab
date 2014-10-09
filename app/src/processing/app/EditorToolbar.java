@@ -415,8 +415,16 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       break;	
     case VIEW_CIRCUIT:
       File filePdf = getLibraryFile("#define circuit", "pdf.file");
-      if (filePdf.exists())
+      File fileBit2 = getLibraryFile("#define circuit", "bit.file");
+      if (filePdf.exists()) {
+        long datePDF = filePdf.lastModified();
+        long dateBit = fileBit2.lastModified();
+        if (dateBit > datePDF)
+          Base.showMessage("Warning!", "The circuit defined by the bit file is newer then the view in this PDF file. This view of the circuit may not be correct, please edit the circuit for an accurate view.");
         Base.openURL("file://" + filePdf.toString());
+      }
+        
+        
       else
         Base.showMessage("Not Found", "Sorry, no schematic pdf file found in the libraries or project directory.");
       break;        
