@@ -1747,10 +1747,15 @@ public class Sketch {
    */
   public boolean isReadOnly() {
     String apath = folder.getAbsolutePath();
-//    for (File folder : Base.getLibrariesPath()) {
-//      if (apath.startsWith(folder.getAbsolutePath()))
-//        return true;
-//    }
+    for (File folder : Base.getLibrariesPath()) {
+      if (apath.startsWith(folder.getAbsolutePath())) {
+        if (!apath.startsWith(Base.getSketchbookLibrariesPath()))
+          return true;
+      }
+    }
+    if (apath.startsWith(Base.getExamplesPath())) {
+      return true;
+    }
 //    if (apath.startsWith(Base.getExamplesPath()) ||
 //        apath.startsWith(Base.getSketchbookLibrariesPath())) {
 //      return true;
