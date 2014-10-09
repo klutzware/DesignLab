@@ -878,7 +878,7 @@ public class Base {
             String symbols[] = listExtensions(lib, ".sym");
             for (String symbol : symbols) {
               //showMessage("Test", symbol);
-              String libName = getFileNameWithoutExtension(new File(symbol));
+              String libName = getFileNameWithoutExtension(new File(symbol)); //TODO this should be the folder name and the symbols should be in the folder name... JPG
               Base.removeIseSymbol(pslLibName, pslLibName, libName);
               Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
             }

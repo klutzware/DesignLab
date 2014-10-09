@@ -422,12 +422,6 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       break;        
     case EDIT_CIRCUIT:
       File fileXise = getLibraryFile("#define circuit", "xise.file");
-//      for (File folder : Base.getLibrariesPath()) {
-//        if (fileXise.toString().startsWith(folder.getAbsolutePath())) {
-//            Base.showMessage("Library File", "This is a library circuit, it cannot be edited directly.");
-//            fileXise = null;
-//        }
-//      }
       if (fileXise.exists()){
         if (fileXise.toString().startsWith(Base.getActiveSketchPath()))
           Base.openURL("file://" + fileXise.toString());
