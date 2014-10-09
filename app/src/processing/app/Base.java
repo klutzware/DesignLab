@@ -845,7 +845,8 @@ public class Base {
     // (don't do earlier, cuz we might move it based on a window being closed)
     editor.setVisible(true);
     
-    updateXilinxProject(editor);
+    if (!path.contains("Template"))
+      updateXilinxProject(editor);
    
 
     return editor;
