@@ -25,6 +25,7 @@ package processing.app;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 
@@ -854,11 +855,19 @@ public class Base {
     //Update ISE Library location
     //editor.statusNotice("Updating Xilinx ISE Library Location");
    try {
-    File sketchLocation = new File(editor.getSketch().getFolder().getPath());
-    String files[] = listExtensions(sketchLocation, ".xise");    
-    for (String xilinxFile : files) {
-      Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
-    }    
+    File sketchLocation = new File(editor.getSketch().getFolder().getPath() + "/circuit");
+    if (sketchLocation.exists()) {
+      String files[] = listExtensions(sketchLocation, ".xise");    
+      for (String xilinxFile : files) {
+        Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
+      }   
+      //Import Xilinx User Libraries
+      //TODO JPG Cleanup user libraries that have been deleted. Maybe we should just import all libraries here too? Using import_libraries.xtcl then we can delete all libraries.
+      for (String xilinxFile : files) {
+        Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+      } 
+    }
+ 
     
     //Add Xilinx Symbols from Library directories to the catalog
     String pslPath = Base.getExamplesPath();    
@@ -886,19 +895,6 @@ public class Base {
         } 
       }   
     }
-    
-    //Import Xilinx User Libraries
-    //TODO JPG Cleanup user libraries that have been deleted. Maybe we should just import all libraries here too? Using import_libraries.xtcl then we can delete all libraries.
-    //editor.statusNotice("Updating Xilinx ISE User Libraries");
-    //TODO JPG setup a notification to know when these processes are finished and update the editor window. Don't let any xise files be opened before these processes finish.
-    for (String xilinxFile : files) {
-      Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-    } 
-//      Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_Pro_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-//      Process proc1 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_500K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-//      Process proc2 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_One_250K.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-//      Process proc3 = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/PSL_Papilio_DUO_LX9.xise" + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-      //int exitVal = proc.waitFor();
     } catch (Exception e) {
       showWarning(_("Problem Updating Xilinx User Library"),
                   I18n.format(_("Could not update the Xilinx User Library\n{0}")), e);
@@ -2965,10 +2961,10 @@ public class Base {
 //		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_Pro_LX9.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_Pro_LX9.xise", currentName, newName);
 
     //TODO Should just do this for all *.sch files JPG
-    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_DUO_LX9.sch", Base.getActiveSketchPath() + "\\Papilio_DUO_LX9.sch", currentName, newName);
-    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_One_250K.sch", Base.getActiveSketchPath() + "\\Papilio_One_250K.sch", currentName, newName);
-    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_One_500K.sch", Base.getActiveSketchPath() + "\\Papilio_One_500K.sch", currentName, newName);
-    Base.replaceFileContents(Base.getActiveSketchPath() + "\\Papilio_Pro.sch", Base.getActiveSketchPath() + "\\Papilio_Pro.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\circuit\\Papilio_DUO_LX9.sch", Base.getActiveSketchPath() + "\\circuit\\Papilio_DUO_LX9.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\circuit\\Papilio_One_250K.sch", Base.getActiveSketchPath() + "\\circuit\\Papilio_One_250K.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\circuit\\Papilio_One_500K.sch", Base.getActiveSketchPath() + "\\circuit\\Papilio_One_500K.sch", currentName, newName);
+    Base.replaceFileContents(Base.getActiveSketchPath() + "\\circuit\\Papilio_Pro.sch", Base.getActiveSketchPath() + "\\circuit\\Papilio_Pro.sch", currentName, newName);
 		
 		
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\examples\\Template_Community_Core_Library\\Template_Community_Core_Library.ino", Base.getActiveSketchPath() + "\\examples\\Template_Community_Core_Library\\" + newName + ".ino", currentName, newName);
