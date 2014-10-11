@@ -31,30 +31,48 @@
 #ifdef ZPU
 #include <zpuino.h>
 
+//static void spiSend(uint8_t b) {
+//	USPIDATA=b;
+//}
+
+// static void spiSetMode32()
+// {
+	// USPICTL|=SPITS0|SPITS1;
+// }
+// static void spiSetMode8()
+// {
+	// USPICTL&=~(SPITS0|SPITS1);
+// }
+
+//static uint32_t spiRec32(void)
+//{
+//	return SPI.transfer32(0xFFFFFFFF);
+	// USPIDATA=0xffffffff;
+	// return USPIDATA;
+//}
+
 static void spiSend(uint8_t b) {
-	USPIDATA=b;
-}
-/*
-static void spiSetMode32()
-{
-	USPICTL|=SPITS0|SPITS1;
-}
-static void spiSetMode8()
-{
-	USPICTL&=~(SPITS0|SPITS1);
+  SPI.transfer(b);
 }
 
-static uint32_t spiRec32(void)
-{
-	USPIDATA=0xffffffff;
-	return USPIDATA;
-	}
-*/
-static uint32_t spiRec(void) {
-	spiSend(0XFF);
-//Serial.print(USPIDATA&0xff);
-//Serial.print(" ");
-	return USPIDATA&0xff;
+static uint32_t spiRec32(uint8_t wishboneSlot) {
+	 spiSend(0XFF);
+	 spiSend(0XFF);
+	 spiSend(0XFF);
+	 spiSend(0XFF);
+// Serial.print(USPIDATA&0xff);
+// Serial.print(" ");
+	//return USPIDATA&0xff;
+	//return USPIDATA;
+	//return SPI.transfer32(0xFFFFFFFF);
+	//REGISTER(IO_SLOT(12),5) = 0xFFFFFFFF;
+	return REGISTER(IO_SLOT(wishboneSlot),1);
+	//return SPI.transfer32(0xFFFFFFFF);
+}
+
+/** Receive a byte from the card */
+static  uint8_t spiRec(void) {
+  return SPI.transfer(0xFF);
 }
 
 #else
@@ -257,6 +275,11 @@ uint8_t Sd2Card::eraseSingleBlockEnable(void) {
  * the value zero, false, is returned for failure.  The reason for failure
  * can be determined by calling errorCode() and errorData().
  */
+int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin, uint8_t wishboneSlot) {
+	wishboneSlot_ = wishboneSlot;
+	return init(sckRateID, chipSelectPin);
+} 
+ 
 int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   errorCode_ = inBlock_ = partialBlockRead_ = type_ = 0;
   chipSelectPin_ = chipSelectPin;
@@ -285,11 +308,14 @@ int Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   SPSR &= ~(1 << SPI2X);
 #endif // defined ZPU
 #else // USE_SPI_LIB
-  SPI.begin();
+  SPI.begin(wishboneSlot_);
+  REGISTER(IO_SLOT(wishboneSlot_),0)=BIT(SPICP1)|BIT(SPICPOL)|BIT(SPISRE)|BIT(SPIEN)|BIT(SPIBLOCK);
 #ifdef SPI_CLOCK_DIV128
     SPI.setClockDivider(SPI_CLOCK_DIV128);
 #else
+#ifndef ZPU
     SPI.setClockDivider(255);
+#endif
 #endif
 #endif // USE_SPI_LIB
 #endif // SOFTWARE_SPI
@@ -405,11 +431,12 @@ int Sd2Card::readBlock(uint32_t block, uint8_t* dst) {
 
 	idst = (unsigned int*)dst;
 	for (i=128;i!=0;i--) {
-		USPIDATA=0xff;
-		USPIDATA=0xff;
-		USPIDATA=0xff;
-		USPIDATA=0xff;
-		*idst++=USPIDATA;
+		*idst++=spiRec32(wishboneSlot_);
+		// USPIDATA=0xff;
+		// USPIDATA=0xff;
+		// USPIDATA=0xff;
+		// USPIDATA=0xff;
+		//*idst++=USPIDATA;
 	}
 	chipSelectHigh();
 	inBlock_ = 0;

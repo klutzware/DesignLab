@@ -35,7 +35,7 @@ uint8_t const SPI_QUARTER_SPEED = 2;
  * USE_SPI_LIB: if set, use the SPI library bundled with Arduino IDE, otherwise
  * run with a standalone driver for AVR.
  */
-#ifndef ZPU
+#ifdef ZPU
 #define USE_SPI_LIB
 #endif // ZPU
 /**
@@ -199,6 +199,7 @@ class Sd2Card {
   }
 #endif
   int init(uint8_t sckRateID, uint8_t chipSelectPin);
+  int init(uint8_t sckRateID, uint8_t chipSelectPin, uint8_t wishboneSlot);
   void partialBlockRead(uint8_t value);
   /** Returns the current value, true or false, for partial block read. */
   int partialBlockRead(void) const {return partialBlockRead_;}
@@ -229,6 +230,7 @@ class Sd2Card {
  private:
   uint32_t block_;
   uint8_t chipSelectPin_;
+  uint8_t wishboneSlot_;
   uint8_t errorCode_;
   uint8_t inBlock_;
   uint16_t offset_;
