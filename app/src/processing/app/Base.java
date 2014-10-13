@@ -1748,7 +1748,7 @@ public class Base {
 
           g.setFont(new Font("SansSerif", Font.PLAIN, 11));
           g.setColor(Color.white);
-          g.drawString(Base.VERSION_NAME, 50, 30);
+          g.drawString(Base.VERSION_NAME, 450, 280);
         }
       };
     window.addMouseListener(new MouseAdapter() {
