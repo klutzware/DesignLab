@@ -616,7 +616,7 @@
 
     <tar compression="gzip" destfile="linux/arduino-${version}-linux.tgz">
       <tarfileset dir="linux/work"
-		  prefix="DesignLab-${version}"
+		  prefix="papilio-DesignLab-ide"
 		  excludes="arduino,
 			    hardware/tools/avrdude,
           hardware/tools/zpuinoprogrammer,
@@ -632,17 +632,17 @@
 		  prefix="arduino-${version}/hardware/tools" />
     </tar>
 -->
-    <move file="linux/work" tofile="linux/DesignLab-${version}" />
+    <move file="linux/work" tofile="linux/papilio-DesignLab-ide" />
 
     <exec executable="tar" dir="linux">
       <arg value="-z"/>
       <arg value="-c"/>
       <arg value="-f"/>
       <arg value="DesignLab-${version}-${platform}.tgz"/>
-      <arg value="DesignLab-${version}"/>
+      <arg value="papilio-DesignLab-ide"/>
     </exec>
 
-    <move file="linux/DesignLab-${version}" tofile="linux/work" />
+    <move file="linux/papilio-DesignLab-ide" tofile="linux/work" />
 
     <echo>
       =======================================================
@@ -818,12 +818,12 @@
 
     <zip destfile="windows/DesignLab-${version}-${platform}.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="DesignLab-${version}" />
+		  prefix="papilio-DesignLab-ide" />
     </zip>
 
     <zip destfile="windows/DesignLab-${version}-${platform}-expert.zip" level="9">
       <zipfileset dir="windows/work" 
-		  prefix="DesignLab-${version}" 
+		  prefix="papilio-DesignLab-ide" 
 		  excludes="java/**" />
     </zip>
 
