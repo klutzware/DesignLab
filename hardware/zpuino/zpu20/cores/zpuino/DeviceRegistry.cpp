@@ -21,11 +21,12 @@ namespace ZPUino {
                     if (vendor != ((val>>8)&0xff))
                         continue; /* No match */
                 }
-                if (vendor!=PRODUCT_ANY) {
+                if (product!=PRODUCT_ANY) {
                     if (product != (val&0xff))
                         continue; /* No match */
                 }
                 if (isRegistered(i))
+                    --instance; // Must decrement instance even for already-registered devices.
                     continue;
 
                 if (instance=0xff || --instance==0)
