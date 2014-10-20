@@ -173,6 +173,9 @@ public:
 	// parsing/conversion
 	long toInt(void) const;
 
+    // cast operator
+    operator char*() { return buffer; }
+
 protected:
 	char *buffer;	        // the actual char array
 	unsigned int capacity;  // the array length minus one (for the '\0')
