@@ -26,10 +26,12 @@ namespace ZPUino {
                         continue; /* No match */
                 }
                 if (isRegistered(i))
-                    --instance; // Must decrement instance even for already-registered devices.
+                {
+                    --instance;
                     continue;
+                }
 
-                if (instance=0xff || --instance==0)
+                if (instance==0xff || --instance==0)
                     return i;
             }
         }
