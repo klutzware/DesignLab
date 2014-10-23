@@ -2955,7 +2955,7 @@ public class Base {
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.h", Base.getActiveSketchPath() + "\\" + newName + ".h", currentName, newName);
 		
 		//TODO Should just do this for all *.xise files JPG
-		Base.replaceFileContents(Base.getActiveSketchPath() + "\\CCL_Designer.xise", Base.getActiveSketchPath() + "\\CCL_Designer.xise", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Chip_Designer.xise", Base.getActiveSketchPath() + "\\Chip_Designer.xise", currentName, newName);
 //		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_DUO_LX9.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_DUO_LX9.xise", currentName, newName);
 //		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_One_250K.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_One_250K.xise", currentName, newName);
 //		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_One_500K.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_One_500K.xise", currentName, newName);
@@ -3235,7 +3235,7 @@ public class Base {
       }
 	  
 //	  // is this a Xilinx symbol library
-//	  File f = new File(destinationFolder.getPath() + "/CCL_Designer.xise");
+//	  File f = new File(destinationFolder.getPath() + "/Chip_Designer.xise");
 //	  if (f.exists()) { 
 //		//String mainFilename = Base.getActiveSketchPath();
 //		//String sketchName = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
