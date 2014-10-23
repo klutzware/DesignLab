@@ -431,16 +431,17 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     case EDIT_CIRCUIT:
       File fileXise = getLibraryFile("#define circuit", "xise.file");
       if (fileXise.exists()){
-        if (fileXise.toString().startsWith(Base.getActiveSketchPath()))
-          Base.openURL("file://" + fileXise.toString());
-        else {
-            Base.showMessage("Library File", "This is a library circuit, it cannot be edited directly. Please save to a new location to edit.");
-            Base.activeEditor.handleSaveAs();
-            try {
-              Base.copyDir(fileXise.getParentFile(), new File(Base.getActiveSketchPath()+"/circuit") );
-            } catch (IOException ie) { }
-            Base.showMessage("Saved", "Don't forget to remove the \"#define circuit\" statement before editing the circuit.");
-        }
+        Base.openURL("file://" + fileXise.toString());
+//        if (fileXise.toString().startsWith(Base.getActiveSketchPath()))
+//          Base.openURL("file://" + fileXise.toString());
+//        else {
+//            Base.showMessage("Library File", "This is a library circuit, it cannot be edited directly. Please save to a new location to edit.");
+//            Base.activeEditor.handleSaveAs();
+//            try {
+//              Base.copyDir(fileXise.getParentFile(), new File(Base.getActiveSketchPath()+"/circuit") );
+//            } catch (IOException ie) { }
+//            Base.showMessage("Saved", "Don't forget to remove the \"#define circuit\" statement before editing the circuit.");
+//        }
       }
       else
         Base.showMessage("Not Found", "Sorry, no Xilinx ISE project file found in the libraries or project directory.");
