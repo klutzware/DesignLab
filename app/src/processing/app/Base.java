@@ -864,9 +864,9 @@ public class Base {
       }   
       //Import Xilinx User Libraries
       //TODO JPG Cleanup user libraries that have been deleted. Maybe we should just import all libraries here too? Using import_libraries.xtcl then we can delete all libraries.
-      for (String xilinxFile : files) {
-        Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-      } 
+//      for (String xilinxFile : files) {
+//        Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
+//      } 
     }
  
     
@@ -2948,7 +2948,7 @@ public class Base {
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.sym", Base.getActiveSketchPath() + "\\" + newName + ".sym", currentName, newName);
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.vhd", Base.getActiveSketchPath() + "\\" + newName + ".vhd", currentName, newName);
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Edit_Your_CCL_Design.sch", Base.getActiveSketchPath() + "\\Edit_Your_CCL_Design.sch", currentName, newName);
-		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Simulate_Your_CCL_Design.vhd", Base.getActiveSketchPath() + "\\Simulate_Your_CCL_Design.vhd", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Chip_Designer\\Simulate_Your_CCL_Design.vhd", Base.getActiveSketchPath() + "\\Chip_Designer\\Simulate_Your_CCL_Design.vhd", currentName, newName);
 		
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\keywords.txt", Base.getActiveSketchPath() + "\\keywords.txt", currentName, newName);		
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.cpp", Base.getActiveSketchPath() + "\\" + newName + ".cpp", currentName, newName);
@@ -3117,61 +3117,149 @@ public class Base {
 		tmpFile.renameTo(newFile);
 	}  	
 	
-	static public void updateIsePaths(String fileName, String newFileName) {
-		//String oldFileName = "try.dat";
-		String tmpFileName = fileName + ".tmp";
-		boolean skipLines = false;
-		boolean headerFound = false;
-		String pslPath = Base.getExamplesPath();
-		String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";		
+	//Replace the xtclsh script by adding all library files to a project
+  static public void updateIsePaths(String fileName, String newFileName) {
+    //String oldFileName = "try.dat";
+    String tmpFileName = fileName + ".tmp";
+    boolean headerFound = false;
+    String pslPath = Base.getExamplesPath();
+    String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";   
 
-		//Base.showMessage("Test", "In UpdatePaths");
-		
-		BufferedReader br = null;
-		BufferedWriter bw = null;
-		try {
-			br = new BufferedReader(new FileReader(fileName));
-			bw = new BufferedWriter(new FileWriter(tmpFileName));
-			String line, newLine;
+    //Base.showMessage("Test", "In UpdatePaths");
+    
+    BufferedReader br = null;
+    BufferedWriter bw = null;
+    try {
+      br = new BufferedReader(new FileReader(fileName));
+      bw = new BufferedWriter(new FileWriter(tmpFileName));
+      String line, newLine;
 
-			while ((line = br.readLine()) != null) {
-				if (headerFound) {
-					newLine = line.replaceAll("xil_pn:name=\"(.*)Libraries", "xil_pn:name=\"" + pslLibName);
-					bw.write(newLine + "\n");
-				} else {
-					bw.write(line + "\n");
-				}
-				if (line.contains("<files>")) //Header found
-					headerFound = true;
-				if (line.contains("</files>")) //Header ends
-					headerFound = false;					
-			}	
+      while ((line = br.readLine()) != null) {
+        if (headerFound) {
+          newLine = line.replaceAll("xil_pn:name=\"(.*)Libraries", "xil_pn:name=\"" + pslLibName);
+          bw.write(newLine + "\n");
+        } else {
+          bw.write(line + "\n");
+        }
+        if (line.contains("<files>")) { //Header found
+          //Add all VHD, .v, and .ncd files in library locations to the project
+          List <File> libraryLocations = Base.getLibrariesPath();
+          for (File libRoot : libraryLocations ) {
+            File[] libFolders = libRoot.listFiles();
+            if (libFolders != null) {
+              for (File lib : libFolders) {
+                if (lib.isDirectory()) {
+                  File[] libFiles = lib.listFiles();
+                  for (File libFileName : libFiles) {
+                    if (libFileName.getName().toLowerCase().contains(".vhd")) { 
+                      bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_VHDL\">\n");
+                      bw.write("\t<association xil_pn:name=\"BehavioralSimulation\" xil_pn:seqID=\"154\"/>\n");
+                      bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
+                      bw.write("\t<library xil_pn:name=\"DesignLab\"/>\n");
+                      bw.write("\t</file>\n");
+                    }
+                    if (libFileName.getName().toLowerCase().contains(".ngc")) { 
+                      bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_NGC\">\n");
+                      bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
+                      bw.write("\t</file>\n");
+                    }  
+                    if (libFileName.getName().toLowerCase().contains(".v")) { 
+                      bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_VERILOG\">\n");
+                      bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
+                      bw.write("\t</file>\n");
+                    }                     
+                  }
+                }   
+              } 
+            }   
+          }
+          headerFound = true;
+        }
+        if (line.contains("</files>")) //Header ends
+          headerFound = false;          
+      } 
 
-		} catch (Exception e) {
-		 return;
-		} finally {
-		 try {
-			if(br != null)
-			   br.close();
-		 } catch (IOException e) {
-			//
-		 }
-		 try {
-			if(bw != null)
-			   bw.close();
-		 } catch (IOException e) {
-			//
-		 }
-		}
-		// Once everything is complete, delete old file..
-		File oldFile = new File(fileName);
-		oldFile.delete();
+    } catch (Exception e) {
+     return;
+    } finally {
+     try {
+      if(br != null)
+         br.close();
+     } catch (IOException e) {
+      //
+     }
+     try {
+      if(bw != null)
+         bw.close();
+     } catch (IOException e) {
+      //
+     }
+    }
+    // Once everything is complete, delete old file..
+    File oldFile = new File(fileName);
+    oldFile.delete();
 
-		// And rename tmp file's name to old file name
-		File tmpFile = new File(tmpFileName);
-		File newFile = new File(newFileName);
-		tmpFile.renameTo(newFile);
-	} 	
+    // And rename tmp file's name to old file name
+    File tmpFile = new File(tmpFileName);
+    File newFile = new File(newFileName);
+    tmpFile.renameTo(newFile);
+  }   	
+	
+//	static public void updateIsePaths(String fileName, String newFileName) {
+//		//String oldFileName = "try.dat";
+//		String tmpFileName = fileName + ".tmp";
+//		boolean skipLines = false;
+//		boolean headerFound = false;
+//		String pslPath = Base.getExamplesPath();
+//		String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";		
+//
+//		//Base.showMessage("Test", "In UpdatePaths");
+//		
+//		BufferedReader br = null;
+//		BufferedWriter bw = null;
+//		try {
+//			br = new BufferedReader(new FileReader(fileName));
+//			bw = new BufferedWriter(new FileWriter(tmpFileName));
+//			String line, newLine;
+//
+//			while ((line = br.readLine()) != null) {
+//				if (headerFound) {
+//					newLine = line.replaceAll("xil_pn:name=\"(.*)Libraries", "xil_pn:name=\"" + pslLibName);
+//					bw.write(newLine + "\n");
+//				} else {
+//					bw.write(line + "\n");
+//				}
+//				if (line.contains("<files>")) //Header found
+//					headerFound = true;
+//				if (line.contains("</files>")) //Header ends
+//					headerFound = false;					
+//			}	
+//
+//		} catch (Exception e) {
+//		 return;
+//		} finally {
+//		 try {
+//			if(br != null)
+//			   br.close();
+//		 } catch (IOException e) {
+//			//
+//		 }
+//		 try {
+//			if(bw != null)
+//			   bw.close();
+//		 } catch (IOException e) {
+//			//
+//		 }
+//		}
+//		// Once everything is complete, delete old file..
+//		File oldFile = new File(fileName);
+//		oldFile.delete();
+//
+//		// And rename tmp file's name to old file name
+//		File tmpFile = new File(tmpFileName);
+//		File newFile = new File(newFileName);
+//		tmpFile.renameTo(newFile);
+//	} 	
   
   public void handleAddLibrary(Editor editor) {
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home"));
