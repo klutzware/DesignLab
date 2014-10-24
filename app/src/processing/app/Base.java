@@ -2187,7 +2187,7 @@ public class Base {
 			//Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + url.substring(7) + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);	//Important to redirect std error
 			//int exitVal = proc.waitFor();
 			//activeEditor.statusNotice("Opening Xilinx ISE");
-	    int nbThreads =  Thread.getAllStackTraces().keySet().size();
+//	    int nbThreads =  Thread.getAllStackTraces().keySet().size();
 //	    int nbRunning = 0;
 //	    for (Thread t : Thread.getAllStackTraces().keySet()) {
 //	        if (t.getState()==Thread.State.RUNNABLE) nbRunning++;
@@ -2195,9 +2195,10 @@ public class Base {
 //	    }
 	    //showMessage("test", Integer.toString(nbThreads));
 	    //TODO JPG This is a bit of a shortcut, we should capture the processes to update the symbols and check if those are done...
-			if (nbThreads > 11)
-			   showMessage("Not Ready Yet.","Still updating all Xilinx symbol libraries. Please try again.");
-			else
+//			if (nbThreads > 11)
+//			   showMessage("Not Ready Yet.","Still updating all Xilinx symbol libraries. Please try again.");
+//			else
+			  Base.updateIsePaths(url.substring(7), url.substring(7));
 			  platform.openURL(url); 
 /* 			try {
 				Thread.sleep(5000);                 //1000 milliseconds is one second.
