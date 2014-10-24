@@ -877,8 +877,7 @@
         </instance>
         <instance x="4352" y="1584" name="XLXI_27" orien="R0">
         </instance>
-        <instance x="864" y="1904" name="XLXI_41" orien="R0">
-        </instance>
+        <instance x="864" y="1904" name="XLXI_41" orien="R0" />
         <branch name="leds(3:0)">
             <wire x2="1280" y1="1888" y2="1888" x1="1120" />
             <wire x2="1280" y1="1888" y2="1920" x1="1280" />
@@ -983,5 +982,6 @@
         <iomarker fontsize="28" x="432" y="1968" name="XLXN_496" orien="R180" />
         <iomarker fontsize="28" x="432" y="2032" name="XLXN_497" orien="R180" />
         <iomarker fontsize="28" x="432" y="2096" name="XLXN_498" orien="R180" />
+        <text style="fontsize:64;fontname:Arial" x="60" y="3440">Version: 1.0</text>
     </sheet>
 </drawing>

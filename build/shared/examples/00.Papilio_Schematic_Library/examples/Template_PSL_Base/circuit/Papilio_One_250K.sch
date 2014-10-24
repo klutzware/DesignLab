@@ -95,8 +95,6 @@
         <signal name="XLXN_334(7:0)" />
         <signal name="XLXN_335(7:0)" />
         <signal name="XLXN_336(7:0)" />
-        <signal name="XLXN_475(97:0)" />
-        <signal name="XLXN_476(147:0)" />
         <port polarity="BiDirectional" name="WING_AL0" />
         <port polarity="BiDirectional" name="WING_AL1" />
         <port polarity="BiDirectional" name="WING_AL2" />
@@ -832,5 +830,6 @@
         </instance>
         <instance x="4352" y="1584" name="XLXI_27" orien="R0">
         </instance>
+        <text style="fontsize:64;fontname:Arial" x="92" y="3432">Version: 1.0</text>
     </sheet>
 </drawing>

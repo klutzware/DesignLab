@@ -96,8 +96,6 @@
         <signal name="Arduino_27" />
         <signal name="Arduino_25" />
         <signal name="Arduino_23" />
-        <signal name="ARD_RESET" />
-        <signal name="XLXN_456" />
         <signal name="leds(3:0)" />
         <signal name="WING_AL0" />
         <signal name="WING_AL2" />
@@ -118,6 +116,8 @@
         <signal name="leds(0)" />
         <signal name="XLXN_450(61:0)" />
         <signal name="XLXN_451(33:0)" />
+        <signal name="ARD_RESET" />
+        <signal name="DUO_SW1" />
         <port polarity="BiDirectional" name="Arduino_8" />
         <port polarity="BiDirectional" name="Arduino_9" />
         <port polarity="BiDirectional" name="Arduino_10" />
@@ -176,7 +176,6 @@
         <port polarity="BiDirectional" name="Arduino_27" />
         <port polarity="BiDirectional" name="Arduino_25" />
         <port polarity="BiDirectional" name="Arduino_23" />
-        <port polarity="Output" name="ARD_RESET" />
         <port polarity="Output" name="WING_AL0" />
         <port polarity="Output" name="WING_AL2" />
         <port polarity="Output" name="WING_AL4" />
@@ -185,6 +184,8 @@
         <port polarity="Input" name="WING_AL3" />
         <port polarity="Input" name="WING_AL5" />
         <port polarity="Input" name="WING_AL7" />
+        <port polarity="Output" name="ARD_RESET" />
+        <port polarity="Input" name="DUO_SW1" />
         <blockdef name="Wing_GPIO">
             <timestamp>2013-11-27T0:38:36</timestamp>
             <rect width="160" x="0" y="-128" height="128" />
@@ -355,28 +356,6 @@
             <line x2="496" y1="-1888" y2="-1888" x1="432" />
             <line x2="496" y1="-1920" y2="-1920" x1="432" />
         </blockdef>
-        <blockdef name="obuf">
-            <timestamp>2009-3-20T10:10:10</timestamp>
-            <line x2="64" y1="0" y2="-64" x1="64" />
-            <line x2="64" y1="-32" y2="0" x1="128" />
-            <line x2="128" y1="-64" y2="-32" x1="64" />
-            <line x2="64" y1="-32" y2="-32" x1="0" />
-            <line x2="128" y1="-32" y2="-32" x1="224" />
-        </blockdef>
-        <blockdef name="pulldown">
-            <timestamp>2000-1-1T10:10:10</timestamp>
-            <line x2="64" y1="-160" y2="-128" x1="64" />
-            <line x2="60" y1="0" y2="0" x1="68" />
-            <line x2="52" y1="-16" y2="-16" x1="76" />
-            <line x2="40" y1="-32" y2="-32" x1="88" />
-            <line x2="64" y1="-108" y2="-128" x1="64" />
-            <line x2="64" y1="-104" y2="-108" x1="80" />
-            <line x2="80" y1="-88" y2="-104" x1="48" />
-            <line x2="48" y1="-72" y2="-88" x1="80" />
-            <line x2="80" y1="-56" y2="-72" x1="48" />
-            <line x2="48" y1="-48" y2="-56" x1="64" />
-            <line x2="64" y1="-32" y2="-48" x1="64" />
-        </blockdef>
         <blockdef name="Wishbone_Symbol_Example">
             <timestamp>2014-10-1T6:28:8</timestamp>
             <rect width="160" x="52" y="-64" height="64" />
@@ -430,6 +409,15 @@
             <line x2="64" y1="-160" y2="-160" x1="0" />
             <line x2="128" y1="-224" y2="-224" x1="224" />
             <line x2="128" y1="-96" y2="-96" x1="224" />
+        </blockdef>
+        <blockdef name="inv">
+            <timestamp>2000-1-1T10:10:10</timestamp>
+            <line x2="64" y1="-32" y2="-32" x1="0" />
+            <line x2="160" y1="-32" y2="-32" x1="224" />
+            <line x2="128" y1="-64" y2="-32" x1="64" />
+            <line x2="64" y1="-32" y2="0" x1="128" />
+            <line x2="64" y1="0" y2="-64" x1="64" />
+            <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <block symbolname="Wishbone_Empty_Slot" name="XLXI_37">
             <blockpin signalname="XLXN_430(61:0)" name="wishbone_in(61:0)" />
@@ -603,13 +591,6 @@
             <blockpin name="WING_AL7" />
             <blockpin name="WING_AL6" />
         </block>
-        <block symbolname="pulldown" name="XLXI_47">
-            <blockpin signalname="XLXN_456" name="O" />
-        </block>
-        <block symbolname="obuf" name="XLXI_45">
-            <blockpin signalname="XLXN_456" name="I" />
-            <blockpin signalname="ARD_RESET" name="O" />
-        </block>
         <block symbolname="Wishbone_Symbol_Example" name="XLXI_48">
             <blockpin signalname="BUTTONS(3:0)" name="buttons(3:0)" />
             <blockpin signalname="leds(3:0)" name="leds(3:0)" />
@@ -635,6 +616,10 @@
             <blockpin signalname="BUTTONS(1)" name="O1" />
             <blockpin signalname="BUTTONS(2)" name="O2" />
             <blockpin signalname="BUTTONS(3)" name="O3" />
+        </block>
+        <block symbolname="inv" name="XLXI_51">
+            <blockpin signalname="DUO_SW1" name="I" />
+            <blockpin signalname="ARD_RESET" name="O" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="5440" height="3520">
@@ -988,19 +973,7 @@
             <wire x2="5200" y1="3344" y2="3344" x1="5184" />
         </branch>
         <iomarker fontsize="28" x="5200" y="3344" name="Arduino_23" orien="R0" />
-        <text style="fontsize:28;fontname:Arial" x="48" y="3460">Add a Pullup if you want the ATmega32U4 chip to run when this circuit is loaded.</text>
-        <text style="fontsize:28;fontname:Arial" x="24" y="3492">Add a Pulldown if you want to disable the ATmega32U4 chip when this circuit is loaded.</text>
-        <branch name="ARD_RESET">
-            <wire x2="560" y1="3168" y2="3168" x1="528" />
-        </branch>
-        <instance x="304" y="3200" name="XLXI_45" orien="R0" />
-        <iomarker fontsize="28" x="560" y="3168" name="ARD_RESET" orien="R0" />
-        <branch name="XLXN_456">
-            <wire x2="304" y1="3168" y2="3200" x1="304" />
-        </branch>
-        <instance x="240" y="3360" name="XLXI_47" orien="R0" />
-        <instance x="864" y="1904" name="XLXI_48" orien="R0">
-        </instance>
+        <instance x="864" y="1904" name="XLXI_48" orien="R0" />
         <branch name="leds(3:0)">
             <wire x2="1280" y1="1888" y2="1888" x1="1120" />
             <wire x2="1280" y1="1888" y2="1920" x1="1280" />
@@ -1033,27 +1006,23 @@
         <instance x="464" y="2128" name="XLXI_50" orien="R0" />
         <bustap x2="704" y1="2096" y2="2096" x1="800" />
         <branch name="BUTTONS(3)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2096" type="branch" />
-            <wire x2="696" y1="2096" y2="2096" x1="688" />
-            <wire x2="704" y1="2096" y2="2096" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2096" type="branch" />
+            <wire x2="704" y1="2096" y2="2096" x1="688" />
         </branch>
         <bustap x2="704" y1="2032" y2="2032" x1="800" />
         <branch name="BUTTONS(2)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2032" type="branch" />
-            <wire x2="696" y1="2032" y2="2032" x1="688" />
-            <wire x2="704" y1="2032" y2="2032" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2032" type="branch" />
+            <wire x2="704" y1="2032" y2="2032" x1="688" />
         </branch>
         <bustap x2="704" y1="1968" y2="1968" x1="800" />
         <branch name="BUTTONS(1)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1968" type="branch" />
-            <wire x2="696" y1="1968" y2="1968" x1="688" />
-            <wire x2="704" y1="1968" y2="1968" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1968" type="branch" />
+            <wire x2="704" y1="1968" y2="1968" x1="688" />
         </branch>
         <bustap x2="704" y1="1904" y2="1904" x1="800" />
         <branch name="BUTTONS(0)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1904" type="branch" />
-            <wire x2="696" y1="1904" y2="1904" x1="688" />
-            <wire x2="704" y1="1904" y2="1904" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1904" type="branch" />
+            <wire x2="704" y1="1904" y2="1904" x1="688" />
         </branch>
         <branch name="WING_AL1">
             <wire x2="464" y1="1904" y2="1904" x1="432" />
@@ -1069,30 +1038,26 @@
         </branch>
         <bustap x2="1376" y1="2112" y2="2112" x1="1280" />
         <branch name="leds(3)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2112" type="branch" />
-            <wire x2="1432" y1="2112" y2="2112" x1="1376" />
-            <wire x2="1440" y1="2112" y2="2112" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2112" type="branch" />
+            <wire x2="1440" y1="2112" y2="2112" x1="1376" />
             <wire x2="1488" y1="2112" y2="2112" x1="1440" />
         </branch>
         <bustap x2="1376" y1="2048" y2="2048" x1="1280" />
         <branch name="leds(2)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2048" type="branch" />
-            <wire x2="1432" y1="2048" y2="2048" x1="1376" />
-            <wire x2="1440" y1="2048" y2="2048" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2048" type="branch" />
+            <wire x2="1440" y1="2048" y2="2048" x1="1376" />
             <wire x2="1488" y1="2048" y2="2048" x1="1440" />
         </branch>
         <bustap x2="1376" y1="1984" y2="1984" x1="1280" />
         <branch name="leds(1)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1984" type="branch" />
-            <wire x2="1432" y1="1984" y2="1984" x1="1376" />
-            <wire x2="1440" y1="1984" y2="1984" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1984" type="branch" />
+            <wire x2="1440" y1="1984" y2="1984" x1="1376" />
             <wire x2="1488" y1="1984" y2="1984" x1="1440" />
         </branch>
         <bustap x2="1376" y1="1920" y2="1920" x1="1280" />
         <branch name="leds(0)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1920" type="branch" />
-            <wire x2="1432" y1="1920" y2="1920" x1="1376" />
-            <wire x2="1440" y1="1920" y2="1920" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1920" type="branch" />
+            <wire x2="1440" y1="1920" y2="1920" x1="1376" />
             <wire x2="1488" y1="1920" y2="1920" x1="1440" />
         </branch>
         <branch name="XLXN_450(61:0)">
@@ -1190,5 +1155,17 @@
         </branch>
         <instance x="4672" y="3504" name="XLXI_44" orien="R0">
         </instance>
+        <text style="fontsize:64;fontname:Arial" x="2348" y="3432">Version: 1.0</text>
+        <iomarker fontsize="28" x="560" y="3168" name="ARD_RESET" orien="R0" />
+        <branch name="ARD_RESET">
+            <wire x2="560" y1="3168" y2="3168" x1="528" />
+        </branch>
+        <instance x="304" y="3200" name="XLXI_51" orien="R0" />
+        <branch name="DUO_SW1">
+            <wire x2="304" y1="3168" y2="3168" x1="272" />
+        </branch>
+        <iomarker fontsize="28" x="272" y="3168" name="DUO_SW1" orien="R180" />
+        <text style="fontsize:28;fontname:Arial" x="44" y="3492">Replace DUO_SW1 with a Pullup if you want to disable the ATmega32U4 chip when this circuit is loaded.</text>
+        <text style="fontsize:28;fontname:Arial" x="44" y="3456">Replace DUO_SW1 with a Pulldown if you want the ATmega32U4 chip to run when this circuit is loaded.</text>
     </sheet>
 </drawing>

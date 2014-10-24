@@ -96,7 +96,6 @@
         <signal name="XLXN_326(7:0)" />
         <signal name="XLXN_450(61:0)" />
         <signal name="XLXN_451(33:0)" />
-        <signal name="XLXN_486(33:0)" />
         <signal name="leds(3:0)" />
         <signal name="WING_AL0" />
         <signal name="WING_AL2" />
@@ -111,7 +110,6 @@
         <signal name="WING_AL3" />
         <signal name="WING_AL5" />
         <signal name="WING_AL7" />
-        <signal name="XLXN_501(33:0)" />
         <signal name="leds(3)" />
         <signal name="leds(2)" />
         <signal name="leds(1)" />
@@ -958,8 +956,7 @@
             <wire x2="1008" y1="1296" y2="1296" x1="752" />
             <wire x2="1008" y1="1296" y2="1792" x1="1008" />
         </branch>
-        <instance x="864" y="1904" name="XLXI_41" orien="R0">
-        </instance>
+        <instance x="864" y="1904" name="XLXI_41" orien="R0" />
         <branch name="leds(3:0)">
             <wire x2="1280" y1="1888" y2="1888" x1="1120" />
             <wire x2="1280" y1="1888" y2="1920" x1="1280" />
@@ -992,27 +989,23 @@
         <instance x="464" y="2128" name="XLXI_50" orien="R0" />
         <bustap x2="704" y1="2096" y2="2096" x1="800" />
         <branch name="BUTTONS(3)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2096" type="branch" />
-            <wire x2="696" y1="2096" y2="2096" x1="688" />
-            <wire x2="704" y1="2096" y2="2096" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2096" type="branch" />
+            <wire x2="704" y1="2096" y2="2096" x1="688" />
         </branch>
         <bustap x2="704" y1="2032" y2="2032" x1="800" />
         <branch name="BUTTONS(2)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2032" type="branch" />
-            <wire x2="696" y1="2032" y2="2032" x1="688" />
-            <wire x2="704" y1="2032" y2="2032" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="2032" type="branch" />
+            <wire x2="704" y1="2032" y2="2032" x1="688" />
         </branch>
         <bustap x2="704" y1="1968" y2="1968" x1="800" />
         <branch name="BUTTONS(1)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1968" type="branch" />
-            <wire x2="696" y1="1968" y2="1968" x1="688" />
-            <wire x2="704" y1="1968" y2="1968" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1968" type="branch" />
+            <wire x2="704" y1="1968" y2="1968" x1="688" />
         </branch>
         <bustap x2="704" y1="1904" y2="1904" x1="800" />
         <branch name="BUTTONS(0)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1904" type="branch" />
-            <wire x2="696" y1="1904" y2="1904" x1="688" />
-            <wire x2="704" y1="1904" y2="1904" x1="696" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="696" y="1904" type="branch" />
+            <wire x2="704" y1="1904" y2="1904" x1="688" />
         </branch>
         <branch name="WING_AL1">
             <wire x2="464" y1="1904" y2="1904" x1="432" />
@@ -1036,27 +1029,28 @@
         <iomarker fontsize="28" x="432" y="2096" name="WING_AL7" orien="R180" />
         <bustap x2="1376" y1="2112" y2="2112" x1="1280" />
         <branch name="leds(3)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2112" type="branch" />
-            <wire x2="1432" y1="2112" y2="2112" x1="1376" />
-            <wire x2="1488" y1="2112" y2="2112" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2112" type="branch" />
+            <wire x2="1440" y1="2112" y2="2112" x1="1376" />
+            <wire x2="1488" y1="2112" y2="2112" x1="1440" />
         </branch>
         <bustap x2="1376" y1="2048" y2="2048" x1="1280" />
         <branch name="leds(2)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2048" type="branch" />
-            <wire x2="1432" y1="2048" y2="2048" x1="1376" />
-            <wire x2="1488" y1="2048" y2="2048" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="2048" type="branch" />
+            <wire x2="1440" y1="2048" y2="2048" x1="1376" />
+            <wire x2="1488" y1="2048" y2="2048" x1="1440" />
         </branch>
         <bustap x2="1376" y1="1984" y2="1984" x1="1280" />
         <branch name="leds(1)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1984" type="branch" />
-            <wire x2="1432" y1="1984" y2="1984" x1="1376" />
-            <wire x2="1488" y1="1984" y2="1984" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1984" type="branch" />
+            <wire x2="1440" y1="1984" y2="1984" x1="1376" />
+            <wire x2="1488" y1="1984" y2="1984" x1="1440" />
         </branch>
         <bustap x2="1376" y1="1920" y2="1920" x1="1280" />
         <branch name="leds(0)">
-            <attrtext style="alignment:SOFT-BCENTER;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1920" type="branch" />
-            <wire x2="1432" y1="1920" y2="1920" x1="1376" />
-            <wire x2="1488" y1="1920" y2="1920" x1="1432" />
+            <attrtext style="alignment:SOFT-LEFT;fontsize:28;fontname:Arial" attrname="Name" x="1432" y="1920" type="branch" />
+            <wire x2="1440" y1="1920" y2="1920" x1="1376" />
+            <wire x2="1488" y1="1920" y2="1920" x1="1440" />
         </branch>
+        <text style="fontsize:64;fontname:Arial" x="32" y="3460">Version: 1.0</text>
     </sheet>
 </drawing>

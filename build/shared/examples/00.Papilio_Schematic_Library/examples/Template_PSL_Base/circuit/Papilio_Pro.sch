@@ -949,5 +949,6 @@
         </instance>
         <instance x="4640" y="3088" name="XLXI_38" orien="R0">
         </instance>
+        <text style="fontsize:64;fontname:Arial" x="80" y="3448">Version: 1.0</text>
     </sheet>
 </drawing>
