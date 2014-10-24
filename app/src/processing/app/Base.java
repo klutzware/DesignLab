@@ -2956,10 +2956,6 @@ public class Base {
 		
 		//TODO Should just do this for all *.xise files JPG
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Chip_Designer.xise", Base.getActiveSketchPath() + "\\Chip_Designer.xise", currentName, newName);
-//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_DUO_LX9.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_DUO_LX9.xise", currentName, newName);
-//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_One_250K.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_One_250K.xise", currentName, newName);
-//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_One_500K.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_One_500K.xise", currentName, newName);
-//		Base.replaceFileContents(Base.getActiveSketchPath() + "\\PSL_Papilio_Pro_LX9.xise", Base.getActiveSketchPath() + "\\PSL_Papilio_Pro_LX9.xise", currentName, newName);
 
     //TODO Should just do this for all *.sch files JPG
     Base.replaceFileContents(Base.getActiveSketchPath() + "\\circuit\\Papilio_DUO_LX9.sch", Base.getActiveSketchPath() + "\\circuit\\Papilio_DUO_LX9.sch", currentName, newName);
