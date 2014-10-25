@@ -81,6 +81,8 @@ public:
 
 	size_t write(uint8_t c);
 
+        size_t writeAndTranslate(const uint8_t *str, int size);
+
 	virtual int peek() { return -1; }
 
 	using Print::write; // pull in write(str) and write(buf, size) from Print
