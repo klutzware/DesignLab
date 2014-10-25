@@ -36,7 +36,7 @@ namespace ZPUino {
             }
         } else {
             unsigned long count = CLK_FREQ; /* This is one second */
-            cmp = count/ms;
+            cmp = (count/ms)-1;
             if (cmp>maxvalue)
                 cmp=0;
         }
