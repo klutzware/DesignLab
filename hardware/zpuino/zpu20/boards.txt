@@ -28,6 +28,21 @@ zpuino20_xula2_lx9.build.board=ZPUINO_XULA2
 zpuino20_xula2_lx9.build.extra_flags=-D__ZPUINO_XULA2__ -DBOARD_ID=0xB6011900 -DBOARD_MEMORYSIZE=0x2000000 -nostartfiles
 zpuino20_xula2_lx9.build.extraSflags=-DBOARD_ID=0xB6011900
 ##############################################################
+zpuino20_xula2_lx25.name=ZPUino 2.0 on XuLA2 (LX25)
+zpuino20_xula2_lx25.boardid=0xBA011900
+zpuino20_xula2_lx25.upload.protocol=zpuino-serial
+zpuino20_xula2_lx25.upload.maximum_size=8388608
+zpuino20_xula2_lx25.upload.size_sections=all
+zpuino20_xula2_lx25.upload.speed=1000000
+zpuino20_xula2_lx25.upload.tool=zpuinoprogrammer
+zpuino20_xula2_lx25.build.f_cpu=96000000L
+zpuino20_xula2_lx25.build.core=zpuino
+zpuino20_xula2_lx25.build.mcu=zpu
+zpuino20_xula2_lx25.build.toolchain=zpu
+zpuino20_xula2_lx25.build.board=ZPUINO_XULA2
+zpuino20_xula2_lx25.build.extra_flags=-D__ZPUINO_XULA2__ -DBOARD_ID=0xBA011900 -DBOARD_MEMORYSIZE=0x2000000 -nostartfiles
+zpuino20_xula2_lx25.build.extraSflags=-DBOARD_ID=0xBA011900
+##############################################################
 zpuino20_ems11_bb_lx45.name=ZPUino 2.0 on EMS11-BB-v22 (LX45)
 zpuino20_ems11_bb_lx45.boardid=0xB8011900
 zpuino20_ems11_bb_lx45.upload.protocol=zpuino-serial
