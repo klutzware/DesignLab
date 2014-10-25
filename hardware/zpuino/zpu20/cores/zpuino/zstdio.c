@@ -6,7 +6,7 @@
 
 static struct __zFILE __files[MAX_FILES];
 
-static char _snprintfbuf[512];
+static char _snprintfbuf[8192];
 
 FILE*stdout=&__files[1];
 FILE*stderr=&__files[2];
@@ -20,7 +20,7 @@ int printf(const char *format, ...)
     va_list ap;
     va_start(ap,format);
     r = vsnprintf(_snprintfbuf, sizeof(_snprintfbuf), format, ap);
-    fwrite(_snprintfbuf, 1, r, stdout);
+    fwrite(_snprintfbuf, r, 1, stdout);
     va_end(ap);
     return r;
 }
@@ -31,7 +31,7 @@ int fprintf(FILE *stream, const char *format, ...)
     va_list ap;
     va_start(ap,format);
     r = vsnprintf(_snprintfbuf, sizeof(_snprintfbuf), format, ap);
-    fwrite(_snprintfbuf, 1, r, stream);
+    fwrite(_snprintfbuf, r, 1, stream);
     va_end(ap);
     return r;
 }
@@ -39,7 +39,7 @@ int fprintf(FILE *stream, const char *format, ...)
 int sprintf(char *str, const char *format, ...) {
     va_list ap;
     va_start(ap,format);
-    int r = vsnprintf(str, 256, format, ap);
+    int r = vsnprintf(str, 0x7fffffff, format, ap);
     va_end(ap);
     return r;
 }
@@ -182,8 +182,10 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap)
             break;
         size--,*str++=*format++;
     }
-    *str++='\0';
-    return (str-start-1);
+
+    *str='\0';
+
+    return (str-start);
 }
 
 int snprintf(char *dest, size_t size, const char *format, ...)
