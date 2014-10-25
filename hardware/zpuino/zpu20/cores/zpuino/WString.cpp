@@ -66,7 +66,7 @@ String::String(unsigned char value, unsigned char base)
 {
 	init();
 	char buf[9];
-	utoa(value, buf, base);
+	itoa(value, buf, base);
 	*this = buf;
 }
 
@@ -82,7 +82,7 @@ String::String(unsigned int value, unsigned char base)
 {
 	init();
 	char buf[17];
-	utoa(value, buf, base);
+	itoa(value, buf, base);
 	*this = buf;
 }
 
@@ -267,7 +267,7 @@ unsigned char String::concat(int num)
 unsigned char String::concat(unsigned int num)
 {
 	char buf[6];
-	utoa(num, buf, 10);
+	itoa(num, buf, 10);
 	return concat(buf, strlen(buf));
 }
 
@@ -643,5 +643,3 @@ long String::toInt(void) const
 	if (buffer) return atol(buffer);
 	return 0;
 }
-
-

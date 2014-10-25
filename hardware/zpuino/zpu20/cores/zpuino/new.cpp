@@ -3,6 +3,7 @@
 #ifdef ZPU
 
 #include <inttypes.h>
+#include <string.h>
 #include <new>
 
 extern "C" {
@@ -20,6 +21,13 @@ extern "C" {
     {
     }
     void *realloc(void *ptr, int size) {
+        void *newptr = malloc(size);
+        if(newptr)
+        {
+            if(ptr)
+                memcpy(newptr, ptr, size);
+            return newptr;
+        }
         return NULL;
     }
 };
