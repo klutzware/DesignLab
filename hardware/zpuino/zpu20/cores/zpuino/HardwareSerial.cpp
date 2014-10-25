@@ -3,7 +3,6 @@
 #include <DeviceRegistry.h>
 
 HardwareSerial Serial(1); /* 1st instance/slot */
-//HardwareSerial Serial1(2); /* 1st instance/slot */
 
 using namespace ZPUino;
 
@@ -33,6 +32,23 @@ void HardwareSerial::setPins(TX tx, RX rx)
     inputPinForFunction( rx, ppspin );
 }
 
+size_t HardwareSerial::writeAndTranslate(const uint8_t *str, int size)
+{
+    size_t s = 0;
+    while (size--) {
+        if ((*str)=='\n') {
+            while ((REG(1) & 2)==2);
+            REG(0) = '\r';
+        }
+        while ((REG(1) & 2)==2);
+	REG(0) = *str;
+        s++;
+        str++;
+    }
+    return s;
+}
+
+
 #ifdef HAVE_ZFDEVICE
 
 /* ZPUino File Device support */
@@ -44,7 +60,7 @@ static ssize_t zf_serial_read(void *ptr, void *dest, size_t size)
 static ssize_t zf_serial_write(void *ptr, const void *src, size_t size)
 {
     HardwareSerial *f = static_cast<HardwareSerial*>(ptr);
-    return f->write((const uint8_t*)src, size);
+    return f->writeAndTranslate((const uint8_t*)src, size);
 }
 
 
