@@ -21,14 +21,17 @@ namespace ZPUino {
                     if (vendor != ((val>>8)&0xff))
                         continue; /* No match */
                 }
-                if (vendor!=PRODUCT_ANY) {
+                if (product!=PRODUCT_ANY) {
                     if (product != (val&0xff))
                         continue; /* No match */
                 }
                 if (isRegistered(i))
+                {
+                    --instance;
                     continue;
+                }
 
-                if (instance=0xff || --instance==0)
+                if (instance==0xff || --instance==0)
                     return i;
             }
         }
