@@ -36,29 +36,11 @@
 #endif
 
 static void spiSend(uint8_t b) {
-	SPISD_SPIDATA=b;
+    SPISD_SPIDATA=b;
 }
-/*
-static void spiSetMode32()
-{
-	USPICTL|=SPITS0|SPITS1;
-}
-static void spiSetMode8()
-{
-	USPICTL&=~(SPITS0|SPITS1);
-}
-
-static uint32_t spiRec32(void)
-{
-	USPIDATA=0xffffffff;
-	return USPIDATA;
-	}
-*/
 static uint32_t spiRec(void) {
-	spiSend(0XFF);
-//Serial.print(USPIDATA&0xff);
-//Serial.print(" ");
-	return SPISD_SPIDATA&0xff;
+    spiSend(0XFF);
+    return SPISD_SPIDATA&0xff;
 }
 
 #else
