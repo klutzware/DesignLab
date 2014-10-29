@@ -91,14 +91,7 @@ static struct zfops dev_ops = {
 
 static int __zfIntializeDev()
 {
-    int r;
-
-    r = zfRegisterFileBackend("dev", &dev_ops);
-
-    if (r!=0)
-        return r;
-
-    return 0;
+    return zfRegisterFileBackend("dev", &dev_ops);
 }
 
 int zfRegisterDevice(const char *name, struct zfdevops *ops, void *data)
