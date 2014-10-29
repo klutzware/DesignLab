@@ -5,12 +5,12 @@
 name=ZPUino 2.0 (32-bits) Boards
 compiler.path={runtime.ide.path}/hardware/tools/zpu/bin/
 compiler.c.cmd=zpu-elf-gcc
-compiler.c.flags=-c -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
+compiler.c.flags=-c -DZPU -DZPUINO_ACCEL -Wall -Wextra -I{sketch.path} -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
 compiler.c.elf.cmd=zpu-elf-g++
 compiler.c.elf.flags=-O2 -nostartfiles -Wl,-T -Wl,{build.core.path}/zpuino.lds -Wl,--relax -Wl,--gc-sections
 compiler.S.flags=-c -g -assembler-with-cpp
 compiler.cpp.cmd=zpu-elf-g++
-compiler.cpp.flags=-c -fno-exceptions -fno-rtti -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
+compiler.cpp.flags=-c -fno-exceptions -fno-rtti -DZPU -DZPUINO_ACCEL -Wall -Wextra -I{sketch.path} -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
 compiler.ar.cmd=zpu-elf-ar
 compiler.as.cmd=zpu-elf-as
 compiler.ar.flags=rcs
