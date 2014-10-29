@@ -22,13 +22,23 @@ SPIClass SPI;
 #define PPS_INDEX_SCK  1
 #define PPS_INDEX_MISO 0
 
+void SPIClass::begin()
+{
+    if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_SPI)!=0) {
+        return;
+    }
+
+    //Serial.println(getSlot());
+    REG(0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+}
+
 void SPIClass::begin(MOSI mosi, MISO miso, SCK sck)
 {
     if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_SPI)!=0) {
         return;
     }
 
-    Serial.println(getSlot());
+    //Serial.println(getSlot());
     REG(0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 
     pinMode(mosi, OUTPUT);

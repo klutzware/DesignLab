@@ -65,6 +65,7 @@ public:
   uint32_t transfer32(unsigned _data);
 
   void begin(MOSI mosi, MISO miso, SCK sck);
+  void begin();
   void end();
 
   void setBitOrder(int);
