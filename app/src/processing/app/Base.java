@@ -845,8 +845,8 @@ public class Base {
     // (don't do earlier, cuz we might move it based on a window being closed)
     editor.setVisible(true);
     
-    if (!path.contains("Template"))
-      updateXilinxProject(editor);
+    //if (!path.contains("Template"))
+    updateXilinxProject(editor);
    
 
     return editor;
@@ -2198,7 +2198,8 @@ public class Base {
 //			if (nbThreads > 11)
 //			   showMessage("Not Ready Yet.","Still updating all Xilinx symbol libraries. Please try again.");
 //			else
-			  Base.updateIsePaths(url.substring(7), url.substring(7));
+	      updateXilinxProject(Base.activeEditor);
+			  //Base.updateIsePaths(url.substring(7), url.substring(7));
 			  platform.openURL(url); 
 /* 			try {
 				Thread.sleep(5000);                 //1000 milliseconds is one second.
@@ -3201,62 +3202,6 @@ public class Base {
     File newFile = new File(newFileName);
     tmpFile.renameTo(newFile);
   }   	
-	
-//	static public void updateIsePaths(String fileName, String newFileName) {
-//		//String oldFileName = "try.dat";
-//		String tmpFileName = fileName + ".tmp";
-//		boolean skipLines = false;
-//		boolean headerFound = false;
-//		String pslPath = Base.getExamplesPath();
-//		String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";		
-//
-//		//Base.showMessage("Test", "In UpdatePaths");
-//		
-//		BufferedReader br = null;
-//		BufferedWriter bw = null;
-//		try {
-//			br = new BufferedReader(new FileReader(fileName));
-//			bw = new BufferedWriter(new FileWriter(tmpFileName));
-//			String line, newLine;
-//
-//			while ((line = br.readLine()) != null) {
-//				if (headerFound) {
-//					newLine = line.replaceAll("xil_pn:name=\"(.*)Libraries", "xil_pn:name=\"" + pslLibName);
-//					bw.write(newLine + "\n");
-//				} else {
-//					bw.write(line + "\n");
-//				}
-//				if (line.contains("<files>")) //Header found
-//					headerFound = true;
-//				if (line.contains("</files>")) //Header ends
-//					headerFound = false;					
-//			}	
-//
-//		} catch (Exception e) {
-//		 return;
-//		} finally {
-//		 try {
-//			if(br != null)
-//			   br.close();
-//		 } catch (IOException e) {
-//			//
-//		 }
-//		 try {
-//			if(bw != null)
-//			   bw.close();
-//		 } catch (IOException e) {
-//			//
-//		 }
-//		}
-//		// Once everything is complete, delete old file..
-//		File oldFile = new File(fileName);
-//		oldFile.delete();
-//
-//		// And rename tmp file's name to old file name
-//		File tmpFile = new File(tmpFileName);
-//		File newFile = new File(newFileName);
-//		tmpFile.renameTo(newFile);
-//	} 	
   
   public void handleAddLibrary(Editor editor) {
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.home"));
