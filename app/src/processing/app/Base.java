@@ -886,12 +886,14 @@ public class Base {
         for (File lib : libFiles) {
           if (lib.isDirectory()) {
             String symbols[] = listExtensions(lib, ".sym");
-            for (String symbol : symbols) {
-              //showMessage("Test", symbol);
-              String libName = getFileNameWithoutExtension(new File(symbol)); //TODO this should be the folder name and the symbols should be in the folder name... JPG
-              Base.removeIseSymbol(pslLibName, pslLibName, libName);
-              Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
-            }
+            Base.installIseSymbol(pslLibName, pslCatName, lib, symbols);      
+//            String symbols[] = listExtensions(lib, ".sym");
+//            for (String symbol : symbols) {
+//              //showMessage("Test", symbol);
+//              String libName = getFileNameWithoutExtension(new File(symbol)); //TODO this should be the folder name and the symbols should be in the folder name... JPG
+//              Base.removeIseSymbol(pslLibName, pslLibName, libName);
+//              Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
+//            }
           }   
         } 
       }   
@@ -3012,47 +3014,68 @@ public class Base {
 
 	}  
 	
-	static public void installIseSymbol(String libFileName, String catFileName, String newSymbolFileName, String symbolName) {
+	static public void installIseSymbol(String libFileName, String catFileName, File symbolDir, String symbols[]) {
 		BufferedReader br = null;
 		PrintWriter pw = null;
 		PrintWriter catPw = null;
-		try {
-			br = new BufferedReader(new FileReader(newSymbolFileName));
-			pw = new PrintWriter(new FileWriter(libFileName, true));
-			catPw = new PrintWriter(new FileWriter(catFileName, true));
-			String line;
-
-			//Append the symbol to the end of the end of the lib file
-			while ((line = br.readLine()) != null) {
-				pw.append(line+"\n");
-			}
-			pw.append("\0");	//add null character to the end.
-			
-			//Add the symbol to the cat file
-			catPw.append("\"." + symbolName + "\"\n{\n\"" + symbolName + "\"\n}\n");
-			
-		} catch (Exception e) {
-		 return;
-		} finally {
-		 try {
-			if(br != null)
-			   br.close();
-		 } catch (IOException e) {
-			//
-		 }
-		 try {
-			if(pw != null)
-			   pw.close();
-		 } catch (Exception e) {
-			//
-		 }
-		 try {
-			if(catPw != null)
-			   catPw.close();
-		 } catch (Exception e) {
-			//
-		 }		 
-		}
+		String symbolName;
+		
+//    String symbols[] = listExtensions(symbolDir, ".sym");
+    if (symbols.length > 0){
+  		try {
+  			
+  			pw = new PrintWriter(new FileWriter(libFileName, true));
+  			catPw = new PrintWriter(new FileWriter(catFileName, true));
+  			String line;
+  			
+  			catPw.append("\"." + getFileNameWithoutExtension(symbolDir) + "\"\n{\n");
+    	  for (String symbol : symbols) {
+    	    //showMessage("Test", symbol);
+    	    br = new BufferedReader(new FileReader(symbolDir + "/" + symbol));
+    	    symbolName = getFileNameWithoutExtension(new File(symbol)); //TODO this should be the folder name and the symbols should be in the folder name... JPG
+    	    //Base.removeIseSymbol(libFileName, libFileName, symbolName);
+    	    //Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
+    	  
+  
+    			//Append the symbol to the end of the end of the lib file
+    			while ((line = br.readLine()) != null) {
+    				pw.append(line +"\n"); //remove any null characters
+    			}
+    			//pw.append("\0");	//add null character to the end.
+    			
+    			//Add the symbol to the cat file
+    			catPw.append("\"" + symbolName + "\"\n");
+  			
+    	  }
+  			
+  			catPw.append("}\n");
+  			
+  		} catch (Exception e) {
+  		 return;
+  		} finally {
+  		 try {
+  			if(br != null)
+  			   br.close();
+  		 } catch (IOException e) {
+  			//
+  		 }
+  		 try {
+  			if(pw != null){
+  			  //pw.append("\0"); //add null character to the end.
+  			  pw.close();
+  			}
+  		 } catch (Exception e) {
+  			//
+  		 }
+  		 try {
+  			if(catPw != null)
+  			   catPw.close();
+  		 } catch (Exception e) {
+  			//
+  		 }		 
+  		}
+    }
+		
 	}
 	
 	static public void removeIseSymbol(String fileName, String newFileName, String toFind) {
