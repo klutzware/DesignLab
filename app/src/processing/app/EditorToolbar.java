@@ -61,7 +61,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   /** Height of each toolbar button. */
   static final int BUTTON_HEIGHT = 32;
   /** The amount of space between groups of buttons on the toolbar. */
-  static final int BUTTON_GAP    = 5;
+  static final int BUTTON_GAP    = 10;
   /** Size of the button image being chopped up. */
   static final int BUTTON_IMAGE_SIZE = 33;
 
@@ -192,7 +192,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       int offsetX = 3;
       for (int i = 0; i < buttonCount; i++) {
         x1[i] = offsetX;
-        if (i == 2 || i == 6) x1[i] += BUTTON_GAP;
+        if (i == 2 || i == 6 || i == 9) x1[i] += BUTTON_GAP;
         x2[i] = x1[i] + BUTTON_WIDTH;
         offsetX = x2[i];
       }
