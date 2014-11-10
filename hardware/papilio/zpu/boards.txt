@@ -58,7 +58,7 @@ zpuino_papilio_prolx9van.xise.file=circuit/PSL_Papilio_Pro_LX9.xise
 zpuino_papilio_prolx9van.pdf.file=circuit/schematic_papilio_pro.pdf
 zpuino_papilio_prolx9van.bit.file=circuit/LX9/papilio_pro.bit
 ##############################################################
-zpuino_papilio_duolx9van.name=Papilio DUO - ZPUino
+zpuino_papilio_duolx9van.name=Papilio DUO FPGA - ZPUino
 zpuino_papilio_duolx9van.boardid=0xa4051300
 zpuino_papilio_duolx9van.upload.protocol=zpuino-serial
 zpuino_papilio_duolx9van.upload.maximum_size=8388608
