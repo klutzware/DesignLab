@@ -1,5 +1,5 @@
 zpuino_papilio_one250.name=Papilio One (250K) - ZPUino
-zpuino_papilio_one250.boardid=0xB4020E00
+zpuino_papilio_one250.boardid=0xA5020E00
 zpuino_papilio_one250.upload.protocol=zpuino-serial
 zpuino_papilio_one250.upload.maximum_size=12160
 zpuino_papilio_one250.upload.size_sections=all
@@ -10,8 +10,8 @@ zpuino_papilio_one250.build.core=zpuino
 zpuino_papilio_one250.build.mcu=zpu
 zpuino_papilio_one250.build.pins=standard
 zpuino_papilio_one250.build.toolchain=zpu
-zpuino_papilio_one250.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xB4020E00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
-zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xB4020E00
+zpuino_papilio_one250.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DBOARD_ID=0xA5020E00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_250__ -nostartfiles
+zpuino_papilio_one250.build.extraSflags=-DBOARD_ID=0xA5020E00
 zpuino_papilio_one250.bootloader.tool=papilioprog
 zpuino_papilio_one250.bootloader.file=p1_250k/zpuino-1.0-PapilioOne-S3E250-Vanilla-1.0.bit
 zpuino_papilio_one250.xise.file=circuit/PSL_Papilio_One_250K.xise
