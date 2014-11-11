@@ -6,24 +6,6 @@
         <trait edittrait="all:0" />
     </attr>
     <netlist>
-        <signal name="LED" />
-        <signal name="DRAM_DQM(1:0)" />
-        <signal name="DRAM_BA(1:0)" />
-        <signal name="DRAM_ADDR(12:0)" />
-        <signal name="DRAM_WE_N" />
-        <signal name="DRAM_RAS_N" />
-        <signal name="DRAM_CS_N" />
-        <signal name="DRAM_CLK" />
-        <signal name="DRAM_CKE" />
-        <signal name="DRAM_CAS_N" />
-        <signal name="DRAM_DQ(15:0)" />
-        <signal name="CLK" />
-        <signal name="SPI_MISO" />
-        <signal name="RXD" />
-        <signal name="SPI_SCK" />
-        <signal name="SPI_MOSI" />
-        <signal name="TXD" />
-        <signal name="SPI_CS" />
         <signal name="WING_AL0" />
         <signal name="WING_AL1" />
         <signal name="WING_AL2" />
@@ -84,32 +66,9 @@
         <signal name="XLXN_328(7:0)" />
         <signal name="XLXN_325(7:0)" />
         <signal name="XLXN_326(7:0)" />
-        <signal name="XLXN_337" />
-        <signal name="XLXN_338" />
-        <signal name="XLXN_339" />
-        <signal name="sram_data(7:0)" />
-        <signal name="sram_ce" />
-        <signal name="sram_we" />
-        <signal name="sram_oe" />
-        <signal name="sram_addr(18:0)" />
-        <port polarity="Output" name="LED" />
-        <port polarity="Output" name="DRAM_DQM(1:0)" />
-        <port polarity="Output" name="DRAM_BA(1:0)" />
-        <port polarity="Output" name="DRAM_ADDR(12:0)" />
-        <port polarity="Output" name="DRAM_WE_N" />
-        <port polarity="Output" name="DRAM_RAS_N" />
-        <port polarity="Output" name="DRAM_CS_N" />
-        <port polarity="Output" name="DRAM_CLK" />
-        <port polarity="Output" name="DRAM_CKE" />
-        <port polarity="Output" name="DRAM_CAS_N" />
-        <port polarity="BiDirectional" name="DRAM_DQ(15:0)" />
-        <port polarity="Input" name="CLK" />
-        <port polarity="Input" name="SPI_MISO" />
-        <port polarity="Input" name="RXD" />
-        <port polarity="Output" name="SPI_SCK" />
-        <port polarity="Output" name="SPI_MOSI" />
-        <port polarity="Output" name="TXD" />
-        <port polarity="BiDirectional" name="SPI_CS" />
+        <signal name="ext_pins_in(100:0)" />
+        <signal name="ext_pins_out(100:0)" />
+        <signal name="ext_pins_inout(100:0)" />
         <port polarity="BiDirectional" name="WING_AL0" />
         <port polarity="BiDirectional" name="WING_AL1" />
         <port polarity="BiDirectional" name="WING_AL2" />
@@ -158,16 +117,11 @@
         <port polarity="BiDirectional" name="WING_CH5" />
         <port polarity="BiDirectional" name="WING_CH6" />
         <port polarity="BiDirectional" name="WING_CH7" />
-        <port polarity="Input" name="XLXN_337" />
-        <port polarity="Input" name="XLXN_338" />
-        <port polarity="Input" name="XLXN_339" />
-        <port polarity="BiDirectional" name="sram_data(7:0)" />
-        <port polarity="Output" name="sram_ce" />
-        <port polarity="Output" name="sram_we" />
-        <port polarity="Output" name="sram_oe" />
-        <port polarity="Output" name="sram_addr(18:0)" />
+        <port polarity="Input" name="ext_pins_in(100:0)" />
+        <port polarity="Output" name="ext_pins_out(100:0)" />
+        <port polarity="BiDirectional" name="ext_pins_inout(100:0)" />
         <blockdef name="Wing_GPIO">
-            <timestamp>2013-11-27T0:38:36</timestamp>
+            <timestamp>2014-10-31T16:12:30</timestamp>
             <rect width="160" x="0" y="-128" height="128" />
             <rect width="64" x="160" y="-108" height="24" />
             <line x2="224" y1="-96" y2="-96" x1="160" />
@@ -200,82 +154,6 @@
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
-        <branch name="LED">
-            <wire x2="752" y1="912" y2="912" x1="720" />
-        </branch>
-        <branch name="DRAM_DQM(1:0)">
-            <wire x2="752" y1="848" y2="848" x1="720" />
-        </branch>
-        <branch name="DRAM_BA(1:0)">
-            <wire x2="752" y1="816" y2="816" x1="720" />
-        </branch>
-        <branch name="DRAM_ADDR(12:0)">
-            <wire x2="752" y1="784" y2="784" x1="720" />
-        </branch>
-        <branch name="DRAM_WE_N">
-            <wire x2="752" y1="752" y2="752" x1="720" />
-        </branch>
-        <branch name="DRAM_RAS_N">
-            <wire x2="752" y1="720" y2="720" x1="720" />
-        </branch>
-        <branch name="DRAM_CS_N">
-            <wire x2="752" y1="688" y2="688" x1="720" />
-        </branch>
-        <branch name="DRAM_CLK">
-            <wire x2="752" y1="656" y2="656" x1="720" />
-        </branch>
-        <branch name="DRAM_CKE">
-            <wire x2="752" y1="624" y2="624" x1="720" />
-        </branch>
-        <branch name="DRAM_CAS_N">
-            <wire x2="752" y1="592" y2="592" x1="720" />
-        </branch>
-        <branch name="DRAM_DQ(15:0)">
-            <wire x2="752" y1="560" y2="560" x1="720" />
-        </branch>
-        <branch name="CLK">
-            <wire x2="752" y1="336" y2="336" x1="720" />
-        </branch>
-        <branch name="SPI_MISO">
-            <wire x2="752" y1="400" y2="400" x1="720" />
-        </branch>
-        <branch name="RXD">
-            <wire x2="752" y1="464" y2="464" x1="720" />
-        </branch>
-        <iomarker fontsize="28" x="720" y="912" name="LED" orien="R180" />
-        <iomarker fontsize="28" x="720" y="848" name="DRAM_DQM(1:0)" orien="R180" />
-        <iomarker fontsize="28" x="720" y="816" name="DRAM_BA(1:0)" orien="R180" />
-        <iomarker fontsize="28" x="720" y="784" name="DRAM_ADDR(12:0)" orien="R180" />
-        <iomarker fontsize="28" x="720" y="752" name="DRAM_WE_N" orien="R180" />
-        <iomarker fontsize="28" x="720" y="720" name="DRAM_RAS_N" orien="R180" />
-        <iomarker fontsize="28" x="720" y="688" name="DRAM_CS_N" orien="R180" />
-        <iomarker fontsize="28" x="720" y="656" name="DRAM_CLK" orien="R180" />
-        <iomarker fontsize="28" x="720" y="624" name="DRAM_CKE" orien="R180" />
-        <iomarker fontsize="28" x="720" y="592" name="DRAM_CAS_N" orien="R180" />
-        <iomarker fontsize="28" x="720" y="560" name="DRAM_DQ(15:0)" orien="R180" />
-        <iomarker fontsize="28" x="720" y="336" name="CLK" orien="R180" />
-        <iomarker fontsize="28" x="720" y="400" name="SPI_MISO" orien="R180" />
-        <iomarker fontsize="28" x="720" y="464" name="RXD" orien="R180" />
-        <branch name="SPI_SCK">
-            <wire x2="2384" y1="512" y2="512" x1="2352" />
-        </branch>
-        <branch name="SPI_MOSI">
-            <wire x2="2384" y1="544" y2="544" x1="2352" />
-        </branch>
-        <branch name="TXD">
-            <wire x2="2384" y1="576" y2="576" x1="2352" />
-        </branch>
-        <branch name="SPI_CS">
-            <wire x2="2384" y1="608" y2="608" x1="2352" />
-        </branch>
-        <iomarker fontsize="28" x="2384" y="512" name="SPI_SCK" orien="R0" />
-        <iomarker fontsize="28" x="2384" y="544" name="SPI_MOSI" orien="R0" />
-        <iomarker fontsize="28" x="2384" y="576" name="TXD" orien="R0" />
-        <iomarker fontsize="28" x="2384" y="608" name="SPI_CS" orien="R0" />
-        <rect width="728" x="256" y="240" height="848" />
-        <text style="fontsize:40;fontname:Arial" x="296" y="1048">Left Side Connections for Papilio Pro</text>
-        <rect width="620" x="2232" y="404" height="376" />
-        <text style="fontsize:40;fontname:Arial" x="2272" y="708">Right Side Connections for all</text>
         <branch name="WING_AL0">
             <wire x2="2992" y1="912" y2="912" x1="2896" />
         </branch>
@@ -532,39 +410,19 @@
         </branch>
         <rect width="456" x="1400" y="800" height="1760" />
         <text style="fontsize:40;fontname:Arial" x="1496" y="2524">GPIO Wings</text>
-        <branch name="XLXN_337">
-            <wire x2="736" y1="1360" y2="1360" x1="704" />
+        <branch name="ext_pins_in(100:0)">
+            <wire x2="576" y1="176" y2="176" x1="544" />
         </branch>
-        <branch name="XLXN_338">
-            <wire x2="736" y1="1296" y2="1296" x1="704" />
+        <branch name="ext_pins_out(100:0)">
+            <wire x2="576" y1="208" y2="208" x1="544" />
         </branch>
-        <branch name="XLXN_339">
-            <wire x2="736" y1="1232" y2="1232" x1="704" />
+        <branch name="ext_pins_inout(100:0)">
+            <wire x2="576" y1="240" y2="240" x1="544" />
         </branch>
-        <branch name="sram_data(7:0)">
-            <wire x2="736" y1="1456" y2="1456" x1="704" />
-        </branch>
-        <branch name="sram_ce">
-            <wire x2="736" y1="1520" y2="1520" x1="704" />
-        </branch>
-        <branch name="sram_we">
-            <wire x2="736" y1="1552" y2="1552" x1="704" />
-        </branch>
-        <branch name="sram_oe">
-            <wire x2="736" y1="1584" y2="1584" x1="704" />
-        </branch>
-        <branch name="sram_addr(18:0)">
-            <wire x2="736" y1="1488" y2="1488" x1="704" />
-        </branch>
-        <iomarker fontsize="28" x="704" y="1360" name="XLXN_337" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1296" name="XLXN_338" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1232" name="XLXN_339" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1456" name="sram_data(7:0)" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1520" name="sram_ce" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1552" name="sram_we" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1584" name="sram_oe" orien="R180" />
-        <iomarker fontsize="28" x="704" y="1488" name="sram_addr(18:0)" orien="R180" />
-        <rect width="728" x="256" y="1168" height="536" />
-        <text style="fontsize:40;fontname:Arial" x="276" y="1644">Left Side Connections for Papilio DUO</text>
+        <iomarker fontsize="28" x="544" y="176" name="ext_pins_in(100:0)" orien="R180" />
+        <iomarker fontsize="28" x="544" y="208" name="ext_pins_out(100:0)" orien="R180" />
+        <iomarker fontsize="28" x="544" y="240" name="ext_pins_inout(100:0)" orien="R180" />
+        <rect width="552" x="136" y="96" height="324" />
+        <text style="fontsize:64;fontname:Arial" x="240" y="376">External Pins</text>
     </sheet>
 </drawing>
