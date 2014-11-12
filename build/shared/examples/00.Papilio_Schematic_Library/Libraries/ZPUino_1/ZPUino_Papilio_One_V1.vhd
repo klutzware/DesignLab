@@ -68,16 +68,16 @@ entity ZPUino_Papilio_One_V1 is
     SPI_FLASH_MOSI:   out std_logic;
     SPI_FLASH_CS:     inout std_logic;
 	 
-	 gpio_bus_in : in std_logic_vector(97 downto 0);
-	 gpio_bus_out : out std_logic_vector(147 downto 0);
+	 gpio_bus_in : in std_logic_vector(200 downto 0);
+	 gpio_bus_out : out std_logic_vector(200 downto 0);
 		
 	 -- UART (FTDI) connection
     TXD:        out std_logic;
     RXD:        in std_logic;
 
 	 --There are more bits in the address for this wishbone connection
-	 wishbone_slot_video_in : in std_logic_vector(63 downto 0);
-	 wishbone_slot_video_out : out std_logic_vector(33 downto 0);
+	 wishbone_slot_video_in : in std_logic_vector(100 downto 0);
+	 wishbone_slot_video_out : out std_logic_vector(100 downto 0);
 	 vgaclkout: out std_logic;	
 
 -- Unfortunately the Xilinx Schematic Editor does not support records, so we have to put all wishbone signals into one array.
@@ -119,35 +119,35 @@ entity ZPUino_Papilio_One_V1 is
 --  wishbone_out(0) <= wishbone_out_record.wb_inta_o; 
 
 	 --Input and output reversed for the master
-	 wishbone_slot_5_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_5_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_5_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_5_out : in std_logic_vector(100 downto 0);
 	 
-	 wishbone_slot_6_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_6_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_6_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_6_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_8_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_8_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_8_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_8_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_9_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_9_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_9_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_9_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_10_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_10_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_10_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_10_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_11_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_11_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_11_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_11_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_12_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_12_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_12_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_12_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_13_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_13_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_13_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_13_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_14_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_14_out : in std_logic_vector(33 downto 0);
+	 wishbone_slot_14_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_14_out : in std_logic_vector(100 downto 0);
 
-	 wishbone_slot_15_in : out std_logic_vector(61 downto 0);
-	 wishbone_slot_15_out : in std_logic_vector(33 downto 0)	 
+	 wishbone_slot_15_in : out std_logic_vector(100 downto 0);
+	 wishbone_slot_15_out : in std_logic_vector(100 downto 0)	 
 
   );
 --  attribute LOC: string;
