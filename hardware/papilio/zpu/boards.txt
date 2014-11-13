@@ -79,7 +79,7 @@ zpuino_papilio_prolx9van.pdf.file=circuit/schematic_papilio_pro.pdf
 zpuino_papilio_prolx9van.bit.file=circuit/LX9/papilio_pro.bit
 ##############################################################
 zpuino_papilio_duolx9van.name=Papilio DUO FPGA - ZPUino
-zpuino_papilio_duolx9van.boardid=0xB4051300
+zpuino_papilio_duolx9van.boardid=0xA4051300
 zpuino_papilio_duolx9van.upload.protocol=zpuino-serial
 zpuino_papilio_duolx9van.upload.maximum_size=8388608
 zpuino_papilio_duolx9van.upload.size_sections=all
@@ -89,8 +89,8 @@ zpuino_papilio_duolx9van.build.f_cpu=96000000L
 zpuino_papilio_duolx9van.build.core=zpuino
 zpuino_papilio_duolx9van.build.mcu=zpu
 zpuino_papilio_duolx9van.build.toolchain=zpu
-zpuino_papilio_duolx9van.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xB4051300 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
-zpuino_papilio_duolx9van.build.extraSflags=-DBOARD_ID=0xB4051300
+zpuino_papilio_duolx9van.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xA4051300 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
+zpuino_papilio_duolx9van.build.extraSflags=-DBOARD_ID=0xA4051300
 zpuino_papilio_duolx9van.bootloader.tool=papilioprog
 zpuino_papilio_duolx9van.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
 zpuino_papilio_duolx9van.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
