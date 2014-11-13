@@ -82,7 +82,7 @@ entity ZPUino_Papilio_DUO_V1 is
     sram_oe:    out std_logic;
 	
 	 --There are more bits in the address for this wishbone connection
-	 wishbone_slot_video_in : in std_logic_vector(63 downto 0);
+	 wishbone_slot_video_in : in std_logic_vector(100 downto 0);
 	 wishbone_slot_video_out : out std_logic_vector(100 downto 0);
 	 vgaclkout: out std_logic;	
 
