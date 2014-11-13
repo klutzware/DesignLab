@@ -30,8 +30,8 @@ CONFIG PROHIBIT=P60;
 
 NET CLK      LOC="P94"  | IOSTANDARD=LVTTL;               										# CLK
 TIMESPEC TS_Period_1 = PERIOD "CLK" 31.25 ns HIGH 50%;
-NET ext_pins_in(0)      LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;               										# CLK
-TIMESPEC TS_Period_1 = PERIOD "ext_pins_in(0)" 31.25 ns HIGH 50%;
+NET ext_pins_in(0)      LOC="P94"  | IOSTANDARD=LVTTL;               										# CLK
+TIMESPEC TS_Period_2 = PERIOD "ext_pins_in(0)" 31.25 ns HIGH 50%;
 NET TXD       LOC="P105" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          										# TX
 NET ext_pins_out(3)       LOC="P105" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          										# TX
 NET RXD       LOC="P101" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST; 	    											# RX
