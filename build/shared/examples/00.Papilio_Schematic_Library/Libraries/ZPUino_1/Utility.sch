@@ -69,6 +69,8 @@
         <signal name="ext_pins_in(100:0)" />
         <signal name="ext_pins_out(100:0)" />
         <signal name="ext_pins_inout(100:0)" />
+        <signal name="ARD_RESET" />
+        <signal name="DUO_SW1" />
         <port polarity="BiDirectional" name="WING_AL0" />
         <port polarity="BiDirectional" name="WING_AL1" />
         <port polarity="BiDirectional" name="WING_AL2" />
@@ -120,6 +122,8 @@
         <port polarity="Input" name="ext_pins_in(100:0)" />
         <port polarity="Output" name="ext_pins_out(100:0)" />
         <port polarity="BiDirectional" name="ext_pins_inout(100:0)" />
+        <port polarity="Output" name="ARD_RESET" />
+        <port polarity="Input" name="DUO_SW1" />
         <blockdef name="Wing_GPIO">
             <timestamp>2014-10-31T16:12:30</timestamp>
             <rect width="160" x="0" y="-128" height="128" />
@@ -127,6 +131,15 @@
             <line x2="224" y1="-96" y2="-96" x1="160" />
             <rect width="64" x="160" y="-44" height="24" />
             <line x2="224" y1="-32" y2="-32" x1="160" />
+        </blockdef>
+        <blockdef name="inv">
+            <timestamp>2000-1-1T10:10:10</timestamp>
+            <line x2="64" y1="-32" y2="-32" x1="0" />
+            <line x2="160" y1="-32" y2="-32" x1="224" />
+            <line x2="128" y1="-64" y2="-32" x1="64" />
+            <line x2="64" y1="-32" y2="0" x1="128" />
+            <line x2="64" y1="0" y2="-64" x1="64" />
+            <circle r="16" cx="144" cy="-32" />
         </blockdef>
         <block symbolname="Wing_GPIO" name="XLXI_27">
             <blockpin signalname="XLXN_335(7:0)" name="wt_miso(7:0)" />
@@ -151,6 +164,10 @@
         <block symbolname="Wing_GPIO" name="XLXI_22">
             <blockpin signalname="XLXN_325(7:0)" name="wt_miso(7:0)" />
             <blockpin signalname="XLXN_326(7:0)" name="wt_mosi(7:0)" />
+        </block>
+        <block symbolname="inv" name="XLXI_48">
+            <blockpin signalname="DUO_SW1" name="I" />
+            <blockpin signalname="ARD_RESET" name="O" />
         </block>
     </netlist>
     <sheet sheetnum="1" width="3520" height="2720">
@@ -424,5 +441,18 @@
         <iomarker fontsize="28" x="544" y="240" name="ext_pins_inout(100:0)" orien="R180" />
         <rect width="552" x="136" y="96" height="324" />
         <text style="fontsize:64;fontname:Arial" x="240" y="376">External Pins</text>
+        <text style="fontsize:28;fontname:Arial" x="928" y="436">Replace DUO_SW1 with a Pulldown if you want the ATmega32U4 chip to run when this circuit is loaded.</text>
+        <branch name="ARD_RESET">
+            <wire x2="1440" y1="144" y2="144" x1="1408" />
+        </branch>
+        <instance x="1184" y="176" name="XLXI_48" orien="R0" />
+        <branch name="DUO_SW1">
+            <wire x2="1184" y1="144" y2="144" x1="1152" />
+        </branch>
+        <text style="fontsize:28;fontname:Arial" x="928" y="468">Replace DUO_SW1 with a Pullup if you want to disable the ATmega32U4 chip when this circuit is loaded.</text>
+        <iomarker fontsize="28" x="1440" y="144" name="ARD_RESET" orien="R0" />
+        <iomarker fontsize="28" x="1152" y="144" name="DUO_SW1" orien="R180" />
+        <rect width="1468" x="836" y="100" height="472" />
+        <text style="fontsize:48;fontname:Arial" x="1388" y="536">Papilio DUO Reset</text>
     </sheet>
 </drawing>
