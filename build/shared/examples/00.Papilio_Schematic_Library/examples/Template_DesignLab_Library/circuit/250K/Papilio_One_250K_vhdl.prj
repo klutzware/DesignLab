@@ -1,0 +1,5 @@
+vhdl DesignLab "D:\Dropbox\GadgetFactory_Engineering\DesignLab_Examples\libraries\ZPUino_2\pad.vhd"
+vhdl DesignLab "D:\Dropbox\GadgetFactory_Engineering\DesignLab_Examples\libraries\ZPUino_2\ZPUino_Papilio_One_250K_V2.vhd"
+vhdl DesignLab "D:\Dropbox\GadgetFactory_Engineering\DesignLab_Examples\libraries\ZPUino_2\Wing_GPIO.vhd"
+vhdl DesignLab "D:\Dropbox\GadgetFactory_Engineering\DesignLab_Examples\libraries\Papilio_Hardware\Papilio_Default_Wing_Pinout.vhd"
+vhdl work "D:\Dropbox\GadgetFactory_Engineering\DesignLab\build\windows\work\examples\00.Papilio_Schematic_Library\examples\Template_PSL_Base\circuit\250K\Papilio_One_250K.vhf"
