@@ -898,6 +898,12 @@ public class Base {
         } 
       }   
     }
+    
+    PrintWriter pw = new PrintWriter(new FileWriter(pslLibName, true));
+    pw.append("\0");  //add null character to the end.
+    pw.close();
+    
+    
     } catch (Exception e) {
       showWarning(_("Problem Updating Xilinx User Library"),
                   I18n.format(_("Could not update the Xilinx User Library\n{0}")), e);
@@ -2200,7 +2206,7 @@ public class Base {
 //			if (nbThreads > 11)
 //			   showMessage("Not Ready Yet.","Still updating all Xilinx symbol libraries. Please try again.");
 //			else
-	      updateXilinxProject(Base.activeEditor);
+	      updateXilinxProject(Base.activeEditor);  //TODO This needs to pass the xise file instead of relying on the active editor. When dealing with a library the xise file is not updated.
 			  //Base.updateIsePaths(url.substring(7), url.substring(7));
 			  platform.openURL(url); 
 /* 			try {
@@ -3039,7 +3045,8 @@ public class Base {
   
     			//Append the symbol to the end of the end of the lib file
     			while ((line = br.readLine()) != null) {
-    				pw.append(line +"\n"); //remove any null characters
+    			  //line = line.replace("\\u00", "");  //remove any null characters
+    				pw.append(line +"\n");
     			}
     			//pw.append("\0");	//add null character to the end.
     			
