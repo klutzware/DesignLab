@@ -248,6 +248,7 @@ board = zpuino_papilio_prolx9van
 software=ARDUINO
 
 programmer = papilio:papilioprog
+ise.path=/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin
 
 upload.using = bootloader
 upload.verify = true
