@@ -67,7 +67,7 @@ public class Platform extends processing.app.Platform {
 //        url = url.substring(7);
 //      } 
       if (url.endsWith(".xise")){
-        launcher = Preferences.get("ise.path");
+        launcher = Preferences.get("ise.path") + "/ise";
         url = url.substring(7);
       } 
       if (url.endsWith(".sh"))

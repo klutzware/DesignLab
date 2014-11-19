@@ -242,12 +242,12 @@ run.present.exclusive = false
 run.present.exclusive.macosx = true
 
 # ARDUINO PREFERENCES
-target_package = zpuino
+target_package = papilio
 target_platform = zpu
 board = zpuino_papilio_prolx9van
 software=ARDUINO
 
-programmer = zpuino:papilioprog
+programmer = papilio:papilioprog
 
 upload.using = bootloader
 upload.verify = true
