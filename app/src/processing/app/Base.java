@@ -3021,65 +3021,92 @@ public class Base {
 	}  
 	
 	static public void installIseSymbol(String libFileName, String catFileName, File symbolDir, String symbols[]) {
-		BufferedReader br = null;
-		PrintWriter pw = null;
-		PrintWriter catPw = null;
-		String symbolName;
+		BufferedReader sourceSymbol = null;
+		PrintWriter libFile = null;
+		PrintWriter catFile = null;
+    PrintWriter linuxSymbol = null;
+		String symbolName, libPath;
 		
 //    String symbols[] = listExtensions(symbolDir, ".sym");
     if (symbols.length > 0){
   		try {
+  		  
+  		  //Create an empty edif file in the directory so linux will automatically add the path to the symbols
+//  		  if (Base.isLinux()){
+  		    File edifFile = new File(symbolDir + "/linuxsymbol.edif");
+  		    if (!edifFile.exists())
+  		      new FileOutputStream(edifFile).close();
+//  		  }
   			
-  			pw = new PrintWriter(new FileWriter(libFileName, true));
-  			catPw = new PrintWriter(new FileWriter(catFileName, true));
+  			libFile = new PrintWriter(new FileWriter(libFileName, true));
+  			catFile = new PrintWriter(new FileWriter(catFileName, true));
+  			libPath = new File(libFileName).getParent();
+  			
+  			
   			String line;
   			
-  			catPw.append("\"." + getFileNameWithoutExtension(symbolDir) + "\"\n{\n");
+  			catFile.append("\"." + getFileNameWithoutExtension(symbolDir) + "\"\n{\n");
     	  for (String symbol : symbols) {
     	    //showMessage("Test", symbol);
-    	    br = new BufferedReader(new FileReader(symbolDir + "/" + symbol));
-    	    symbolName = getFileNameWithoutExtension(new File(symbol)); //TODO this should be the folder name and the symbols should be in the folder name... JPG
-    	    //Base.removeIseSymbol(libFileName, libFileName, symbolName);
-    	    //Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
-    	  
+    	    sourceSymbol = new BufferedReader(new FileReader(symbolDir + "/" + symbol));
+    	    symbolName = getFileNameWithoutExtension(new File(symbol));
+//    	    if (Base.isLinux())
+//    	      linuxSymbol = new PrintWriter(new FileWriter(libPath  + "/" + symbol , false));
   
     			//Append the symbol to the end of the end of the lib file
-    			while ((line = br.readLine()) != null) {
+    			while ((line = sourceSymbol.readLine()) != null) {
     			  //line = line.replace("\\u00", "");  //remove any null characters
-    				pw.append(line +"\n");
+    				libFile.append(line +"\n");
+//    				if (Base.isLinux())
+//    				  linuxSymbol.write(line + "\n");
     			}
-    			//pw.append("\0");	//add null character to the end.
+    			//libFile.append("\0");	//add null character to the end.
     			
     			//Add the symbol to the cat file
-    			catPw.append("\"" + symbolName + "\"\n");
+    			catFile.append("\"" + symbolName + "\"\n");
+    			
+    			//Close linuxSymbol
+//    			if (Base.isLinux()) {
+//    			  if(linuxSymbol != null)
+//    			    linuxSymbol.close();
+//    			}
   			
     	  }
   			
-  			catPw.append("}\n");
+  			catFile.append("}\n");
   			
   		} catch (Exception e) {
   		 return;
   		} finally {
   		 try {
-  			if(br != null)
-  			   br.close();
+  			if(sourceSymbol != null){
+  			  sourceSymbol.close();
+  			}
   		 } catch (IOException e) {
   			//
   		 }
   		 try {
-  			if(pw != null){
-  			  //pw.append("\0"); //add null character to the end.
-  			  pw.close();
+  			if(libFile != null){
+  			  //libFile.append("\0"); //add null character to the end.
+  			  libFile.close();
   			}
   		 } catch (Exception e) {
   			//
   		 }
   		 try {
-  			if(catPw != null)
-  			   catPw.close();
+  			if(catFile != null)
+  			   catFile.close();
   		 } catch (Exception e) {
   			//
-  		 }		 
+  		 }	
+//       try {
+//         if (Base.isLinux()){
+//           if(linuxSymbol != null)
+//             linuxSymbol.close();
+//         }
+//        } catch (Exception e) {
+//         //
+//        }
   		}
     }
 		
@@ -3170,6 +3197,12 @@ public class Base {
           bw.write(line + "\n");
         }
         if (line.contains("<files>")) { //Header found
+//          if (Base.isLinux()){
+//            bw.write("\t<file xil_pn:name=\"" + pslLibName + "/Xilinx_Symbol_Library/symbol.ngc" + "\" xil_pn:type=\"FILE_NGC\">\n");
+//            bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
+//            bw.write("\t</file>\n");
+//          }
+          
           //Add all VHD, .v, and .ncd files in library locations to the project
           List <File> libraryLocations = Base.getLibrariesPath();
           for (File libRoot : libraryLocations ) {
@@ -3191,6 +3224,11 @@ public class Base {
                       bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
                       bw.write("\t</file>\n");
                     }  
+                    if (libFileName.getName().toLowerCase().contains(".edif")) { 
+                      bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_EDIF\">\n");
+                      bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
+                      bw.write("\t</file>\n");
+                    }                     
                     if (libFileName.getName().toLowerCase().contains(".v")) { 
                       bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_VERILOG\">\n");
                       bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
