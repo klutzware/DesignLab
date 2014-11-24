@@ -3131,7 +3131,7 @@ public class Base {
 	//Replace the xtclsh script by adding all library files to a project
   static public void updateIsePaths(String fileName, String newFileName) {
     String tmpFileName = fileName + ".tmp";
-    boolean headerFound = false;
+    boolean fileSection = false;
     String pslPath = Base.getExamplesPath();
     String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";   
 
@@ -3144,9 +3144,22 @@ public class Base {
       String line, newLine;
 
       while ((line = br.readLine()) != null) {
-        if (headerFound) {
+        if (fileSection) {
           newLine = line.replaceAll("xil_pn:name=\"(.*)Libraries", "xil_pn:name=\"" + pslLibName);
-          bw.write(newLine + "\n");
+          if (line.contains("file xil_pn:name=\"")){
+            File fileCheck = new File(fileName + "/../" + line.substring(line.lastIndexOf("file xil_pn:name=\"")+18, line.lastIndexOf("\" xil_pn:")));
+            if (fileCheck.exists()) {  //If the file exists then just write the line
+              bw.write(newLine + "\n");
+            }
+            else {  //If the file is not found do not write any of the lines until a </file> is found
+              while ((line = br.readLine()) != null) {
+                if (line.contains("</file>"))
+                  break;
+              }
+            }
+          }
+          else
+            bw.write(newLine + "\n");
         } else {
           bw.write(line + "\n");
         }
@@ -3188,10 +3201,10 @@ public class Base {
               } 
             }   
           }
-          headerFound = true;
+          fileSection = true;
         }
         if (line.contains("</files>")) //Header ends
-          headerFound = false;          
+          fileSection = false;          
       } 
 
     } catch (Exception e) {
