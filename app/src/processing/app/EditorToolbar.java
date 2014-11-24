@@ -151,6 +151,8 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
     buttonImages = new Image[BUTTON_COUNT][3];
 
       for (int i = 0; i < BUTTON_COUNT; i++) {
+      if (i == 6)   //skip the tools for now
+        i = 9;
       for (int state = 0; state < 3; state++) {
         Image image = createImage(BUTTON_WIDTH, BUTTON_HEIGHT);
         Graphics g = image.getGraphics();
@@ -191,8 +193,10 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
 
       int offsetX = 3;
       for (int i = 0; i < buttonCount; i++) {
+        if (i == 6)   //skip the tools for now
+          i = 9;
         x1[i] = offsetX;
-        if (i == 2 || i == 6 || i == 9) x1[i] += BUTTON_GAP;
+        if (i == 2 || i == 6 || i == 9 || i ==10) x1[i] += BUTTON_GAP;
         x2[i] = x1[i] + BUTTON_WIDTH;
         offsetX = x2[i];
       }
@@ -232,7 +236,8 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
            shiftPressed ? titleShift[currentRollover] : title[currentRollover];
       if (currentRollover != SERIAL)
         //by dhia
-        g.drawString(status, (buttonCount-1) * BUTTON_WIDTH + 10 * BUTTON_GAP, statusY);
+        //g.drawString(status, (buttonCount-1) * BUTTON_WIDTH + 10 * BUTTON_GAP, statusY);
+        g.drawString(status, (buttonCount-5) * BUTTON_WIDTH + 10 * BUTTON_GAP, statusY);
       else {
         int statusX = x1[SERIAL] - BUTTON_GAP;
         statusX -= g.getFontMetrics().stringWidth(status);
