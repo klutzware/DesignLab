@@ -846,27 +846,24 @@ public class Base {
     editor.setVisible(true);
     
     //if (!path.contains("Template"))
-    updateXilinxProject(editor);
+    //updateXilinxProject(editor);
    
 
     return editor;
   }
 
-  public static void updateXilinxProject(Editor editor){
+  public static void updateXilinxProject(String xiseFile){
     //Update ISE Library location
     //editor.statusNotice("Updating Xilinx ISE Library Location");
    try {
-    File sketchLocation = new File(editor.getSketch().getFolder().getPath() + "/circuit");
+    //File sketchLocation = new File(editor.getSketch().getFolder().getPath() + "/circuit");
+    File sketchLocation = new File(xiseFile);
     if (sketchLocation.exists()) {
-      String files[] = listExtensions(sketchLocation, ".xise");    
-      for (String xilinxFile : files) {
-        Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
-      }   
-      //Import Xilinx User Libraries
-      //TODO JPG Cleanup user libraries that have been deleted. Maybe we should just import all libraries here too? Using import_libraries.xtcl then we can delete all libraries.
+      Base.updateIsePaths(xiseFile, xiseFile);
+//      String files[] = listExtensions(sketchLocation, ".xise");    
 //      for (String xilinxFile : files) {
-//        Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + sketchLocation + "/" + xilinxFile + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);
-//      } 
+//        Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
+//      }   
     }
  
     
@@ -2190,33 +2187,8 @@ public class Base {
 			activeEditor.handleBurnBitfile(url.substring(7));
 	  }
 	  else if (url.endsWith(".xise")) {
-			//activeEditor.statusNotice("Loading Xilinx User Libraries");
-			//Base.updateIsePaths(url.substring(7), url.substring(7));
-			//File sketchLocation = new File(Base.getActiveSketchPath());
-			//TODO JPG process the arduino app library path too, it is get(1)
-			//Process proc = Runtime.getRuntime().exec("cmd /c \"xtclsh import_user_libraries.xtcl " + url.substring(7) + " " + getLibrariesPath().get(3).getPath().replace("\\", "/") + "/* 2> NUL\"", null ,sketchLocation);	//Important to redirect std error
-			//int exitVal = proc.waitFor();
-			//activeEditor.statusNotice("Opening Xilinx ISE");
-//	    int nbThreads =  Thread.getAllStackTraces().keySet().size();
-//	    int nbRunning = 0;
-//	    for (Thread t : Thread.getAllStackTraces().keySet()) {
-//	        if (t.getState()==Thread.State.RUNNABLE) nbRunning++;
-//	        Thread.State.
-//	    }
-	    //showMessage("test", Integer.toString(nbThreads));
-	    //TODO JPG This is a bit of a shortcut, we should capture the processes to update the symbols and check if those are done...
-//			if (nbThreads > 11)
-//			   showMessage("Not Ready Yet.","Still updating all Xilinx symbol libraries. Please try again.");
-//			else
-	      updateXilinxProject(Base.activeEditor);  //TODO This needs to pass the xise file instead of relying on the active editor. When dealing with a library the xise file is not updated.
-			  //Base.updateIsePaths(url.substring(7), url.substring(7));
+	      updateXilinxProject(url.substring(7));
 			  platform.openURL(url); 
-/* 			try {
-				Thread.sleep(5000);                 //1000 milliseconds is one second.
-			} catch(InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}			
-			platform.openURL("file://" + Base.getActiveSketchPath() + "/import_user_libraries.cmd"); */
 	  } else
 		platform.openURL(url);
 	  

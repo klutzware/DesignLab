@@ -212,33 +212,33 @@ public class Editor extends JFrame implements RunnerListener {
           {
             Base.activeEditor.handleSaveAs();
             saveAtStart = false;
-            Base.updateXilinxProject(Base.activeEditor);
-      			if (renameSymbol == true) {
-      				//Base.showMessage("title", "Renaming Symbol Lib");
-      			  String sketchName = sketch.getName();
-      			  
-      				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketchName);
-      				renameSymbol = false;
-      				
-      				try {
-        		    File newFile = new File(Base.getActiveSketchPath(), "edit_library.ino");
-        		    File oldFile = new File(Base.activeEditor.sketch.getPrimaryFile().toString());
-        		    File exampleFolder = new File(Base.getActiveSketchPath() + "/examples/Template_Community_Core_Library");
-        		    Base.activeEditor.sketch.getCode(0).saveAs(newFile);
-                exampleFolder.renameTo(new File(Base.getActiveSketchPath() + "/examples/" + sketchName));
-        		    oldFile.delete();
-        		    Base.activeEditor.handleOpenUnchecked(newFile.toString(),
-        		                               0,
-        		                               Base.activeEditor.getSelectionStart(),
-        		                               Base.activeEditor.getSelectionStop(),
-        		                               Base.activeEditor.getScrollPosition());
-      				} catch (IOException ie) { }
-      				Base.activeEditor.base.rebuildSketchbookMenus();
-              Base.activeEditor.base.onBoardOrPortChange();
-              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu, Base.activeEditor);
-              Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
-              base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
-      			}
+            //Base.updateXilinxProject(Base.activeEditor);
+//      			if (renameSymbol == true) {
+//      				//Base.showMessage("title", "Renaming Symbol Lib");
+//      			  String sketchName = sketch.getName();
+//      			  
+//      				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketchName);
+//      				renameSymbol = false;
+//      				
+//      				try {
+//        		    File newFile = new File(Base.getActiveSketchPath(), "edit_library.ino");
+//        		    File oldFile = new File(Base.activeEditor.sketch.getPrimaryFile().toString());
+//        		    File exampleFolder = new File(Base.getActiveSketchPath() + "/examples/Template_Community_Core_Library");
+//        		    Base.activeEditor.sketch.getCode(0).saveAs(newFile);
+//                exampleFolder.renameTo(new File(Base.getActiveSketchPath() + "/examples/" + sketchName));
+//        		    oldFile.delete();
+//        		    Base.activeEditor.handleOpenUnchecked(newFile.toString(),
+//        		                               0,
+//        		                               Base.activeEditor.getSelectionStart(),
+//        		                               Base.activeEditor.getSelectionStop(),
+//        		                               Base.activeEditor.getScrollPosition());
+//      				} catch (IOException ie) { }
+//      				Base.activeEditor.base.rebuildSketchbookMenus();
+//              Base.activeEditor.base.onBoardOrPortChange();
+//              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu, Base.activeEditor);
+//              Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
+//              base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+//      			}
           }
           
         }
