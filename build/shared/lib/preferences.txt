@@ -244,7 +244,7 @@ run.present.exclusive.macosx = true
 # ARDUINO PREFERENCES
 target_package = papilio
 target_platform = zpu
-board = zpuino_papilio_prolx9van
+board = zpuino_papilio_duolx9van
 software=ARDUINO
 
 programmer = papilio:papilioprog
