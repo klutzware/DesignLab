@@ -2185,8 +2185,10 @@ public class Base {
       }
       if (url.startsWith("sketchdir://"))
 		url = "file://" + Base.getActiveSketchPath() + "/" + url.substring(12);
-	  if (url.endsWith(".bit"))
+	  if (url.endsWith(".bit")){
+	    Preferences.set("programmer", "papilioprog");
 			activeEditor.handleBurnBitfile(url.substring(7));
+	  }
 	  else if (url.endsWith(".xise")) {
 			//activeEditor.statusNotice("Loading Xilinx User Libraries");
 			//Base.updateIsePaths(url.substring(7), url.substring(7));
