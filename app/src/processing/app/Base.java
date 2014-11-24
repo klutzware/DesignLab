@@ -853,17 +853,10 @@ public class Base {
   }
 
   public static void updateXilinxProject(String xiseFile){
-    //Update ISE Library location
-    //editor.statusNotice("Updating Xilinx ISE Library Location");
    try {
-    //File sketchLocation = new File(editor.getSketch().getFolder().getPath() + "/circuit");
     File sketchLocation = new File(xiseFile);
     if (sketchLocation.exists()) {
-      Base.updateIsePaths(xiseFile, xiseFile);
-//      String files[] = listExtensions(sketchLocation, ".xise");    
-//      for (String xilinxFile : files) {
-//        Base.updateIsePaths(sketchLocation + "/" + xilinxFile, sketchLocation + "/" + xilinxFile);
-//      }   
+      Base.updateIsePaths(xiseFile, xiseFile); 
     }
  
     
@@ -884,13 +877,6 @@ public class Base {
           if (lib.isDirectory()) {
             String symbols[] = listExtensions(lib, ".sym");
             Base.installIseSymbol(pslLibName, pslCatName, lib, symbols);      
-//            String symbols[] = listExtensions(lib, ".sym");
-//            for (String symbol : symbols) {
-//              //showMessage("Test", symbol);
-//              String libName = getFileNameWithoutExtension(new File(symbol)); //TODO this should be the folder name and the symbols should be in the folder name... JPG
-//              Base.removeIseSymbol(pslLibName, pslLibName, libName);
-//              Base.installIseSymbol(pslLibName, pslCatName, lib.getPath() + "/" + symbol, libName);      
-//            }
           }   
         } 
       }   
@@ -2938,7 +2924,6 @@ public class Base {
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.cpp", Base.getActiveSketchPath() + "\\" + newName + ".cpp", currentName, newName);
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Wishbone_Symbol_Example.h", Base.getActiveSketchPath() + "\\" + newName + ".h", currentName, newName);
 		
-		//TODO Should just do this for all *.xise files JPG
 		Base.replaceFileContents(Base.getActiveSketchPath() + "\\Chip_Designer.xise", Base.getActiveSketchPath() + "\\Chip_Designer.xise", currentName, newName);
 
     //TODO Should just do this for all *.sch files JPG
@@ -2952,7 +2937,6 @@ public class Base {
 	}
 
 	static public void replaceFileContents(String fileName, String newFileName, String toReplace, String replaceWith) {
-	  //String oldFileName = "try.dat";
 	  String tmpFileName = fileName + ".tmp";
 
 	  BufferedReader br = null;
@@ -3001,7 +2985,6 @@ public class Base {
     PrintWriter linuxSymbol = null;
 		String symbolName, libPath;
 		
-//    String symbols[] = listExtensions(symbolDir, ".sym");
     if (symbols.length > 0){
   		try {
   		  
@@ -3087,7 +3070,6 @@ public class Base {
 	}
 	
 	static public void removeIseSymbol(String fileName, String newFileName, String toFind) {
-		//String oldFileName = "try.dat";
 		String tmpFileName = fileName + ".tmp";
 		boolean skipLines = false;
 		boolean headerFound = false;
@@ -3148,13 +3130,11 @@ public class Base {
 	
 	//Replace the xtclsh script by adding all library files to a project
   static public void updateIsePaths(String fileName, String newFileName) {
-    //String oldFileName = "try.dat";
     String tmpFileName = fileName + ".tmp";
     boolean headerFound = false;
     String pslPath = Base.getExamplesPath();
     String pslLibName = pslPath.replace("\\", "/") + "/00.Papilio_Schematic_Library/Libraries";   
 
-    //Base.showMessage("Test", "In UpdatePaths");
     
     BufferedReader br = null;
     BufferedWriter bw = null;
@@ -3171,11 +3151,6 @@ public class Base {
           bw.write(line + "\n");
         }
         if (line.contains("<files>")) { //Header found
-//          if (Base.isLinux()){
-//            bw.write("\t<file xil_pn:name=\"" + pslLibName + "/Xilinx_Symbol_Library/symbol.ngc" + "\" xil_pn:type=\"FILE_NGC\">\n");
-//            bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
-//            bw.write("\t</file>\n");
-//          }
           
           //Add all VHD, .v, and .ncd files in library locations to the project
           List <File> libraryLocations = Base.getLibrariesPath();
@@ -3305,20 +3280,6 @@ public class Base {
         editor.statusError(e);
         return;
       }
-	  
-//	  // is this a Xilinx symbol library
-//	  File f = new File(destinationFolder.getPath() + "/Chip_Designer.xise");
-//	  if (f.exists()) { 
-//		//String mainFilename = Base.getActiveSketchPath();
-//		//String sketchName = mainFilename.substring(mainFilename.lastIndexOf("\\")+1);	//TODO JPG this can be a forward slash in Unix
-//		String pslPath = Base.getExamplesPath();
-//		String pslLibName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.lib";
-//		String pslCatName = pslPath+"/00.Papilio_Schematic_Library/Libraries/Xilinx_Symbol_Library" + "/Papilio_Schematic_Library.cat";
-//		
-//		Base.removeIseSymbol(pslLibName, pslLibName, libName);
-//		Base.installIseSymbol(pslLibName, pslCatName, destinationFolder.getPath() + "/" + libName + ".sym", libName);
-//		Base.showMessage("title", "Finished installing Xilinx symbol");
-//	  }
 	  
       editor.statusNotice(_("Library added to your libraries. Check \"Import library\" menu"));
     } finally {
