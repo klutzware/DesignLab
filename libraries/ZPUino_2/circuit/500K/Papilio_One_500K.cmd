@@ -1,0 +1,1 @@
+xst -intstyle ise -ifn "D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/ZPUino_2/circuit/500K/Papilio_One_500K.xst" -ofn "D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/ZPUino_2/circuit/500K/Papilio_One_500K.syr" 

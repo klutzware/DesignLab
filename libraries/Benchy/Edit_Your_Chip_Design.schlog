@@ -1,0 +1,10 @@
+select figure at 804 674 8 -branches -sn=1
+delete selection -sn=1
+add instance BENCHY_sa_SumpBlaze_LogicAnalyzer8 144 512 R0 -sn=1
+add instance BENCHY_sa_SumpBlaze_LogicAnalyzer8_jtag 832 512 R0 -sn=1
+add instance BENCHY_zpuino_wb_waveform_generator 608 1216 R0 -sn=1
+select figure at 324 273 8 -branches -sn=1
+select figure at 1165 302 8 -branches -sn=1
+update symbols BENCHY_sa_SumpBlaze_LogicAnalyzer8
+select figure at 848 907 8 -branches -sn=1
+update symbols BENCHY_sa_SumpBlaze_LogicAnalyzer8_jtag

@@ -1,0 +1,9 @@
+MODULE Edit_Your_Chip_Design
+	SUBMODULE MISC_zpuino_sa_splitter2
+		INSTANCE XLXI_4
+	SUBMODULE MISC_zpuino_sa_splitter4
+		INSTANCE XLXI_5
+	SUBMODULE MISC_zpuino_wb_SevenSeg
+		INSTANCE XLXI_6
+	SUBMODULE AUDIO_zpuino_wb_passthrough
+		INSTANCE XLXI_9
