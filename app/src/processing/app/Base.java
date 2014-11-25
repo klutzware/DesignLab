@@ -51,9 +51,9 @@ import static processing.app.I18n._;
  * files and images, etc) that comes from that.
  */
 public class Base {
-  public static final int REVISION = 152;
+  public static final int REVISION = 020;
   /** This might be replaced by main() if there's a lib/version.txt file. */
-  static String VERSION_NAME = "0152";
+  static String VERSION_NAME = "0020";
   /** Set true if this a proper release rather than a numbered revision. */
   static public boolean RELEASE = false;
 
@@ -2933,7 +2933,7 @@ public class Base {
     Base.replaceFileContents(Base.getActiveSketchPath() + "\\circuit\\Papilio_Pro.sch", Base.getActiveSketchPath() + "\\circuit\\Papilio_Pro.sch", currentName, newName);
 		
 		
-		Base.replaceFileContents(Base.getActiveSketchPath() + "\\examples\\Template_Community_Core_Library\\Template_Community_Core_Library.ino", Base.getActiveSketchPath() + "\\examples\\Template_Community_Core_Library\\" + newName + ".ino", currentName, newName);
+		Base.replaceFileContents(Base.getActiveSketchPath() + "\\examples\\Template_DesignLab_Library\\Template_DesignLab_Library.ino", Base.getActiveSketchPath() + "\\examples\\Template_DesignLab_Library\\" + newName + ".ino", currentName, newName);
 	}
 
 	static public void replaceFileContents(String fileName, String newFileName, String toReplace, String replaceWith) {

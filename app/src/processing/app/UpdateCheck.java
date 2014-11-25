@@ -50,7 +50,7 @@ import static processing.app.I18n._;
  */
 public class UpdateCheck implements Runnable {
   Base base;
-  String downloadURL = _("http://www.arduino.cc/latest.txt");
+  String downloadURL = _("http://www.papilio.cc/latest.txt");
 
   static final long ONE_DAY = 24 * 60 * 60 * 1000;
 

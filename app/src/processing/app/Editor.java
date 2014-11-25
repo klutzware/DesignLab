@@ -213,32 +213,32 @@ public class Editor extends JFrame implements RunnerListener {
             Base.activeEditor.handleSaveAs();
             saveAtStart = false;
             //Base.updateXilinxProject(Base.activeEditor);
-//      			if (renameSymbol == true) {
-//      				//Base.showMessage("title", "Renaming Symbol Lib");
-//      			  String sketchName = sketch.getName();
-//      			  
-//      				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketchName);
-//      				renameSymbol = false;
-//      				
-//      				try {
-//        		    File newFile = new File(Base.getActiveSketchPath(), "edit_library.ino");
-//        		    File oldFile = new File(Base.activeEditor.sketch.getPrimaryFile().toString());
-//        		    File exampleFolder = new File(Base.getActiveSketchPath() + "/examples/Template_Community_Core_Library");
-//        		    Base.activeEditor.sketch.getCode(0).saveAs(newFile);
-//                exampleFolder.renameTo(new File(Base.getActiveSketchPath() + "/examples/" + sketchName));
-//        		    oldFile.delete();
-//        		    Base.activeEditor.handleOpenUnchecked(newFile.toString(),
-//        		                               0,
-//        		                               Base.activeEditor.getSelectionStart(),
-//        		                               Base.activeEditor.getSelectionStop(),
-//        		                               Base.activeEditor.getScrollPosition());
-//      				} catch (IOException ie) { }
-//      				Base.activeEditor.base.rebuildSketchbookMenus();
-//              Base.activeEditor.base.onBoardOrPortChange();
-//              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu, Base.activeEditor);
-//              Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
-//              base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
-//      			}
+      			if (renameSymbol == true) {
+      				//Base.showMessage("title", "Renaming Symbol Lib");
+      			  String sketchName = sketch.getName();
+      			  
+      				Base.renameSymbolLibrary("Wishbone_Symbol_Example", sketchName);
+      				renameSymbol = false;
+      				
+      				try {
+        		    File newFile = new File(Base.getActiveSketchPath(), "edit_library.ino");
+        		    File oldFile = new File(Base.activeEditor.sketch.getPrimaryFile().toString());
+        		    File exampleFolder = new File(Base.getActiveSketchPath() + "/examples/Template_DesignLab_Library");
+        		    Base.activeEditor.sketch.getCode(0).saveAs(newFile);
+                exampleFolder.renameTo(new File(Base.getActiveSketchPath() + "/examples/" + sketchName));
+        		    oldFile.delete();
+        		    Base.activeEditor.handleOpenUnchecked(newFile.toString(),
+        		                               0,
+        		                               Base.activeEditor.getSelectionStart(),
+        		                               Base.activeEditor.getSelectionStop(),
+        		                               Base.activeEditor.getScrollPosition());
+      				} catch (IOException ie) { }
+      				Base.activeEditor.base.rebuildSketchbookMenus();
+              Base.activeEditor.base.onBoardOrPortChange();
+              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu, Base.activeEditor);
+              Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
+              base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+      			}
           }
           
         }
@@ -547,13 +547,24 @@ public class Editor extends JFrame implements RunnerListener {
     JMenuItem item;
     fileMenu = new JMenu(_("File"));
 
-    item = newJMenuItem(_("New"), 'N');
+//    item = newJMenuItem(_("New"), 'N');
+//    item.addActionListener(new ActionListener() {
+//        public void actionPerformed(ActionEvent e) {
+//          base.handleNew();
+//        }
+//      });
+//    fileMenu.add(item);
+    
+    item = newJMenuItem(_("New Papilio Project"), 'N');
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          base.handleNew();
+          String pslPath = Base.getExamplesPath();
+          File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
+          Editor newproj = base.handleOpen(f1.getAbsolutePath());
+          newproj.handlesaveAtStart(false);
         }
       });
-    fileMenu.add(item);
+    fileMenu.add(item);    
 
     item = Editor.newJMenuItem(_("Open..."), 'O');
     item.addActionListener(new ActionListener() {
