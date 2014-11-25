@@ -1,7 +1,0 @@
-vhdl DesignLab "../../../../../../../../../../DesignLab_Examples/libraries/ZPUino_2/sdram_hamster.vhd"
-vhdl DesignLab "../../../../../../../../../../DesignLab_Examples/libraries/ZPUino_2/sdram_wrap.vhd"
-vhdl DesignLab "../../../../../../../../../../DesignLab_Examples/libraries/ZPUino_2/pad.vhd"
-vhdl DesignLab "../../../../../../../../../../DesignLab_Examples/libraries/ZPUino_2/ZPUino_Papilio_Pro_V2.vhd"
-vhdl DesignLab "../../../../../../../../../../DesignLab_Examples/libraries/ZPUino_2/Wing_GPIO.vhd"
-vhdl DesignLab "../../../../../../../../../../DesignLab_Examples/libraries/ZPUino_2/Papilio_Default_Wing_Pinout.vhd"
-vhdl work "Papilio_Pro.vhf"
