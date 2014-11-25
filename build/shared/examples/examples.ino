@@ -121,6 +121,11 @@ HARDWARE
 	example://WING_Analog/WING_Analog.ino	
 	
 ZPUINO SOFT PROCESSOR PROJECTS
+	QuickStart Project - Try out the basic Papilio functionality
+        This is the project that comes pre-loaded on the Papilio One and Papilio Pro boards.
+        It outputs the ASCII table on the FPGA serial port and flashes the LED's of any Button/LED Wing connected to any of the Wing Slots.
+	example://Papilio_QuickStart/Papilio_QuickStart.ino
+
 	Audio Project - RetroCade Synth
 	How about putting all of these audio chips together and putting them under MIDI control? That's what this project does, there is even a special MegaWing to provide high quality audio jacks, MIDI connnectors, and a Digital readout.
 	example://Audio_RetroCade_Synth/Audio_RetroCade_Synth.ino
