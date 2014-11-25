@@ -407,9 +407,9 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       break;	  
     case NEW_PROJECT:
       String pslPath = Base.getExamplesPath();
-      File f1 = new File(pslPath+"/00.Papilio_Schematic_Library/examples/Template_PSL_Base/Template_PSL_Base.ino");    
+      File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
       Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
-      newproj.handlesaveAtStart(false);
+      newproj.handlesaveAtStart(false);    
       break;	
     case LOAD_CIRCUIT:
       File fileBit = getLibraryFile("#define circuit", "bit.file");
