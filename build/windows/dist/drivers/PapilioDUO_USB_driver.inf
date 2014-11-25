@@ -91,7 +91,7 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 
 [DeviceList.NTamd64]
 %papilioDUO.bootloader%=DriverInstall, USB\VID_1D50&PID_60A4, USB\VID_1D50&PID_60A4&MI_00
-%papilioDUO.sketch%=DriverInstall, USB\VID_1D50&PID_60A4, USB\VID_1D50&PID_60A4&MI_00
+%papilioDUO.sketch%=DriverInstall, USB\VID_1D50&PID_60A5, USB\VID_1D50&PID_60A5&MI_00
 
 ;------------------------------------------------------------------------------
 ;  String Definitions
@@ -103,6 +103,6 @@ MFGFILENAME="CDC_vista"
 DRIVERFILENAME ="usbser"
 MFGNAME="Gadget Factory (www.gadgetfactory.net)"
 INSTDISK="Gadget Factory Papilio USB Driver Installer"
-papilioDUO.bootloader="Papilio DUO Bootloader"
-papilioDUO.sketch="Papilio DUO"
+papilioDUO.bootloader="Papilio DUO AVR Bootloader"
+papilioDUO.sketch="Papilio DUO AVR Serial Port"
 SERVICE="USB RS-232 Emulation Driver"
