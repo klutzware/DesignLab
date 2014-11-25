@@ -876,7 +876,7 @@ public class Base {
         for (File lib : libFiles) {
           if (lib.isDirectory()) {
             String symbols[] = listExtensions(lib, ".sym");
-            Base.installIseSymbol(pslLibName, pslCatName, lib, symbols);      
+            Base.installIseSymbol(pslLibName, pslCatName, lib, symbols);
           }   
         } 
       }   
@@ -2990,7 +2990,7 @@ public class Base {
   		  
   		  //Create an empty edif file in the directory so linux will automatically add the path to the symbols
 //  		  if (Base.isLinux()){
-  		    File edifFile = new File(symbolDir + "/linuxsymbol.edif");
+  		    File edifFile = new File(symbolDir + "/include_symbols.edif");
   		    if (!edifFile.exists())
   		      new FileOutputStream(edifFile).close();
 //  		  }
