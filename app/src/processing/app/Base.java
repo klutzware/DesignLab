@@ -3165,6 +3165,8 @@ public class Base {
                 }
               }
             }
+            else
+              bw.write(newLine + "\n");
           }
           else
             bw.write(newLine + "\n");
