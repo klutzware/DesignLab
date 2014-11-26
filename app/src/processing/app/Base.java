@@ -3178,24 +3178,24 @@ public class Base {
                 if (lib.isDirectory()) {
                   File[] libFiles = lib.listFiles();
                   for (File libFileName : libFiles) {
-                    if (libFileName.getName().toLowerCase().contains(".vhd")) { 
+                    if (libFileName.getName().toLowerCase().endsWith(".vhd")) { 
                       bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_VHDL\">\n");
                       bw.write("\t<association xil_pn:name=\"BehavioralSimulation\" xil_pn:seqID=\"154\"/>\n");
                       bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
                       bw.write("\t<library xil_pn:name=\"DesignLab\"/>\n");
                       bw.write("\t</file>\n");
                     }
-                    if (libFileName.getName().toLowerCase().contains(".ngc")) { 
+                    if (libFileName.getName().toLowerCase().endsWith(".ngc")) { 
                       bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_NGC\">\n");
                       bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
                       bw.write("\t</file>\n");
                     }  
-                    if (libFileName.getName().toLowerCase().contains(".edif")) { 
+                    if (libFileName.getName().toLowerCase().endsWith(".edif")) { 
                       bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_EDIF\">\n");
                       bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
                       bw.write("\t</file>\n");
                     }                     
-                    if (libFileName.getName().toLowerCase().contains(".v")) { 
+                    if (libFileName.getName().toLowerCase().endsWith(".v")) { 
                       bw.write("\t<file xil_pn:name=\"" + libFileName.getAbsolutePath() + "\" xil_pn:type=\"FILE_VERILOG\">\n");
                       bw.write("\t<association xil_pn:name=\"Implementation\" xil_pn:seqID=\"0\"/>\n");
                       bw.write("\t</file>\n");
