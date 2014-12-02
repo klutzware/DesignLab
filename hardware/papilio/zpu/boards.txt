@@ -86,7 +86,7 @@ zpuino_papilio_duolx9van.upload.size_sections=all
 zpuino_papilio_duolx9van.upload.speed=1000000
 zpuino_papilio_duolx9van.upload.tool=zpuinoprogrammer
 zpuino_papilio_duolx9van.build.f_cpu=96000000L
-zpuino_papilio_duolx9van.build.core=zpuino
+zpuino_papilio_duolx9van.build.core=zpuino2
 zpuino_papilio_duolx9van.build.mcu=zpu
 zpuino_papilio_duolx9van.build.toolchain=zpu
 zpuino_papilio_duolx9van.build.extra_flags=-D__ZPUINO_PAPILIO_PRO__ -DBOARD_ID=0xB4051300 -DBOARD_MEMORYSIZE=0x800000 -nostartfiles
