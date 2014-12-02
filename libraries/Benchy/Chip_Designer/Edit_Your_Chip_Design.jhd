@@ -1,7 +1,0 @@
-MODULE Edit_Your_Chip_Design
-	SUBMODULE BENCHY_sa_SumpBlaze_LogicAnalyzer8
-		INSTANCE XLXI_49
-	SUBMODULE BENCHY_sa_SumpBlaze_LogicAnalyzer8_jtag
-		INSTANCE XLXI_50
-	SUBMODULE BENCHY_zpuino_wb_waveform_generator
-		INSTANCE XLXI_51
