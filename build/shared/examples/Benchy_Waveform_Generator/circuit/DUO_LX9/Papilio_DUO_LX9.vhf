@@ -7,11 +7,11 @@
 -- \   \   \/     Version : 14.1
 --  \   \         Application : sch2hdl
 --  /   /         Filename : Papilio_DUO_LX9.vhf
--- /___/   /\     Timestamp : 12/02/2014 13:27:53
+-- /___/   /\     Timestamp : 12/03/2014 10:23:00
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
---Command: sch2hdl -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/Benchy -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/Clocks -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/HQVGA -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/Papilio_Hardware -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/ZPUino_1 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/ZPUino_2 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/ZPUino_Wishbone_Peripherals -intstyle ise -family spartan6 -flat -suppress -vhdl D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/Benchy_Waveform_Generator/circuit/DUO_LX9/Papilio_DUO_LX9.vhf -w D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/Benchy_Waveform_Generator/circuit/Papilio_DUO_LX9.sch
+--Command: sch2hdl -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/Benchy -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/Clocks -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/HQVGA -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/Papilio_Hardware -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/ZPUino_2 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/libraries/ZPUino_Wishbone_Peripherals -sympath C:/Users/Jack/Documents/Arduino/libraries/TestLib -intstyle ise -family spartan6 -flat -suppress -vhdl D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/examples/Benchy_Waveform_Generator/circuit/DUO_LX9/Papilio_DUO_LX9.vhf -w D:/Dropbox/GadgetFactory_Engineering/DesignLab/build/windows/work/examples/Benchy_Waveform_Generator/circuit/Papilio_DUO_LX9.sch
 --Design Name: Papilio_DUO_LX9
 --Device: spartan6
 --Purpose:
@@ -247,11 +247,6 @@ architecture BEHAVIORAL of Papilio_DUO_LX9 is
    end component;
    attribute BOX_TYPE of INV : component is "BLACK_BOX";
    
-   component clk_32to960_pll
-      port ( CLK_IN1  : in    std_logic; 
-             CLK_OUT1 : out   std_logic);
-   end component;
-   
    component ZPUino_Papilio_DUO_V2
       port ( gpio_bus_out            : out   std_logic_vector (200 downto 0); 
              gpio_bus_in             : in    std_logic_vector (200 downto 0); 
@@ -294,6 +289,11 @@ architecture BEHAVIORAL of Papilio_DUO_LX9 is
              clk_in       : in    std_logic; 
              wishbone_in  : in    std_logic_vector (100 downto 0); 
              wishbone_out : out   std_logic_vector (100 downto 0));
+   end component;
+   
+   component clk_32to300_pll
+      port ( CLK_IN1  : in    std_logic; 
+             CLK_OUT1 : out   std_logic);
    end component;
    
 begin
@@ -413,10 +413,6 @@ begin
       port map (I=>DUO_SW1,
                 O=>ARD_RESET);
    
-   XLXI_50 : clk_32to960_pll
-      port map (CLK_IN1=>XLXN_466,
-                CLK_OUT1=>XLXN_475);
-   
    XLXI_59 : ZPUino_Papilio_DUO_V2
       port map (ext_pins_in(100 downto 0)=>ext_pins_in(100 downto 0),
                 gpio_bus_in(200 downto 0)=>XLXN_598(200 downto 0),
@@ -467,6 +463,10 @@ begin
                 sin_dac_out=>Arduino_0,
                 sin_out=>open,
                 wishbone_out(100 downto 0)=>XLXN_522(100 downto 0));
+   
+   XLXI_64 : clk_32to300_pll
+      port map (CLK_IN1=>XLXN_466,
+                CLK_OUT1=>XLXN_475);
    
 end BEHAVIORAL;
 
