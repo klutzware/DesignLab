@@ -26,6 +26,7 @@ import java.io.File;
 
 import javax.swing.UIManager;
 
+import processing.app.Base;
 import processing.app.Preferences;
 import processing.core.PConstants;
 
@@ -68,7 +69,10 @@ public class Platform extends processing.app.Platform {
 //      } 
       if (url.endsWith(".xise")){
         launcher = Preferences.get("ise.path") + "/ise";
-        url = url.substring(7);
+        if (new File(launcher).exists())
+          url = url.substring(7);
+        else
+          Base.showMessage("Xilinx ISE not found", "The Xilinx ISE executable is not found, please go to preferences and set its location.");
       } 
       if (url.endsWith(".sh"))
       {
