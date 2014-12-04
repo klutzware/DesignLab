@@ -529,6 +529,12 @@
   </target>
 
   <target name="linux64-build" depends="linux-build" description="Build linux (64-bit) version">
+    <copy todir="linux/work/hardware/tools/papilio/papilio_loader" file="../hardware/tools/papilio/lin64/papilio-prog" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/papilio-prog" /> 
+
+    <copy todir="linux/work/hardware/tools/papilio/papilio_loader/" file="../hardware/tools/papilio/lin64/gawk" />
+    <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/gawk" />	
+  
     <copy tofile="linux/work/hardware/tools/avrdude" file="linux/dist/tools/avrdude64" overwrite="true" />
     <copy tofile="linux/work/lib/librxtxSerial.so" file="linux/dist/lib/librxtxSerial64.so" overwrite="true" />
 
