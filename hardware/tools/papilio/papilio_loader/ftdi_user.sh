@@ -16,4 +16,4 @@ echo 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="7bc0", GROU
 echo 'ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="7bc0", RUN+="/sbin/modprobe ftdi_sio" RUN+="/bin/sh -c '"'"'echo 0403 7bc0 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id'"'"'"' >> /etc/udev/rules.d/papilio.rules
 udevadm control --reload
 echo "You may need to log out and back in for the changes to take affect, if that does not work then reboot."
-newgrp dialout
+su $SUDO_USER
