@@ -6,7 +6,7 @@ if [ $username != "root" ]; then
 fi
 echo $SUDO_USER
 usermod -a -G dialout $SUDO_USER
-apt-get install libftdi-dev
+apt-get install libftdi-dev gawk
 chgrp dialout hardware/tools/papilio/papilio_loader/papilio-prog
 chgrp dialout hardware/tools/papilio/papilio-prog
 chgrp dialout hardware/tools/papilio/lin32/papilio-prog
