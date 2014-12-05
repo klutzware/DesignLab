@@ -533,6 +533,7 @@
     <copy tofile="linux/work/hardware/tools/papilio/papilio_loader/gawk" file="../hardware/tools/papilio/lin64/gawk" overwrite="true" />
     <copy tofile="linux/work/hardware/tools/avrdude" file="linux/dist/tools/avrdude64" overwrite="true" />
     <copy tofile="linux/work/lib/librxtxSerial.so" file="linux/dist/lib/librxtxSerial64.so" overwrite="true" />
+	<copy tofile="linux/work/lib/preferences.txt" file="linux/dist/lib/preferences-lin64.txt" overwrite="true" />
 
     <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/gawk" />	
     <chmod perm="755" file="linux/work/hardware/tools/papilio/papilio_loader/papilio-prog" /> 
