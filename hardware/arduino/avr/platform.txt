@@ -69,7 +69,26 @@ tools.avrdude.erase.params.verbose=-v -v -v -v
 tools.avrdude.erase.params.quiet=-q -q
 tools.avrdude.erase.pattern="{cmd.path}" "-C{config.path}" {erase.verbose} -p{build.mcu} -c{protocol} {program.extra_params} -e -Ulock:w:{bootloader.unlock_bits}:m -Uefuse:w:{bootloader.extended_fuses}:m -Uhfuse:w:{bootloader.high_fuses}:m -Ulfuse:w:{bootloader.low_fuses}:m
 
+tools.avrdude.duoisp.params.verbose=-v -v -v -v
+tools.avrdude.duoisp.params.quiet=-q -q
+tools.avrdude.duoisp.pattern="{runtime.ide.path}/hardware/tools/papilio/papilio_loader/bin/papilio-prog.exe" -f {runtime.ide.path}/hardware/arduino/avr/bootloaders/caterina/Papilio_DUO_ArduinoISP.bit
+
 tools.avrdude.bootloader.params.verbose=-v -v -v -v
 tools.avrdude.bootloader.params.quiet=-q -q
 tools.avrdude.bootloader.pattern="{cmd.path}" "-C{config.path}" {bootloader.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{runtime.ide.path}/hardware/arduino/avr/bootloaders/{bootloader.file}:i" -Ulock:w:{bootloader.lock_bits}:m
 
+# Papilio Programmer
+# ------------------
+tools.papilioprog.cmd=papilio_programmer_linux.sh 
+tools.papilioprog.cmd.windows=Papilio_Programmer.bat
+tools.papilioprog.path={runtime.ide.path}/hardware/tools/papilio/papilio_loader
+
+tools.papilioprog.bootloader.params.verbose=-v
+tools.papilioprog.bootloader.params.quiet=
+tools.papilioprog.bootloader.pattern="{path}/{cmd}" "{runtime.ide.path}/hardware/zpuino/zpu/bootloaders/{bootloader.file}"
+tools.papilioprog.bootloader.pattern2="{path}/{cmd}" 
+
+# This is not necessary but not sure how to disable the erase.
+tools.papilioprog.erase.params.verbose=
+tools.papilioprog.erase.params.quiet=
+tools.papilioprog.erase.pattern="{path}/bin/papilio-prog.exe" -c 

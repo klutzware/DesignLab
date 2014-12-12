@@ -273,6 +273,14 @@ public class BasicUploader extends Uploader  {
       // flushSerialBuffer();
       // }
 
+      //If we need to load the Arduino DUO ISP bit file first.
+      if (programmer.contains("duoisp")){
+        String pattern = prefs.get("duoisp.pattern");
+        String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false;
+      }      
+      
       String pattern = prefs.get("program.pattern");
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       return executeUploadCommand(cmd);
@@ -308,6 +316,14 @@ public class BasicUploader extends Uploader  {
       // {
       // flushSerialBuffer();
       // }
+      
+      //If we need to load the Arduino DUO ISP bit file first.
+      if (programmer.contains("duoisp")){
+        String pattern = prefs.get("duoisp.pattern");
+        String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false;
+      }        
 
       String pattern = prefs.get("erase.pattern");
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);

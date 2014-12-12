@@ -2,10 +2,10 @@
 
 ##############################################################
 
-duo.name=Papilio DUO - AVR
+duo.name=Papilio DUO - AVR - USB
 duo.upload.tool=avrdude
 duo.upload.protocol=avr109
-duo.upload.maximum_size=28672
+duo.upload.maximum_size=45000
 duo.upload.speed=57600
 duo.upload.disable_flushing=true
 duo.upload.use_1200bps_touch=true
@@ -28,5 +28,44 @@ duo.build.core=arduino
 duo.build.variant=papilioDUO
 duo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
 
+duo.bootloader.tool=papilioprog
+duo.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
+duo.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
+duo.pdf.file=circuit/schematic_papilio_DUO.pdf
+duo.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
+
 ##############################################################
 
+##############################################################
+
+duoisp.name=Papilio DUO - AVR - No USB - ISP
+duoisp.upload.tool=avrdude
+duoisp.upload.protocol=avr109
+duoisp.upload.maximum_size=32768
+duoisp.upload.speed=57600
+duoisp.upload.disable_flushing=true
+
+duoisp.program.tool=duoisp
+
+duoisp.bootloader.tool=avrdude
+duoisp.bootloader.low_fuses=0xff
+duoisp.bootloader.high_fuses=0x97
+#duoisp.bootloader.high_fuses=0xd8 #Without JTAG enabled
+duoisp.bootloader.extended_fuses=0xcb
+duoisp.bootloader.file=caterina/Caterina-Papilio-duo.hex
+duoisp.bootloader.unlock_bits=0x3F
+duoisp.bootloader.lock_bits=0x2F
+
+duoisp.build.mcu=atmega32u4
+duoisp.build.f_cpu=16000000L
+duoisp.build.vid=0x1d50
+duoisp.build.pid=0x60a5
+duoisp.build.core=arduino
+duoisp.build.variant=papilioDUO
+duoisp.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
+
+duoisp.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
+duoisp.pdf.file=circuit/schematic_papilio_DUO.pdf
+duoisp.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
+
+##############################################################

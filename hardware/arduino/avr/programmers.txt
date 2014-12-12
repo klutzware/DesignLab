@@ -6,3 +6,6 @@ duoisp.program.protocol=stk500v1
 duoisp.program.speed=57600
 duoisp.program.tool=avrdude
 duoisp.program.extra_params=-P{serial.port} -b{program.speed}
+
+papilioprog.name=Papilio Programmer
+papilioprog.program.tool=papilioprog
