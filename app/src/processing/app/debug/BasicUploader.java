@@ -152,6 +152,31 @@ public class BasicUploader extends Uploader  {
 //        flushSerialBuffer();
 //      }
 
+      //If we need to load the Arduino DUO ISP bit file first.
+      String protocol = prefs.get("upload.protocol");
+      if (protocol.contains("duoisp")){
+        //Load the ISP bit file
+        String pattern = prefs.get("duoisp.pattern");
+        String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false;
+        
+        //Program the hex file with avrdude
+        pattern = prefs.get("duoisp.pattern2");
+        cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false; 
+        
+        //Restart FPGA
+        pattern = prefs.get("duoisp.pattern3");
+        cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false;
+        pattern = prefs.get("duoisp.pattern4");
+        cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        return executeUploadCommand(cmd);      
+      } 
+      
       String pattern = prefs.get("upload.pattern");
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       uploadResult = executeUploadCommand(cmd);
@@ -275,10 +300,26 @@ public class BasicUploader extends Uploader  {
 
       //If we need to load the Arduino DUO ISP bit file first.
       if (programmer.contains("duoisp")){
+        //Load the ISP bit file
         String pattern = prefs.get("duoisp.pattern");
         String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
         if (!executeUploadCommand(cmd))
           return false;
+        
+        //Program the hex file with avrdude
+        pattern = prefs.get("duoisp.pattern2");
+        cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false; 
+        
+        //Restart FPGA
+        pattern = prefs.get("duoisp.pattern3");
+        cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        if (!executeUploadCommand(cmd))
+          return false;
+        pattern = prefs.get("duoisp.pattern4");
+        cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+        return executeUploadCommand(cmd);         
       }      
       
       String pattern = prefs.get("program.pattern");
@@ -351,13 +392,13 @@ public class BasicUploader extends Uploader  {
     PreferencesMap prefs = Preferences.getMap();
     prefs.putAll(Base.getBoardPreferences());
     prefs.putAll(targetPlatform.getProgrammer(programmer));
-    prefs.putAll(targetPlatform.getTool(prefs.get("bootloader.tool")));
+    prefs.putAll(targetPlatform.getTool(prefs.get("bitloader.tool")));
     if (verbose) {
       prefs.put("erase.verbose", prefs.get("erase.params.verbose"));
-      prefs.put("bootloader.verbose", prefs.get("bootloader.params.verbose"));
+      prefs.put("bitloader.verbose", prefs.get("bitloader.params.verbose"));
     } else {
       prefs.put("erase.verbose", prefs.get("erase.params.quiet"));
-      prefs.put("bootloader.verbose", prefs.get("bootloader.params.quiet"));
+      prefs.put("bitloader.verbose", prefs.get("bitloader.params.quiet"));
     }
     
     try {
@@ -366,8 +407,8 @@ public class BasicUploader extends Uploader  {
       // {
       // flushSerialBuffer();
       // }
-
-      String pattern = prefs.get("bootloader.pattern2") + " \"" + path + "\"";
+      String temp =  prefs.get("bitloader.pattern2");
+      String pattern = temp + " \"" + path + "\"";
 	  //Base.showMessage("Title", pattern);
 	  System.out.println(_("Burning bit file to Papilio Board."));
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);

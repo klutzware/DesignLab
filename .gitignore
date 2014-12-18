@@ -34,3 +34,5 @@ build/windows/zap-2.3.0-linux32.tgz
 build/windows/launcher/application-old (2).ico
 build/windows/launcher/application-old.ico
 build/windows/erw/setup/setup.exe
+*.exe
+build/windows/erw/setup/DesignLab-020-windows-setup.exe

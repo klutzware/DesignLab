@@ -2175,7 +2175,7 @@ public class Base {
 	  if (url.endsWith(".bit")){
 	    Preferences.set("programmer", "papilioprog");
 			activeEditor.handleBurnBitfile(url.substring(7));
-      Preferences.set("programmer", "duoisp");			
+      //Preferences.set("programmer", "duoisp");			
 	  }
 	  else if (url.endsWith(".xise")) {
 	      updateXilinxProject(url.substring(7));

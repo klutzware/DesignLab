@@ -5,7 +5,7 @@
 duo.name=Papilio DUO - AVR - USB
 duo.upload.tool=avrdude
 duo.upload.protocol=avr109
-duo.upload.maximum_size=45000
+duo.upload.maximum_size=28672
 duo.upload.speed=57600
 duo.upload.disable_flushing=true
 duo.upload.use_1200bps_touch=true
@@ -28,8 +28,8 @@ duo.build.core=arduino
 duo.build.variant=papilioDUO
 duo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
 
-duo.bootloader.tool=papilioprog
-duo.bootloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
+duo.bitloader.tool=papilioprog
+duo.bitloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
 duo.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
 duo.pdf.file=circuit/schematic_papilio_DUO.pdf
 duo.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
@@ -40,10 +40,14 @@ duo.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
 
 duoisp.name=Papilio DUO - AVR - No USB - ISP
 duoisp.upload.tool=avrdude
-duoisp.upload.protocol=avr109
+duoisp.upload.protocol=duoisp
+duoisp.communication=serial
+duoisp.protocol=stk500v1
+duoisp.program.extra_params=-P{serial.port} -b{upload.speed}
 duoisp.upload.maximum_size=32768
 duoisp.upload.speed=57600
 duoisp.upload.disable_flushing=true
+duoisp.upload.use_1200bps_touch=false
 
 duoisp.program.tool=duoisp
 
@@ -64,6 +68,8 @@ duoisp.build.core=arduino
 duoisp.build.variant=papilioDUO
 duoisp.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
 
+duoisp.bitloader.tool=papilioprog
+duoisp.bitloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
 duoisp.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
 duoisp.pdf.file=circuit/schematic_papilio_DUO.pdf
 duoisp.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
