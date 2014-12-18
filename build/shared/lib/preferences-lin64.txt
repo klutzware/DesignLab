@@ -247,7 +247,7 @@ target_platform = zpu
 board = zpuino_papilio_duolx9van
 software=ARDUINO
 
-programmer = papilio:papilioprog
+programmer = arduino:duoisp
 ise.path=/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64
 
 upload.using = bootloader

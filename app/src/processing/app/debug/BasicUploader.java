@@ -372,26 +372,37 @@ public class BasicUploader extends Uploader  {
         return false;
 
       pattern = prefs.get("bootloader.pattern");
-	  System.out.println(_("Burning bit file to Papilio Board."));
+	  //System.out.println(_("Burning bit file to Papilio Board."));
       cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
-      return executeUploadCommand(cmd);
+      if (!executeUploadCommand(cmd))
+        return false;
+      
+      //Restart FPGA
+      pattern = prefs.get("duoisp.pattern3");
+      cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+      if (!executeUploadCommand(cmd))
+        return false;
+      pattern = prefs.get("duoisp.pattern4");
+      cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
+      return executeUploadCommand(cmd);       
+      
     } catch (Exception e) {
       throw new RunnerException(e);
     }
   }
   
   public boolean burnBitfile(String path) throws RunnerException {
-    String programmer = Preferences.get("programmer");
+//    String programmer = Preferences.get("programmer");
     TargetPlatform targetPlatform = Base.getTargetPlatform();
-    if (programmer.contains(":")) {
-      String[] split = programmer.split(":", 2);
-      targetPlatform = Base.getCurrentTargetPlatformFromPackage(split[0]);
-      programmer = split[1];
-    }
+//    if (programmer.contains(":")) {
+//      String[] split = programmer.split(":", 2);
+//      targetPlatform = Base.getCurrentTargetPlatformFromPackage(split[0]);
+//      programmer = split[1];
+//    }
     
     PreferencesMap prefs = Preferences.getMap();
     prefs.putAll(Base.getBoardPreferences());
-    prefs.putAll(targetPlatform.getProgrammer(programmer));
+//    prefs.putAll(targetPlatform.getProgrammer(programmer));
     prefs.putAll(targetPlatform.getTool(prefs.get("bitloader.tool")));
     if (verbose) {
       prefs.put("erase.verbose", prefs.get("erase.params.verbose"));
@@ -410,7 +421,7 @@ public class BasicUploader extends Uploader  {
       String temp =  prefs.get("bitloader.pattern2");
       String pattern = temp + " \"" + path + "\"";
 	  //Base.showMessage("Title", pattern);
-	  System.out.println(_("Burning bit file to Papilio Board."));
+	  //System.out.println(_("Burning bit file to Papilio Board."));
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       return executeUploadCommand(cmd);
     } catch (Exception e) {
