@@ -1,3 +1,6 @@
+1/1/2015 Jack Gassett
+	-Digitally signed the drivers so they will install in Windows 8 with no fuss.
+
 9/15/2014 Jack Gassett
 	-Added support for Papilio DUO
 	-Upgraded to FTDI CDM v2.10.00 driver

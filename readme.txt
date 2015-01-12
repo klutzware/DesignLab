@@ -33,6 +33,10 @@ Processing and Wiring.
 
 Icon and about image designed by ToDo: http://www.todo.to.it/
 
+DesignLab 0.2.1 - 2015.01.01
+[ide]
+*Digitally signed the drivers for easy install in Windows 8
+
 ZAP 2.3.0 - 2014.3.25
 [ide]
 *Program bit files with the internal loader instead of loading externally.
