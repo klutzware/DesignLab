@@ -75,12 +75,12 @@
 // #define FPGA_PIN_P17 47
 
 // Other pins
-// #define FPGA_PIN_P24 48
+#define FPGA_PIN_P24 48
 // #define FPGA_LED_PIN 49
 
-// #define FPGA_PIN_FLASHCS     FPGA_PIN_P24
+#define FPGA_PIN_FLASHCS     FPGA_PIN_P24
 
-// #define SPI_FLASH_SEL_PIN FPGA_PIN_FLASHCS
+#define SPI_FLASH_SEL_PIN FPGA_PIN_FLASHCS
 
 /* WING configuration */
 
