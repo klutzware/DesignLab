@@ -14,3 +14,6 @@ This library also has many examples.  After installation, you can find them unde
 File | Examples | Gameduino.  'selftest' is a good example to start with, since it
 runs a series of hardware tests.
 
+License:
+Gameduino is open-source hardware (BSD license) and all its code is GPL licensed.
+

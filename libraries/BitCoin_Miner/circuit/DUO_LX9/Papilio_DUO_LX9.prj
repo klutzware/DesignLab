@@ -1,0 +1,4 @@
+vhdl DesignLab "../../../../../DesignLab/build/windows/work/libraries/ZPUino_2/pad.vhd"
+verilog work "../../BitCoin_Miner.v"
+vhdl DesignLab "../../../../../DesignLab/build/windows/work/libraries/Papilio_Hardware/LogicStart_Shield_Pinout.vhd"
+vhdl work "Papilio_DUO_LX9.vhf"
