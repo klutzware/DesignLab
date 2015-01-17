@@ -27,8 +27,6 @@ void SPIClass::begin()
     if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_SPI)!=0) {
         return;
     }
-
-    //Serial.println(getSlot());
     REG(0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 }
 
@@ -38,7 +36,6 @@ void SPIClass::begin(MOSI mosi, MISO miso, SCK sck)
         return;
     }
 
-    //Serial.println(getSlot());
     REG(0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 
     pinMode(mosi, OUTPUT);
@@ -66,9 +63,35 @@ uint16_t SPIClass::transfer16(unsigned _data) {
     return REG(3);
 }
 
-uint32_t SPIClass::transfer32(unsigned _data) {
+uint32_t SPIClass::transfer24(unsigned _data) {
     REG(5) = _data;
     return REG(5);
+}
+
+uint32_t SPIClass::transfer32(unsigned _data) {
+    REG(7) = _data;
+    return REG(7);
+}
+
+void SPIClass::send(unsigned _data) {
+    REG(1) = _data;
+}
+
+void SPIClass::send16(unsigned _data) {
+    REG(3) = _data;
+}
+
+void SPIClass::send24(unsigned _data) {
+    REG(5) = _data;
+}
+
+void SPIClass::send32(unsigned _data) {
+    REG(7) = _data;
+}
+
+unsigned SPIClass::read()
+{
+    return REG(1);
 }
 
 void SPIClass::end() {
@@ -82,12 +105,12 @@ void SPIClass::setBitOrder(int bitOrder)
 
 void SPIClass::setDataMode(int mode)
 {
-    REG(0) = (REG(0) & ~SPI_MODE_MASK) | mode;
+    REG(0) = (REG(0) & ~SPI_MODE_MASK) | (mode<<SPICPOL);
 }
 
 void SPIClass::setClockDivider(int rate)
 {
-    REG(0) = (REG(0) & ~SPI_CLOCK_MASK) | rate;
+    REG(0) = (REG(0) & ~SPI_CLOCK_MASK) | (rate<<SPICP0);
 }
 
 
