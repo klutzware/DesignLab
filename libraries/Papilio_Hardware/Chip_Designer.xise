@@ -15,6 +15,19 @@
   <version xil_pn:ise_version="14.1" xil_pn:schema_version="2"/>
 
   <files>
+    <file xil_pn:name="../AVR_Wishbone_Bridge/AVR_Wishbone_Bridge.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="154"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+      <library xil_pn:name="DesignLab"/>
+    </file>
+    <file xil_pn:name="../AVR_Wishbone_Bridge/AVR_Wishbone_Bridge_Test.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="154"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+      <library xil_pn:name="DesignLab"/>
+    </file>
+    <file xil_pn:name="../AVR_Wishbone_Bridge/include_symbols.edif" xil_pn:type="FILE_EDIF">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
     <file xil_pn:name="../Benchy/BENCHY_sa_SumpBlaze_LogicAnalyzer8.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="154"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -198,6 +211,12 @@
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
       <library xil_pn:name="DesignLab"/>
     </file>
+    <file xil_pn:name="../BitCoin_Miner/BitCoin_Miner.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
+    <file xil_pn:name="../BitCoin_Miner/include_symbols.edif" xil_pn:type="FILE_EDIF">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
     <file xil_pn:name="../Clocks/clk_32to100_dcm.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="154"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -260,6 +279,9 @@
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
     </file>
     <file xil_pn:name="../Gameduino/fifo.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
+    <file xil_pn:name="../Gameduino/Gameduino.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
     </file>
     <file xil_pn:name="../Gameduino/generated.v" xil_pn:type="FILE_VERILOG">
@@ -328,6 +350,11 @@
       <library xil_pn:name="DesignLab"/>
     </file>
     <file xil_pn:name="Papilio_DUO_Wing_Pinout.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="154"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+      <library xil_pn:name="DesignLab"/>
+    </file>
+    <file xil_pn:name="Spartan6_Reset.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="154"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
       <library xil_pn:name="DesignLab"/>
@@ -927,7 +954,14 @@
     <!-- Do not hand-edit this section, as it will be overwritten when the    -->
     <!-- project is analyzed based on files automatically identified as       -->
     <!-- include files.                                                       -->
-    <file xil_pn:name="../Gameduino/revision.v" xil_pn:type=""/>
+    <file xil_pn:name="../BitCoin_Miner/main_pll.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../BitCoin_Miner/raw7seg.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../BitCoin_Miner/serial.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../BitCoin_Miner/sha-256-functions.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../BitCoin_Miner/sha256_transform.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../BitCoin_Miner/uart_receiver.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../BitCoin_Miner/uart_transmitter.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="../Gameduino/revision.v" xil_pn:type="FILE_VERILOG"/>
   </autoManagedFiles>
 
 </project>

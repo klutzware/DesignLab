@@ -4,4 +4,3 @@ map -intstyle ise -p xc6slx9-tqg144-2 -w -logic_opt off -ol high -t 1 -xt 0 -reg
 par -w -intstyle ise -ol high -mt off Papilio_DUO_LX9_map.ncd Papilio_DUO_LX9.ncd Papilio_DUO_LX9.pcf 
 trce -intstyle ise -v 3 -s 2 -n 3 -fastpaths -xml Papilio_DUO_LX9.twx Papilio_DUO_LX9.ncd -o Papilio_DUO_LX9.twr Papilio_DUO_LX9.pcf 
 bitgen -intstyle ise -f Papilio_DUO_LX9.ut Papilio_DUO_LX9.ncd 
-bitgen -intstyle ise -f Papilio_DUO_LX9.ut Papilio_DUO_LX9.ncd 

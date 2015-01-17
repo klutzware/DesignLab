@@ -1,3 +1,14 @@
+DesignLab 0.2.2 - 2015.01.16
+[ide]
+*Fix error with audio sketches for the DUO
+*Fix bootloader error for all boards other then DUO
+
+[designlab libraries]
+*Added blank library
+*Fixed Arcade MegaWing
+*Add Wishbone bridge
+*Add Arcade MegaWing Example
+
 DesignLab 0.2.1 - 2015.01.01
 [ide]
 *Digitally signed the drivers for easy install in Windows 8
