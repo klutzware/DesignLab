@@ -1,3 +1,0 @@
-MODULE Edit_Your_Chip_Design
-	SUBMODULE AVR_Wishbone_Bridge
-		INSTANCE XLXI_50

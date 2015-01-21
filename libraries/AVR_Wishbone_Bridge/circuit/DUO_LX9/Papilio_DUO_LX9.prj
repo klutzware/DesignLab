@@ -1,8 +1,0 @@
-vhdl DesignLab "../../../ZPUino_Wishbone_Peripherals/Wishbone_to_Registers.vhd"
-vhdl DesignLab "../../../ZPUino_2/sram_ctrl8.vhd"
-vhdl DesignLab "../../../ZPUino_2/pad.vhd"
-vhdl DesignLab "../../../ZPUino_2/ZPUino_Papilio_DUO_V2.vhd"
-vhdl DesignLab "../../../Papilio_Hardware/Wing_GPIO.vhd"
-vhdl DesignLab "../../../Papilio_Hardware/Papilio_DUO_Wing_Pinout.vhd"
-vhdl DesignLab "../../AVR_Wishbone_Bridge_Test.vhd"
-vhdl work "Papilio_DUO_LX9.vhf"
