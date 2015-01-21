@@ -1,7 +1,0 @@
-vhdl DesignLab "../../../ZPUino_Wishbone_Peripherals/Wishbone_to_Registers.vhd"
-vhdl DesignLab "../../../ZPUino_2/pad.vhd"
-vhdl DesignLab "../../../ZPUino_2/ZPUino_Papilio_One_250K_V2.vhd"
-vhdl DesignLab "../../Wishbone_Symbol_Example.vhd"
-vhdl DesignLab "../../../Papilio_Hardware/Wing_GPIO.vhd"
-vhdl DesignLab "../../../Papilio_Hardware/Papilio_Default_Wing_Pinout.vhd"
-vhdl work "Papilio_One_250K.vhf"
