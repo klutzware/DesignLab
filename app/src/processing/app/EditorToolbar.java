@@ -26,6 +26,8 @@ import static processing.app.I18n._;
 
 import java.io.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -412,15 +414,15 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       newproj.handlesaveAtStart(false);    
       break;	
     case LOAD_CIRCUIT:
-      File fileBit = getLibraryFile("#define circuit", "bit.file");
+      File fileBit = getLibraryFile("\n#definecircuit", "bit.file");
       if (fileBit.exists())
         Base.openURL("file://" + fileBit.toString());
       else
         Base.showMessage("Not Found", "Sorry, no bit file found in the libraries or project directory.");
       break;	
     case VIEW_CIRCUIT:
-      File filePdf = getLibraryFile("#define circuit", "pdf.file");
-      File fileBit2 = getLibraryFile("#define circuit", "bit.file");
+      File filePdf = getLibraryFile("\n#definecircuit", "pdf.file");
+      File fileBit2 = getLibraryFile("\n#definecircuit", "bit.file");
       if (filePdf.exists()) {
         long datePDF = filePdf.lastModified();
         long dateBit = fileBit2.lastModified();
@@ -434,7 +436,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
         Base.showMessage("Not Found", "Sorry, no schematic pdf file found in the libraries or project directory.");
       break;        
     case EDIT_CIRCUIT:
-      File fileXise = getLibraryFile("#define circuit", "xise.file");
+      File fileXise = getLibraryFile("\n#definecircuit", "xise.file");
       if (fileXise.exists()){
         //Base.openURL("file://" + fileXise.toString());
         if (fileXise.toString().startsWith(Base.getActiveSketchPath()))
@@ -455,6 +457,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   }
   
   private File getLibraryFile(String keyWord, String prefKey) {
+    //Remove the whitespace and search for a newline to rule out commented out keywords.
     String keyWordVal = getKeyWord(keyWord);
     PreferencesMap prefs = Preferences.getMap();
     prefs.putAll(Base.getBoardPreferences());
@@ -485,11 +488,34 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   }
   
   private String getKeyWord(String keyword) {
+    
+//    // whitespace
+//    String p = "\\s+";
+//    
+//    // multi-line and single-line comment
+//    //p += "|" + "(//\\s*?$)|(/\\*\\s*?\\*/)";
+//    p += "|(/\\*[^*]*(?:\\*(?!/)[^*]*)*\\*/)|(//.*?$)";
+//
+//    // pre-processor directive
+//    p += "|(#(?:\\\\\\n|.)*)";
+//    Pattern pattern = Pattern.compile(p, Pattern.MULTILINE);
+//      
+//    Matcher matcher = pattern.matcher(keyword);
+//    int i = 0;
+//    while (matcher.find()) {
+//      if (matcher.start()!=i)
+//        break;
+//      i = matcher.end();
+//    }
+   
     String result = null;
     String text = editor.getText();
     text = text.toLowerCase();
+    text = text.replaceAll(" ", "");
+    text = text.replaceAll("\t", "");
     int start = text.indexOf(keyword, 0);
-    int end = text.indexOf("\n", start);
+    //int start = i;
+    int end = text.indexOf("\n", start+1);
     if (start >= 0) {
       result = text.substring(start + keyword.length(), end);
       result = result.trim();
