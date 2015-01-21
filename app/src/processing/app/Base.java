@@ -2984,93 +2984,74 @@ public class Base {
 	}  
 	
 	static public void installIseSymbol(String libFileName, String catFileName, File symbolDir, String symbols[]) {
-		BufferedReader sourceSymbol = null;
-		PrintWriter libFile = null;
-		PrintWriter catFile = null;
-    PrintWriter linuxSymbol = null;
-		String symbolName, libPath;
+//		BufferedReader sourceSymbol = null;
+//		PrintWriter libFile = null;
+//		PrintWriter catFile = null;
+//    PrintWriter linuxSymbol = null;
+//		String symbolName, libPath;
 		
     if (symbols.length > 0){
   		try {
   		  
   		  //Create an empty edif file in the directory so linux will automatically add the path to the symbols
-//  		  if (Base.isLinux()){
-  		    File edifFile = new File(symbolDir + "/include_symbols.edif");
-  		    if (!edifFile.exists())
-  		      new FileOutputStream(edifFile).close();
-//  		  }
-  			
-  			libFile = new PrintWriter(new FileWriter(libFileName, true));
-  			catFile = new PrintWriter(new FileWriter(catFileName, true));
-  			libPath = new File(libFileName).getParent();
-  			
-  			
-  			String line;
-  			
-  			catFile.append("\"." + getFileNameWithoutExtension(symbolDir) + "\"\n{\n");
-    	  for (String symbol : symbols) {
-    	    //showMessage("Test", symbol);
-    	    sourceSymbol = new BufferedReader(new FileReader(symbolDir + "/" + symbol));
-    	    symbolName = getFileNameWithoutExtension(new File(symbol));
-//    	    if (Base.isLinux())
-//    	      linuxSymbol = new PrintWriter(new FileWriter(libPath  + "/" + symbol , false));
-  
-    			//Append the symbol to the end of the end of the lib file
-    			while ((line = sourceSymbol.readLine()) != null) {
-    			  //line = line.replace("\\u00", "");  //remove any null characters
-    				libFile.append(line +"\n");
-//    				if (Base.isLinux())
-//    				  linuxSymbol.write(line + "\n");
-    			}
-    			//libFile.append("\0");	//add null character to the end.
-    			
-    			//Add the symbol to the cat file
-    			catFile.append("\"" + symbolName + "\"\n");
-    			
-    			//Close linuxSymbol
-//    			if (Base.isLinux()) {
-//    			  if(linuxSymbol != null)
-//    			    linuxSymbol.close();
-//    			}
-  			
-    	  }
-  			
-  			catFile.append("}\n");
-  			
-  		} catch (Exception e) {
-  		 return;
-  		} finally {
-  		 try {
-  			if(sourceSymbol != null){
-  			  sourceSymbol.close();
-  			}
-  		 } catch (IOException e) {
-  			//
-  		 }
-  		 try {
-  			if(libFile != null){
-  			  //libFile.append("\0"); //add null character to the end.
-  			  libFile.close();
-  			}
-  		 } catch (Exception e) {
-  			//
-  		 }
-  		 try {
-  			if(catFile != null)
-  			   catFile.close();
-  		 } catch (Exception e) {
-  			//
-  		 }	
-//       try {
-//         if (Base.isLinux()){
-//           if(linuxSymbol != null)
-//             linuxSymbol.close();
-//         }
-//        } catch (Exception e) {
-//         //
-//        }
-  		}
+		    File edifFile = new File(symbolDir + "/include_symbols.edif");
+		    if (!edifFile.exists())
+		      new FileOutputStream(edifFile).close();	
+      } catch (IOException e) {
+        return;
+      }		    
     }
+		    //Since discovering that adding an edif file to a directory adds the symbols to the path - the lib and cat files are no longer needed!
+//  			libFile = new PrintWriter(new FileWriter(libFileName, true));
+//  			catFile = new PrintWriter(new FileWriter(catFileName, true));
+//  			libPath = new File(libFileName).getParent();
+//  			
+//  			
+//  			String line;
+//  			
+//  			catFile.append("\"." + getFileNameWithoutExtension(symbolDir) + "\"\n{\n");
+//    	  for (String symbol : symbols) {
+//    	    sourceSymbol = new BufferedReader(new FileReader(symbolDir + "/" + symbol));
+//    	    symbolName = getFileNameWithoutExtension(new File(symbol));
+//  
+//    			//Append the symbol to the end of the end of the lib file
+//    			while ((line = sourceSymbol.readLine()) != null) {
+//    				libFile.append(line +"\n");
+//    			}
+//    			
+//    			//Add the symbol to the cat file
+//    			catFile.append("\"" + symbolName + "\"\n");
+//    			
+//  			
+//    	  }
+//  			
+//  			catFile.append("}\n");
+//  			
+//  		} catch (Exception e) {
+//  		 return;
+//  		} finally {
+//  		 try {
+//  			if(sourceSymbol != null){
+//  			  sourceSymbol.close();
+//  			}
+//  		 } catch (IOException e) {
+//  			//
+//  		 }
+//  		 try {
+//  			if(libFile != null){
+//  			  libFile.close();
+//  			}
+//  		 } catch (Exception e) {
+//  			//
+//  		 }
+//  		 try {
+//  			if(catFile != null)
+//  			   catFile.close();
+//  		 } catch (Exception e) {
+//  			//
+//  		 }	
+//  		}
+//    }
 		
 	}
 	
