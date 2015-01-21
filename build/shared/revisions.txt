@@ -1,3 +1,14 @@
+DesignLab 1.0.0 - 2015.01.21
+[ide]
+*Fix symbols not closing properly.
+*Check for comments before #define circuit statements
+
+[designlab libraries]
+*Separate Arcade MegaWing and LogicStart MegaWing circuits to their own libraries.
+*Update Utility.sch with Papilio DUO IO connections.
+*Add ZPUino Hyperion variant for Papilio One 500K.
+*Added Pullups to the Arcade MegaWing Circuit.
+
 DesignLab 0.2.2 - 2015.01.16
 [ide]
 *Fix error with audio sketches for the DUO
