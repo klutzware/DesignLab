@@ -40,7 +40,7 @@ zpuino_papilio_one500.pdf.file=circuit/schematic_papilio_one_500k.pdf
 zpuino_papilio_one500.bit.file=circuit/500K/papilio_one_500k.bit
 ##############################################################
 zpuino_papilio_one500vps.name=Papilio One (500K) - ZPUino Hyperion
-zpuino_papilio_one500vps.boardid=0xA4010E01
+zpuino_papilio_one500vps.boardid=0xb4010f00 
 zpuino_papilio_one500vps.upload.protocol=zpuino-serial
 zpuino_papilio_one500vps.upload.maximum_size=12160
 zpuino_papilio_one500vps.upload.size_sections=all
@@ -51,8 +51,8 @@ zpuino_papilio_one500vps.build.core=zpuino
 zpuino_papilio_one500vps.build.mcu=zpu
 zpuino_papilio_one500vps.build.pins=standard
 zpuino_papilio_one500vps.build.toolchain=zpu
-zpuino_papilio_one500vps.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xA4010E01 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
-zpuino_papilio_one500vps.build.extraSflags=-DBOARD_ID=0xA4010E01
+zpuino_papilio_one500vps.build.extra_flags=-D__ZPUINO_PAPILIO_ONE__ -DCLK_FREQ=92000000 -DBOARD_ID=0xb4010f00 -DBOARD_MEMORYSIZE=0x4000 -D__S3E_500__ -nostartfiles
+zpuino_papilio_one500vps.build.extraSflags=-DBOARD_ID=0xb4010f00 
 zpuino_papilio_one500vps.bitloader.tool=papilioprog
 zpuino_papilio_one500vps.bitloader.file=p1_500k/zpuino-1.0-PapilioOne-S3E500-Hyperion-HQVGA-PinSelect.bit
 zpuino_papilio_one500vps.xise.file=circuit/PSL_Papilio_One_500K.xise
