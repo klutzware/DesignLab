@@ -62,7 +62,7 @@ public:
   SPIClass(int index=1);
   byte transfer(unsigned _data);
   uint16_t transfer16(unsigned _data);
-  uint16_t transfer24(unsigned _data);
+  uint32_t transfer24(unsigned _data);
   uint32_t transfer32(unsigned _data);
   uint32_t read();
   void send(unsigned _data);
