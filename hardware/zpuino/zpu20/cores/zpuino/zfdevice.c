@@ -1,6 +1,8 @@
 #include "zfdevice.h"
 #include <string.h>
 
+#ifndef NOPOSIX
+
 #define ZF_MAX_BACKENDS 8
 #define ZF_MAX_DEVICES 32
 
@@ -112,3 +114,4 @@ int zfRegisterDevice(const char *name, struct zfdevops *ops, void *data)
     }
     return -1;
 }
+#endif

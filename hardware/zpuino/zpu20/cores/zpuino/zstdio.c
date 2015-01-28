@@ -1,3 +1,5 @@
+#ifndef NOPOSIX
+
 #include "zstdio.h"
 #include "zposix.h"
 #include <stdlib.h>
@@ -371,3 +373,4 @@ void __attribute__((constructor)) __stdio_init()
     }
     __stdio_initialized=1;
 }
+#endif

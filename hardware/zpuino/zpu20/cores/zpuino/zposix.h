@@ -1,6 +1,8 @@
 #ifndef __ZPOSIX_H__
 #define __ZPOSIX_H__
 
+#ifndef NOPOSIX
+
 #include <sys/types.h>
 #include <stdarg.h>
 
@@ -27,6 +29,8 @@ off_t lseek(int fd, off_t offset, int whence);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif

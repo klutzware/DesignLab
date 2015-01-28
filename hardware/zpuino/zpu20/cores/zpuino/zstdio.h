@@ -1,6 +1,8 @@
 #ifndef __ZSTDIO_H__
 #define __ZSTDIO_H__
 
+#ifndef NOPOSIX
+
 #include <sys/types.h>
 #include <stdarg.h>
 
@@ -48,4 +50,5 @@ extern FILE *stderr;
 }
 #endif
 
+#endif
 #endif

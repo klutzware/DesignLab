@@ -3,6 +3,8 @@
 
 #include <sys/types.h>
 
+#ifndef NOPOSIX
+
 #define HAVE_ZFDEVICE
 
 #ifdef __cplusplus
@@ -31,6 +33,7 @@ struct zfops *zfFindBackend(const char *name);
 
 #ifdef __cplusplus
 }
+#endif
 #endif
 
 #endif
