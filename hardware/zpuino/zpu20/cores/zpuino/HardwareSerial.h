@@ -85,6 +85,15 @@ public:
 
 	virtual int peek() { return -1; }
 
+        virtual void setBaudRate(unsigned baudrate)
+        {
+            if (__builtin_constant_p(baudrate)) {
+                REG(1) = BAUDRATEGEN(baudrate) | BIT(UARTEN);
+            } else {
+                begin_slow(baudrate);
+            }
+        }
+
 	using Print::write; // pull in write(str) and write(buf, size) from Print
 private:
 	unsigned int ioslot;
