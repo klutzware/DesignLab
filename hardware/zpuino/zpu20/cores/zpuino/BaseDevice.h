@@ -54,10 +54,18 @@ namespace ZPUino {
         register_t m_baseaddress;
     };
 
+    struct WishboneSlot {
+        explicit WishboneSlot(uint8_t number): m_slot(number) {}
+        operator uint8_t () const { return m_slot; }
+    private:
+        int m_slot;
+    };
+
     class BaseDevice: public REGAccess {
     public:
         BaseDevice(uint8_t instance=0xff): m_slot(0xff), m_instance(instance) {}
         int deviceBegin(uint8_t vendor, uint8_t product);
+        int deviceBegin(const WishboneSlot &slot);
         int isError() { return m_slot==0xff; }
         inline uint8_t getSlot() const { return m_slot; }
         inline uint8_t getInstance() const { return m_instance; }

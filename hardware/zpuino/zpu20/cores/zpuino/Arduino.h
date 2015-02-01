@@ -17,4 +17,6 @@
 #define _BV(x) (1<<(x))
 #endif
 
+using namespace ZPUino;
+
 #endif

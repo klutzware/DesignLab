@@ -117,3 +117,6 @@ void SPIClass::setClockDivider(int rate)
 SPIClass::SPIClass(int index): BaseDevice(index)
 {
 }
+SPIClass::SPIClass(const WishboneSlot &slot): BaseDevice(slot)
+{
+}

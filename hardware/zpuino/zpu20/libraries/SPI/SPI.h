@@ -60,6 +60,7 @@ INTVAL(SCK);
 class SPIClass: public BaseDevice {
 public:
   SPIClass(int index=1);
+  SPIClass(const WishboneSlot &slot);
   byte transfer(unsigned _data);
   uint16_t transfer16(unsigned _data);
   uint32_t transfer24(unsigned _data);

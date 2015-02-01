@@ -37,6 +37,7 @@ class HardwareSerial: public ZPUino::BaseDevice, public Stream
 private:
 public:
 	HardwareSerial(uint8_t instance=0xff): BaseDevice(instance) {}
+        HardwareSerial(const ZPUino::WishboneSlot &slot): BaseDevice(slot) {}
 
 	__attribute__((always_inline)) inline void begin(const unsigned int baudrate) {
 		if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_UART)==0) {
