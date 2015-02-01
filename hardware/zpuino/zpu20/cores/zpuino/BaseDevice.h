@@ -64,6 +64,7 @@ namespace ZPUino {
     class BaseDevice: public REGAccess {
     public:
         BaseDevice(uint8_t instance=0xff): m_slot(0xff), m_instance(instance) {}
+        BaseDevice(const WishboneSlot &slot): m_slot(slot), m_instance(0x0) {}
         int deviceBegin(uint8_t vendor, uint8_t product);
         int deviceBegin(const WishboneSlot &slot);
         int isError() { return m_slot==0xff; }
