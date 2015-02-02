@@ -74,6 +74,7 @@ public abstract class Uploader implements MessageConsumer {
   public abstract boolean uploadUsingPreferences(File sourcePath, String buildPath, String className, int programmerOptions, List<String> warningsAccumulator) throws Exception;
 
   public abstract boolean burnBootloader() throws Exception;
+  public abstract boolean burnBitfile(String path) throws RunnerException;
 
   public boolean requiresAuthorization() {
     return false;

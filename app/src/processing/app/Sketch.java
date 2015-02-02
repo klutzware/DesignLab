@@ -814,7 +814,7 @@ public class Sketch {
     if (isReadOnly() || isUntitled()) {
       // default to the sketchbook folder
       if (this.getName().contains("edit_library"))
-        fd.setDirectory(Base.getSketchbookLibrariesFolder().toString());
+        fd.setSelectedFile(new File(Base.getSketchbookLibrariesFolder().getAbsolutePath(), folder.getName()));
       else
       fd.setSelectedFile(new File(Base.getSketchbookFolder().getAbsolutePath(), folder.getName()));
     } else {

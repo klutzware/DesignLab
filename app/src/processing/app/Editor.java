@@ -53,7 +53,7 @@ import cc.arduino.packages.BoardPort;
 import cc.arduino.packages.Uploader;
 import cc.arduino.packages.uploaders.SerialUploader;
 
-import gnu.io.*;
+
 
 import java.io.File;
 
@@ -242,9 +242,11 @@ public class Editor extends JFrame implements RunnerListener {
       				} catch (IOException ie) { }
       				Base.activeEditor.base.rebuildSketchbookMenus();
               Base.activeEditor.base.onBoardOrPortChange();
-              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu, Base.activeEditor);
+              Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu);
               Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
-              base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+              try {
+                base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+              } catch (Exception ie) { }
       			}
           }
           
@@ -268,7 +270,11 @@ public class Editor extends JFrame implements RunnerListener {
     //PdeKeywords keywords = new PdeKeywords();
     //sketchbook = new Sketchbook(this);
 
-    buildMenuBar();
+    try {
+      buildMenuBar();
+    } catch (Exception e1) {
+      e1.printStackTrace();
+    }
 
     // For rev 0120, placing things inside a JPanel
     Container contentPain = getContentPane();
@@ -564,10 +570,14 @@ public class Editor extends JFrame implements RunnerListener {
     item = newJMenuItem(_("New Papilio Project"), 'N');
     item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          String pslPath = Base.getExamplesPath();
-          File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
-          Editor newproj = base.handleOpen(f1.getAbsolutePath());
-          newproj.handlesaveAtStart(false);
+          try {
+            String pslPath = Base.getExamplesPath();
+            File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
+            Editor newproj = base.handleOpen(f1.getAbsolutePath());
+            newproj.handlesaveAtStart(false);
+          } catch (Exception e1) {
+            e1.printStackTrace();
+          }
         }
       });
     fileMenu.add(item);    
@@ -689,10 +699,14 @@ public class Editor extends JFrame implements RunnerListener {
      item = new JMenuItem(_("New Papilio Project"));
      item.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
-           String pslPath = Base.getExamplesPath();
-           File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
-           Editor newproj = base.handleOpen(f1.getAbsolutePath());
-           newproj.handlesaveAtStart(false);
+           try {
+             String pslPath = Base.getExamplesPath();
+             File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
+             Editor newproj = base.handleOpen(f1.getAbsolutePath());
+             newproj.handlesaveAtStart(false);
+           } catch (Exception e1) {
+             e1.printStackTrace();
+           }
          }
        });
      papilioMenu.add(item);  
@@ -700,10 +714,14 @@ public class Editor extends JFrame implements RunnerListener {
      item = new JMenuItem(_("New DesignLab Library"));
      item.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
-           String pslPath = Base.getExamplesPath();
-           File f1 = new File(pslPath+"/Template_DesignLab_Library/edit_library.ino");
-           Editor newproj = base.handleOpen(f1.getAbsolutePath());
-           newproj.handlesaveAtStart(true);
+           try {
+             String pslPath = Base.getExamplesPath();
+             File f1 = new File(pslPath+"/Template_DesignLab_Library/edit_library.ino");
+             Editor newproj = base.handleOpen(f1.getAbsolutePath());
+             newproj.handlesaveAtStart(true);
+           } catch (Exception e1) {
+             e1.printStackTrace();
+           }
          }
        });
      papilioMenu.add(item); 	
@@ -2862,7 +2880,7 @@ public class Editor extends JFrame implements RunnerListener {
 
         try 
 		{
-          Uploader uploader = new BasicUploader();
+          Uploader uploader = new SerialUploader();
           if (uploader.burnBitfile(bitFilePath)) 
 		  {
             statusNotice(_("Done burning bitfile."));

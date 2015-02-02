@@ -412,10 +412,14 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       Base.openURL(_("tools://Logic_Analyzer.sh"));
       break;	  
     case NEW_PROJECT:
-      String pslPath = Base.getExamplesPath();
-      File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
-      Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
-      newproj.handlesaveAtStart(false);    
+      try {
+        String pslPath = Base.getExamplesPath();
+        File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
+        Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
+        newproj.handlesaveAtStart(false);   
+      } catch (Exception e1) {
+        e1.printStackTrace();
+      }
       break;	
     case LOAD_CIRCUIT:
       File fileBit = getLibraryFile("\n#definecircuit", "bit.file");

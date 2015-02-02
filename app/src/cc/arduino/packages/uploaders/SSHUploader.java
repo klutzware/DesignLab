@@ -187,5 +187,10 @@ public class SSHUploader extends Uploader {
   public boolean burnBootloader() throws RunnerException {
     throw new RunnerException("Can't burn bootloader via SSH");
   }
+  
+  @Override
+  public boolean burnBitfile(String path) throws RunnerException {
+    throw new RunnerException("Can't burn bitfile via SSH");
+  }  
 
 }
