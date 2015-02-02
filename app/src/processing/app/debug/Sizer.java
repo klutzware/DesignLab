@@ -21,8 +21,6 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-  
-  $Id$
 */
 
 package processing.app.debug;
@@ -31,23 +29,37 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import processing.app.helpers.PreferencesMap;
+import processing.app.helpers.ProcessUtils;
 import processing.app.helpers.StringReplacer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sizer implements MessageConsumer {
   private ArrayList<Long> sizes;
+  private long textSize;
+  private long dataSize;
+  private long eepromSize;
   private RunnerException exception;
   private PreferencesMap prefs;
   private String firstLine;
-  private Pattern pattern;
-
-public Sizer(PreferencesMap _prefs) {
+  private Pattern textPattern;
+  private Pattern dataPattern;
+  private Pattern eepromPattern;
+  
+  public Sizer(PreferencesMap _prefs) {
     prefs = _prefs;
-    pattern = Pattern.compile(prefs.get("recipe.size.regex"));
     sizes = new ArrayList<Long>();
+    textPattern = Pattern.compile(prefs.get("recipe.size.regex"));
+    dataPattern = null;
+    String pref = prefs.get("recipe.size.regex.data");
+    if (pref != null)
+      dataPattern = Pattern.compile(pref);
+    eepromPattern = null;
+    pref = prefs.get("recipe.size.regex.eeprom");
+    if (pref != null)
+      eepromPattern = Pattern.compile(pref);
   }
-
+  
   public List<Long> computeSize() throws RunnerException {
 
     int r = 0;
@@ -95,7 +107,7 @@ public Sizer(PreferencesMap _prefs) {
   public void message(String s) {
     if (firstLine == null)
       firstLine = s;
-    Matcher matcher = pattern.matcher(s.trim());
+    Matcher matcher = textPattern.matcher(s.trim());
     if (matcher.matches()) {
        int i;
        for (i=0;i<matcher.groupCount();i++) {

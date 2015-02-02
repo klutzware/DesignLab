@@ -1,6 +1,9 @@
 /*
  Posix-like utility functions
  */
+
+#ifndef NOPOSIX
+
 #include "zposix.h"
 #include "zpuino-types.h"
 #include <stdarg.h>
@@ -147,3 +150,5 @@ extern "C" void __attribute__((constructor)) __posix_init()
     }
     initialized=1;
 }
+
+#endif

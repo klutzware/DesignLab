@@ -1,3 +1,5 @@
+#ifndef NOPOSIX
+
 #include "zstdio.h"
 #include "zposix.h"
 #include <stdlib.h>
@@ -10,7 +12,10 @@ static char _snprintfbuf[8192];
 
 FILE*stdout=&__files[1];
 FILE*stderr=&__files[2];
-static void __stdio_init();
+
+void __stdio_init();
+
+static inline size_t __utoa(unsigned long i, char**dest, int base, size_t size, int pad, int fill, int upper);
 
 #define UNIMPLEMENTED(x) fprintf(stderr,"ERROR: function %s not implemented\r\n", __PRETTY_FUNCTION__);
 
@@ -80,7 +85,7 @@ static inline size_t __utoa(unsigned long i, char**dest, int base, size_t size, 
 
 int vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
-    char *start = str;
+    const char *start = str;
     char sizespec[4];
     int spptr=0;
     int isformat = 0;
@@ -368,3 +373,4 @@ void __attribute__((constructor)) __stdio_init()
     }
     __stdio_initialized=1;
 }
+#endif

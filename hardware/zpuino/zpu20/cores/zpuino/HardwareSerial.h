@@ -37,6 +37,7 @@ class HardwareSerial: public ZPUino::BaseDevice, public Stream
 private:
 public:
 	HardwareSerial(uint8_t instance=0xff): BaseDevice(instance) {}
+        HardwareSerial(const ZPUino::WishboneSlot &slot): BaseDevice(slot) {}
 
 	__attribute__((always_inline)) inline void begin(const unsigned int baudrate) {
 		if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_UART)==0) {
@@ -84,6 +85,15 @@ public:
         size_t writeAndTranslate(const uint8_t *str, int size);
 
 	virtual int peek() { return -1; }
+
+        virtual void setBaudRate(unsigned baudrate)
+        {
+            if (__builtin_constant_p(baudrate)) {
+                REG(1) = BAUDRATEGEN(baudrate) | BIT(UARTEN);
+            } else {
+                begin_slow(baudrate);
+            }
+        }
 
 	using Print::write; // pull in write(str) and write(buf, size) from Print
 private:

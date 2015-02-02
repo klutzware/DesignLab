@@ -23,6 +23,8 @@
 package processing.app;
 
 import processing.app.syntax.*;
+import processing.app.helpers.PreferencesMap;
+import processing.app.Base;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -95,7 +97,7 @@ public class EditorLineStatus extends JComponent {
 
   public void paintComponent(Graphics g) {
     if (name=="" && serialport=="") {
-      Map<String, String> boardPreferences =  Base.getBoardPreferences();
+      PreferencesMap boardPreferences =  Base.getBoardPreferences();
       if (boardPreferences!=null)
         setBoardName(boardPreferences.get("name"));
       else

@@ -51,7 +51,7 @@ namespace ZPUino {
     int DeviceRegistry::getPPSPin(int masterslot, int offset, int shift)
     {
         unsigned count = REGISTER(SYSCTLBASE, 32+shift);
-        unsigned start = -1;
+        unsigned start = (unsigned)-1;
         register_t startreg = &REGISTER(SYSCTLBASE, 64);
         
         while(count--) {
@@ -61,7 +61,7 @@ namespace ZPUino {
             if (dev!=masterslot) {
                 continue;
             } else {
-                int pin = (val>>(8+shift))&0xff;
+                //int pin = (val>>(8+shift))&0xff;
                 if (offset==0)
                     return start;
                 offset--;

@@ -52,6 +52,11 @@
 
 #include "SD.h"
 
+#ifdef HAVE_ZFDEVICE
+static void zf_register_sdcard();
+#endif
+
+
 // Used by `getNextPathComponent`
 #define MAX_COMPONENT_LEN 12 // What is max length?
 #define PATH_COMPONENT_BUFFER_LEN MAX_COMPONENT_LEN+1
@@ -340,10 +345,18 @@ boolean SDClass::begin(uint8_t csPin) {
     Return true if initialization succeeds, false otherwise.
 
    */
-   root.close();
-   return card.init(SPI_HALF_SPEED, csPin) &&
+    root.close();
+    boolean ret = false;
+    ret =card.init(SPI_HALF_SPEED, csPin) &&
          ( volume.init(card) || volume.init(card,1)) &&
-         root.openRoot(&volume);
+        root.openRoot(&volume);
+
+#ifdef HAVE_ZFDEVICE
+    if (ret) {
+        zf_register_sdcard();
+    }
+#endif
+    return ret;
 }
 
 
@@ -615,3 +628,37 @@ void File::rewindDirectory(void) {
 }
 
 SDClass SD;
+
+#ifdef HAVE_ZFDEVICE
+
+/* ZPUino File Device support */
+
+static void *zf_sdcard_open(const char *path)
+{
+    File f = SD.open(path);
+    if (f) {
+        return new File(f);
+    }
+    return NULL;
+}
+
+static ssize_t zf_sdcard_read(void *ptr, void *dest, size_t size)
+{
+    File *f = static_cast<File*>(ptr);
+    return f->read(dest, size);
+}
+
+static struct zfops zf_sdcard_ops = {
+    &zf_sdcard_open,
+    NULL,
+    &zf_sdcard_read,
+    NULL,
+    NULL,
+};
+
+void zf_register_sdcard()
+{
+    zfRegisterFileBackend("sd", &zf_sdcard_ops);
+}
+
+#endif

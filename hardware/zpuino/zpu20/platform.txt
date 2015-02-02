@@ -5,12 +5,12 @@
 name=Papilio FPGA Boards
 compiler.path={runtime.ide.path}/hardware/tools/zpu/bin/
 compiler.c.cmd=zpu-elf-gcc
-compiler.c.flags=-c -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
+compiler.c.flags=-c -DZPU -DZPUINO_ACCEL -Wall -Wextra -I{sketch.path} -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
 compiler.c.elf.cmd=zpu-elf-g++
 compiler.c.elf.flags=-O2 -nostartfiles -Wl,-T -Wl,{build.core.path}/zpuino.lds -Wl,--relax -Wl,--gc-sections
 compiler.S.flags=-c -g -assembler-with-cpp
 compiler.cpp.cmd=zpu-elf-g++
-compiler.cpp.flags=-c -fno-exceptions -fno-rtti -DZPU -DZPUINO_ACCEL -Wall -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
+compiler.cpp.flags=-c -fno-exceptions -fno-rtti -DZPU -DZPUINO_ACCEL -Wall -Wextra -I{sketch.path} -O2 -fno-reorder-blocks  -fno-reorder-blocks-and-partition -fno-prefetch-loop-arrays  -fno-gcse -ffunction-sections -fdata-sections -nostartfiles -mmult -mdiv -mno-callpcrel -mno-pushspadd -mno-poppcrel
 compiler.ar.cmd=zpu-elf-ar
 compiler.as.cmd=zpu-elf-as
 compiler.ar.flags=rcs
@@ -41,7 +41,7 @@ recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -D
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} "{build.path}/{archive_file}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-Wl,-Map,{build.path}/{build.project_name}.map" -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -Wl,--warn-common -Wl,--warn-section-align {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} "-Wl,-Map,{build.path}/{build.project_name}.map" --cref -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -lm -Wl,--warn-common -Wl,--warn-section-align -Wl,--whole-archive {object_files} "{build.path}/{archive_file}" -Wl,--no-whole-archive
 
 ## Create eeprom
 recipe.objcopy.eep.pattern=

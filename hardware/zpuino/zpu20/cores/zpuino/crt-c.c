@@ -45,7 +45,9 @@ int main(int argc, char **argv)
 
 void __attribute__((noreturn)) _premain(void)
 {
-	___clear_bss();
+#ifndef NOCLEARBSS
+    ___clear_bss();
+#endif
 	___do_global_ctors();
 	main(0,0);
 	while(1);
