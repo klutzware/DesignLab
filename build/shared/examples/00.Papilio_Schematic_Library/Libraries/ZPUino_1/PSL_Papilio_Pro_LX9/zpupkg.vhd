@@ -36,8 +36,8 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use ieee.numeric_std.all;
 
-library board;
-use board.zpu_config.all;
+library work;
+use work.zpu_config.all;
 
 package zpupkg is
 

@@ -40,7 +40,7 @@ use ieee.std_logic_arith.all;
 
 package zpu_config is
 	-- generate trace output or not.
-	constant	Generate_Trace		: boolean := false;
+	constant	Generate_Trace		: boolean := true;
 	constant wordPower			: integer := 5;
 	-- during simulation, set this to '0' to get matching trace.txt 
 	constant	DontCareValue		: std_logic := 'X';
@@ -57,13 +57,12 @@ package zpu_config is
 
   constant stackSize_bits: integer := 13;
 
-
+  constant Undefined: std_logic :='0';
 	-- start byte address of stack. 
 	-- point to top of RAM - 2*words
 	constant 	spStart				: std_logic_vector(maxAddrBitIncIO downto 0) :=
     conv_std_logic_vector((2**(maxAddrBitBRAM+1))-8, maxAddrBitIncIO+1);
 
   constant enable_fmul16: boolean := false;
-  constant Undefined: std_logic := '0';
 
 end zpu_config;

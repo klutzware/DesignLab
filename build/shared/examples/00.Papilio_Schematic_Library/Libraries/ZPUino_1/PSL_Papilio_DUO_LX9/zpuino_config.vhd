@@ -61,7 +61,7 @@ package zpuino_config is
   constant zpuino_spiblocking: boolean := true;
 
   -- Number of GPIO to map (number of FPGA pins)
-  constant zpuino_gpio_count: integer := 50;
+  constant zpuino_gpio_count: integer := 55;
 
   -- Peripheral Pin Select
   constant zpuino_pps_enabled: boolean := true;
@@ -72,5 +72,11 @@ package zpuino_config is
   -- Number of IO select bits. Maps to maximum number of IO devices
 
   constant zpuino_number_io_select_bits: integer := 4;
+
+  -- Set this to the max. number of output pps on the system
+  constant PPSCOUNT_OUT: integer := 8;
+
+  -- Set this to the max. number of input pps on the system
+  constant PPSCOUNT_IN: integer := 6;
 
 end package zpuino_config;

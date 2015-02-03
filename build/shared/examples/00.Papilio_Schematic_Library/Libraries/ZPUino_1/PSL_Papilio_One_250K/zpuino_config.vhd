@@ -64,7 +64,7 @@ package zpuino_config is
   constant zpuino_gpio_count: integer := 49;
 
   -- Peripheral Pin Select
-  constant zpuino_pps_enabled: boolean := false;
+  constant zpuino_pps_enabled: boolean := true;
 
   -- Internal SPI ADC
   constant zpuino_adc_enabled: boolean := true;
@@ -72,5 +72,10 @@ package zpuino_config is
   -- Number of IO select bits. Maps to maximum number of IO devices
 
   constant zpuino_number_io_select_bits: integer := 4;
+
+  -- Set this to the max. number of output pps on the system
+  constant PPSCOUNT_OUT: integer := 8;
+  -- Set this to the max. number of input pps on the system
+  constant PPSCOUNT_IN: integer := 6;
 
 end package zpuino_config;
