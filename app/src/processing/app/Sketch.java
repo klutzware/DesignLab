@@ -1663,11 +1663,11 @@ public class Sketch {
     Sizer sizer = new Sizer(prefs);
     try {
       sizes = sizer.computeSize();
-      if (sizes.size()==1) {
+      if (sizes.size()==2) {
         size = sizes.get(0);
-        System.out.println(I18n
-            .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2}% used"),
-                    size, maxTextSize, size * 100 / maxTextSize));
+        //System.out.println(I18n
+        //    .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2}% used"),
+        //            size, maxTextSize, size * 100 / maxTextSize));
       } else {
           text=sizes.get(0);
 	  data=sizes.get(1);
@@ -1687,8 +1687,8 @@ public class Sketch {
       return;
     }
 
-    long textSize = sizes.get(0);
-    long dataSize = sizes.get(1);
+    long textSize = sizes.get(1);
+    long dataSize = sizes.get(0);
     System.out.println();
     System.out.println(I18n
                        .format(_("Sketch uses {0} bytes ({2}%%) of program storage space. Maximum is {1} bytes."),
