@@ -6,6 +6,8 @@ duo.name=Papilio DUO - AVR - USB
 duo.upload.tool=avrdude
 duo.upload.protocol=avr109
 duo.upload.maximum_size=28672
+duo.upload.maximum_data_size=2560
+duo.upload.size_sections=all
 duo.upload.speed=57600
 duo.upload.disable_flushing=true
 duo.upload.use_1200bps_touch=true
@@ -22,11 +24,18 @@ duo.bootloader.lock_bits=0x2F
 
 duo.build.mcu=atmega32u4
 duo.build.f_cpu=16000000L
+duo.vid.0=0x1d50
+duo.pid.0=0x60a4
+duo.vid.1=0x1d50
+duo.pid.1=0x60a5
 duo.build.vid=0x1d50
 duo.build.pid=0x60a5
+duo.build.usb_product="Papilio DUO AVR Serial Port"
+duo.build.board=AVR_DUO
 duo.build.core=arduino
 duo.build.variant=papilioDUO
-duo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
+duo.build.extra_flags={build.usb_flags}
+#duo.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
 
 duo.bitloader.tool=papilioprog
 duo.bitloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
