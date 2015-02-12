@@ -10,50 +10,51 @@
 
 #define swap(a, b) { int t = a; a = b; b = t; }
 
-class Adafruit_GFX : public Print {
+template<typename PixelType>
+class Adafruit_GFX_core : public Print {
 
  public:
 
-  Adafruit_GFX(); // Constructor
+  Adafruit_GFX_core(); // Constructor
   void begin(int w, int h);
 
   // This MUST be defined by the subclass:
-  virtual void drawPixel(int x, int y, unsigned int color) = 0;
+  virtual void drawPixel(int x, int y, PixelType color) = 0;
 
   // These MAY be overridden by the subclass to provide device-specific
   // optimized code.  Otherwise 'generic' versions are used.
   virtual void
-    drawLine(int x0, int y0, int x1, int y1, unsigned int color),
-    drawFastVLine(int x, int y, int h, unsigned int color),
-    drawFastHLine(int x, int y, int w, unsigned int color),
-    drawRect(int x, int y, int w, int h, unsigned int color),
-    fillRect(int x, int y, int w, int h, unsigned int color),
-    fillScreen(unsigned int color),
+    drawLine(int x0, int y0, int x1, int y1, PixelType color),
+    drawFastVLine(int x, int y, int h, PixelType color),
+    drawFastHLine(int x, int y, int w, PixelType color),
+    drawRect(int x, int y, int w, int h, PixelType color),
+    fillRect(int x, int y, int w, int h, PixelType color),
+    fillScreen(PixelType color),
     invertDisplay(boolean i);
 
   // These exist only with Adafruit_GFX (no subclass overrides)
   void
-    drawCircle(int x0, int y0, int r, unsigned int color),
+    drawCircle(int x0, int y0, int r, PixelType color),
     drawCircleHelper(int x0, int y0, int r, uint8_t cornername,
-      unsigned int color),
-    fillCircle(int x0, int y0, int r, unsigned int color),
+      PixelType color),
+    fillCircle(int x0, int y0, int r, PixelType color),
     fillCircleHelper(int x0, int y0, int r, uint8_t cornername,
-      int delta, unsigned int color),
+      int delta, PixelType color),
     drawTriangle(int x0, int y0, int x1, int y1,
-      int x2, int y2, unsigned int color),
+      int x2, int y2, PixelType color),
     fillTriangle(int x0, int y0, int x1, int y1,
-      int x2, int y2, unsigned int color),
+      int x2, int y2, PixelType color),
     drawRoundRect(int x0, int y0, int w, int h,
-      int radius, unsigned int color),
+      int radius, PixelType color),
     fillRoundRect(int x0, int y0, int w, int h,
-      int radius, unsigned int color),
+      int radius, PixelType color),
     drawBitmap(int x, int y, const uint8_t *bitmap,
-      int w, int h, unsigned int color),
-    drawChar(int x, int y, unsigned char c, unsigned int color,
-      unsigned int bg, uint8_t size),
+      int w, int h, PixelType color),
+    drawChar(int x, int y, unsigned char c, PixelType color,
+      PixelType bg, uint8_t size),
     setCursor(int x, int y),
-    setTextColor(unsigned int c),
-    setTextColor(unsigned int c, unsigned int bg),
+    setTextColor(PixelType c),
+    setTextColor(PixelType c, PixelType bg),
     setTextSize(uint8_t s),
     setTextWrap(boolean w),
     setRotation(uint8_t r);
@@ -89,5 +90,7 @@ class Adafruit_GFX : public Print {
   boolean
     wrap; // If set, 'wrap' text at right edge of display
 };
+
+typedef Adafruit_GFX_core<uint16_t> Adafruit_GFX;
 
 #endif // _ADAFRUIT_GFX_H
