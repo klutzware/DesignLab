@@ -118,7 +118,7 @@ HARDWARE
   Arcade MegaWing
 	Hardware Project - Arcade MegaWing 
 	This is a demo project that shows you how to use draw a circuit that uses all of the Arcade MegaWing components.
-	example://MegaWing_Arcade/MegaWing_Arcade.ino
+	example://MegaWing_Logicstart/MegaWing_Arcade.ino
 
   Analog SPI Wing
 	Hardware Project - Analog Wing 
