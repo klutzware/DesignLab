@@ -3,13 +3,13 @@
 
 #if defined( __ZPUINO_S3E_EVAL__ )
 # include "board_s3e_eval.h"
-#elif defined( __ZPUINO_PAPILIO_ONE__ )
+#elif defined( __ZPUINO_PAPILIO_ONE__ ) || defined( __ZPUINO_PAPILIO_ONE_250K__ ) || defined( __ZPUINO_PAPILIO_ONE_500K__ ) || defined( __ZPUINO_PAPILIO_ONE_HYPERION__ )
 # include "board_papilio_one.h"
 #elif defined( __ZPUINO_PAPILIO_PLUS__ )
 # include "board_papilio_plus.h"
 #elif defined( __ZPUINO_PAPILIO_PRO__ )
 # include "board_papilio_pro.h"
-#elif defined( __ZPUINO_PAPILIO_DUO__ )
+#elif defined( __ZPUINO_PAPILIO_DUO__ ) || defined( __ZPUINO_PAPILIO_DUO_512KB__ ) || defined( __ZPUINO_PAPILIO_DUO_2MB__ )
 # include "board_papilio_duo.h"
 #elif defined( __ZPUINO_NEXYS2__ )
 # include "board_nexys2.h"
