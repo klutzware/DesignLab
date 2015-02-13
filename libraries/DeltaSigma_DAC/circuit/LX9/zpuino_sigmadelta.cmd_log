@@ -1,1 +1,0 @@
-vhdtdtfi -prj PSL_Papilio_Pro_LX9 -o D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/DeltaSigma_DAC/circuit/LX9/zpuino_sigmadelta.vhi -module zpuino_sigmadelta -template C:/Xilinx/14.1/ISE_DS/ISE//data/vhdlinst.tft -deleteonerror -lib work ../../zpuino_sigmadelta.vhd 

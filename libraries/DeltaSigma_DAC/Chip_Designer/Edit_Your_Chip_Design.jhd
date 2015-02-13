@@ -1,3 +1,0 @@
-MODULE Edit_Your_Chip_Design
-	SUBMODULE DeltaSigma_DAC
-		INSTANCE XLXI_48
