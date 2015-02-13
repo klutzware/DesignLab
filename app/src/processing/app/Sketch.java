@@ -1650,7 +1650,7 @@ public class Sketch {
 
   protected void size(PreferencesMap prefs) throws RunnerException {
     List<Long> sizes;
-    long size=-1,text,data,bss;
+    long size=-1,text,data,bss,textSize,dataSize;
     String maxTextSizeString = prefs.get("upload.maximum_size");
     String maxDataSizeString = prefs.get("upload.maximum_data_size");
     String sizeSections = prefs.get("upload.size_sections");
@@ -1665,6 +1665,8 @@ public class Sketch {
       sizes = sizer.computeSize();
       if (sizes.size()==2) {
         size = sizes.get(0);
+        textSize = sizes.get(1);
+        dataSize = sizes.get(0);
         //System.out.println(I18n
         //    .format(_("Binary sketch size: {0} bytes (of a {1} byte maximum) - {2}% used"),
         //            size, maxTextSize, size * 100 / maxTextSize));
@@ -1672,6 +1674,8 @@ public class Sketch {
           text=sizes.get(0);
 	  data=sizes.get(1);
 	  bss=sizes.get(2);
+    textSize = sizes.get(0);
+    dataSize = sizes.get(1);	  
 	  if (sizeSections!=null && sizeSections.equals("all")) {
 	      size = text + data + bss;
 	  } else {
@@ -1687,8 +1691,8 @@ public class Sketch {
       return;
     }
 
-    long textSize = sizes.get(1);
-    long dataSize = sizes.get(0);
+//    long textSize = sizes.get(1);
+//    long dataSize = sizes.get(0);
     System.out.println();
     System.out.println(I18n
                        .format(_("Sketch uses {0} bytes ({2}%%) of program storage space. Maximum is {1} bytes."),
