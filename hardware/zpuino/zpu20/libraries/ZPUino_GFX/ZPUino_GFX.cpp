@@ -1,10 +1,15 @@
 #include <ZPUino_GFX.h>
 
 const modeline_t modeline_640x480_60 =   {21,35,640,656,752,800,480,490,492,525,1,1,0};
+const modeline_t modeline_320x240_60 =   {21,35,640,656,752,800,480,490,492,525,1,1,1};
 const modeline_t modeline_800x600_60 =   {20,21,800,840,968,1056,600,601,605,628,0,0,0};
+const modeline_t modeline_400x300_60 =   {20,21,800,840,968,1056,600,601,605,628,0,0,1};
 const modeline_t modeline_1024x768_60 =  {17,11,1024,1048,1184,1344,768,771,777,806,1,1,0};
+const modeline_t modeline_512x384_60 =  {17,11,1024,1048,1184,1344,768,771,777,806,1,1,1};
 const modeline_t modeline_1280x768_60 =  {13,8,1280,1328,1360,1440,768,771,778,790,0,0,0};
+const modeline_t modeline_640x384_60 =  {13,8,1280,1328,1360,1440,768,771,778,790,0,0,1};
 const modeline_t modeline_1280x1024_60 = {18,7,1280,1328,1440,1688,1024,1025,1028,1066,0,0,0};
+const modeline_t modeline_640x512_60 = {18,7,1280,1328,1440,1688,1024,1025,1028,1066,0,0,1};
 
 template<>
 int ZPUino_GFX_class<uint16_t>::setupVGA(const modeline_t *mode)

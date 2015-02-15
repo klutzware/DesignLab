@@ -20,11 +20,18 @@ typedef struct  {
     uint8_t duplicate:1;
 } modeline_t;
 
+extern const modeline_t modeline_320x240_60;
+extern const modeline_t modeline_400x300_60;
+extern const modeline_t modeline_512x384_60;
+extern const modeline_t modeline_640x384_60;
 extern const modeline_t modeline_640x480_60;
+extern const modeline_t modeline_640x512_60;
 extern const modeline_t modeline_800x600_60;
 extern const modeline_t modeline_1024x768_60;
 extern const modeline_t modeline_1280x768_60;
 extern const modeline_t modeline_1280x1024_60;
+
+
 
 class Font;
 
