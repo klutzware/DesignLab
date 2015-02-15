@@ -63,7 +63,7 @@ template<>
         } else if (deviceBegin(0x08, 0x1D)==0) {
             unsigned fbsize = mode->hdisplay * mode->vdisplay * sizeof(uint16_t);
             if (mode->duplicate) {
-                fbsize<<=2;
+                fbsize>>=2;
             }
             framebuffers=(uint32_t*)malloc(fbsize);
             REG(0) = (unsigned)framebuffers;

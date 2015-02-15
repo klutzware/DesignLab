@@ -20,7 +20,11 @@ void setup(void) {
     Serial.begin(115200);
     Serial.println(F("TFT LCD test"));
 
-    gfx.begin();
+    // Comment out your modeline. See ZPUino_GFX.h for other modes.
+
+    gfx.begin( &modeline_640x480_60 );
+    // gfx.begin( &modeline_640x512_60 );
+    // gfx.begin( &modeline_320x240_60 );
 }
 
 void test()
