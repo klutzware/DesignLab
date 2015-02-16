@@ -2,9 +2,9 @@
 #define __DEVICE_H__
 
 #include <sys/types.h>
+#include <sys/stat.h>
 
-#ifndef NOPOSIX
-
+#ifndef NOSTDIO
 #define HAVE_ZFDEVICE
 
 #ifdef __cplusplus
@@ -17,6 +17,7 @@ struct zfops {
     ssize_t (*read)(void*, void *target, size_t size);
     ssize_t (*write)(void*, const void *source, size_t size);
     int (*seek)(void*,int,int);
+    int (*fstat)(void*,struct stat *buf);
 };
 
 struct zfdevops {
@@ -34,6 +35,7 @@ struct zfops *zfFindBackend(const char *name);
 #ifdef __cplusplus
 }
 #endif
+
 #endif
 
 #endif

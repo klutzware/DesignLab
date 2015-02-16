@@ -21,15 +21,80 @@ struct __filedes {
     int mode;
 };
 
+extern "C" {
+
 static struct __filedes __fds[MAX_FILES];
+static char __cwd[128];
+
+char *getcwd(char *buf, size_t size)
+{
+    return strncpy(buf,__cwd, size);
+}
+
+static char *makefullpath(char *dest, const char *pathname)
+{
+    char *d = dest;
+    char cwd[128];
+
+    if (pathname[0] == '/') {
+        /* Full path */
+        strcpy(dest,pathname);
+    } else {
+        getcwd(cwd, sizeof(cwd));
+        size_t len = strlen(cwd);
+        strcpy(d,cwd);
+        d+=len;
+        // CWD never ends with '/', except if we are on root.
+        if (len!=1) {
+            *d++='/';
+            *d='\0';
+        }
+        strcat(d,pathname);
+    }
+    return dest;
+}
+
+
+int chdir(const char *path)
+{
+    if (path[0]=='/') {
+        strcpy(__cwd, path);
+    } else {
+        if (strlen(__cwd)==1) {
+            /* Root */
+            strcat(__cwd, path);
+        } else {
+            strcat(__cwd,"/");
+            strcat(__cwd, path);
+        }
+    }
+    // Strip last "/" if present.
+    size_t len = strlen(__cwd);
+    while (len>0 && __cwd[len]=='/') {
+        __cwd[len--]='\0';
+    }
+    return 0;
+}
+
+void debugprint(const char *c)
+{
+    volatile unsigned int *ptr = (volatile unsigned int*)0x90000000;
+    while (*c) {
+        while ((*(ptr+1)&0x2)!=0);
+        *ptr = *c;
+        c++;
+    };
+}
 
 #define BACKEND_PRINT 1
 
 /* Raw file I/O */
 
-extern "C" int open(const char *pathname, int flags,...)
+int open(const char *pathname, int flags,...)
 {
     char rdevice[16];
+    char path[128];
+    char *pptr;
     int newfd=-1;
     int i;
 
@@ -45,34 +110,49 @@ extern "C" int open(const char *pathname, int flags,...)
 
     __fds[newfd].mode = flags;
 
-    const char *delim = strchr(pathname,':');
-
-    if (NULL==delim)
+    if ((pathname==NULL) || (pathname[0]=='\0'))
         return -1;
 
-    delim++;
+    makefullpath(path, pathname);
 
-    if (!*delim)
+    if (path[0]!='/') {
         return -1;
+    }
 
-    if ((delim-pathname) > 15)
+    pptr=&path[1];
+
+    const char *delim = strchr(pptr,'/');
+
+    if (NULL==delim) {
+        return -1;
+    } else {
+        if (!*delim) {
+            return -1;
+        }
+
+        if ((delim-pptr) > 15) {
         return -1; /* Too large */
+        }
 
-    strncpy(rdevice, pathname, delim-pathname);
-    rdevice[delim-pathname-1] = '\0';
+        strncpy(rdevice, pptr, delim-pptr);
+        rdevice[delim-pptr] = '\0';
+
+        delim++;
+    }
+
 
     /* Look it up */
-
     struct zfops *ops = zfFindBackend(rdevice);
 
-    if (ops==NULL)
+    if (ops==NULL) {
         return -1;
-
+    }
     
     void *handle = ops->open(delim);
 
-    if (NULL==handle)
+    if (NULL==handle) {
         return -1;
+    }
 
     __fds[newfd].ops = ops;
     __fds[newfd].data = handle;
@@ -80,7 +160,7 @@ extern "C" int open(const char *pathname, int flags,...)
     return newfd;
 }
 
-extern "C" int close(int fd)
+int close(int fd)
 {
     int ret = 0;
     if (__fds[fd].ops) {
@@ -92,7 +172,7 @@ extern "C" int close(int fd)
     return ret;
 }
 
-extern "C" ssize_t read(int fd, void *buf, size_t count)
+ssize_t read(int fd, void *buf, size_t count)
 {
     int ret = -1;
     if (__fds[fd].ops) {
@@ -103,7 +183,19 @@ extern "C" ssize_t read(int fd, void *buf, size_t count)
     return ret;
 
 }
-extern "C" ssize_t write(int fd, const void *buf, size_t count)
+
+int fstat(int fd, struct stat *buf)
+{
+    int ret = -1;
+    if (__fds[fd].ops) {
+        if (__fds[fd].ops->read) {
+            ret = __fds[fd].ops->fstat(__fds[fd].data,buf);
+        }
+    }
+    return ret;
+}
+
+ssize_t write(int fd, const void *buf, size_t count)
 {
     int ret = -1;
     if (__fds[fd].ops) {
@@ -119,16 +211,21 @@ extern "C" void abort()
     while(1);
 }
 
-extern "C" char *strerror(int err)
+char *strerror(int err)
 {
     return "Unknown";
 }
 
 
-extern "C" off_t lseek(int fd, off_t offset, int whence)
+off_t lseek(int fd, off_t offset, int whence)
 {
-    errno = -EINVAL;
-    return (off_t)-1;
+    int ret = -1;
+    if (__fds[fd].ops) {
+        if (__fds[fd].ops->seek) {
+            ret = __fds[fd].ops->seek(__fds[fd].data,offset,whence);
+        }
+    }
+    return ret;
 }
 
 struct tm dummytm;
@@ -138,7 +235,7 @@ struct tm *gmtime(const time_t *timep)
     return &dummytm;
 }
 
-extern "C" void __attribute__((constructor)) __posix_init()
+void __attribute__((constructor)) __posix_init()
 {
     static int initialized=0;
     int i;
@@ -148,7 +245,21 @@ extern "C" void __attribute__((constructor)) __posix_init()
     for (i=0;i!=MAX_FILES;i++) {
         __fds[i].ops=NULL;
     }
+    __cwd[0]='/';
+    __cwd[1]='\0';
     initialized=1;
+}
+
+int access(const char *pathname, int mode)
+{
+    return 0;
+}
+int isatty(int fd)
+{
+    return 0;
+}
+
+
 }
 
 #endif

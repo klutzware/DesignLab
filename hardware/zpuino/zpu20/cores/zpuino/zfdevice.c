@@ -82,13 +82,22 @@ static ssize_t zf_dev_write(void *handle,const void *src,size_t size)
     return dev->ops->write(dev->data, src, size);
 }
 
+static ssize_t zf_dev_fstat(void *handle,struct stat *buf)
+{
+    return -1;
+}
+static ssize_t zf_dev_seek(void *handle,int pos, int whence)
+{
+    return -1;
+}
 
 static struct zfops dev_ops = {
     &zf_dev_open,
     &zf_dev_close,
     &zf_dev_read,
     &zf_dev_write,
-    NULL,
+    &zf_dev_seek,
+    &zf_dev_fstat
 };
 
 static int __zfIntializeDev()
@@ -103,6 +112,7 @@ int zfRegisterDevice(const char *name, struct zfdevops *ops, void *data)
     if (!__dev_initialized)
         if (__zfIntializeDev()!=0)
             return -1;
+    __dev_initialized=1;
 
     for (i=0;i!=ZF_MAX_DEVICES;i++) {
         if (__devices[i].ops==NULL) {

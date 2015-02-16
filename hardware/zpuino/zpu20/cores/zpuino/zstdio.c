@@ -13,7 +13,7 @@ static char _snprintfbuf[8192];
 FILE*stdout=&__files[1];
 FILE*stderr=&__files[2];
 
-void __stdio_init();
+extern void __stdio_init();
 
 static inline size_t __utoa(unsigned long i, char**dest, int base, size_t size, int pad, int fill, int upper);
 
