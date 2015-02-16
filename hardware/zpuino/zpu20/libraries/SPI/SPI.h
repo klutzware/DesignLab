@@ -73,6 +73,7 @@ public:
 
   void begin(MOSI mosi, MISO miso, SCK sck);
   void begin();
+  void begin(const WishboneSlot &slot);
   void end();
 
   void setBitOrder(int);

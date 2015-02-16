@@ -30,6 +30,14 @@ void SPIClass::begin()
     REG(0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
 }
 
+void SPIClass::begin(const WishboneSlot &slot)
+{
+    if (deviceBegin(slot)!=0) {
+        return;
+    }
+    REG(0)=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
+}
+
 void SPIClass::begin(MOSI mosi, MISO miso, SCK sck)
 {
     if (deviceBegin(VENDOR_ZPUINO, PRODUCT_ZPUINO_SPI)!=0) {
