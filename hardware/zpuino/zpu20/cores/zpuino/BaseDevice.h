@@ -67,6 +67,7 @@ namespace ZPUino {
         BaseDevice(const WishboneSlot &slot): m_slot(slot), m_instance(0x0) {}
         int deviceBegin(uint8_t vendor, uint8_t product);
         int deviceBegin(const WishboneSlot &slot);
+        int deviceBegin(const register_t base);
         int isError() { return m_slot==0xff; }
         inline uint8_t getSlot() const { return m_slot; }
         inline uint8_t getInstance() const { return m_instance; }

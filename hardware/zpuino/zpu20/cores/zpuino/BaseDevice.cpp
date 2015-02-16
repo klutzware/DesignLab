@@ -23,6 +23,11 @@ namespace ZPUino {
         return 0;
     }
 
+    int BaseDevice::deviceBegin(const register_t base) {
+        m_baseaddress = base;
+        return 0;
+    }
+
     int BaseDevice::deviceBegin(const WishboneSlot &slot) {
         if (DeviceRegistry::registerDevice(slot)<0) {
             m_slot=0xff;
