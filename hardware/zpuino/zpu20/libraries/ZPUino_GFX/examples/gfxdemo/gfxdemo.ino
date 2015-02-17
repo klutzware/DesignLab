@@ -1,3 +1,5 @@
+#define circuit VGA_ZPUino
+
 #include <Adafruit_GFX.h>
 #include <ZPUino_GFX.h>
 #include <PLL.h>
