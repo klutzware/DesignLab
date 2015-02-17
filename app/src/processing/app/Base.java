@@ -2417,7 +2417,7 @@ public class Base {
       if (url.startsWith("example://")){
         String pslPath = Base.getExamplesPath();
         File f1 = new File(pslPath+ "//" + url.substring(10));    
-        activeEditor.base.handleOpen(f1.getAbsolutePath());
+        activeEditor.base.handleOpen(f1);
         return;
       }
       if (url.startsWith("sketchdir://"))

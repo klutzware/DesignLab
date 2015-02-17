@@ -415,7 +415,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       try {
         String pslPath = Base.getExamplesPath();
         File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
-        Editor newproj = Base.activeEditor.base.handleOpen(f1.getAbsolutePath());
+        Editor newproj = Base.activeEditor.base.handleOpen(f1);
         newproj.handlesaveAtStart(false);   
       } catch (Exception e1) {
         e1.printStackTrace();

@@ -177,7 +177,7 @@ public class Editor extends JFrame implements RunnerListener {
   boolean renameSymbol;
 
 
-  public Editor(Base ibase, String path, int[] location) throws Exception {
+  public Editor(Base ibase, File file, int[] location) throws Exception {
     super("Papilio DesignLab");
     this.base = ibase;
     saveAtStart = false;
@@ -234,7 +234,7 @@ public class Editor extends JFrame implements RunnerListener {
         		    Base.activeEditor.sketch.getCode(0).saveAs(newFile);
                 exampleFolder.renameTo(new File(Base.getActiveSketchPath() + "/examples/" + sketchName));
         		    oldFile.delete();
-        		    Base.activeEditor.handleOpenUnchecked(newFile.toString(),
+        		    Base.activeEditor.handleOpenUnchecked(newFile,
         		                               0,
         		                               Base.activeEditor.getSelectionStart(),
         		                               Base.activeEditor.getSelectionStop(),
@@ -245,7 +245,8 @@ public class Editor extends JFrame implements RunnerListener {
               Base.activeEditor.base.rebuildImportMenu(Base.activeEditor.importMenu);
               Base.activeEditor.base.rebuildExamplesMenu(Base.activeEditor.examplesMenu);
               try {
-                base.handleOpen(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+                File tmp = new File(Base.getActiveSketchPath() + "/examples/" + sketchName + "/" + sketchName + ".ino");
+                base.handleOpen(tmp);
               } catch (Exception ie) { }
       			}
           }
@@ -573,7 +574,7 @@ public class Editor extends JFrame implements RunnerListener {
           try {
             String pslPath = Base.getExamplesPath();
             File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
-            Editor newproj = base.handleOpen(f1.getAbsolutePath());
+            Editor newproj = base.handleOpen(f1);
             newproj.handlesaveAtStart(false);
           } catch (Exception e1) {
             e1.printStackTrace();
@@ -702,7 +703,7 @@ public class Editor extends JFrame implements RunnerListener {
            try {
              String pslPath = Base.getExamplesPath();
              File f1 = new File(pslPath+"/Template_PSL_Base/Template_PSL_Base.ino");    
-             Editor newproj = base.handleOpen(f1.getAbsolutePath());
+             Editor newproj = base.handleOpen(f1);
              newproj.handlesaveAtStart(false);
            } catch (Exception e1) {
              e1.printStackTrace();
@@ -717,7 +718,7 @@ public class Editor extends JFrame implements RunnerListener {
            try {
              String pslPath = Base.getExamplesPath();
              File f1 = new File(pslPath+"/Template_DesignLab_Library/edit_library.ino");
-             Editor newproj = base.handleOpen(f1.getAbsolutePath());
+             Editor newproj = base.handleOpen(f1);
              newproj.handlesaveAtStart(true);
            } catch (Exception e1) {
              e1.printStackTrace();
