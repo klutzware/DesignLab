@@ -73,11 +73,15 @@ public:
 
   void begin(MOSI mosi, MISO miso, SCK sck);
   void begin();
+  void begin(int wishboneSlot);
+  void begin(const WishboneSlot &slot);
   void end();
 
   void setBitOrder(int);
   void setDataMode(int);
   void setClockDivider(int);
+private:
+  int wishboneSlot;  
 };
 
 extern SPIClass SPI;
