@@ -91,6 +91,8 @@ zpuino20_pipistrello_lx45.build.extra_flags=-D__ZPUINO_PIPISTRELLO__ -DBOARD_ID=
 zpuino20_pipistrello_lx45.build.extraSflags=-DBOARD_ID=0xBA011A00 
 ##############################################################
 zpuino20_papilio_duo2m.name=ZPUino 2.0 on Papilio DUO (LX9 with 2MB SRAM)
+zpuino20_papilio_duo2m.vid.0=0x0403
+zpuino20_papilio_duo2m.pid.0=0x7bc0
 zpuino20_papilio_duo2m.boardid=0xB4051500
 zpuino20_papilio_duo2m.upload.protocol=zpuino-serial
 zpuino20_papilio_duo2m.upload.maximum_size=8388608
@@ -100,8 +102,11 @@ zpuino20_papilio_duo2m.upload.tool=zpuinoprogrammer
 zpuino20_papilio_duo2m.build.f_cpu=96000000L
 zpuino20_papilio_duo2m.build.core=zpuino
 zpuino20_papilio_duo2m.build.mcu=zpu
+zpuino20_papilio_duo2m.build.vid=0x0403
+zpuino20_papilio_duo2m.build.pid=0x7BC0
+zpuino20_papilio_duo2m.build.usb_product="Papilio DUO"
 zpuino20_papilio_duo2m.build.toolchain=zpu
-zpuino20_papilio_duo2m.build.board=ZPUINO_PAPILIO_PRO
+zpuino20_papilio_duo2m.build.board=ZPUINO_PAPILIO_DUO
 zpuino20_papilio_duo2m.build.extra_flags=-D__ZPUINO_PAPILIO_DUO__ -DZPU20 -DBOARD_ID=0xB4051500 -DBOARD_MEMORYSIZE=0x200000 -nostartfiles
 zpuino20_papilio_duo2m.build.extraSflags=-DBOARD_ID=0xB4051500
 ##############################################################

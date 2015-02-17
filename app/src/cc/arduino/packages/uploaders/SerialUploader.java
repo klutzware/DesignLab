@@ -26,22 +26,22 @@
 
 package cc.arduino.packages.uploaders;
 
+import static processing.app.I18n._;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.File;
 
-import cc.arduino.packages.Uploader;
-import processing.app.*;
+import processing.app.Base;
+import processing.app.I18n;
+import processing.app.Preferences;
+import processing.app.Serial;
+import processing.app.SerialException;
 import processing.app.debug.RunnerException;
 import processing.app.debug.TargetPlatform;
 import processing.app.helpers.PreferencesMap;
 import processing.app.helpers.StringReplacer;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import static processing.app.I18n._;
+import cc.arduino.packages.Uploader;
 
 public class SerialUploader extends Uploader {
 
@@ -92,15 +92,13 @@ public class SerialUploader extends Uploader {
             System.out.println(_("Forcing reset using 1200bps open/close on port ") + uploadPort);
           Serial.touchPort(uploadPort, 1200);
         }
+        Thread.sleep(400);
         if (waitForUploadPort) {
           // Scanning for available ports seems to open the port or
           // otherwise assert DTR, which would cancel the WDT reset if
           // it happened within 250 ms. So we wait until the reset should
           // have already occured before we start scanning.
-          Thread.sleep(300);
           uploadPort = waitForUploadPort(uploadPort, before);
-        } else {
-          Thread.sleep(400);
         }
       } catch (SerialException e) {
         throw new RunnerException(e);
@@ -159,12 +157,12 @@ public class SerialUploader extends Uploader {
       String pattern = prefs.getOrExcept("upload.pattern");
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       uploadResult = executeUploadCommand(cmd);
+    } catch (RunnerException e) {
+      throw e;
     } catch (Exception e) {
       throw new RunnerException(e);
     }
 
-    // Remove the magic baud rate (1200bps) to avoid
-    // future unwanted board resets
     try {
       if (uploadResult && doTouch) {
         String uploadPort = Preferences.get("serial.port");
@@ -174,24 +172,12 @@ public class SerialUploader extends Uploader {
           // sketch port never comes back). Doing this saves users from accidentally
           // opening Serial Monitor on the soon-to-be-orphaned bootloader port.
           Thread.sleep(1000);
-          long timeout = System.currentTimeMillis() + 2000;
-          while (timeout > System.currentTimeMillis()) {
+          long started = System.currentTimeMillis();
+          while (System.currentTimeMillis() - started < 2000) {
             List<String> portList = Serial.list();
-            if (portList.contains(uploadPort)) {
-              try {
-                Serial.touchPort(uploadPort, 9600);
-                break;
-              } catch (SerialException e) {
-                // Port already in use
-              }
-            }
+            if (portList.contains(uploadPort))
+              break;
             Thread.sleep(250);
-          }
-        } else {
-          try {
-            Serial.touchPort(uploadPort, 9600);
-          } catch (SerialException e) {
-            throw new RunnerException(e);
           }
         }
       }
@@ -259,7 +245,11 @@ public class SerialUploader extends Uploader {
 
     PreferencesMap prefs = Preferences.getMap();
     prefs.putAll(Base.getBoardPreferences());
-    prefs.putAll(targetPlatform.getProgrammer(programmer));
+    PreferencesMap programmerPrefs = targetPlatform.getProgrammer(programmer);
+    if (programmerPrefs == null)
+      throw new RunnerException(
+          _("Please select a programmer from Tools->Programmer menu"));
+    prefs.putAll(programmerPrefs);
     prefs.putAll(targetPlatform.getTool(prefs.getOrExcept("program.tool")));
 
     prefs.put("build.path", buildPath);
@@ -280,6 +270,8 @@ public class SerialUploader extends Uploader {
       String pattern = prefs.getOrExcept("program.pattern");
       String[] cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       return executeUploadCommand(cmd);
+    } catch (RunnerException e) {
+      throw e;
     } catch (Exception e) {
       throw new RunnerException(e);
     }
@@ -299,6 +291,9 @@ public class SerialUploader extends Uploader {
     } else {
       programmerPrefs = targetPlatform.getProgrammer(programmer);
     }
+    if (programmerPrefs == null)
+      throw new RunnerException(
+          _("Please select a programmer from Tools->Programmer menu"));
 
     // Build configuration for the current programmer
     PreferencesMap prefs = Preferences.getMap();
@@ -339,6 +334,8 @@ public class SerialUploader extends Uploader {
       pattern = prefs.getOrExcept("bootloader.pattern");
       cmd = StringReplacer.formatAndSplit(pattern, prefs, true);
       return executeUploadCommand(cmd);
+    } catch (RunnerException e) {
+      throw e;
     } catch (Exception e) {
       throw new RunnerException(e);
     }

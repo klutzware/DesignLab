@@ -32,7 +32,6 @@ import processing.core.PConstants;
 import java.io.*;
 import java.util.Map;
 
-
 /**
  * Used by Base for platform-specific tweaking, for instance finding the
  * sketchbook location using the Windows registry, or OS X event handling.
