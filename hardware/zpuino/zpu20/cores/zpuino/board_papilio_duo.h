@@ -7,7 +7,7 @@
 
 /* LX9 bitfile is 0x5327C in size */
 
-#define SPIOFFSET 0x54000
+#define SPIOFFSET 0x60000
 
 #ifndef BOARD_MEMORYSIZE
 #error Undefined board memory size

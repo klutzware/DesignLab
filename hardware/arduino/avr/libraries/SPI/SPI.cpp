@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2010 by Cristian Maglie <c.maglie@bug.st>
+ * Copyright (c) 2014 by Paul Stoffregen <paul@pjrc.com> (Transaction API)
  * SPI Master library for arduino.
  *
  * This file is free software; you can redistribute it and/or modify
@@ -8,18 +9,20 @@
  * published by the Free Software Foundation.
  */
 
-#ifdef __AVR__
-#include "pins_arduino.h"
-#endif
-
 #include "SPI.h"
+#include "pins_arduino.h"
 
 SPIClass SPI;
 
-#ifdef __AVR__
+uint8_t SPIClass::interruptMode = 0;
+uint8_t SPIClass::interruptMask = 0;
+uint8_t SPIClass::interruptSave = 0;
+#ifdef SPI_TRANSACTION_MISMATCH_LED
+uint8_t SPIClass::inTransactionFlag = 0;
+#endif
 
-void SPIClass::begin() {
-
+void SPIClass::begin()
+{
   // Set SS to high so a connected chip will be "deselected" by default
   digitalWrite(SS, HIGH);
 
@@ -44,71 +47,86 @@ void SPIClass::begin() {
   pinMode(MOSI, OUTPUT);
 }
 
-
 void SPIClass::end() {
   SPCR &= ~_BV(SPE);
 }
 
-void SPIClass::setBitOrder(uint8_t bitOrder)
+// mapping of interrupt numbers to bits within SPI_AVR_EIMSK
+#if defined(__AVR_ATmega32U4__)
+  #define SPI_INT0_MASK  (1<<INT0)
+  #define SPI_INT1_MASK  (1<<INT1)
+  #define SPI_INT2_MASK  (1<<INT2)
+  #define SPI_INT3_MASK  (1<<INT3)
+  #define SPI_INT4_MASK  (1<<INT6)
+#elif defined(__AVR_AT90USB646__) || defined(__AVR_AT90USB1286__)
+  #define SPI_INT0_MASK  (1<<INT0)
+  #define SPI_INT1_MASK  (1<<INT1)
+  #define SPI_INT2_MASK  (1<<INT2)
+  #define SPI_INT3_MASK  (1<<INT3)
+  #define SPI_INT4_MASK  (1<<INT4)
+  #define SPI_INT5_MASK  (1<<INT5)
+  #define SPI_INT6_MASK  (1<<INT6)
+  #define SPI_INT7_MASK  (1<<INT7)
+#elif defined(EICRA) && defined(EICRB) && defined(EIMSK)
+  #define SPI_INT0_MASK  (1<<INT4)
+  #define SPI_INT1_MASK  (1<<INT5)
+  #define SPI_INT2_MASK  (1<<INT0)
+  #define SPI_INT3_MASK  (1<<INT1)
+  #define SPI_INT4_MASK  (1<<INT2)
+  #define SPI_INT5_MASK  (1<<INT3)
+  #define SPI_INT6_MASK  (1<<INT6)
+  #define SPI_INT7_MASK  (1<<INT7)
+#else
+  #ifdef INT0
+  #define SPI_INT0_MASK  (1<<INT0)
+  #endif
+  #ifdef INT1
+  #define SPI_INT1_MASK  (1<<INT1)
+  #endif
+  #ifdef INT2
+  #define SPI_INT2_MASK  (1<<INT2)
+  #endif
+#endif
+
+void SPIClass::usingInterrupt(uint8_t interruptNumber)
 {
-  if(bitOrder == LSBFIRST) {
-    SPCR |= _BV(DORD);
-  } else {
-    SPCR &= ~(_BV(DORD));
+  uint8_t mask;
+
+  if (interruptMode > 1) return;
+
+  noInterrupts();
+  switch (interruptNumber) {
+  #ifdef SPI_INT0_MASK
+  case 0: mask = SPI_INT0_MASK; break;
+  #endif
+  #ifdef SPI_INT1_MASK
+  case 1: mask = SPI_INT1_MASK; break;
+  #endif
+  #ifdef SPI_INT2_MASK
+  case 2: mask = SPI_INT2_MASK; break;
+  #endif
+  #ifdef SPI_INT3_MASK
+  case 3: mask = SPI_INT3_MASK; break;
+  #endif
+  #ifdef SPI_INT4_MASK
+  case 4: mask = SPI_INT4_MASK; break;
+  #endif
+  #ifdef SPI_INT5_MASK
+  case 5: mask = SPI_INT5_MASK; break;
+  #endif
+  #ifdef SPI_INT6_MASK
+  case 6: mask = SPI_INT6_MASK; break;
+  #endif
+  #ifdef SPI_INT7_MASK
+  case 7: mask = SPI_INT7_MASK; break;
+  #endif
+  default:
+    interruptMode = 2;
+    interrupts();
+    return;
   }
+  interruptMode = 1;
+  interruptMask |= mask;
+  interrupts();
 }
 
-void SPIClass::setDataMode(uint8_t mode)
-{
-  SPCR = (SPCR & ~SPI_MODE_MASK) | mode;
-}
-
-void SPIClass::setClockDivider(uint8_t rate)
-{
-  SPCR = (SPCR & ~SPI_CLOCK_MASK) | (rate & SPI_CLOCK_MASK);
-  SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | ((rate >> 2) & SPI_2XCLOCK_MASK);
-}
-
-#endif
-
-#ifdef ZPU
-
-
-void SPIClass::begin(int mosi, int miso, int sck)
-{
-	USPICTL=BIT(SPICP1)|BIT(SPIEN)|BIT(SPIBLOCK);
-
-
-	pinMode(mosi, OUTPUT);
-	pinModePPS(mosi,HIGH);
-	pinMode(miso, INPUT);
-	pinMode(sck, OUTPUT);
-	pinModePPS(sck,HIGH);
-
-
-	outputPinForFunction( mosi, IOPIN_USPI_MOSI );
-	outputPinForFunction( sck, IOPIN_USPI_SCK);
-	inputPinForFunction( miso, IOPIN_USPI_MISO );
-
-}
-
-void SPIClass::end() {
-	USPICTL &= ~(_BV(SPIEN)|_BV(SPIBLOCK));
-}
-
-void SPIClass::setBitOrder(uint8_t bitOrder)
-{
-	/* No support */
-}
-
-void SPIClass::setDataMode(uint8_t mode)
-{
-	USPICTL = (USPICTL & ~SPI_MODE_MASK) | mode;
-}
-
-void SPIClass::setClockDivider(uint8_t rate)
-{
-	USPICTL = (USPICTL & ~SPI_CLOCK_MASK) | rate;
-}
-
-#endif

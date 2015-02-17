@@ -106,10 +106,10 @@ public class Sketch {
    * path is location of the main .pde file, because this is also
    * simplest to use when opening the file from the finder/explorer.
    */
-  public Sketch(Editor editor, String path) throws IOException {
+  public Sketch(Editor editor, File file) throws IOException {
     this.editor = editor;
 
-    primaryFile = new File(path);
+    primaryFile = file;
 
     // get the name of the sketch by chopping .pde or .java
     // off of the main file name
@@ -136,7 +136,7 @@ public class Sketch {
     tempBuildFolder = Base.getBuildFolder();
     //Base.addBuildFolderToClassPath();
 
-    folder = new File(new File(path).getParent());
+    folder = new File(file.getParent());
     //System.out.println("sketch dir is " + folder);
 
     load();
@@ -516,12 +516,11 @@ public class Sketch {
         // if successful, set base properties for the sketch
 
         File newMainFile = new File(newFolder, newName + ".ino");
-        String newMainFilePath = newMainFile.getAbsolutePath();
 
         // having saved everything and renamed the folder and the main .pde,
         // use the editor to re-open the sketch to re-init state
         // (unfortunately this will kill positions for carets etc)
-        editor.handleOpenUnchecked(newMainFilePath,
+        editor.handleOpenUnchecked(newMainFile,
                                    currentIndex,
                                    editor.getSelectionStart(),
                                    editor.getSelectionStop(),
@@ -930,7 +929,7 @@ public class Sketch {
     File newFile = new File(newFolder, newName + ".ino");
     code[0].saveAs(newFile);
 
-    editor.handleOpenUnchecked(newFile.getPath(),
+    editor.handleOpenUnchecked(newFile,
                                currentIndex,
                                editor.getSelectionStart(),
                                editor.getSelectionStop(),
@@ -1721,7 +1720,7 @@ public class Sketch {
 
     int warnDataPercentage = Integer.parseInt(prefs.get("build.warn_data_percentage"));
     if (maxDataSize > 0 && dataSize > maxDataSize*warnDataPercentage/100)
-	  System.out.println(_("Low memory available, stability problems may occur"));
+      System.err.println(_("Low memory available, stability problems may occur."));
   }
 
   protected boolean upload(String buildPath, String suggestedClassName, int programmingType) throws Exception {
@@ -1730,11 +1729,6 @@ public class Sketch {
     String board = Preferences.get("board");
 
     BoardPort boardPort = Base.getDiscoveryManager().find(Preferences.get("serial.port"));
-
-    if (boardPort == null) {
-      editor.statusError(I18n.format("Board at {0} is not available", Preferences.get("serial.port")));
-      return false;
-    }
 
     Uploader uploader = new UploaderAndMonitorFactory().newUploader(target.getBoards().get(board), boardPort);
 
@@ -2110,9 +2104,10 @@ public class Sketch {
     for (int i = 0; i < c.length; i++) {
       if (((c[i] >= '0') && (c[i] <= '9')) ||
           ((c[i] >= 'a') && (c[i] <= 'z')) ||
-          ((c[i] >= 'A') && (c[i] <= 'Z'))) {
+          ((c[i] >= 'A') && (c[i] <= 'Z')) ||
+          ((i > 0) && (c[i] == '-')) ||
+          ((i > 0) && (c[i] == '.'))) {
         buffer.append(c[i]);
-
       } else {
         buffer.append('_');
       }

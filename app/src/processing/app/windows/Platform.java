@@ -353,8 +353,6 @@ public class Platform extends processing.app.Platform {
     }
   }
 
-  /*
-  Temporarly disabled due to https://github.com/arduino/Arduino/issues/1573
   @Override
   public String preListAllCandidateDevices() {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -370,5 +368,4 @@ public class Platform extends processing.app.Platform {
       return super.preListAllCandidateDevices();
     }
   }
-  */
 }
