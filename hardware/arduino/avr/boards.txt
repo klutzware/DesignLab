@@ -26,6 +26,7 @@ duo.build.mcu=atmega32u4
 duo.build.f_cpu=16000000L
 duo.vid.0=0x1d50
 duo.pid.0=0x60a4
+duo.name.0=Papilio DUO AVR
 duo.vid.1=0x1d50
 duo.pid.1=0x60a5
 duo.build.vid=0x1d50
@@ -40,6 +41,7 @@ duo.build.extra_flags={build.usb_flags}
 duo.bitloader.tool=papilioprog
 duo.bitloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
 duo.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
+duo.sch.file=circuit/Papilio_DUO_LX9.sch
 duo.pdf.file=circuit/schematic_papilio_DUO.pdf
 duo.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
 
@@ -80,6 +82,7 @@ duoisp.build.extra_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid}
 duoisp.bitloader.tool=papilioprog
 duoisp.bitloader.file=lx9/zpuino-1.0-PapilioPro-S6LX9-Vanilla-1.0.bit
 duoisp.xise.file=circuit/PSL_Papilio_DUO_LX9.xise
+duoisp.sch.file=circuit/Papilio_DUO_LX9.sch
 duoisp.pdf.file=circuit/schematic_papilio_DUO.pdf
 duoisp.bit.file=circuit/DUO_LX9/papilio_duo_lx9.bit
 
