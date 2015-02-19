@@ -422,15 +422,15 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       }
       break;	
     case LOAD_CIRCUIT:
-      File fileBit = getLibraryFile("\n#definecircuit", "bit.file");
+      File fileBit = getLibraryFile("#define\\s+circuit", "bit.file");
       if (fileBit.exists())
         Base.openURL("file://" + fileBit.toString());
       else
         Base.showMessage("Not Found", "Sorry, no bit file found in the libraries or project directory.");
       break;	
     case VIEW_CIRCUIT:
-      File filePdf = getLibraryFile("\n#definecircuit", "pdf.file");
-      File fileBit2 = getLibraryFile("\n#definecircuit", "bit.file");
+      File filePdf = getLibraryFile("#define\\s+circuit", "pdf.file");
+      File fileBit2 = getLibraryFile("#define\\s+circuit", "bit.file");
       if (filePdf.exists()) {
         long datePDF = filePdf.lastModified();
         long dateBit = fileBit2.lastModified();
@@ -444,7 +444,7 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
         Base.showMessage("Not Found", "Sorry, no schematic pdf file found in the libraries or project directory.");
       break;        
     case EDIT_CIRCUIT:
-      File fileXise = getLibraryFile("\n#definecircuit", "xise.file");
+      File fileXise = getLibraryFile("#define\\s+circuit", "xise.file");
       if (fileXise.exists()){
         //Base.openURL("file://" + fileXise.toString());
         if (fileXise.toString().startsWith(Base.getActiveSketchPath()))
@@ -497,37 +497,21 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
   
   private String getKeyWord(String keyword) {
     
-//    // whitespace
-//    String p = "\\s+";
-//    
-//    // multi-line and single-line comment
-//    //p += "|" + "(//\\s*?$)|(/\\*\\s*?\\*/)";
-//    p += "|(/\\*[^*]*(?:\\*(?!/)[^*]*)*\\*/)|(//.*?$)";
-//
-//    // pre-processor directive
-//    p += "|(#(?:\\\\\\n|.)*)";
-//    Pattern pattern = Pattern.compile(p, Pattern.MULTILINE);
-//      
-//    Matcher matcher = pattern.matcher(keyword);
-//    int i = 0;
-//    while (matcher.find()) {
-//      if (matcher.start()!=i)
-//        break;
-//      i = matcher.end();
-//    }
-   
     String result = null;
     String text = editor.getText();
-    text = text.toLowerCase();
-    text = text.replaceAll(" ", "");
-    text = text.replaceAll("\t", "");
-    int start = text.indexOf(keyword, 0);
-    //int start = i;
-    int end = text.indexOf("\n", start+1);
-    if (start >= 0) {
-      result = text.substring(start + keyword.length(), end);
-      result = result.trim();
+    String editorLines[] = text.split("\\r?\\n");
+    String pattern = "^\\s*" + keyword + "\\s+([^\\s]+).*$";
+    Pattern r = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+    
+    for (String line : editorLines){
+      Matcher m = r.matcher(line);
+      if (m.find()) {
+        result = m.group(1).toString();
+        result = result.toLowerCase();
+        return result;
+      }
     }
+    
     return result;
   }
 
