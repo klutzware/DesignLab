@@ -423,8 +423,15 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
       break;	
     case LOAD_CIRCUIT:
       File fileBit = getLibraryFile("#define\\s+circuit", "bit.file");
-      if (fileBit.exists())
+      File fileSch = getLibraryFile("#define\\s+circuit", "sch.file");     
+      if (fileBit.exists()) {
+        long dateSch = fileSch.lastModified();
+        long dateBitfile = fileBit.lastModified();
+        long currentTime = java.lang.System.currentTimeMillis();
+        if ((dateSch > (currentTime - 86400000)) && (dateSch > dateBitfile))  //If the schematic has been modified in the last 24 hours and the schematic is newer then bit file.
+          Base.showMessage("Warning!", "The Xilinx Schematic file is newer then the BitFile that contains the circuit. Did you forget to run \"Generate Programming File\" after modifying the circuit?");        
         Base.openURL("file://" + fileBit.toString());
+      }
       else
         Base.showMessage("Not Found", "Sorry, no bit file found in the libraries or project directory.");
       break;	
@@ -438,8 +445,6 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
           Base.showMessage("Warning!", "The circuit defined by the bit file is newer then the view in this PDF file. This view of the circuit may not be correct, please edit the circuit for an accurate view.");
         Base.openURL("file://" + filePdf.toString());
       }
-        
-        
       else
         Base.showMessage("Not Found", "Sorry, no schematic pdf file found in the libraries or project directory.");
       break;        
