@@ -7,11 +7,11 @@
 -- \   \   \/     Version : 14.1
 --  \   \         Application : sch2hdl
 --  /   /         Filename : Papilio_DUO_LX9.vhf
--- /___/   /\     Timestamp : 02/11/2015 15:01:41
+-- /___/   /\     Timestamp : 02/13/2015 15:59:16
 -- \   \  /  \ 
 --  \___\/\___\ 
 --
---Command: sch2hdl -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/AVR_Wishbone_Bridge -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Benchy -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/BitCoin_Miner -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Building_Blocks -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Clocks -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Gameduino -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/HQVGA -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Papilio_Hardware -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_640_480 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_ZXSpectrum -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/ZPUino_2 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/ZPUino_Wishbone_Peripherals -intstyle ise -family spartan6 -flat -suppress -vhdl D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_ZXSpectrum/circuit/DUO_LX9/Papilio_DUO_LX9.vhf -w D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_ZXSpectrum/circuit/Papilio_DUO_LX9.sch
+--Command: sch2hdl -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/AVR_Wishbone_Bridge -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Benchy -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/BitCoin_Miner -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Building_Blocks -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Clocks -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Gameduino -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/HQVGA -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Multiple_Serial_Ports -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/Papilio_Hardware -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_640_480 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_ZXSpectrum -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/ZPUino_2 -sympath D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/ZPUino_Wishbone_Peripherals -intstyle ise -family spartan6 -flat -suppress -vhdl D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_ZXSpectrum/circuit/DUO_LX9/Papilio_DUO_LX9.vhf -w D:/Dropbox/GadgetFactory_Engineering/DesignLab_Examples/libraries/VGA_ZXSpectrum/circuit/Papilio_DUO_LX9.sch
 --Design Name: Papilio_DUO_LX9
 --Device: spartan6
 --Purpose:
@@ -101,7 +101,7 @@ architecture BEHAVIORAL of Papilio_DUO_LX9 is
          downto 0);
    signal XLXN_754                                      : std_logic_vector (100 
          downto 0);
-   signal XLXN_755                                      : std_logic_vector (32 
+   signal XLXN_756                                      : std_logic_vector (32 
          downto 0);
    signal XLXI_51_AVR_Wishbone_Bridge_Enable_openSignal : std_logic;
    signal XLXI_51_wishbone_slot_5_out_openSignal        : std_logic_vector (100 
@@ -141,7 +141,6 @@ architecture BEHAVIORAL of Papilio_DUO_LX9 is
    signal XLXI_61_VGA_Red2_openSignal                   : std_logic;
    signal XLXI_61_VGA_Red3_openSignal                   : std_logic;
    signal XLXI_61_VGA_Vsync_openSignal                  : std_logic;
-   signal XLXI_65_vgaclk_openSignal                     : std_logic;
    component ZPUino_Papilio_DUO_V2
       port ( gpio_bus_out               : out   std_logic_vector (200 downto 
             0); 
@@ -289,18 +288,11 @@ architecture BEHAVIORAL of Papilio_DUO_LX9 is
    end component;
    
    component vga_zxspectrum_zpuino
-      port ( wishbone_in             : in    std_logic_vector (100 downto 0); 
+      port ( VGA_Bus                 : inout std_logic_vector (32 downto 0); 
+             wishbone_in             : in    std_logic_vector (100 downto 0); 
              wishbone_out            : out   std_logic_vector (100 downto 0); 
-             vga_hsync               : out   std_logic; 
-             vga_vsync               : out   std_logic; 
-             vga_bright              : out   std_logic; 
-             vga_b0                  : out   std_logic; 
-             vga_r0                  : out   std_logic; 
-             vga_g0                  : out   std_logic; 
-             VGA_Bus                 : inout std_logic_vector (32 downto 0); 
              wishbone_slot_video_in  : out   std_logic_vector (100 downto 0); 
-             wishbone_slot_video_out : in    std_logic_vector (100 downto 0); 
-             vgaclk                  : in    std_logic);
+             wishbone_slot_video_out : in    std_logic_vector (100 downto 0));
    end component;
    
 begin
@@ -374,7 +366,7 @@ begin
                 gpio_bus_in(200 downto 0)=>XLXN_744(200 downto 0),
                 RS232_TX=>open,
                 SD_MISO=>open,
-                VGA_Bus(32 downto 0)=>XLXN_755(32 downto 0),
+                VGA_Bus(32 downto 0)=>XLXN_756(32 downto 0),
                 WING_AH0=>Arduino_8,
                 WING_AH1=>Arduino_9,
                 WING_AH2=>Arduino_10,
@@ -431,18 +423,11 @@ begin
                 WING_DL7=>Arduino_39);
    
    XLXI_65 : vga_zxspectrum_zpuino
-      port map (vgaclk=>XLXI_65_vgaclk_openSignal,
-                wishbone_in(100 downto 0)=>XLXN_751(100 downto 0),
+      port map (wishbone_in(100 downto 0)=>XLXN_751(100 downto 0),
                 wishbone_slot_video_out(100 downto 0)=>XLXN_754(100 downto 0),
-                vga_bright=>open,
-                vga_b0=>open,
-                vga_g0=>open,
-                vga_hsync=>open,
-                vga_r0=>open,
-                vga_vsync=>open,
                 wishbone_out(100 downto 0)=>XLXN_752(100 downto 0),
                 wishbone_slot_video_in(100 downto 0)=>XLXN_753(100 downto 0),
-                VGA_Bus(32 downto 0)=>XLXN_755(32 downto 0));
+                VGA_Bus(32 downto 0)=>XLXN_756(32 downto 0));
    
 end BEHAVIORAL;
 
