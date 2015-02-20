@@ -460,7 +460,16 @@ public class EditorToolbar extends JComponent implements MouseInputListener, Key
             try {
               Base.copyDir(fileXise.getParentFile(), new File(Base.getActiveSketchPath()+"/circuit") );
             } catch (IOException ie) { }
-            Base.showMessage("Saved", "Don't forget to remove the \"#define circuit\" statement before editing the circuit.");
+            String text = editor.getText();
+            String pattern = "#define\\s+circuit\\s+";
+            Pattern r = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            Matcher m = r.matcher(text);
+            if (m.find()) {
+              String newText = m.replaceAll("//#define circuit ");
+              editor.setText(newText);
+              editor.handleSave(false);
+            }
+            //Base.showMessage("Saved", "Don't forget to remove the \"#define circuit\" statement before editing the circuit.");
         }
       }
       else
