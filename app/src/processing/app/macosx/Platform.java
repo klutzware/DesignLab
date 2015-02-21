@@ -139,6 +139,9 @@ public class Platform extends processing.app.Platform {
             desktopClass.getMethod("browse", new Class[] { URI.class });
           browseMethod.invoke(desktop, new Object[] { new URI(url) });
         } else {  // open a file
+          if (url.startsWith("file://")) {
+            url = url.substring(7);
+          }
           Method openMethod =
             desktopClass.getMethod("open", new Class[] { File.class });
           openMethod.invoke(desktop, new Object[] { new File(url) });
